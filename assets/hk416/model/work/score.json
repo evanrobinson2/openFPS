@@ -1,0 +1,80 @@
+{
+ "right_photo": {
+  "iou": 0.9677,
+  "reference_px": 53845,
+  "model_px": 54225,
+  "mismatch_px": 1776,
+  "top5": [
+   {
+    "area_px": 259,
+    "bbox": [
+     236,
+     6,
+     267,
+     22
+    ],
+    "region": "rear sight",
+    "kind": "reference only (model too small)"
+   },
+   {
+    "area_px": 94,
+    "bbox": [
+     261,
+     134,
+     293,
+     138
+    ],
+    "region": "lower receiver / trigger guard",
+    "kind": "model only (model too big)"
+   },
+   {
+    "area_px": 40,
+    "bbox": [
+     153,
+     97,
+     157,
+     109
+    ],
+    "region": "stock",
+    "kind": "model only (model too big)"
+   },
+   {
+    "area_px": 40,
+    "bbox": [
+     34,
+     149,
+     73,
+     163
+    ],
+    "region": "stock",
+    "kind": "model only (model too big)"
+   },
+   {
+    "area_px": 38,
+    "bbox": [
+     364,
+     82,
+     371,
+     92
+    ],
+    "region": "lower receiver / trigger guard",
+    "kind": "reference only (model too small)"
+   }
+  ],
+  "iou_if_fitted": 0.9676
+ },
+ "drawing_left": {
+  "iou": 0.8212,
+  "fitted_px_per_mm": 0.8698,
+  "reference_px": 48238,
+  "model_px": 50938
+ },
+ "drawing_right": {
+  "iou": 0.8309,
+  "fitted_px_per_mm": 0.8698,
+  "reference_px": 48893,
+  "model_px": 50952
+ },
+ "reference_ceiling_photo_vs_drawing_left": 0.8304,
+ "reference_ceiling_photo_vs_drawing_right": 0.841
+}

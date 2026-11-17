@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HK416 sample</title>
+<style>
+  :root { --fg:#e9eef2; --dim:#9aa6b0; --acc:#ffb347; --acc2:#6cc3ff; --bg:#0d1014; --panel:#161b21; --line:#2a323b; }
+  html,body { margin:0; background:var(--bg); color:var(--fg); font:14px/1.45 ui-monospace,Menlo,monospace; }
+  main { max-width:1040px; margin:0 auto; padding:20px 16px 48px; }
+  h1 { font-size:20px; margin:0 0 4px; } h2 { font-size:15px; margin:22px 0 6px; } p { color:var(--dim); margin:4px 0 12px; }
+  .row { display:flex; flex-wrap:wrap; gap:10px 16px; align-items:end; background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:12px; }
+  label { display:grid; gap:4px; color:var(--dim); font-size:12px; }
+  select,button,input[type=range] { font:inherit; color:var(--fg); background:#0f1318; border:1px solid var(--line); border-radius:6px; padding:6px 8px; }
+  button { cursor:pointer; } button.go { border-color:var(--acc); color:var(--acc); } button:disabled { opacity:.4; cursor:default; }
+  .chk { display:flex; gap:6px; align-items:center; color:var(--fg); font-size:13px; }
+  canvas { width:100%; display:block; background:#07090c; border:1px solid var(--line); border-radius:8px; margin-top:10px; }
+  table { border-collapse:collapse; width:100%; margin-top:8px; font-size:13px; } th,td { border-bottom:1px solid var(--line); padding:5px 8px; text-align:right; } th:first-child,td:first-child { text-align:left; }
+  .wrap { overflow-x:auto; } #status { color:var(--dim); margin-top:8px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>HK416 D14.5RS: simulation sample</h1>
+  <p>Everything on this page is computed from the asset's simulations: the sound is synthesised by <code>sound/hk416-sound.js</code>, the mechanism and recoil come from <code>action/hk416-action.js</code>, and the trajectory table from <code>ballistics/hk416-ballistics.js</code>. No recordings, no mesh files. Nothing plays until you press a button; start with the volume low.</p>
+
+  <div class="row">
+    <button class="go" id="semi" disabled>Fire (semi)</button>
+    <button class="go" id="auto" disabled>Auto, 10 rounds</button>
+    <label>Environment <select id="env"><option value="dry">Dry (free field)</option></select></label>
+    <label>Stance <select id="stance"><option value="ads">Aimed</option><option value="hip">Hip</option></select></label>
+    <label class="chk"><input type="checkbox" id="hpd"> Earmuffs</label>
+    <label>Volume <input type="range" id="vol" min="0" max="1" step="0.01" value="0.25"></label>
+    <label>Slow motion <select id="slow"><option value="40">40×</option><option value="10">10×</option><option value="1">Real time</option></select></label>
+  </div>
+  <div id="status">Loading the simulations…</div>
+
+  <h2>Mechanism and recoil</h2>
+  <canvas id="gun" width="1000" height="240"></canvas>
+  <canvas id="plot" width="1000" height="200"></canvas>
+
+  <h2>Point of impact with HK's 100 yd zero (mm, + high)</h2>
+  <div class="wrap"><table id="poi"></table></div>
+</main>
+<script src="../action/hk416-action.js"></script>
+<script src="../ballistics/hk416-ballistics.js"></script>
+<script type="module">
+import HK416Sound from '../sound/hk416-sound.js';
+const $ = (id) => document.getElementById(id);
+const A = window.HK416Action, B = window.HK416Ballistics;
+const AC = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 48000 });
+const master = AC.createGain(); master.gain.value = +$('vol').value; master.connect(AC.destination);
+$('vol').oninput = () => { master.gain.value = +$('vol').value; };
+let S = null, run = null;
+
+// ---------------------------------------------------------------- sound: dry shot -> room -> earmuffs, rendered offline
+async function shotBuffer(variant) {
+  const src = S.shot(variant), env = $('env').value, irLen = env === 'dry' ? 0 : S.params.overlays[env].persp.shooter.len;
+  const off = new OfflineAudioContext(1, Math.ceil((src.duration + irLen + 0.3) * 48000), 48000);
+  const chain = await S.chain({ overlay: env, perspective: 'shooter', hpd: $('hpd').checked, ear: true }, off);
+  const n = off.createBufferSource(); n.buffer = src; n.connect(chain.input); chain.output.connect(off.destination); n.start();
+  const out = await off.startRendering(), d = out.getChannelData(0); let pk = 0;
+  for (let i = 0; i < d.length; i++) pk = Math.max(pk, Math.abs(d[i]));
+  if (pk > 0.98) for (let i = 0; i < d.length; i++) d[i] *= 0.98 / pk;
+  return out;
+}
+
+// ---------------------------------------------------------------- the mechanism, drawn as a schematic side view
+function drawGun(s) {
+  const c = $('gun').getContext('2d'), W = 1000, H = 240; c.clearRect(0, 0, W, H);
+  const px = 1.15, ox = 520, oy = 120;  // 1.15 px per mm; origin at the upper receiver front face, on the bore
+  c.save(); c.translate(ox + s.recoil.pos[2] * 1e3 * px, oy);
+  c.rotate(-s.recoil.pitch);
+  c.strokeStyle = '#2f3a45'; c.lineWidth = 2;
+  c.strokeRect(-190 * px, -22 * px, 190 * px, 44 * px);           // upper receiver
+  c.strokeRect(0, -12 * px, 230 * px, 24 * px);                     // handguard
+  c.beginPath(); c.moveTo(0, 0); c.lineTo(370 * px, 0); c.strokeStyle = '#55636f'; c.stroke();   // bore
+  c.fillStyle = '#ffb347';                                          // bolt carrier: moves with s.carrierMm
+  c.fillRect((-150 - s.carrierMm) * px, -9 * px, 120 * px, 18 * px);
+  c.fillStyle = '#6cc3ff'; c.save(); c.translate((-30 - s.carrierMm) * px, 0); c.rotate(s.boltRot); c.fillRect(0, -6 * px, 22 * px, 12 * px); c.restore(); // bolt head
+  if (s.chamberPressureMPa > 1) { c.fillStyle = `rgba(255,120,40,${Math.min(1, s.chamberPressureMPa / 360)})`; c.beginPath(); c.arc(375 * px, 0, 10 + s.chamberPressureMPa / 12, 0, 7); c.fill(); }
+  c.restore();
+  c.fillStyle = '#9aa6b0'; c.font = '12px ui-monospace,Menlo,monospace';
+  c.fillText(`shot ${s.shotIndex + 1}   t = ${(s.shotTime * 1e3).toFixed(1)} ms after sear release`, 12, 18);
+  c.fillText(`carrier ${s.carrierMm.toFixed(1)} mm  ${s.carrierVel.toFixed(2)} m/s   bolt ${s.boltDeg.toFixed(1)}°   chamber ${s.chamberPressureMPa.toFixed(0)} MPa`, 12, 36);
+  c.fillText(`recoil: ${(s.recoil.pos[2] * 1e3).toFixed(1)} mm back, muzzle ${s.recoil.pitchDeg.toFixed(2)}° up`, 12, 54);
+}
+
+// ---------------------------------------------------------------- traces of the run so far
+function drawPlot(hist, tEnd) {
+  const c = $('plot').getContext('2d'), W = 1000, H = 200; c.clearRect(0, 0, W, H);
+  c.strokeStyle = '#2a323b'; c.beginPath(); c.moveTo(0, H - 20); c.lineTo(W, H - 20); c.stroke();
+  const line = (key, scale, col) => { c.strokeStyle = col; c.beginPath(); hist.forEach((h, i) => { const x = h.t / tEnd * W, y = H - 20 - h[key] * scale; i ? c.lineTo(x, y) : c.moveTo(x, y); }); c.stroke(); };
+  line('carrier', 1.6, '#ffb347'); line('pitch', 40, '#6cc3ff');
+  c.fillStyle = '#9aa6b0'; c.font = '12px ui-monospace,Menlo,monospace';
+  c.fillText('carrier travel (mm)', 12, 16); c.fillStyle = '#6cc3ff'; c.fillText('muzzle rise (degrees × 40 px)', 200, 16);
+  c.fillStyle = '#9aa6b0'; c.fillText(`${(tEnd * 1e3).toFixed(0)} ms`, W - 60, H - 6);
+}
+
+async function fire(auto) {
+  if (!S) return; AC.resume();
+  const shots = auto ? 10 : 1, opts = { mode: auto ? 'auto' : 'semi', shots, stance: $('stance').value };
+  const tEnd = auto ? 0.85 : 0.25, slow = +$('slow').value;   // 10 rounds at the simulated ~800 rpm, plus the last cycle
+  const buf = await shotBuffer(auto ? 'auto1s' : 'single');
+  const n = AC.createBufferSource(); n.buffer = buf; n.connect(master); n.start();   // the sound plays in real time
+  const hist = [], t0 = performance.now(), id = {}; run = id;
+  (function frame() {
+    if (run !== id) return;
+    const t = Math.min(tEnd, (performance.now() - t0) / 1000 / slow), s = A.sample(t, opts);
+    hist.push({ t, carrier: s.carrierMm, pitch: s.recoil.pitchDeg }); drawGun(s); drawPlot(hist, tEnd);
+    if (t < tEnd) requestAnimationFrame(frame);
+  })();
+}
+$('semi').onclick = () => fire(false); $('auto').onclick = () => fire(true);
+
+// ---------------------------------------------------------------- ballistics table
+(function poiTable() {
+  const dists = [10, 25, 55, 100, 200, 300, 400];
+  let h = '<tr><th>Load</th>' + dists.map((d) => `<th>${d} m</th>`).join('') + '</tr>';
+  for (const ammo of ['M855', 'Mk262', 'M856']) h += `<tr><td>${ammo}</td>` + dists.map((d) => `<td>${(B.poi(ammo, 'hk100yd', d) * 1e3).toFixed(0)}</td>`).join('') + '</tr>';
+  $('poi').innerHTML = h;
+})();
+
+Promise.all([A.load('../action/action.json'), HK416Sound.build(AC)]).then(([, s]) => {
+  S = s;
+  for (const [k, v] of Object.entries(S.overlays)) if (v.perspectives.includes('shooter')) { const o = document.createElement('option'); o.value = k; o.textContent = v.title; $('env').appendChild(o); }
+  $('env').value = 'range_berm'; $('semi').disabled = $('auto').disabled = false;
+  $('status').textContent = 'Ready. Sound is real time; the mechanism plays in slow motion.';
+  drawGun(A.sample(0, {})); drawPlot([], 0.25);
+}).catch((e) => { $('status').textContent = 'Could not load: ' + e.message + ' (serve this folder over http, see USAGE.md)'; });
+</script>
+</body>
+</html>

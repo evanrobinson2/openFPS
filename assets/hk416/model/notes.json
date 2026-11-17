@@ -1,0 +1,165 @@
+{
+ "what_i_did": [
+  [
+   "Inventory first",
+   "Listed 349 visible features region by region before modelling; each is a named object or a justified merge (48 merges)."
+  ],
+  [
+   "One ruler",
+   "Counted rail lugs in the right photo (0.897 px/mm) and wrote every outline in that photo's pixels, so each number can be checked against the image."
+  ],
+  [
+   "Part by part",
+   "301 named parts under HK416 > upper, lower, handguard, barrel_assembly, stock, grip, magazine, sights, controls, fasteners, with 7 game sockets."
+  ],
+  [
+   "Real fits",
+   "Moving parts run in real cavities (bolt carrier bore, charging handle channel, magazine well, button pocket, bolt catch relief), so the clips do not pass through solid metal."
+  ],
+  [
+   "Baked PBR",
+   "Three procedural materials (anodized aluminium, glass-filled polymer, phosphate steel) baked with Cycles to 2048 px base colour, occlusion-roughness-metallic and normal sets, embedded in the GLB."
+  ],
+  [
+   "Checks as scripts",
+   "Silhouette IoU, assembly, animation overlap, inventory coverage and GLB reload are scripts in tools/, rerun every round."
+  ]
+ ],
+ "good": [
+  "Right-photo silhouette IoU 0.968 at a fixed scale with no fitting.",
+  "No floating parts; every clip stays under 0.2 mm of overlap.",
+  "Barrel measures 14.5 in in the reloaded GLB.",
+  "ADS view through the ghost ring lines up with the front post."
+ ],
+ "off": [
+  "Drawing silhouettes are below the 0.92 target: the drawing shows a short-barrel rifle with a longer handguard, and its rail is not drawn to MIL-STD pitch. The photo itself scores about the same against the drawing as the model does. One model cannot score 0.92 on the photo and on the drawing.",
+  "Rear sight: the photo shows a bulky diopter-style sight; the model's folding arm is slimmer and its windage knob sits elsewhere (the largest remaining silhouette mismatch, about 260 px of 53,845).",
+  "Handguard length: the model follows the photo (9.0 in, 19 lugs per rail). Not confirmed against an independent source for the D14.5RS.",
+  "No rail slot numbers, no maker marks, no words on the selector (pictograms only).",
+  "Lateral sizes are AR-pattern values, not measured: no top or front reference was supplied.",
+  "The upper receiver is a clean extrusion with added parts; the real forging's scallops around the forward assist and the cam-pin bulge are simplified.",
+  "Stock and grip are slab-sided lofts with rounded edges; the real mouldings have more compound curvature and a thinner lower strut.",
+  "The magazine follows the photo's wide, strongly ribbed magazine (the .22 LR pattern), not a STANAG steel magazine.",
+  "Mould seams, the selector lever's grooves and the receivers' cast texture exist only as normal-map grain.",
+  "Ambient occlusion is baked at the rest pose (magazine moved out of the well for the bake); the bolt carrier and the stock's bore stay dark when they move."
+ ],
+ "rounds": [
+  {
+   "round": 1,
+   "change": "First full build: 301 parts from the inventory, outlines traced from the right photo with the rail ruler.",
+   "mean_iou": 0.6187,
+   "iou_right_photo": 0.7464,
+   "iou_drawing_right": 0.5814,
+   "iou_drawing_left": 0.5284,
+   "top5_mismatch": [
+    "stock: 5612 px, reference only (model too small)",
+    "magazine: 5515 px, model only (model too big)",
+    "buttpad / butt plate: 552 px, model only (model too big)",
+    "gas block / front sight: 534 px, reference only (model too small)",
+    "rear sight: 465 px, reference only (model too small)"
+   ]
+  },
+  {
+   "round": 2,
+   "change": "Rest pose fixed: clip tracks muted so the stock, magazine and sights sit where the photo shows them (round 1 was scoring the first frame of the last clip).",
+   "mean_iou": 0.8714,
+   "iou_right_photo": 0.9601,
+   "iou_drawing_right": 0.8322,
+   "iou_drawing_left": 0.8219,
+   "top5_mismatch": [
+    "rear sight: 508 px, reference only (model too small)",
+    "stock: 147 px, model only (model too big)",
+    "handguard: 99 px, model only (model too big)",
+    "lower receiver / trigger guard: 64 px, reference only (model too small)",
+    "lower receiver / trigger guard: 48 px, reference only (model too small)"
+   ]
+  },
+  {
+   "round": 3,
+   "change": "Rear sight now folds forward with full-length pivot lugs; trigger and grip horn separated; QD cup, trigger guard, magwell fillet and stock diagonal corrected; round parts get 1.5x segments.",
+   "mean_iou": 0.8733,
+   "iou_right_photo": 0.9676,
+   "iou_drawing_right": 0.8312,
+   "iou_drawing_left": 0.8211,
+   "top5_mismatch": [
+    "rear sight: 258 px, reference only (model too small)",
+    "lower receiver / trigger guard: 94 px, model only (model too big)",
+    "stock: 40 px, model only (model too big)",
+    "stock: 40 px, model only (model too big)",
+    "lower receiver / trigger guard: 38 px, reference only (model too small)"
+   ]
+  },
+  {
+   "round": 4,
+   "change": "Sight arms and bases rebuilt as single outlines (no overlapping shells), ghost-ring aperture opened for ADS, charging handle T reshaped, organic parts rounded in 4 steps, guard horn moved to the trigger guard, tower web closed, LOD1 raised to about 25 percent.",
+   "mean_iou": 0.8733,
+   "iou_right_photo": 0.9677,
+   "iou_drawing_right": 0.8309,
+   "iou_drawing_left": 0.8212,
+   "top5_mismatch": [
+    "rear sight: 259 px, model only (model too big)",
+    "lower receiver / trigger guard: 94 px, model only (model too big)",
+    "stock: 40 px, model only (model too big)",
+    "stock: 40 px, model only (model too big)",
+    "lower receiver / trigger guard: 38 px, reference only (model too small)"
+   ]
+  },
+  {
+   "round": 5,
+   "change": "Final textured build: three baked 2048 px PBR sets, polymer highlight reduced, marking panels less worn; geometry unchanged from round 4; all checks rerun on the shipped GLB.",
+   "mean_iou": 0.8733,
+   "iou_right_photo": 0.9677,
+   "iou_drawing_right": 0.8309,
+   "iou_drawing_left": 0.8212,
+   "top5_mismatch": [
+    "rear sight: 259 px, reference only (model too small)",
+    "lower receiver / trigger guard: 94 px, model only (model too big)",
+    "stock: 40 px, model only (model too big)",
+    "stock: 40 px, model only (model too big)",
+    "lower receiver / trigger guard: 38 px, reference only (model too small)"
+   ]
+  }
+ ],
+ "moving_parts": "13 glTF clips at 24 fps: charge (30 frames), dust_cover_open (10 frames), mag_release (10 frames), mag_out (24 frames), mag_in (22 frames), bolt_catch (12 frames), safety_to_fire (6 frames), safety_to_safe (6 frames), trigger_pull (10 frames), stock_extend (46 frames), stock_collapse (46 frames), sights_down (8 frames), sights_up (8 frames). Each moving part has its origin on its hinge or slide axis. stock_extend and stock_collapse stop at each of the six positions (0, 15, 30, 45, 60, 75 mm) for four frames.",
+ "creative_additions": "Three-position fire-control pictograms (safe, single, automatic) with no words; two cartridges in the magazine for reload; a first-person hip render. No maker marks, no orange.",
+ "checks": {
+  "inventory": true,
+  "silhouette_right_photo": 0.9677,
+  "silhouette_drawing_right": 0.8309,
+  "silhouette_drawing_left": 0.8212,
+  "reference_ceiling_drawing_right": 0.841,
+  "reference_ceiling_drawing_left": 0.8304,
+  "assembly": true,
+  "animation": true,
+  "export": true
+ },
+ "triangles": {
+  "lod0": 85784,
+  "lod1": 20802,
+  "lod0_by_region": {
+   "upper": 9722,
+   "lower": 4752,
+   "handguard": 21466,
+   "barrel_assembly": 14036,
+   "stock": 12992,
+   "grip": 1740,
+   "magazine": 4388,
+   "sights": 3896,
+   "controls": 4544,
+   "fasteners": 8248
+  },
+  "lod1_by_region": {
+   "upper": 2996,
+   "lower": 1544,
+   "handguard": 3658,
+   "barrel_assembly": 3008,
+   "stock": 3320,
+   "grip": 668,
+   "magazine": 1468,
+   "sights": 1024,
+   "controls": 1780,
+   "fasteners": 1336
+  }
+ },
+ "parts": 301
+}

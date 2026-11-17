@@ -1,0 +1,214 @@
+{
+ "note": "max sample difference between sim.py and hk416-sound.js, dB relative to the signal peak; js_ms is node synthesis time",
+ "worst_db": -160.3,
+ "outputs": {
+  "dry_shooter_single_free": {
+   "max_error_db_re_peak": -312.4,
+   "js_ms": 6
+  },
+  "dry_shooter_single_field": {
+   "max_error_db_re_peak": -312.4,
+   "js_ms": 21
+  },
+  "dry_shooter_semi3_free": {
+   "max_error_db_re_peak": -312.4,
+   "js_ms": 11
+  },
+  "dry_shooter_semi3_field": {
+   "max_error_db_re_peak": -312.4,
+   "js_ms": 48
+  },
+  "dry_shooter_auto1s_free": {
+   "max_error_db_re_peak": -310.0,
+   "js_ms": 38
+  },
+  "dry_shooter_auto1s_field": {
+   "max_error_db_re_peak": -310.0,
+   "js_ms": 372
+  },
+  "dry_bystander_single_free": {
+   "max_error_db_re_peak": -303.6,
+   "js_ms": 26
+  },
+  "dry_bystander_single_field": {
+   "max_error_db_re_peak": -303.6,
+   "js_ms": 45
+  },
+  "dry_bystander_semi3_free": {
+   "max_error_db_re_peak": -296.0,
+   "js_ms": 75
+  },
+  "dry_bystander_semi3_field": {
+   "max_error_db_re_peak": -296.0,
+   "js_ms": 134
+  },
+  "dry_bystander_auto1s_free": {
+   "max_error_db_re_peak": -299.9,
+   "js_ms": 378
+  },
+  "dry_bystander_auto1s_field": {
+   "max_error_db_re_peak": -299.9,
+   "js_ms": 653
+  },
+  "dry_downrange_single_free": {
+   "max_error_db_re_peak": -312.5,
+   "js_ms": 26
+  },
+  "dry_downrange_single_field": {
+   "max_error_db_re_peak": -312.5,
+   "js_ms": 45
+  },
+  "dry_downrange_semi3_free": {
+   "max_error_db_re_peak": -312.5,
+   "js_ms": 77
+  },
+  "dry_downrange_semi3_field": {
+   "max_error_db_re_peak": -312.5,
+   "js_ms": 135
+  },
+  "dry_downrange_auto1s_free": {
+   "max_error_db_re_peak": -309.0,
+   "js_ms": 466
+  },
+  "dry_downrange_auto1s_field": {
+   "max_error_db_re_peak": -309.0,
+   "js_ms": 697
+  },
+  "mech_cycle": {
+   "max_error_db_re_peak": -314.2,
+   "js_ms": 3
+  },
+  "mech_case_drop": {
+   "max_error_db_re_peak": -317.1,
+   "js_ms": 0
+  },
+  "mech_trigger": {
+   "max_error_db_re_peak": -311.6,
+   "js_ms": 0
+  },
+  "mech_trigger_reset": {
+   "max_error_db_re_peak": -315.1,
+   "js_ms": 0
+  },
+  "mech_charge": {
+   "max_error_db_re_peak": -314.7,
+   "js_ms": 2
+  },
+  "mech_bolt_lock_back": {
+   "max_error_db_re_peak": -310.5,
+   "js_ms": 2
+  },
+  "mech_bolt_release": {
+   "max_error_db_re_peak": -309.0,
+   "js_ms": 2
+  },
+  "steel_r18": {
+   "max_error_db_re_peak": -160.3,
+   "js_ms": 5
+  },
+  "steel_r20": {
+   "max_error_db_re_peak": -163.4,
+   "js_ms": 5
+  },
+  "steel_r22": {
+   "max_error_db_re_peak": -162.7,
+   "js_ms": 6
+  },
+  "steel_r25": {
+   "max_error_db_re_peak": -164.2,
+   "js_ms": 7
+  },
+  "steel_r30": {
+   "max_error_db_re_peak": -163.9,
+   "js_ms": 10
+  },
+  "ir_concrete_room_shooter": {
+   "max_error_db_re_peak": -239.9,
+   "js_ms": 90
+  },
+  "ir_furnished_room_shooter": {
+   "max_error_db_re_peak": -247.6,
+   "js_ms": 34
+  },
+  "ir_hallway_shooter": {
+   "max_error_db_re_peak": -240.0,
+   "js_ms": 92
+  },
+  "ir_indoor_range_shooter": {
+   "max_error_db_re_peak": -245.3,
+   "js_ms": 40
+  },
+  "ir_warehouse_shooter": {
+   "max_error_db_re_peak": -240.6,
+   "js_ms": 156
+  },
+  "ir_warehouse_bystander": {
+   "max_error_db_re_peak": -242.0,
+   "js_ms": 150
+  },
+  "ir_warehouse_downrange": {
+   "max_error_db_re_peak": -244.2,
+   "js_ms": 154
+  },
+  "ir_open_field_shooter": {
+   "max_error_db_re_peak": -359.4,
+   "js_ms": 4
+  },
+  "ir_open_field_bystander": {
+   "max_error_db_re_peak": -359.4,
+   "js_ms": 4
+  },
+  "ir_open_field_downrange": {
+   "max_error_db_re_peak": -355.2,
+   "js_ms": 4
+  },
+  "ir_range_berm_shooter": {
+   "max_error_db_re_peak": -252.8,
+   "js_ms": 18
+  },
+  "ir_range_berm_bystander": {
+   "max_error_db_re_peak": -295.0,
+   "js_ms": 17
+  },
+  "ir_range_berm_downrange": {
+   "max_error_db_re_peak": -271.3,
+   "js_ms": 17
+  },
+  "ir_forest_edge_shooter": {
+   "max_error_db_re_peak": -320.1,
+   "js_ms": 42
+  },
+  "ir_forest_edge_bystander": {
+   "max_error_db_re_peak": -310.5,
+   "js_ms": 35
+  },
+  "ir_forest_edge_downrange": {
+   "max_error_db_re_peak": -293.1,
+   "js_ms": 36
+  },
+  "ir_street_canyon_shooter": {
+   "max_error_db_re_peak": -244.3,
+   "js_ms": 78
+  },
+  "ir_street_canyon_bystander": {
+   "max_error_db_re_peak": -238.7,
+   "js_ms": 69
+  },
+  "ir_street_canyon_downrange": {
+   "max_error_db_re_peak": -246.0,
+   "js_ms": 75
+  },
+  "ir_valley_shooter": {
+   "max_error_db_re_peak": -306.1,
+   "js_ms": 169
+  },
+  "ir_valley_bystander": {
+   "max_error_db_re_peak": -298.6,
+   "js_ms": 168
+  },
+  "ir_valley_downrange": {
+   "max_error_db_re_peak": -288.8,
+   "js_ms": 184
+  }
+ }
+}

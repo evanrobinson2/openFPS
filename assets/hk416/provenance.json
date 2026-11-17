@@ -1,0 +1,34 @@
+{
+  "asset": "hk416",
+  "credit": "carpetshark",
+  "modelled_by": [
+    {
+      "part": "model (model/build.py)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    },
+    {
+      "part": "sound simulation (sound/)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    },
+    {
+      "part": "ballistics simulation (ballistics/)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    },
+    {
+      "part": "action and recoil simulation (action/)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    }
+  ],
+  "reviewed_by": [
+    {
+      "part": "manual notes and comparison (notes/MANUAL_NOTES.md, notes/MANUAL_COMPARE.md)",
+      "model": "Claude Opus 5.5",
+      "date": "2026-11-17"
+    }
+  ],
+  "status": "Simulation-grade sound, action and ballistics; parametric geometry recipe (Blender Python)."
+}

@@ -1,0 +1,12 @@
+[
+ "Drawing silhouettes are below the 0.92 target: the drawing shows a short-barrel rifle with a longer handguard, and its rail is not drawn to MIL-STD pitch. The photo itself scores about the same against the drawing as the model does. One model cannot score 0.92 on the photo and on the drawing.",
+ "Rear sight: the photo shows a bulky diopter-style sight; the model's folding arm is slimmer and its windage knob sits elsewhere (the largest remaining silhouette mismatch, about 260 px of 53,845).",
+ "Handguard length: the model follows the photo (9.0 in, 19 lugs per rail). Not confirmed against an independent source for the D14.5RS.",
+ "No rail slot numbers, no maker marks, no words on the selector (pictograms only).",
+ "Lateral sizes are AR-pattern values, not measured: no top or front reference was supplied.",
+ "The upper receiver is a clean extrusion with added parts; the real forging's scallops around the forward assist and the cam-pin bulge are simplified.",
+ "Stock and grip are slab-sided lofts with rounded edges; the real mouldings have more compound curvature and a thinner lower strut.",
+ "The magazine follows the photo's wide, strongly ribbed magazine (the .22 LR pattern), not a STANAG steel magazine.",
+ "Mould seams, the selector lever's grooves and the receivers' cast texture exist only as normal-map grain.",
+ "Ambient occlusion is baked at the rest pose (magazine moved out of the well for the bake); the bolt carrier and the stock's bore stay dark when they move."
+]

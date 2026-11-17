@@ -1,0 +1,4660 @@
+{
+ "meta": {
+  "title": "HK416 D14.5RS external and terminal ballistics",
+  "generator": "ballistics/sim.py",
+  "credit": "carpetshark",
+  "units": "SI: metres, seconds, kilograms, joules, newton-seconds, radians unless a key says otherwise (_deg, _moa, _mm, _hpa, _c)",
+  "frame": "range tables: x downrange from the muzzle crown, y up, z to the shooter's right. Paths are relative to the line of sight (+ is high). poi_vs_poa distances are measured from socket_ads_eye",
+  "muzzle_velocity_note": "HK manual value for M855; see ammo.*.source.mv",
+  "scope": "sport and range simulation: paper, steel plates, earth"
+ },
+ "atmosphere": {
+  "temp_c": 15.0,
+  "pressure_hpa": 1013.25,
+  "humidity": 0.0,
+  "altitude_m": 0.0,
+  "rho": 1.2249781262066513,
+  "c": 340.2952514038319,
+  "vapour_pressure_hpa": 0.0,
+  "saturation_hpa": 17.051728361052074
+ },
+ "rifle": {
+  "name": "HK416 D14.5RS",
+  "barrel_length_m": 0.3683,
+  "twist_m": 0.17779999999999999,
+  "twist_in": 7.0,
+  "twist_hand": "right",
+  "sight_height_m": 0.0655,
+  "sight_radius_m": 0.364,
+  "eye_to_muzzle_m": 0.6239,
+  "eye_to_flash_hider_tip_m": 0.6586,
+  "source": {
+   "barrel_length_m": "fact: HK manual p.7 (14.5 in); model NOTES.md",
+   "twist": "fact: HK manual p.7, 1 in 7 in right hand",
+   "sight_height_m": "measured from hk416.glb: rear_sight_aperture centre and front_sight_post tip both y=65.5 mm, socket_ads_eye y=65.5 mm",
+   "sight_radius_m": "measured from hk416.glb",
+   "eye_to_muzzle_m": "measured from hk416.glb (barrel mesh ends z=363.3 mm; socket_muzzle at the flash hider tip z=398.0 mm)"
+  }
+ },
+ "zeros": {
+  "hk100yd": {
+   "distance_m": 91.44,
+   "label": "HK manual zero: 100 yd on the V notch (drum position 1)",
+   "default": true
+  },
+  "hk200yd": {
+   "distance_m": 182.88,
+   "label": "HK drum diopter 2 (200 yd)"
+  },
+  "hk300yd": {
+   "distance_m": 274.32,
+   "label": "HK drum diopter 3 (300 yd)"
+  },
+  "hk400yd": {
+   "distance_m": 365.76,
+   "label": "HK drum diopter 4 (400 yd)"
+  },
+  "50_200": {
+   "distance_m": 50.0,
+   "label": "50 m near zero (the '50/200' zero)"
+  },
+  "25_300": {
+   "distance_m": 25.0,
+   "label": "25 m near zero (the '25/300' zero)"
+  }
+ },
+ "default_zero": "hk100yd",
+ "ammo": {
+  "M855": {
+   "label": "M855 ball, 62 gr, steel penetrator (SS109 type)",
+   "mass_kg": 0.00401753242,
+   "mass_gr": 62,
+   "diameter_m": 0.0056895999999999995,
+   "length_m": 0.0230124,
+   "bc_g7": 0.151,
+   "bc_g1": 0.304,
+   "mv": 850.0,
+   "mv_sigma": 7.5,
+   "group_es10_moa": 3.0,
+   "core": "lead with a hardened steel penetrator of about 10 gr (0.65 g) in the nose",
+   "sparks_on_steel": 0.8,
+   "source": {
+    "mass": "fact: M855 specification, 62 gr",
+    "length_m": "recalled: 0.906 in, commonly published for the SS109/M855 bullet",
+    "bc_g7": "recalled: 0.151, Bryan Litz / Applied Ballistics measured G7 (not re-verified today; consistent with G1 0.304 in the check below)",
+    "bc_g1": "published: 0.304 (commonly listed military figure; 0.307 also quoted)",
+    "mv": "fact: HK manual p.7, 2,790 ft/s (850 m/s) for the 14.5 in barrel (ammunition type not stated; taken as M855/SS109 class). Parameter; action/action.json should override it",
+    "mv_sigma": "inferred: about 25 ft/s shot-to-shot standard deviation, typical of service ball",
+    "group_es10_moa": "inferred: 10-shot extreme spread from a service carbine; range reports cluster around 2.5 to 4 MOA",
+    "penetrator": "recalled, approximate",
+    "sparks_on_steel": "inferred probability of a visible spark; steel-core ammunition is widely banned on steel ranges for sparks and plate damage"
+   },
+   "muzzle_energy_j": 1451.3,
+   "stability_sg": 2.41,
+   "supersonic_to_m": 608.0,
+   "range_m": [
+    0,
+    10,
+    15,
+    20,
+    25,
+    35,
+    45,
+    50,
+    55,
+    62,
+    75,
+    100,
+    125,
+    150,
+    175,
+    200,
+    225,
+    250,
+    275,
+    300,
+    325,
+    350,
+    375,
+    400,
+    425,
+    450,
+    475,
+    500,
+    525,
+    550,
+    575,
+    600
+   ],
+   "table": [
+    {
+     "range_m": 0,
+     "velocity_mps": 850.0,
+     "mach": 2.4978,
+     "energy_j": 1451.3,
+     "momentum_ns": 3.4149,
+     "tof_s": 0.0,
+     "drop_m": 0.0,
+     "wind_drift_10mph_m": 0.0,
+     "spin_drift_m": 0.0,
+     "coriolis_right_m": 0.0,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 10,
+     "velocity_mps": 839.64,
+     "mach": 2.4674,
+     "energy_j": 1416.2,
+     "momentum_ns": 3.3733,
+     "tof_s": 0.01184,
+     "drop_m": -0.00068,
+     "wind_drift_10mph_m": 0.00032,
+     "spin_drift_m": 3e-05,
+     "coriolis_right_m": 1e-05,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 15,
+     "velocity_mps": 834.48,
+     "mach": 2.4522,
+     "energy_j": 1398.8,
+     "momentum_ns": 3.3526,
+     "tof_s": 0.01781,
+     "drop_m": -0.00155,
+     "wind_drift_10mph_m": 0.00073,
+     "spin_drift_m": 7e-05,
+     "coriolis_right_m": 1e-05,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 20,
+     "velocity_mps": 829.34,
+     "mach": 2.4371,
+     "energy_j": 1381.6,
+     "momentum_ns": 3.3319,
+     "tof_s": 0.02382,
+     "drop_m": -0.00276,
+     "wind_drift_10mph_m": 0.0013,
+     "spin_drift_m": 0.00012,
+     "coriolis_right_m": 2e-05,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 25,
+     "velocity_mps": 824.21,
+     "mach": 2.4221,
+     "energy_j": 1364.6,
+     "momentum_ns": 3.3113,
+     "tof_s": 0.02987,
+     "drop_m": -0.00433,
+     "wind_drift_10mph_m": 0.00204,
+     "spin_drift_m": 0.00019,
+     "coriolis_right_m": 4e-05,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 35,
+     "velocity_mps": 814.01,
+     "mach": 2.3921,
+     "energy_j": 1331.0,
+     "momentum_ns": 3.2703,
+     "tof_s": 0.04208,
+     "drop_m": -0.00856,
+     "wind_drift_10mph_m": 0.00402,
+     "spin_drift_m": 0.00035,
+     "coriolis_right_m": 8e-05,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 45,
+     "velocity_mps": 803.88,
+     "mach": 2.3623,
+     "energy_j": 1298.1,
+     "momentum_ns": 3.2296,
+     "tof_s": 0.05444,
+     "drop_m": -0.01426,
+     "wind_drift_10mph_m": 0.0067,
+     "spin_drift_m": 0.00056,
+     "coriolis_right_m": 0.00013,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 50,
+     "velocity_mps": 798.84,
+     "mach": 2.3475,
+     "energy_j": 1281.9,
+     "momentum_ns": 3.2094,
+     "tof_s": 0.06068,
+     "drop_m": -0.01769,
+     "wind_drift_10mph_m": 0.00829,
+     "spin_drift_m": 0.00068,
+     "coriolis_right_m": 0.00015,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 55,
+     "velocity_mps": 793.82,
+     "mach": 2.3327,
+     "energy_j": 1265.8,
+     "momentum_ns": 3.1892,
+     "tof_s": 0.06696,
+     "drop_m": -0.02149,
+     "wind_drift_10mph_m": 0.01006,
+     "spin_drift_m": 0.00081,
+     "coriolis_right_m": 0.00019,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 62,
+     "velocity_mps": 786.81,
+     "mach": 2.3121,
+     "energy_j": 1243.6,
+     "momentum_ns": 3.161,
+     "tof_s": 0.07581,
+     "drop_m": -0.02747,
+     "wind_drift_10mph_m": 0.01284,
+     "spin_drift_m": 0.00102,
+     "coriolis_right_m": 0.00024,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 75,
+     "velocity_mps": 773.89,
+     "mach": 2.2742,
+     "energy_j": 1203.1,
+     "momentum_ns": 3.1091,
+     "tof_s": 0.09247,
+     "drop_m": -0.04065,
+     "wind_drift_10mph_m": 0.01895,
+     "spin_drift_m": 0.00147,
+     "coriolis_right_m": 0.00035,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 100,
+     "velocity_mps": 749.38,
+     "mach": 2.2021,
+     "energy_j": 1128.0,
+     "momentum_ns": 3.0106,
+     "tof_s": 0.1253,
+     "drop_m": -0.07385,
+     "wind_drift_10mph_m": 0.03422,
+     "spin_drift_m": 0.00256,
+     "coriolis_right_m": 0.00063,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 125,
+     "velocity_mps": 725.3,
+     "mach": 2.1314,
+     "energy_j": 1056.7,
+     "momentum_ns": 2.9139,
+     "tof_s": 0.15921,
+     "drop_m": -0.11797,
+     "wind_drift_10mph_m": 0.05434,
+     "spin_drift_m": 0.00397,
+     "coriolis_right_m": 0.001,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 150,
+     "velocity_mps": 701.67,
+     "mach": 2.0619,
+     "energy_j": 989.0,
+     "momentum_ns": 2.819,
+     "tof_s": 0.19426,
+     "drop_m": -0.17375,
+     "wind_drift_10mph_m": 0.07952,
+     "spin_drift_m": 0.00572,
+     "coriolis_right_m": 0.00146,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 175,
+     "velocity_mps": 678.5,
+     "mach": 1.9939,
+     "energy_j": 924.8,
+     "momentum_ns": 2.7259,
+     "tof_s": 0.23049,
+     "drop_m": -0.24198,
+     "wind_drift_10mph_m": 0.11001,
+     "spin_drift_m": 0.00782,
+     "coriolis_right_m": 0.002,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 200,
+     "velocity_mps": 655.81,
+     "mach": 1.9272,
+     "energy_j": 863.9,
+     "momentum_ns": 2.6347,
+     "tof_s": 0.26797,
+     "drop_m": -0.32354,
+     "wind_drift_10mph_m": 0.14607,
+     "spin_drift_m": 0.0103,
+     "coriolis_right_m": 0.00265,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 225,
+     "velocity_mps": 633.56,
+     "mach": 1.8618,
+     "energy_j": 806.3,
+     "momentum_ns": 2.5453,
+     "tof_s": 0.30675,
+     "drop_m": -0.41935,
+     "wind_drift_10mph_m": 0.18797,
+     "spin_drift_m": 0.01319,
+     "coriolis_right_m": 0.00339,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 250,
+     "velocity_mps": 611.74,
+     "mach": 1.7977,
+     "energy_j": 751.7,
+     "momentum_ns": 2.4577,
+     "tof_s": 0.34691,
+     "drop_m": -0.53043,
+     "wind_drift_10mph_m": 0.23601,
+     "spin_drift_m": 0.01652,
+     "coriolis_right_m": 0.00423,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 275,
+     "velocity_mps": 590.32,
+     "mach": 1.7347,
+     "energy_j": 700.0,
+     "momentum_ns": 2.3716,
+     "tof_s": 0.38851,
+     "drop_m": -0.65791,
+     "wind_drift_10mph_m": 0.29051,
+     "spin_drift_m": 0.02032,
+     "coriolis_right_m": 0.00518,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 300,
+     "velocity_mps": 569.27,
+     "mach": 1.6729,
+     "energy_j": 651.0,
+     "momentum_ns": 2.2871,
+     "tof_s": 0.43164,
+     "drop_m": -0.80298,
+     "wind_drift_10mph_m": 0.35182,
+     "spin_drift_m": 0.02464,
+     "coriolis_right_m": 0.00624,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 325,
+     "velocity_mps": 548.58,
+     "mach": 1.6121,
+     "energy_j": 604.5,
+     "momentum_ns": 2.2039,
+     "tof_s": 0.47638,
+     "drop_m": -0.96698,
+     "wind_drift_10mph_m": 0.42033,
+     "spin_drift_m": 0.02951,
+     "coriolis_right_m": 0.00742,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 350,
+     "velocity_mps": 528.24,
+     "mach": 1.5523,
+     "energy_j": 560.5,
+     "momentum_ns": 2.1222,
+     "tof_s": 0.52282,
+     "drop_m": -1.15135,
+     "wind_drift_10mph_m": 0.49646,
+     "spin_drift_m": 0.03498,
+     "coriolis_right_m": 0.00871,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 375,
+     "velocity_mps": 508.22,
+     "mach": 1.4935,
+     "energy_j": 518.8,
+     "momentum_ns": 2.0418,
+     "tof_s": 0.57107,
+     "drop_m": -1.35771,
+     "wind_drift_10mph_m": 0.58069,
+     "spin_drift_m": 0.04112,
+     "coriolis_right_m": 0.01012,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 400,
+     "velocity_mps": 488.52,
+     "mach": 1.4356,
+     "energy_j": 479.4,
+     "momentum_ns": 1.9627,
+     "tof_s": 0.62125,
+     "drop_m": -1.58782,
+     "wind_drift_10mph_m": 0.67351,
+     "spin_drift_m": 0.04797,
+     "coriolis_right_m": 0.01167,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 425,
+     "velocity_mps": 469.16,
+     "mach": 1.3787,
+     "energy_j": 442.2,
+     "momentum_ns": 1.8849,
+     "tof_s": 0.67347,
+     "drop_m": -1.84362,
+     "wind_drift_10mph_m": 0.77548,
+     "spin_drift_m": 0.0556,
+     "coriolis_right_m": 0.01334,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 450,
+     "velocity_mps": 450.13,
+     "mach": 1.3228,
+     "energy_j": 407.0,
+     "momentum_ns": 1.8084,
+     "tof_s": 0.72787,
+     "drop_m": -2.1273,
+     "wind_drift_10mph_m": 0.88721,
+     "spin_drift_m": 0.0641,
+     "coriolis_right_m": 0.01516,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 475,
+     "velocity_mps": 431.47,
+     "mach": 1.2679,
+     "energy_j": 374.0,
+     "momentum_ns": 1.7334,
+     "tof_s": 0.7846,
+     "drop_m": -2.44125,
+     "wind_drift_10mph_m": 1.00934,
+     "spin_drift_m": 0.07354,
+     "coriolis_right_m": 0.01712,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 500,
+     "velocity_mps": 413.19,
+     "mach": 1.2142,
+     "energy_j": 342.9,
+     "momentum_ns": 1.66,
+     "tof_s": 0.84382,
+     "drop_m": -2.78816,
+     "wind_drift_10mph_m": 1.14258,
+     "spin_drift_m": 0.08401,
+     "coriolis_right_m": 0.01923,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 525,
+     "velocity_mps": 395.33,
+     "mach": 1.1617,
+     "energy_j": 313.9,
+     "momentum_ns": 1.5883,
+     "tof_s": 0.90568,
+     "drop_m": -3.17101,
+     "wind_drift_10mph_m": 1.28766,
+     "spin_drift_m": 0.09562,
+     "coriolis_right_m": 0.0215,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 550,
+     "velocity_mps": 377.94,
+     "mach": 1.1106,
+     "energy_j": 286.9,
+     "momentum_ns": 1.5184,
+     "tof_s": 0.97037,
+     "drop_m": -3.59311,
+     "wind_drift_10mph_m": 1.44535,
+     "spin_drift_m": 0.10849,
+     "coriolis_right_m": 0.02393,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 575,
+     "velocity_mps": 361.11,
+     "mach": 1.0612,
+     "energy_j": 261.9,
+     "momentum_ns": 1.4508,
+     "tof_s": 1.03806,
+     "drop_m": -4.05817,
+     "wind_drift_10mph_m": 1.61646,
+     "spin_drift_m": 0.12274,
+     "coriolis_right_m": 0.02654,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 600,
+     "velocity_mps": 345.06,
+     "mach": 1.014,
+     "energy_j": 239.2,
+     "momentum_ns": 1.3863,
+     "tof_s": 1.10891,
+     "drop_m": -4.57028,
+     "wind_drift_10mph_m": 1.80171,
+     "spin_drift_m": 0.1385,
+     "coriolis_right_m": 0.02934,
+     "coriolis_up_m": 0.0
+    }
+   ],
+   "zeros": {
+    "hk100yd": {
+     "label": "HK manual zero: 100 yd on the V notch (drum position 1)",
+     "zero_distance_from_eye_m": 91.44,
+     "bore_angle_rad": 0.0013865753435200229,
+     "bore_angle_moa": 4.767,
+     "bore_angle_mrad": 1.3866,
+     "rear_sight_rise_mm": 0.505,
+     "crossings_from_eye_m": [
+      91.4,
+      91.8
+     ],
+     "max_ordinate_m": 0.0,
+     "max_ordinate_range_m": 91.0,
+     "path_m": [
+      -0.0655,
+      -0.05232,
+      -0.04625,
+      -0.04053,
+      -0.03517,
+      -0.02553,
+      -0.01737,
+      -0.01386,
+      -0.01073,
+      -0.007,
+      -0.00216,
+      -0.00069,
+      -0.01015,
+      -0.03127,
+      -0.06483,
+      -0.11172,
+      -0.17287,
+      -0.24929,
+      -0.3421,
+      -0.45251,
+      -0.58184,
+      -0.73155,
+      -0.90325,
+      -1.09869,
+      -1.31983,
+      -1.56885,
+      -1.84813,
+      -2.16038,
+      -2.50856,
+      -2.896,
+      -3.32639,
+      -3.80384
+     ],
+     "poi_vs_poa": [
+      {
+       "distance_from_eye_m": 10,
+       "poi_m": -0.0531,
+       "poi_mm": -53.1,
+       "velocity_mps": 840.3,
+       "energy_j": 1418.0,
+       "tof_ms": 11.09
+      },
+      {
+       "distance_from_eye_m": 15,
+       "poi_m": -0.04699,
+       "poi_mm": -47.0,
+       "velocity_mps": 835.1,
+       "energy_j": 1401.0,
+       "tof_ms": 17.06
+      },
+      {
+       "distance_from_eye_m": 20,
+       "poi_m": -0.04122,
+       "poi_mm": -41.2,
+       "velocity_mps": 830.0,
+       "energy_j": 1384.0,
+       "tof_ms": 23.07
+      },
+      {
+       "distance_from_eye_m": 25,
+       "poi_m": -0.03581,
+       "poi_mm": -35.8,
+       "velocity_mps": 824.9,
+       "energy_j": 1367.0,
+       "tof_ms": 29.11
+      },
+      {
+       "distance_from_eye_m": 35,
+       "poi_m": -0.02609,
+       "poi_mm": -26.1,
+       "velocity_mps": 814.6,
+       "energy_j": 1333.0,
+       "tof_ms": 41.31
+      },
+      {
+       "distance_from_eye_m": 45,
+       "poi_m": -0.01783,
+       "poi_mm": -17.8,
+       "velocity_mps": 804.5,
+       "energy_j": 1300.0,
+       "tof_ms": 53.66
+      },
+      {
+       "distance_from_eye_m": 55,
+       "poi_m": -0.0111,
+       "poi_mm": -11.1,
+       "velocity_mps": 794.4,
+       "energy_j": 1268.0,
+       "tof_ms": 66.17
+      },
+      {
+       "distance_from_eye_m": 62,
+       "poi_m": -0.0073,
+       "poi_mm": -7.3,
+       "velocity_mps": 787.4,
+       "energy_j": 1246.0,
+       "tof_ms": 75.02
+      }
+     ]
+    },
+    "hk200yd": {
+     "label": "HK drum diopter 2 (200 yd)",
+     "zero_distance_from_eye_m": 182.88,
+     "bore_angle_rad": 0.0018092235709496617,
+     "bore_angle_moa": 6.22,
+     "bore_angle_mrad": 1.8092,
+     "rear_sight_rise_mm": 0.659,
+     "crossings_from_eye_m": [
+      44.2,
+      182.9
+     ],
+     "max_ordinate_m": 0.0436,
+     "max_ordinate_range_m": 115.0,
+     "path_m": [
+      -0.0655,
+      -0.04809,
+      -0.03991,
+      -0.03208,
+      -0.0246,
+      -0.01073,
+      0.00165,
+      0.00728,
+      0.01252,
+      0.0192,
+      0.02954,
+      0.04157,
+      0.04268,
+      0.03213,
+      0.00913,
+      -0.02719,
+      -0.07777,
+      -0.14363,
+      -0.22587,
+      -0.32572,
+      -0.44448,
+      -0.58363,
+      -0.74476,
+      -0.92963,
+      -1.14021,
+      -1.37866,
+      -1.64738,
+      -1.94906,
+      -2.28667,
+      -2.66354,
+      -3.08337,
+      -3.55025
+     ],
+     "poi_vs_poa": [
+      {
+       "distance_from_eye_m": 10,
+       "poi_m": -0.04914,
+       "poi_mm": -49.1,
+       "velocity_mps": 840.3,
+       "energy_j": 1418.0,
+       "tof_ms": 11.09
+      },
+      {
+       "distance_from_eye_m": 15,
+       "poi_m": -0.04091,
+       "poi_mm": -40.9,
+       "velocity_mps": 835.1,
+       "energy_j": 1401.0,
+       "tof_ms": 17.06
+      },
+      {
+       "distance_from_eye_m": 20,
+       "poi_m": -0.03303,
+       "poi_mm": -33.0,
+       "velocity_mps": 830.0,
+       "energy_j": 1384.0,
+       "tof_ms": 23.07
+      },
+      {
+       "distance_from_eye_m": 25,
+       "poi_m": -0.02551,
+       "poi_mm": -25.5,
+       "velocity_mps": 824.9,
+       "energy_j": 1367.0,
+       "tof_ms": 29.11
+      },
+      {
+       "distance_from_eye_m": 35,
+       "poi_m": -0.01156,
+       "poi_mm": -11.6,
+       "velocity_mps": 814.6,
+       "energy_j": 1333.0,
+       "tof_ms": 41.31
+      },
+      {
+       "distance_from_eye_m": 45,
+       "poi_m": 0.00092,
+       "poi_mm": 0.9,
+       "velocity_mps": 804.5,
+       "energy_j": 1300.0,
+       "tof_ms": 53.66
+      },
+      {
+       "distance_from_eye_m": 55,
+       "poi_m": 0.01188,
+       "poi_mm": 11.9,
+       "velocity_mps": 794.4,
+       "energy_j": 1268.0,
+       "tof_ms": 66.17
+      },
+      {
+       "distance_from_eye_m": 62,
+       "poi_m": 0.01864,
+       "poi_mm": 18.6,
+       "velocity_mps": 787.4,
+       "energy_j": 1246.0,
+       "tof_ms": 75.02
+      }
+     ]
+    },
+    "hk300yd": {
+     "label": "HK drum diopter 3 (300 yd)",
+     "zero_distance_from_eye_m": 274.32,
+     "bore_angle_rad": 0.0026172764375575223,
+     "bore_angle_moa": 8.998,
+     "bore_angle_mrad": 2.6173,
+     "rear_sight_rise_mm": 0.953,
+     "crossings_from_eye_m": [
+      27.6,
+      274.3
+     ],
+     "max_ordinate_m": 0.1538,
+     "max_ordinate_range_m": 157.0,
+     "path_m": [
+      -0.0655,
+      -0.04001,
+      -0.02779,
+      -0.01591,
+      -0.0044,
+      0.01755,
+      0.03801,
+      0.04768,
+      0.05696,
+      0.0693,
+      0.09015,
+      0.12238,
+      0.14369,
+      0.15334,
+      0.15054,
+      0.13442,
+      0.10404,
+      0.05838,
+      -0.00366,
+      -0.0833,
+      -0.18187,
+      -0.30081,
+      -0.44174,
+      -0.60642,
+      -0.79679,
+      -1.01504,
+      -1.26356,
+      -1.54504,
+      -1.86245,
+      -2.21913,
+      -2.61875,
+      -3.06544
+     ],
+     "poi_vs_poa": [
+      {
+       "distance_from_eye_m": 10,
+       "poi_m": -0.04156,
+       "poi_mm": -41.6,
+       "velocity_mps": 840.3,
+       "energy_j": 1418.0,
+       "tof_ms": 11.09
+      },
+      {
+       "distance_from_eye_m": 15,
+       "poi_m": -0.02929,
+       "poi_mm": -29.3,
+       "velocity_mps": 835.1,
+       "energy_j": 1401.0,
+       "tof_ms": 17.06
+      },
+      {
+       "distance_from_eye_m": 20,
+       "poi_m": -0.01738,
+       "poi_mm": -17.4,
+       "velocity_mps": 830.0,
+       "energy_j": 1384.0,
+       "tof_ms": 23.07
+      },
+      {
+       "distance_from_eye_m": 25,
+       "poi_m": -0.00582,
+       "poi_mm": -5.8,
+       "velocity_mps": 824.9,
+       "energy_j": 1367.0,
+       "tof_ms": 29.11
+      },
+      {
+       "distance_from_eye_m": 35,
+       "poi_m": 0.01622,
+       "poi_mm": 16.2,
+       "velocity_mps": 814.6,
+       "energy_j": 1333.0,
+       "tof_ms": 41.31
+      },
+      {
+       "distance_from_eye_m": 45,
+       "poi_m": 0.03678,
+       "poi_mm": 36.8,
+       "velocity_mps": 804.5,
+       "energy_j": 1300.0,
+       "tof_ms": 53.66
+      },
+      {
+       "distance_from_eye_m": 55,
+       "poi_m": 0.05582,
+       "poi_mm": 55.8,
+       "velocity_mps": 794.4,
+       "energy_j": 1268.0,
+       "tof_ms": 66.17
+      },
+      {
+       "distance_from_eye_m": 62,
+       "poi_m": 0.06823,
+       "poi_mm": 68.2,
+       "velocity_mps": 787.4,
+       "energy_j": 1246.0,
+       "tof_ms": 75.02
+      }
+     ]
+    },
+    "hk400yd": {
+     "label": "HK drum diopter 4 (400 yd)",
+     "zero_distance_from_eye_m": 365.76,
+     "bore_angle_rad": 0.003667319219813759,
+     "bore_angle_moa": 12.607,
+     "bore_angle_mrad": 3.6673,
+     "rear_sight_rise_mm": 1.335,
+     "crossings_from_eye_m": [
+      19.1,
+      365.8
+     ],
+     "max_ordinate_m": 0.3448,
+     "max_ordinate_range_m": 205.0,
+     "path_m": [
+      -0.0655,
+      -0.02951,
+      -0.01204,
+      0.00509,
+      0.02185,
+      0.0543,
+      0.08526,
+      0.10018,
+      0.11471,
+      0.1344,
+      0.1689,
+      0.22738,
+      0.27494,
+      0.31085,
+      0.3343,
+      0.34443,
+      0.3403,
+      0.32089,
+      0.2851,
+      0.23171,
+      0.15939,
+      0.0667,
+      -0.04798,
+      -0.18641,
+      -0.35053,
+      -0.54253,
+      -0.7648,
+      -1.02003,
+      -1.3112,
+      -1.64162,
+      -2.01501,
+      -2.43544
+     ],
+     "poi_vs_poa": [
+      {
+       "distance_from_eye_m": 10,
+       "poi_m": -0.03172,
+       "poi_mm": -31.7,
+       "velocity_mps": 840.3,
+       "energy_j": 1418.0,
+       "tof_ms": 11.09
+      },
+      {
+       "distance_from_eye_m": 15,
+       "poi_m": -0.0142,
+       "poi_mm": -14.2,
+       "velocity_mps": 835.1,
+       "energy_j": 1401.0,
+       "tof_ms": 17.06
+      },
+      {
+       "distance_from_eye_m": 20,
+       "poi_m": 0.00297,
+       "poi_mm": 3.0,
+       "velocity_mps": 830.0,
+       "energy_j": 1384.0,
+       "tof_ms": 23.07
+      },
+      {
+       "distance_from_eye_m": 25,
+       "poi_m": 0.01978,
+       "poi_mm": 19.8,
+       "velocity_mps": 824.9,
+       "energy_j": 1367.0,
+       "tof_ms": 29.11
+      },
+      {
+       "distance_from_eye_m": 35,
+       "poi_m": 0.05232,
+       "poi_mm": 52.3,
+       "velocity_mps": 814.6,
+       "energy_j": 1333.0,
+       "tof_ms": 41.31
+      },
+      {
+       "distance_from_eye_m": 45,
+       "poi_m": 0.08338,
+       "poi_mm": 83.4,
+       "velocity_mps": 804.5,
+       "energy_j": 1300.0,
+       "tof_ms": 53.66
+      },
+      {
+       "distance_from_eye_m": 55,
+       "poi_m": 0.11292,
+       "poi_mm": 112.9,
+       "velocity_mps": 794.4,
+       "energy_j": 1268.0,
+       "tof_ms": 66.17
+      },
+      {
+       "distance_from_eye_m": 62,
+       "poi_m": 0.13268,
+       "poi_mm": 132.7,
+       "velocity_mps": 787.4,
+       "energy_j": 1246.0,
+       "tof_ms": 75.02
+      }
+     ]
+    },
+    "50_200": {
+     "label": "50 m near zero (the '50/200' zero)",
+     "zero_distance_from_eye_m": 50.0,
+     "bore_angle_rad": 0.0016756635305932124,
+     "bore_angle_moa": 5.761,
+     "bore_angle_mrad": 1.6757,
+     "rear_sight_rise_mm": 0.61,
+     "crossings_from_eye_m": [
+      50.0,
+      163.6
+     ],
+     "max_ordinate_m": 0.0287,
+     "max_ordinate_range_m": 107.0,
+     "path_m": [
+      -0.0655,
+      -0.04943,
+      -0.04191,
+      -0.03475,
+      -0.02794,
+      -0.01541,
+      -0.00436,
+      0.0006,
+      0.00517,
+      0.01092,
+      0.01953,
+      0.02821,
+      0.02598,
+      0.0121,
+      -0.01424,
+      -0.0539,
+      -0.10782,
+      -0.17702,
+      -0.2626,
+      -0.36578,
+      -0.48789,
+      -0.63037,
+      -0.79484,
+      -0.98306,
+      -1.19697,
+      -1.43876,
+      -1.71082,
+      -2.01583,
+      -2.35679,
+      -2.737,
+      -3.16017,
+      -3.63039
+     ],
+     "poi_vs_poa": [
+      {
+       "distance_from_eye_m": 10,
+       "poi_m": -0.05039,
+       "poi_mm": -50.4,
+       "velocity_mps": 840.3,
+       "energy_j": 1418.0,
+       "tof_ms": 11.09
+      },
+      {
+       "distance_from_eye_m": 15,
+       "poi_m": -0.04283,
+       "poi_mm": -42.8,
+       "velocity_mps": 835.1,
+       "energy_j": 1401.0,
+       "tof_ms": 17.06
+      },
+      {
+       "distance_from_eye_m": 20,
+       "poi_m": -0.03562,
+       "poi_mm": -35.6,
+       "velocity_mps": 830.0,
+       "energy_j": 1384.0,
+       "tof_ms": 23.07
+      },
+      {
+       "distance_from_eye_m": 25,
+       "poi_m": -0.02877,
+       "poi_mm": -28.8,
+       "velocity_mps": 824.9,
+       "energy_j": 1367.0,
+       "tof_ms": 29.11
+      },
+      {
+       "distance_from_eye_m": 35,
+       "poi_m": -0.01615,
+       "poi_mm": -16.1,
+       "velocity_mps": 814.6,
+       "energy_j": 1333.0,
+       "tof_ms": 41.31
+      },
+      {
+       "distance_from_eye_m": 45,
+       "poi_m": -0.00501,
+       "poi_mm": -5.0,
+       "velocity_mps": 804.5,
+       "energy_j": 1300.0,
+       "tof_ms": 53.66
+      },
+      {
+       "distance_from_eye_m": 55,
+       "poi_m": 0.00462,
+       "poi_mm": 4.6,
+       "velocity_mps": 794.4,
+       "energy_j": 1268.0,
+       "tof_ms": 66.17
+      },
+      {
+       "distance_from_eye_m": 62,
+       "poi_m": 0.01044,
+       "poi_mm": 10.4,
+       "velocity_mps": 787.4,
+       "energy_j": 1246.0,
+       "tof_ms": 75.02
+      }
+     ]
+    },
+    "25_300": {
+     "label": "25 m near zero (the '25/300' zero)",
+     "zero_distance_from_eye_m": 25.0,
+     "bore_angle_rad": 0.002855832418166552,
+     "bore_angle_moa": 9.818,
+     "bore_angle_mrad": 2.8558,
+     "rear_sight_rise_mm": 1.04,
+     "crossings_from_eye_m": [
+      25.0,
+      297.0
+     ],
+     "max_ordinate_m": 0.1927,
+     "max_ordinate_range_m": 169.0,
+     "path_m": [
+      -0.0655,
+      -0.03763,
+      -0.02421,
+      -0.01114,
+      0.00157,
+      0.0259,
+      0.04875,
+      0.05961,
+      0.07008,
+      0.08409,
+      0.10804,
+      0.14623,
+      0.17351,
+      0.18912,
+      0.19229,
+      0.18213,
+      0.15771,
+      0.11802,
+      0.06194,
+      -0.01174,
+      -0.10434,
+      -0.21732,
+      -0.35228,
+      -0.51099,
+      -0.69541,
+      -0.90769,
+      -1.15025,
+      -1.42576,
+      -1.73721,
+      -2.08792,
+      -2.48159,
+      -2.92231
+     ],
+     "poi_vs_poa": [
+      {
+       "distance_from_eye_m": 10,
+       "poi_m": -0.03932,
+       "poi_mm": -39.3,
+       "velocity_mps": 840.3,
+       "energy_j": 1418.0,
+       "tof_ms": 11.09
+      },
+      {
+       "distance_from_eye_m": 15,
+       "poi_m": -0.02586,
+       "poi_mm": -25.9,
+       "velocity_mps": 835.1,
+       "energy_j": 1401.0,
+       "tof_ms": 17.06
+      },
+      {
+       "distance_from_eye_m": 20,
+       "poi_m": -0.01275,
+       "poi_mm": -12.8,
+       "velocity_mps": 830.0,
+       "energy_j": 1384.0,
+       "tof_ms": 23.07
+      },
+      {
+       "distance_from_eye_m": 25,
+       "poi_m": -0.0,
+       "poi_mm": -0.0,
+       "velocity_mps": 824.9,
+       "energy_j": 1367.0,
+       "tof_ms": 29.11
+      },
+      {
+       "distance_from_eye_m": 35,
+       "poi_m": 0.02442,
+       "poi_mm": 24.4,
+       "velocity_mps": 814.6,
+       "energy_j": 1333.0,
+       "tof_ms": 41.31
+      },
+      {
+       "distance_from_eye_m": 45,
+       "poi_m": 0.04737,
+       "poi_mm": 47.4,
+       "velocity_mps": 804.5,
+       "energy_j": 1300.0,
+       "tof_ms": 53.66
+      },
+      {
+       "distance_from_eye_m": 55,
+       "poi_m": 0.0688,
+       "poi_mm": 68.8,
+       "velocity_mps": 794.4,
+       "energy_j": 1268.0,
+       "tof_ms": 66.17
+      },
+      {
+       "distance_from_eye_m": 62,
+       "poi_m": 0.08287,
+       "poi_mm": 82.9,
+       "velocity_mps": 787.4,
+       "energy_j": 1246.0,
+       "tof_ms": 75.02
+      }
+     ]
+    }
+   }
+  },
+  "Mk262": {
+   "label": "Mk 262 Mod 1, 77 gr Sierra MatchKing OTM",
+   "mass_kg": 0.00498951607,
+   "mass_gr": 77,
+   "diameter_m": 0.0056895999999999995,
+   "length_m": 0.0252476,
+   "bc_g7": 0.19,
+   "bc_g1": 0.372,
+   "mv": 770.0,
+   "mv_sigma": 4.5,
+   "group_es10_moa": 1.5,
+   "core": "lead, open-tip match jacket",
+   "sparks_on_steel": 0.05,
+   "source": {
+    "mass": "fact: 77 gr Sierra MatchKing",
+    "length_m": "recalled: 0.994 in (Sierra 77 gr MatchKing)",
+    "bc_g7": "recalled: 0.190, Litz measured G7 for the 77 gr SMK (not re-verified today)",
+    "bc_g1": "published: Sierra's 0.372 (above 2,500 ft/s)",
+    "mv": "inferred: HK's 850 m/s scaled by the Mk 262 to M855 ratio seen in 14.5 in chronograph reports (about 2,620 against 2,900 ft/s)",
+    "mv_sigma": "inferred: about 15 ft/s, match ammunition",
+    "group_es10_moa": "inferred: 10-shot extreme spread from a chrome-lined 14.5 in service barrel; the ammunition alone shoots under 1 MOA from match barrels",
+    "sparks_on_steel": "inferred: copper and lead on steel rarely spark"
+   },
+   "muzzle_energy_j": 1479.1,
+   "stability_sg": 2.215,
+   "supersonic_to_m": 666.0,
+   "range_m": [
+    0,
+    10,
+    15,
+    20,
+    25,
+    35,
+    45,
+    50,
+    55,
+    62,
+    75,
+    100,
+    125,
+    150,
+    175,
+    200,
+    225,
+    250,
+    275,
+    300,
+    325,
+    350,
+    375,
+    400,
+    425,
+    450,
+    475,
+    500,
+    525,
+    550,
+    575,
+    600
+   ],
+   "table": [
+    {
+     "range_m": 0,
+     "velocity_mps": 770.0,
+     "mach": 2.2627,
+     "energy_j": 1479.1,
+     "momentum_ns": 3.8419,
+     "tof_s": 0.0,
+     "drop_m": 0.0,
+     "wind_drift_10mph_m": 0.0,
+     "spin_drift_m": 0.0,
+     "coriolis_right_m": 0.0,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 10,
+     "velocity_mps": 762.18,
+     "mach": 2.2398,
+     "energy_j": 1449.3,
+     "momentum_ns": 3.8029,
+     "tof_s": 0.01305,
+     "drop_m": -0.00083,
+     "wind_drift_10mph_m": 0.0003,
+     "spin_drift_m": 4e-05,
+     "coriolis_right_m": 1e-05,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 15,
+     "velocity_mps": 758.29,
+     "mach": 2.2283,
+     "energy_j": 1434.5,
+     "momentum_ns": 3.7835,
+     "tof_s": 0.01963,
+     "drop_m": -0.00188,
+     "wind_drift_10mph_m": 0.00067,
+     "spin_drift_m": 8e-05,
+     "coriolis_right_m": 2e-05,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 20,
+     "velocity_mps": 754.4,
+     "mach": 2.2169,
+     "energy_j": 1419.8,
+     "momentum_ns": 3.7641,
+     "tof_s": 0.02624,
+     "drop_m": -0.00335,
+     "wind_drift_10mph_m": 0.00119,
+     "spin_drift_m": 0.00014,
+     "coriolis_right_m": 3e-05,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 25,
+     "velocity_mps": 750.53,
+     "mach": 2.2055,
+     "energy_j": 1405.3,
+     "momentum_ns": 3.7448,
+     "tof_s": 0.03289,
+     "drop_m": -0.00526,
+     "wind_drift_10mph_m": 0.00187,
+     "spin_drift_m": 0.00021,
+     "coriolis_right_m": 4e-05,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 35,
+     "velocity_mps": 742.82,
+     "mach": 2.1829,
+     "energy_j": 1376.6,
+     "momentum_ns": 3.7063,
+     "tof_s": 0.04628,
+     "drop_m": -0.01038,
+     "wind_drift_10mph_m": 0.00368,
+     "spin_drift_m": 0.00039,
+     "coriolis_right_m": 8e-05,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 45,
+     "velocity_mps": 735.16,
+     "mach": 2.1604,
+     "energy_j": 1348.3,
+     "momentum_ns": 3.6681,
+     "tof_s": 0.05981,
+     "drop_m": -0.01727,
+     "wind_drift_10mph_m": 0.00612,
+     "spin_drift_m": 0.00063,
+     "coriolis_right_m": 0.00014,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 50,
+     "velocity_mps": 731.35,
+     "mach": 2.1492,
+     "energy_j": 1334.4,
+     "momentum_ns": 3.6491,
+     "tof_s": 0.06663,
+     "drop_m": -0.0214,
+     "wind_drift_10mph_m": 0.00758,
+     "spin_drift_m": 0.00076,
+     "coriolis_right_m": 0.00017,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 55,
+     "velocity_mps": 727.54,
+     "mach": 2.138,
+     "energy_j": 1320.5,
+     "momentum_ns": 3.6301,
+     "tof_s": 0.07348,
+     "drop_m": -0.02598,
+     "wind_drift_10mph_m": 0.00919,
+     "spin_drift_m": 0.00091,
+     "coriolis_right_m": 0.00021,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 62,
+     "velocity_mps": 722.24,
+     "mach": 2.1224,
+     "energy_j": 1301.3,
+     "momentum_ns": 3.6036,
+     "tof_s": 0.08314,
+     "drop_m": -0.03318,
+     "wind_drift_10mph_m": 0.01172,
+     "spin_drift_m": 0.00114,
+     "coriolis_right_m": 0.00026,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 75,
+     "velocity_mps": 712.44,
+     "mach": 2.0936,
+     "energy_j": 1266.3,
+     "momentum_ns": 3.5547,
+     "tof_s": 0.10126,
+     "drop_m": -0.049,
+     "wind_drift_10mph_m": 0.01726,
+     "spin_drift_m": 0.00164,
+     "coriolis_right_m": 0.00039,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 100,
+     "velocity_mps": 693.82,
+     "mach": 2.0389,
+     "energy_j": 1200.9,
+     "momentum_ns": 3.4618,
+     "tof_s": 0.13682,
+     "drop_m": -0.08869,
+     "wind_drift_10mph_m": 0.03108,
+     "spin_drift_m": 0.00285,
+     "coriolis_right_m": 0.00069,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 125,
+     "velocity_mps": 675.5,
+     "mach": 1.985,
+     "energy_j": 1138.3,
+     "momentum_ns": 3.3704,
+     "tof_s": 0.17334,
+     "drop_m": -0.14111,
+     "wind_drift_10mph_m": 0.04919,
+     "spin_drift_m": 0.00439,
+     "coriolis_right_m": 0.00109,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 150,
+     "velocity_mps": 657.47,
+     "mach": 1.9321,
+     "energy_j": 1078.4,
+     "momentum_ns": 3.2804,
+     "tof_s": 0.21086,
+     "drop_m": -0.20696,
+     "wind_drift_10mph_m": 0.07175,
+     "spin_drift_m": 0.00628,
+     "coriolis_right_m": 0.00159,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 175,
+     "velocity_mps": 639.73,
+     "mach": 1.8799,
+     "energy_j": 1021.0,
+     "momentum_ns": 3.1919,
+     "tof_s": 0.2494,
+     "drop_m": -0.287,
+     "wind_drift_10mph_m": 0.09894,
+     "spin_drift_m": 0.00854,
+     "coriolis_right_m": 0.00218,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 200,
+     "velocity_mps": 622.26,
+     "mach": 1.8286,
+     "energy_j": 966.0,
+     "momentum_ns": 3.1048,
+     "tof_s": 0.28903,
+     "drop_m": -0.38202,
+     "wind_drift_10mph_m": 0.13093,
+     "spin_drift_m": 0.01119,
+     "coriolis_right_m": 0.00288,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 225,
+     "velocity_mps": 605.05,
+     "mach": 1.778,
+     "energy_j": 913.3,
+     "momentum_ns": 3.0189,
+     "tof_s": 0.32977,
+     "drop_m": -0.49287,
+     "wind_drift_10mph_m": 0.16793,
+     "spin_drift_m": 0.01424,
+     "coriolis_right_m": 0.00368,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 250,
+     "velocity_mps": 588.1,
+     "mach": 1.7282,
+     "energy_j": 862.8,
+     "momentum_ns": 2.9343,
+     "tof_s": 0.37168,
+     "drop_m": -0.62048,
+     "wind_drift_10mph_m": 0.21014,
+     "spin_drift_m": 0.01772,
+     "coriolis_right_m": 0.00458,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 275,
+     "velocity_mps": 571.37,
+     "mach": 1.679,
+     "energy_j": 814.4,
+     "momentum_ns": 2.8509,
+     "tof_s": 0.41481,
+     "drop_m": -0.76581,
+     "wind_drift_10mph_m": 0.2578,
+     "spin_drift_m": 0.02167,
+     "coriolis_right_m": 0.0056,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 300,
+     "velocity_mps": 554.87,
+     "mach": 1.6306,
+     "energy_j": 768.1,
+     "momentum_ns": 2.7685,
+     "tof_s": 0.45921,
+     "drop_m": -0.92992,
+     "wind_drift_10mph_m": 0.31115,
+     "spin_drift_m": 0.0261,
+     "coriolis_right_m": 0.00673,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 325,
+     "velocity_mps": 538.59,
+     "mach": 1.5827,
+     "energy_j": 723.7,
+     "momentum_ns": 2.6873,
+     "tof_s": 0.50494,
+     "drop_m": -1.11395,
+     "wind_drift_10mph_m": 0.37045,
+     "spin_drift_m": 0.03105,
+     "coriolis_right_m": 0.00798,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 350,
+     "velocity_mps": 522.52,
+     "mach": 1.5355,
+     "energy_j": 681.1,
+     "momentum_ns": 2.6071,
+     "tof_s": 0.55207,
+     "drop_m": -1.31912,
+     "wind_drift_10mph_m": 0.43599,
+     "spin_drift_m": 0.03656,
+     "coriolis_right_m": 0.00934,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 375,
+     "velocity_mps": 506.66,
+     "mach": 1.4889,
+     "energy_j": 640.4,
+     "momentum_ns": 2.528,
+     "tof_s": 0.60066,
+     "drop_m": -1.54674,
+     "wind_drift_10mph_m": 0.50806,
+     "spin_drift_m": 0.04266,
+     "coriolis_right_m": 0.01084,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 400,
+     "velocity_mps": 491.0,
+     "mach": 1.4429,
+     "energy_j": 601.4,
+     "momentum_ns": 2.4499,
+     "tof_s": 0.65079,
+     "drop_m": -1.79826,
+     "wind_drift_10mph_m": 0.587,
+     "spin_drift_m": 0.0494,
+     "coriolis_right_m": 0.01246,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 425,
+     "velocity_mps": 475.56,
+     "mach": 1.3975,
+     "energy_j": 564.2,
+     "momentum_ns": 2.3728,
+     "tof_s": 0.70253,
+     "drop_m": -2.07521,
+     "wind_drift_10mph_m": 0.67315,
+     "spin_drift_m": 0.05682,
+     "coriolis_right_m": 0.01421,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 450,
+     "velocity_mps": 460.32,
+     "mach": 1.3527,
+     "energy_j": 528.6,
+     "momentum_ns": 2.2968,
+     "tof_s": 0.75596,
+     "drop_m": -2.37928,
+     "wind_drift_10mph_m": 0.7669,
+     "spin_drift_m": 0.06498,
+     "coriolis_right_m": 0.0161,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 475,
+     "velocity_mps": 445.3,
+     "mach": 1.3086,
+     "energy_j": 494.7,
+     "momentum_ns": 2.2218,
+     "tof_s": 0.81119,
+     "drop_m": -2.71229,
+     "wind_drift_10mph_m": 0.86862,
+     "spin_drift_m": 0.07393,
+     "coriolis_right_m": 0.01813,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 500,
+     "velocity_mps": 430.51,
+     "mach": 1.2651,
+     "energy_j": 462.4,
+     "momentum_ns": 2.148,
+     "tof_s": 0.86829,
+     "drop_m": -3.07624,
+     "wind_drift_10mph_m": 0.97876,
+     "spin_drift_m": 0.08373,
+     "coriolis_right_m": 0.02031,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 525,
+     "velocity_mps": 415.97,
+     "mach": 1.2224,
+     "energy_j": 431.7,
+     "momentum_ns": 2.0755,
+     "tof_s": 0.92737,
+     "drop_m": -3.47328,
+     "wind_drift_10mph_m": 1.09775,
+     "spin_drift_m": 0.09445,
+     "coriolis_right_m": 0.02264,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 550,
+     "velocity_mps": 401.69,
+     "mach": 1.1804,
+     "energy_j": 402.5,
+     "momentum_ns": 2.0042,
+     "tof_s": 0.98854,
+     "drop_m": -3.90576,
+     "wind_drift_10mph_m": 1.22606,
+     "spin_drift_m": 0.10616,
+     "coriolis_right_m": 0.02513,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 575,
+     "velocity_mps": 387.7,
+     "mach": 1.1393,
+     "energy_j": 375.0,
+     "momentum_ns": 1.9344,
+     "tof_s": 1.05191,
+     "drop_m": -4.37627,
+     "wind_drift_10mph_m": 1.36417,
+     "spin_drift_m": 0.11894,
+     "coriolis_right_m": 0.02778,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 600,
+     "velocity_mps": 374.02,
+     "mach": 1.0991,
+     "energy_j": 349.0,
+     "momentum_ns": 1.8662,
+     "tof_s": 1.11757,
+     "drop_m": -4.88759,
+     "wind_drift_10mph_m": 1.51259,
+     "spin_drift_m": 0.13288,
+     "coriolis_right_m": 0.0306,
+     "coriolis_up_m": 0.0
+    }
+   ],
+   "zeros": {
+    "hk100yd": {
+     "label": "HK manual zero: 100 yd on the V notch (drum position 1)",
+     "zero_distance_from_eye_m": 91.44,
+     "bore_angle_rad": 0.0015213662879410416,
+     "bore_angle_moa": 5.23,
+     "bore_angle_mrad": 1.5214,
+     "rear_sight_rise_mm": 0.554,
+     "crossings_from_eye_m": [
+      78.2,
+      91.4
+     ],
+     "max_ordinate_m": 0.0004,
+     "max_ordinate_range_m": 84.0,
+     "path_m": [
+      -0.0655,
+      -0.05112,
+      -0.04456,
+      -0.03843,
+      -0.03272,
+      -0.02263,
+      -0.01431,
+      -0.01083,
+      -0.00781,
+      -0.00436,
+      -0.0004,
+      -0.00205,
+      -0.01643,
+      -0.04426,
+      -0.08626,
+      -0.14325,
+      -0.21607,
+      -0.30564,
+      -0.41293,
+      -0.53901,
+      -0.68501,
+      -0.85214,
+      -1.04173,
+      -1.25521,
+      -1.49413,
+      -1.76017,
+      -2.05515,
+      -2.38106,
+      -2.74006,
+      -3.13452,
+      -3.56699,
+      -4.04027
+     ],
+     "poi_vs_poa": [
+      {
+       "distance_from_eye_m": 10,
+       "poi_m": -0.05197,
+       "poi_mm": -52.0,
+       "velocity_mps": 762.7,
+       "energy_j": 1451.0,
+       "tof_ms": 12.24
+      },
+      {
+       "distance_from_eye_m": 15,
+       "poi_m": -0.04535,
+       "poi_mm": -45.4,
+       "velocity_mps": 758.8,
+       "energy_j": 1436.0,
+       "tof_ms": 18.81
+      },
+      {
+       "distance_from_eye_m": 20,
+       "poi_m": -0.03917,
+       "poi_mm": -39.2,
+       "velocity_mps": 754.9,
+       "energy_j": 1422.0,
+       "tof_ms": 25.41
+      },
+      {
+       "distance_from_eye_m": 25,
+       "poi_m": -0.03341,
+       "poi_mm": -33.4,
+       "velocity_mps": 751.0,
+       "energy_j": 1407.0,
+       "tof_ms": 32.06
+      },
+      {
+       "distance_from_eye_m": 35,
+       "poi_m": -0.02321,
+       "poi_mm": -23.2,
+       "velocity_mps": 743.3,
+       "energy_j": 1378.0,
+       "tof_ms": 45.44
+      },
+      {
+       "distance_from_eye_m": 45,
+       "poi_m": -0.01478,
+       "poi_mm": -14.8,
+       "velocity_mps": 735.6,
+       "energy_j": 1350.0,
+       "tof_ms": 58.96
+      },
+      {
+       "distance_from_eye_m": 55,
+       "poi_m": -0.00816,
+       "poi_mm": -8.2,
+       "velocity_mps": 728.0,
+       "energy_j": 1322.0,
+       "tof_ms": 72.63
+      },
+      {
+       "distance_from_eye_m": 62,
+       "poi_m": -0.00463,
+       "poi_mm": -4.6,
+       "velocity_mps": 722.7,
+       "energy_j": 1303.0,
+       "tof_ms": 82.28
+      }
+     ]
+    },
+    "hk200yd": {
+     "label": "HK drum diopter 2 (200 yd)",
+     "zero_distance_from_eye_m": 182.88,
+     "bore_angle_rad": 0.0020767444775806974,
+     "bore_angle_moa": 7.139,
+     "bore_angle_mrad": 2.0767,
+     "rear_sight_rise_mm": 0.756,
+     "crossings_from_eye_m": [
+      37.8,
+      182.9
+     ],
+     "max_ordinate_m": 0.0549,
+     "max_ordinate_range_m": 111.0,
+     "path_m": [
+      -0.0655,
+      -0.04557,
+      -0.03623,
+      -0.02732,
+      -0.01884,
+      -0.00319,
+      0.01068,
+      0.01694,
+      0.02274,
+      0.03008,
+      0.04125,
+      0.05349,
+      0.05299,
+      0.03905,
+      0.01093,
+      -0.03217,
+      -0.09111,
+      -0.16679,
+      -0.2602,
+      -0.3724,
+      -0.50451,
+      -0.65776,
+      -0.83347,
+      -1.03307,
+      -1.2581,
+      -1.51025,
+      -1.79135,
+      -2.10338,
+      -2.4485,
+      -2.82907,
+      -3.24765,
+      -3.70705
+     ],
+     "poi_vs_poa": [
+      {
+       "distance_from_eye_m": 10,
+       "poi_m": -0.04676,
+       "poi_mm": -46.8,
+       "velocity_mps": 762.7,
+       "energy_j": 1451.0,
+       "tof_ms": 12.24
+      },
+      {
+       "distance_from_eye_m": 15,
+       "poi_m": -0.03737,
+       "poi_mm": -37.4,
+       "velocity_mps": 758.8,
+       "energy_j": 1436.0,
+       "tof_ms": 18.81
+      },
+      {
+       "distance_from_eye_m": 20,
+       "poi_m": -0.02841,
+       "poi_mm": -28.4,
+       "velocity_mps": 754.9,
+       "energy_j": 1422.0,
+       "tof_ms": 25.41
+      },
+      {
+       "distance_from_eye_m": 25,
+       "poi_m": -0.01987,
+       "poi_mm": -19.9,
+       "velocity_mps": 751.0,
+       "energy_j": 1407.0,
+       "tof_ms": 32.06
+      },
+      {
+       "distance_from_eye_m": 35,
+       "poi_m": -0.00412,
+       "poi_mm": -4.1,
+       "velocity_mps": 743.3,
+       "energy_j": 1378.0,
+       "tof_ms": 45.44
+      },
+      {
+       "distance_from_eye_m": 45,
+       "poi_m": 0.00987,
+       "poi_mm": 9.9,
+       "velocity_mps": 735.6,
+       "energy_j": 1350.0,
+       "tof_ms": 58.96
+      },
+      {
+       "distance_from_eye_m": 55,
+       "poi_m": 0.02204,
+       "poi_mm": 22.0,
+       "velocity_mps": 728.0,
+       "energy_j": 1322.0,
+       "tof_ms": 72.63
+      },
+      {
+       "distance_from_eye_m": 62,
+       "poi_m": 0.02946,
+       "poi_mm": 29.5,
+       "velocity_mps": 722.7,
+       "energy_j": 1303.0,
+       "tof_ms": 82.28
+      }
+     ]
+    },
+    "hk300yd": {
+     "label": "HK drum diopter 3 (300 yd)",
+     "zero_distance_from_eye_m": 274.32,
+     "bore_angle_rad": 0.003007997556026459,
+     "bore_angle_moa": 10.341,
+     "bore_angle_mrad": 3.008,
+     "rear_sight_rise_mm": 1.095,
+     "crossings_from_eye_m": [
+      23.9,
+      274.3
+     ],
+     "max_ordinate_m": 0.1789,
+     "max_ordinate_range_m": 154.0,
+     "path_m": [
+      -0.0655,
+      -0.03625,
+      -0.02226,
+      -0.00869,
+      0.00444,
+      0.0294,
+      0.05259,
+      0.0635,
+      0.07396,
+      0.08781,
+      0.1111,
+      0.14661,
+      0.16939,
+      0.17874,
+      0.1739,
+      0.15408,
+      0.11842,
+      0.06602,
+      -0.00411,
+      -0.09303,
+      -0.20186,
+      -0.33183,
+      -0.48425,
+      -0.66057,
+      -0.86233,
+      -1.0912,
+      -1.34902,
+      -1.63776,
+      -1.9596,
+      -2.31689,
+      -2.7122,
+      -3.14832
+     ],
+     "poi_vs_poa": [
+      {
+       "distance_from_eye_m": 10,
+       "poi_m": -0.03803,
+       "poi_mm": -38.0,
+       "velocity_mps": 762.7,
+       "energy_j": 1451.0,
+       "tof_ms": 12.24
+      },
+      {
+       "distance_from_eye_m": 15,
+       "poi_m": -0.02398,
+       "poi_mm": -24.0,
+       "velocity_mps": 758.8,
+       "energy_j": 1436.0,
+       "tof_ms": 18.81
+      },
+      {
+       "distance_from_eye_m": 20,
+       "poi_m": -0.01036,
+       "poi_mm": -10.4,
+       "velocity_mps": 754.9,
+       "energy_j": 1422.0,
+       "tof_ms": 25.41
+      },
+      {
+       "distance_from_eye_m": 25,
+       "poi_m": 0.00283,
+       "poi_mm": 2.8,
+       "velocity_mps": 751.0,
+       "energy_j": 1407.0,
+       "tof_ms": 32.06
+      },
+      {
+       "distance_from_eye_m": 35,
+       "poi_m": 0.0279,
+       "poi_mm": 27.9,
+       "velocity_mps": 743.3,
+       "energy_j": 1378.0,
+       "tof_ms": 45.44
+      },
+      {
+       "distance_from_eye_m": 45,
+       "poi_m": 0.05119,
+       "poi_mm": 51.2,
+       "velocity_mps": 735.6,
+       "energy_j": 1350.0,
+       "tof_ms": 58.96
+      },
+      {
+       "distance_from_eye_m": 55,
+       "poi_m": 0.07268,
+       "poi_mm": 72.7,
+       "velocity_mps": 728.0,
+       "energy_j": 1322.0,
+       "tof_ms": 72.63
+      },
+      {
+       "distance_from_eye_m": 62,
+       "poi_m": 0.08662,
+       "poi_mm": 86.6,
+       "velocity_mps": 722.7,
+       "energy_j": 1303.0,
+       "tof_ms": 82.28
+      }
+     ]
+    },
+    "hk400yd": {
+     "label": "HK drum diopter 4 (400 yd)",
+     "zero_distance_from_eye_m": 365.76,
+     "bore_angle_rad": 0.004161949465430559,
+     "bore_angle_moa": 14.308,
+     "bore_angle_mrad": 4.1619,
+     "rear_sight_rise_mm": 1.515,
+     "crossings_from_eye_m": [
+      16.9,
+      365.8
+     ],
+     "max_ordinate_m": 0.3849,
+     "max_ordinate_range_m": 202.0,
+     "path_m": [
+      -0.0655,
+      -0.02471,
+      -0.00495,
+      0.01439,
+      0.03329,
+      0.06979,
+      0.10452,
+      0.1212,
+      0.13742,
+      0.15936,
+      0.19764,
+      0.26201,
+      0.31364,
+      0.35183,
+      0.37584,
+      0.38487,
+      0.37806,
+      0.35451,
+      0.31322,
+      0.25316,
+      0.17317,
+      0.07205,
+      -0.05153,
+      -0.199,
+      -0.37191,
+      -0.57194,
+      -0.80091,
+      -1.06081,
+      -1.3538,
+      -1.68225,
+      -2.04871,
+      -2.45599
+     ],
+     "poi_vs_poa": [
+      {
+       "distance_from_eye_m": 10,
+       "poi_m": -0.02721,
+       "poi_mm": -27.2,
+       "velocity_mps": 762.7,
+       "energy_j": 1451.0,
+       "tof_ms": 12.24
+      },
+      {
+       "distance_from_eye_m": 15,
+       "poi_m": -0.00739,
+       "poi_mm": -7.4,
+       "velocity_mps": 758.8,
+       "energy_j": 1436.0,
+       "tof_ms": 18.81
+      },
+      {
+       "distance_from_eye_m": 20,
+       "poi_m": 0.012,
+       "poi_mm": 12.0,
+       "velocity_mps": 754.9,
+       "energy_j": 1422.0,
+       "tof_ms": 25.41
+      },
+      {
+       "distance_from_eye_m": 25,
+       "poi_m": 0.03096,
+       "poi_mm": 31.0,
+       "velocity_mps": 751.0,
+       "energy_j": 1407.0,
+       "tof_ms": 32.06
+      },
+      {
+       "distance_from_eye_m": 35,
+       "poi_m": 0.06757,
+       "poi_mm": 67.6,
+       "velocity_mps": 743.3,
+       "energy_j": 1378.0,
+       "tof_ms": 45.44
+      },
+      {
+       "distance_from_eye_m": 45,
+       "poi_m": 0.1024,
+       "poi_mm": 102.4,
+       "velocity_mps": 735.6,
+       "energy_j": 1350.0,
+       "tof_ms": 58.96
+      },
+      {
+       "distance_from_eye_m": 55,
+       "poi_m": 0.13542,
+       "poi_mm": 135.4,
+       "velocity_mps": 728.0,
+       "energy_j": 1322.0,
+       "tof_ms": 72.63
+      },
+      {
+       "distance_from_eye_m": 62,
+       "poi_m": 0.15744,
+       "poi_mm": 157.4,
+       "velocity_mps": 722.7,
+       "energy_j": 1303.0,
+       "tof_ms": 82.28
+      }
+     ]
+    },
+    "50_200": {
+     "label": "50 m near zero (the '50/200' zero)",
+     "zero_distance_from_eye_m": 50.0,
+     "bore_angle_rad": 0.0017490186439069895,
+     "bore_angle_moa": 6.013,
+     "bore_angle_mrad": 1.749,
+     "rear_sight_rise_mm": 0.637,
+     "crossings_from_eye_m": [
+      50.0,
+      141.1
+     ],
+     "max_ordinate_m": 0.0209,
+     "max_ordinate_range_m": 95.0,
+     "path_m": [
+      -0.0655,
+      -0.04884,
+      -0.04114,
+      -0.03387,
+      -0.02703,
+      -0.01466,
+      -0.00407,
+      0.00055,
+      0.00471,
+      0.00976,
+      0.01667,
+      0.02072,
+      0.01202,
+      -0.01011,
+      -0.04642,
+      -0.09772,
+      -0.16485,
+      -0.24872,
+      -0.35033,
+      -0.47072,
+      -0.61102,
+      -0.77246,
+      -0.95636,
+      -1.16415,
+      -1.39738,
+      -1.65773,
+      -1.94702,
+      -2.26724,
+      -2.62055,
+      -3.00931,
+      -3.43609,
+      -3.90368
+     ],
+     "poi_vs_poa": [
+      {
+       "distance_from_eye_m": 10,
+       "poi_m": -0.04983,
+       "poi_mm": -49.8,
+       "velocity_mps": 762.7,
+       "energy_j": 1451.0,
+       "tof_ms": 12.24
+      },
+      {
+       "distance_from_eye_m": 15,
+       "poi_m": -0.04208,
+       "poi_mm": -42.1,
+       "velocity_mps": 758.8,
+       "energy_j": 1436.0,
+       "tof_ms": 18.81
+      },
+      {
+       "distance_from_eye_m": 20,
+       "poi_m": -0.03476,
+       "poi_mm": -34.8,
+       "velocity_mps": 754.9,
+       "energy_j": 1422.0,
+       "tof_ms": 25.41
+      },
+      {
+       "distance_from_eye_m": 25,
+       "poi_m": -0.02786,
+       "poi_mm": -27.9,
+       "velocity_mps": 751.0,
+       "energy_j": 1407.0,
+       "tof_ms": 32.06
+      },
+      {
+       "distance_from_eye_m": 35,
+       "poi_m": -0.01538,
+       "poi_mm": -15.4,
+       "velocity_mps": 743.3,
+       "energy_j": 1378.0,
+       "tof_ms": 45.44
+      },
+      {
+       "distance_from_eye_m": 45,
+       "poi_m": -0.00468,
+       "poi_mm": -4.7,
+       "velocity_mps": 735.6,
+       "energy_j": 1350.0,
+       "tof_ms": 58.96
+      },
+      {
+       "distance_from_eye_m": 55,
+       "poi_m": 0.00422,
+       "poi_mm": 4.2,
+       "velocity_mps": 728.0,
+       "energy_j": 1322.0,
+       "tof_ms": 72.63
+      },
+      {
+       "distance_from_eye_m": 62,
+       "poi_m": 0.00934,
+       "poi_mm": 9.3,
+       "velocity_mps": 722.7,
+       "energy_j": 1303.0,
+       "tof_ms": 82.28
+      }
+     ]
+    },
+    "25_300": {
+     "label": "25 m near zero (the '25/300' zero)",
+     "zero_distance_from_eye_m": 25.0,
+     "bore_angle_rad": 0.0028920315353659276,
+     "bore_angle_moa": 9.942,
+     "bore_angle_mrad": 2.892,
+     "rear_sight_rise_mm": 1.053,
+     "crossings_from_eye_m": [
+      25.0,
+      264.1
+     ],
+     "max_ordinate_m": 0.1614,
+     "max_ordinate_range_m": 149.0,
+     "path_m": [
+      -0.0655,
+      -0.03741,
+      -0.024,
+      -0.01101,
+      0.00154,
+      0.02534,
+      0.04737,
+      0.0577,
+      0.06758,
+      0.08062,
+      0.1024,
+      0.13502,
+      0.1549,
+      0.16134,
+      0.15361,
+      0.13089,
+      0.09233,
+      0.03703,
+      -0.036,
+      -0.12782,
+      -0.23955,
+      -0.37241,
+      -0.52774,
+      -0.70696,
+      -0.91161,
+      -1.14338,
+      -1.4041,
+      -1.69574,
+      -2.02048,
+      -2.38067,
+      -2.77888,
+      -3.2179
+     ],
+     "poi_vs_poa": [
+      {
+       "distance_from_eye_m": 10,
+       "poi_m": -0.03912,
+       "poi_mm": -39.1,
+       "velocity_mps": 762.7,
+       "energy_j": 1451.0,
+       "tof_ms": 12.24
+      },
+      {
+       "distance_from_eye_m": 15,
+       "poi_m": -0.02565,
+       "poi_mm": -25.6,
+       "velocity_mps": 758.8,
+       "energy_j": 1436.0,
+       "tof_ms": 18.81
+      },
+      {
+       "distance_from_eye_m": 20,
+       "poi_m": -0.01261,
+       "poi_mm": -12.6,
+       "velocity_mps": 754.9,
+       "energy_j": 1422.0,
+       "tof_ms": 25.41
+      },
+      {
+       "distance_from_eye_m": 25,
+       "poi_m": -0.0,
+       "poi_mm": -0.0,
+       "velocity_mps": 751.0,
+       "energy_j": 1407.0,
+       "tof_ms": 32.06
+      },
+      {
+       "distance_from_eye_m": 35,
+       "poi_m": 0.02391,
+       "poi_mm": 23.9,
+       "velocity_mps": 743.3,
+       "energy_j": 1378.0,
+       "tof_ms": 45.44
+      },
+      {
+       "distance_from_eye_m": 45,
+       "poi_m": 0.04605,
+       "poi_mm": 46.0,
+       "velocity_mps": 735.6,
+       "energy_j": 1350.0,
+       "tof_ms": 58.96
+      },
+      {
+       "distance_from_eye_m": 55,
+       "poi_m": 0.06637,
+       "poi_mm": 66.4,
+       "velocity_mps": 728.0,
+       "energy_j": 1322.0,
+       "tof_ms": 72.63
+      },
+      {
+       "distance_from_eye_m": 62,
+       "poi_m": 0.0795,
+       "poi_mm": 79.5,
+       "velocity_mps": 722.7,
+       "energy_j": 1303.0,
+       "tof_ms": 82.28
+      }
+     ]
+    }
+   }
+  },
+  "M856": {
+   "label": "M856 tracer, 63.7 gr",
+   "mass_kg": 0.004127690567,
+   "mass_gr": 63.7,
+   "diameter_m": 0.0056895999999999995,
+   "length_m": 0.029209999999999996,
+   "bc_g7": 0.14,
+   "bc_g1": 0.282,
+   "mv": 810.0,
+   "mv_sigma": 9.0,
+   "group_es10_moa": 5.0,
+   "core": "lead front core, tracer composition in the base",
+   "sparks_on_steel": 1.0,
+   "tracer": {
+    "ignite_distance_m": 15.0,
+    "full_bright_distance_m": 70.0,
+    "burnout_distance_m": 800.0,
+    "color_rgb": [
+     1.0,
+     0.25,
+     0.08
+    ],
+    "mass_loss_kg": 0.00025,
+    "source": "recalled: specification asks for a visible trace from about 75 yd to at least 875 yd (800 m); red strontium-based composition. ignite_distance_m (dim trace start) and mass loss are inferred. Mass loss and base-burn drag change are not modelled"
+   },
+   "source": {
+    "mass": "recalled: 63.7 gr",
+    "length_m": "recalled: about 1.15 in",
+    "bc_g7": "inferred: no trusted published figure; set a little below M855",
+    "mv": "inferred: HK's 850 m/s scaled by the published 20 in velocities of M856 and M855 (about 2,870 against 3,020 ft/s)",
+    "group_es10_moa": "inferred: tracers group worse than ball"
+   },
+   "muzzle_energy_j": 1354.1,
+   "stability_sg": 1.218,
+   "supersonic_to_m": 528.0,
+   "range_m": [
+    0,
+    10,
+    15,
+    20,
+    25,
+    35,
+    45,
+    50,
+    55,
+    62,
+    75,
+    100,
+    125,
+    150,
+    175,
+    200,
+    225,
+    250,
+    275,
+    300,
+    325,
+    350,
+    375,
+    400,
+    425,
+    450,
+    475,
+    500,
+    525,
+    550,
+    575,
+    600
+   ],
+   "table": [
+    {
+     "range_m": 0,
+     "velocity_mps": 810.0,
+     "mach": 2.3803,
+     "energy_j": 1354.1,
+     "momentum_ns": 3.3434,
+     "tof_s": 0.0,
+     "drop_m": 0.0,
+     "wind_drift_10mph_m": 0.0,
+     "spin_drift_m": 0.0,
+     "coriolis_right_m": 0.0,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 10,
+     "velocity_mps": 799.1,
+     "mach": 2.3483,
+     "energy_j": 1317.9,
+     "momentum_ns": 3.2985,
+     "tof_s": 0.01243,
+     "drop_m": -0.00075,
+     "wind_drift_10mph_m": 0.00038,
+     "spin_drift_m": 3e-05,
+     "coriolis_right_m": 1e-05,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 15,
+     "velocity_mps": 793.68,
+     "mach": 2.3323,
+     "energy_j": 1300.1,
+     "momentum_ns": 3.2761,
+     "tof_s": 0.01871,
+     "drop_m": -0.0017,
+     "wind_drift_10mph_m": 0.00085,
+     "spin_drift_m": 5e-05,
+     "coriolis_right_m": 1e-05,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 20,
+     "velocity_mps": 788.29,
+     "mach": 2.3165,
+     "energy_j": 1282.5,
+     "momentum_ns": 3.2538,
+     "tof_s": 0.02503,
+     "drop_m": -0.00304,
+     "wind_drift_10mph_m": 0.00151,
+     "spin_drift_m": 9e-05,
+     "coriolis_right_m": 3e-05,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 25,
+     "velocity_mps": 782.91,
+     "mach": 2.3007,
+     "energy_j": 1265.0,
+     "momentum_ns": 3.2316,
+     "tof_s": 0.03139,
+     "drop_m": -0.00478,
+     "wind_drift_10mph_m": 0.00237,
+     "spin_drift_m": 0.00014,
+     "coriolis_right_m": 4e-05,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 35,
+     "velocity_mps": 772.21,
+     "mach": 2.2692,
+     "energy_j": 1230.7,
+     "momentum_ns": 3.1874,
+     "tof_s": 0.04425,
+     "drop_m": -0.00945,
+     "wind_drift_10mph_m": 0.00467,
+     "spin_drift_m": 0.00026,
+     "coriolis_right_m": 8e-05,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 45,
+     "velocity_mps": 761.59,
+     "mach": 2.238,
+     "energy_j": 1197.1,
+     "momentum_ns": 3.1436,
+     "tof_s": 0.05729,
+     "drop_m": -0.01577,
+     "wind_drift_10mph_m": 0.00778,
+     "spin_drift_m": 0.00041,
+     "coriolis_right_m": 0.00013,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 50,
+     "velocity_mps": 756.31,
+     "mach": 2.2225,
+     "energy_j": 1180.5,
+     "momentum_ns": 3.1218,
+     "tof_s": 0.06388,
+     "drop_m": -0.01956,
+     "wind_drift_10mph_m": 0.00963,
+     "spin_drift_m": 0.0005,
+     "coriolis_right_m": 0.00016,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 55,
+     "velocity_mps": 751.05,
+     "mach": 2.2071,
+     "energy_j": 1164.2,
+     "momentum_ns": 3.1001,
+     "tof_s": 0.07052,
+     "drop_m": -0.02378,
+     "wind_drift_10mph_m": 0.01169,
+     "spin_drift_m": 0.0006,
+     "coriolis_right_m": 0.0002,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 62,
+     "velocity_mps": 743.72,
+     "mach": 2.1855,
+     "energy_j": 1141.6,
+     "momentum_ns": 3.0699,
+     "tof_s": 0.07988,
+     "drop_m": -0.03042,
+     "wind_drift_10mph_m": 0.01493,
+     "spin_drift_m": 0.00075,
+     "coriolis_right_m": 0.00025,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 75,
+     "velocity_mps": 730.22,
+     "mach": 2.1459,
+     "energy_j": 1100.5,
+     "momentum_ns": 3.0141,
+     "tof_s": 0.09752,
+     "drop_m": -0.04506,
+     "wind_drift_10mph_m": 0.02204,
+     "spin_drift_m": 0.00108,
+     "coriolis_right_m": 0.00037,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 100,
+     "velocity_mps": 704.66,
+     "mach": 2.0707,
+     "energy_j": 1024.8,
+     "momentum_ns": 2.9086,
+     "tof_s": 0.13238,
+     "drop_m": -0.08207,
+     "wind_drift_10mph_m": 0.03987,
+     "spin_drift_m": 0.0019,
+     "coriolis_right_m": 0.00067,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 125,
+     "velocity_mps": 679.63,
+     "mach": 1.9972,
+     "energy_j": 953.3,
+     "momentum_ns": 2.8053,
+     "tof_s": 0.1685,
+     "drop_m": -0.13142,
+     "wind_drift_10mph_m": 0.06339,
+     "spin_drift_m": 0.00295,
+     "coriolis_right_m": 0.00106,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 150,
+     "velocity_mps": 655.14,
+     "mach": 1.9252,
+     "energy_j": 885.8,
+     "momentum_ns": 2.7042,
+     "tof_s": 0.20597,
+     "drop_m": -0.19405,
+     "wind_drift_10mph_m": 0.09291,
+     "spin_drift_m": 0.00426,
+     "coriolis_right_m": 0.00154,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 175,
+     "velocity_mps": 631.18,
+     "mach": 1.8548,
+     "energy_j": 822.2,
+     "momentum_ns": 2.6053,
+     "tof_s": 0.24485,
+     "drop_m": -0.27097,
+     "wind_drift_10mph_m": 0.12873,
+     "spin_drift_m": 0.00585,
+     "coriolis_right_m": 0.00212,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 200,
+     "velocity_mps": 607.71,
+     "mach": 1.7858,
+     "energy_j": 762.2,
+     "momentum_ns": 2.5084,
+     "tof_s": 0.28521,
+     "drop_m": -0.36328,
+     "wind_drift_10mph_m": 0.17121,
+     "spin_drift_m": 0.00773,
+     "coriolis_right_m": 0.0028,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 225,
+     "velocity_mps": 584.7,
+     "mach": 1.7182,
+     "energy_j": 705.6,
+     "momentum_ns": 2.4135,
+     "tof_s": 0.32715,
+     "drop_m": -0.4722,
+     "wind_drift_10mph_m": 0.22073,
+     "spin_drift_m": 0.00994,
+     "coriolis_right_m": 0.00359,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 250,
+     "velocity_mps": 562.12,
+     "mach": 1.6518,
+     "energy_j": 652.1,
+     "momentum_ns": 2.3202,
+     "tof_s": 0.37076,
+     "drop_m": -0.59906,
+     "wind_drift_10mph_m": 0.2777,
+     "spin_drift_m": 0.01249,
+     "coriolis_right_m": 0.0045,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 275,
+     "velocity_mps": 539.94,
+     "mach": 1.5867,
+     "energy_j": 601.7,
+     "momentum_ns": 2.2287,
+     "tof_s": 0.41614,
+     "drop_m": -0.74533,
+     "wind_drift_10mph_m": 0.34259,
+     "spin_drift_m": 0.01543,
+     "coriolis_right_m": 0.00551,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 300,
+     "velocity_mps": 518.16,
+     "mach": 1.5227,
+     "energy_j": 554.1,
+     "momentum_ns": 2.1388,
+     "tof_s": 0.4634,
+     "drop_m": -0.91264,
+     "wind_drift_10mph_m": 0.41591,
+     "spin_drift_m": 0.01879,
+     "coriolis_right_m": 0.00665,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 325,
+     "velocity_mps": 496.76,
+     "mach": 1.4598,
+     "energy_j": 509.3,
+     "momentum_ns": 2.0505,
+     "tof_s": 0.51268,
+     "drop_m": -1.1028,
+     "wind_drift_10mph_m": 0.49822,
+     "spin_drift_m": 0.02261,
+     "coriolis_right_m": 0.00791,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 350,
+     "velocity_mps": 475.74,
+     "mach": 1.398,
+     "energy_j": 467.1,
+     "momentum_ns": 1.9637,
+     "tof_s": 0.56411,
+     "drop_m": -1.31781,
+     "wind_drift_10mph_m": 0.59015,
+     "spin_drift_m": 0.02693,
+     "coriolis_right_m": 0.0093,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 375,
+     "velocity_mps": 455.1,
+     "mach": 1.3374,
+     "energy_j": 427.5,
+     "momentum_ns": 1.8785,
+     "tof_s": 0.61784,
+     "drop_m": -1.55993,
+     "wind_drift_10mph_m": 0.69237,
+     "spin_drift_m": 0.03181,
+     "coriolis_right_m": 0.01083,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 400,
+     "velocity_mps": 434.88,
+     "mach": 1.2779,
+     "energy_j": 390.3,
+     "momentum_ns": 1.795,
+     "tof_s": 0.67404,
+     "drop_m": -1.83167,
+     "wind_drift_10mph_m": 0.80562,
+     "spin_drift_m": 0.0373,
+     "coriolis_right_m": 0.01251,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 425,
+     "velocity_mps": 415.1,
+     "mach": 1.2198,
+     "energy_j": 355.6,
+     "momentum_ns": 1.7134,
+     "tof_s": 0.73288,
+     "drop_m": -2.13586,
+     "wind_drift_10mph_m": 0.93071,
+     "spin_drift_m": 0.04348,
+     "coriolis_right_m": 0.01433,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 450,
+     "velocity_mps": 395.81,
+     "mach": 1.1631,
+     "energy_j": 323.3,
+     "momentum_ns": 1.6338,
+     "tof_s": 0.79457,
+     "drop_m": -2.47565,
+     "wind_drift_10mph_m": 1.06849,
+     "spin_drift_m": 0.05041,
+     "coriolis_right_m": 0.01631,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 475,
+     "velocity_mps": 377.06,
+     "mach": 1.108,
+     "energy_j": 293.4,
+     "momentum_ns": 1.5564,
+     "tof_s": 0.85929,
+     "drop_m": -2.85461,
+     "wind_drift_10mph_m": 1.21985,
+     "spin_drift_m": 0.05817,
+     "coriolis_right_m": 0.01846,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 500,
+     "velocity_mps": 358.97,
+     "mach": 1.0549,
+     "energy_j": 265.9,
+     "momentum_ns": 1.4817,
+     "tof_s": 0.92726,
+     "drop_m": -3.27673,
+     "wind_drift_10mph_m": 1.38571,
+     "spin_drift_m": 0.06687,
+     "coriolis_right_m": 0.02078,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 525,
+     "velocity_mps": 341.9,
+     "mach": 1.0047,
+     "energy_j": 241.3,
+     "momentum_ns": 1.4113,
+     "tof_s": 0.99865,
+     "drop_m": -3.74647,
+     "wind_drift_10mph_m": 1.5669,
+     "spin_drift_m": 0.07659,
+     "coriolis_right_m": 0.02328,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 550,
+     "velocity_mps": 328.56,
+     "mach": 0.9655,
+     "energy_j": 222.8,
+     "momentum_ns": 1.3562,
+     "tof_s": 1.07336,
+     "drop_m": -4.26862,
+     "wind_drift_10mph_m": 1.76291,
+     "spin_drift_m": 0.0874,
+     "coriolis_right_m": 0.02597,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 575,
+     "velocity_mps": 319.94,
+     "mach": 0.9402,
+     "energy_j": 211.3,
+     "momentum_ns": 1.3206,
+     "tof_s": 1.15055,
+     "drop_m": -4.84747,
+     "wind_drift_10mph_m": 1.97,
+     "spin_drift_m": 0.09924,
+     "coriolis_right_m": 0.02887,
+     "coriolis_up_m": 0.0
+    },
+    {
+     "range_m": 600,
+     "velocity_mps": 313.22,
+     "mach": 0.9204,
+     "energy_j": 202.5,
+     "momentum_ns": 1.2929,
+     "tof_s": 1.22957,
+     "drop_m": -5.48619,
+     "wind_drift_10mph_m": 2.1853,
+     "spin_drift_m": 0.11207,
+     "coriolis_right_m": 0.03197,
+     "coriolis_up_m": 0.0
+    }
+   ],
+   "zeros": {
+    "hk100yd": {
+     "label": "HK manual zero: 100 yd on the V notch (drum position 1)",
+     "zero_distance_from_eye_m": 91.44,
+     "bore_angle_rad": 0.0014599342863715608,
+     "bore_angle_moa": 5.019,
+     "bore_angle_mrad": 1.4599,
+     "rear_sight_rise_mm": 0.531,
+     "crossings_from_eye_m": [
+      82.8,
+      91.4
+     ],
+     "max_ordinate_m": 0.0002,
+     "max_ordinate_range_m": 86.0,
+     "path_m": [
+      -0.0655,
+      -0.05165,
+      -0.04531,
+      -0.03935,
+      -0.03378,
+      -0.02385,
+      -0.01557,
+      -0.01206,
+      -0.00898,
+      -0.0054,
+      -0.00107,
+      -0.00157,
+      -0.01443,
+      -0.04056,
+      -0.08098,
+      -0.1368,
+      -0.20922,
+      -0.29958,
+      -0.40935,
+      -0.54016,
+      -0.69382,
+      -0.87234,
+      -1.07796,
+      -1.3132,
+      -1.58089,
+      -1.88418,
+      -2.22664,
+      -2.61227,
+      -3.04551,
+      -3.53116,
+      -4.0735,
+      -4.67572
+     ],
+     "poi_vs_poa": [
+      {
+       "distance_from_eye_m": 10,
+       "poi_m": -0.05247,
+       "poi_mm": -52.5,
+       "velocity_mps": 799.8,
+       "energy_j": 1320.0,
+       "tof_ms": 11.65
+      },
+      {
+       "distance_from_eye_m": 15,
+       "poi_m": -0.04608,
+       "poi_mm": -46.1,
+       "velocity_mps": 794.4,
+       "energy_j": 1302.0,
+       "tof_ms": 17.92
+      },
+      {
+       "distance_from_eye_m": 20,
+       "poi_m": -0.04007,
+       "poi_mm": -40.1,
+       "velocity_mps": 789.0,
+       "energy_j": 1285.0,
+       "tof_ms": 24.24
+      },
+      {
+       "distance_from_eye_m": 25,
+       "poi_m": -0.03445,
+       "poi_mm": -34.5,
+       "velocity_mps": 783.6,
+       "energy_j": 1267.0,
+       "tof_ms": 30.6
+      },
+      {
+       "distance_from_eye_m": 35,
+       "poi_m": -0.02443,
+       "poi_mm": -24.4,
+       "velocity_mps": 772.9,
+       "energy_j": 1233.0,
+       "tof_ms": 43.45
+      },
+      {
+       "distance_from_eye_m": 45,
+       "poi_m": -0.01604,
+       "poi_mm": -16.0,
+       "velocity_mps": 762.2,
+       "energy_j": 1199.0,
+       "tof_ms": 56.48
+      },
+      {
+       "distance_from_eye_m": 55,
+       "poi_m": -0.00934,
+       "poi_mm": -9.3,
+       "velocity_mps": 751.7,
+       "energy_j": 1166.0,
+       "tof_ms": 69.69
+      },
+      {
+       "distance_from_eye_m": 62,
+       "poi_m": -0.00569,
+       "poi_mm": -5.7,
+       "velocity_mps": 744.4,
+       "energy_j": 1144.0,
+       "tof_ms": 79.04
+      }
+     ]
+    },
+    "hk200yd": {
+     "label": "HK drum diopter 2 (200 yd)",
+     "zero_distance_from_eye_m": 182.88,
+     "bore_angle_rad": 0.0019841660470142535,
+     "bore_angle_moa": 6.821,
+     "bore_angle_mrad": 1.9842,
+     "rear_sight_rise_mm": 0.722,
+     "crossings_from_eye_m": [
+      39.5,
+      182.9
+     ],
+     "max_ordinate_m": 0.0526,
+     "max_ordinate_range_m": 113.0,
+     "path_m": [
+      -0.0655,
+      -0.04641,
+      -0.03744,
+      -0.02886,
+      -0.02067,
+      -0.00551,
+      0.00802,
+      0.01415,
+      0.01985,
+      0.0271,
+      0.03825,
+      0.05085,
+      0.0511,
+      0.03807,
+      0.01076,
+      -0.03195,
+      -0.09127,
+      -0.16852,
+      -0.26519,
+      -0.38289,
+      -0.52344,
+      -0.68886,
+      -0.88137,
+      -1.10351,
+      -1.35809,
+      -1.64828,
+      -1.97764,
+      -2.35016,
+      -2.77029,
+      -3.24284,
+      -3.77208,
+      -4.36119
+     ],
+     "poi_vs_poa": [
+      {
+       "distance_from_eye_m": 10,
+       "poi_m": -0.04756,
+       "poi_mm": -47.6,
+       "velocity_mps": 799.8,
+       "energy_j": 1320.0,
+       "tof_ms": 11.65
+      },
+      {
+       "distance_from_eye_m": 15,
+       "poi_m": -0.03854,
+       "poi_mm": -38.5,
+       "velocity_mps": 794.4,
+       "energy_j": 1302.0,
+       "tof_ms": 17.92
+      },
+      {
+       "distance_from_eye_m": 20,
+       "poi_m": -0.02991,
+       "poi_mm": -29.9,
+       "velocity_mps": 789.0,
+       "energy_j": 1285.0,
+       "tof_ms": 24.24
+      },
+      {
+       "distance_from_eye_m": 25,
+       "poi_m": -0.02167,
+       "poi_mm": -21.7,
+       "velocity_mps": 783.6,
+       "energy_j": 1267.0,
+       "tof_ms": 30.6
+      },
+      {
+       "distance_from_eye_m": 35,
+       "poi_m": -0.0064,
+       "poi_mm": -6.4,
+       "velocity_mps": 772.9,
+       "energy_j": 1233.0,
+       "tof_ms": 43.45
+      },
+      {
+       "distance_from_eye_m": 45,
+       "poi_m": 0.00722,
+       "poi_mm": 7.2,
+       "velocity_mps": 762.2,
+       "energy_j": 1199.0,
+       "tof_ms": 56.48
+      },
+      {
+       "distance_from_eye_m": 55,
+       "poi_m": 0.01916,
+       "poi_mm": 19.2,
+       "velocity_mps": 751.7,
+       "energy_j": 1166.0,
+       "tof_ms": 69.69
+      },
+      {
+       "distance_from_eye_m": 62,
+       "poi_m": 0.02649,
+       "poi_mm": 26.5,
+       "velocity_mps": 744.4,
+       "energy_j": 1144.0,
+       "tof_ms": 79.04
+      }
+     ]
+    },
+    "hk300yd": {
+     "label": "HK drum diopter 3 (300 yd)",
+     "zero_distance_from_eye_m": 274.32,
+     "bore_angle_rad": 0.002932816628375829,
+     "bore_angle_moa": 10.082,
+     "bore_angle_mrad": 2.9328,
+     "rear_sight_rise_mm": 1.068,
+     "crossings_from_eye_m": [
+      24.4,
+      274.3
+     ],
+     "max_ordinate_m": 0.1809,
+     "max_ordinate_range_m": 156.0,
+     "path_m": [
+      -0.0655,
+      -0.03693,
+      -0.02321,
+      -0.00989,
+      0.00304,
+      0.0277,
+      0.05071,
+      0.06158,
+      0.07203,
+      0.08592,
+      0.1094,
+      0.14571,
+      0.16968,
+      0.18037,
+      0.17677,
+      0.15778,
+      0.12218,
+      0.06864,
+      -0.00431,
+      -0.0983,
+      -0.21514,
+      -0.35683,
+      -0.52564,
+      -0.72406,
+      -0.95492,
+      -1.2214,
+      -1.52704,
+      -1.87584,
+      -2.27226,
+      -2.7211,
+      -3.22662,
+      -3.79202
+     ],
+     "poi_vs_poa": [
+      {
+       "distance_from_eye_m": 10,
+       "poi_m": -0.03866,
+       "poi_mm": -38.7,
+       "velocity_mps": 799.8,
+       "energy_j": 1320.0,
+       "tof_ms": 11.65
+      },
+      {
+       "distance_from_eye_m": 15,
+       "poi_m": -0.0249,
+       "poi_mm": -24.9,
+       "velocity_mps": 794.4,
+       "energy_j": 1302.0,
+       "tof_ms": 17.92
+      },
+      {
+       "distance_from_eye_m": 20,
+       "poi_m": -0.01153,
+       "poi_mm": -11.5,
+       "velocity_mps": 789.0,
+       "energy_j": 1285.0,
+       "tof_ms": 24.24
+      },
+      {
+       "distance_from_eye_m": 25,
+       "poi_m": 0.00145,
+       "poi_mm": 1.5,
+       "velocity_mps": 783.6,
+       "energy_j": 1267.0,
+       "tof_ms": 30.6
+      },
+      {
+       "distance_from_eye_m": 35,
+       "poi_m": 0.02621,
+       "poi_mm": 26.2,
+       "velocity_mps": 772.9,
+       "energy_j": 1233.0,
+       "tof_ms": 43.45
+      },
+      {
+       "distance_from_eye_m": 45,
+       "poi_m": 0.04932,
+       "poi_mm": 49.3,
+       "velocity_mps": 762.2,
+       "energy_j": 1199.0,
+       "tof_ms": 56.48
+      },
+      {
+       "distance_from_eye_m": 55,
+       "poi_m": 0.07075,
+       "poi_mm": 70.7,
+       "velocity_mps": 751.7,
+       "energy_j": 1166.0,
+       "tof_ms": 69.69
+      },
+      {
+       "distance_from_eye_m": 62,
+       "poi_m": 0.08471,
+       "poi_mm": 84.7,
+       "velocity_mps": 744.4,
+       "energy_j": 1144.0,
+       "tof_ms": 79.04
+      }
+     ]
+    },
+    "hk400yd": {
+     "label": "HK drum diopter 4 (400 yd)",
+     "zero_distance_from_eye_m": 365.76,
+     "bore_angle_rad": 0.004180709281968934,
+     "bore_angle_moa": 14.372,
+     "bore_angle_mrad": 4.1807,
+     "rear_sight_rise_mm": 1.522,
+     "crossings_from_eye_m": [
+      16.8,
+      365.8
+     ],
+     "max_ordinate_m": 0.4079,
+     "max_ordinate_range_m": 206.0,
+     "path_m": [
+      -0.0655,
+      -0.02445,
+      -0.00449,
+      0.01507,
+      0.03424,
+      0.07137,
+      0.10686,
+      0.12398,
+      0.14066,
+      0.16329,
+      0.20299,
+      0.2705,
+      0.32567,
+      0.36756,
+      0.39515,
+      0.40736,
+      0.40296,
+      0.38061,
+      0.33886,
+      0.27606,
+      0.19042,
+      0.07992,
+      -0.05769,
+      -0.22491,
+      -0.42459,
+      -0.65987,
+      -0.93432,
+      -1.25192,
+      -1.61715,
+      -2.03479,
+      -2.50912,
+      -3.04333
+     ],
+     "poi_vs_poa": [
+      {
+       "distance_from_eye_m": 10,
+       "poi_m": -0.02696,
+       "poi_mm": -27.0,
+       "velocity_mps": 799.8,
+       "energy_j": 1320.0,
+       "tof_ms": 11.65
+      },
+      {
+       "distance_from_eye_m": 15,
+       "poi_m": -0.00696,
+       "poi_mm": -7.0,
+       "velocity_mps": 794.4,
+       "energy_j": 1302.0,
+       "tof_ms": 17.92
+      },
+      {
+       "distance_from_eye_m": 20,
+       "poi_m": 0.01265,
+       "poi_mm": 12.7,
+       "velocity_mps": 789.0,
+       "energy_j": 1285.0,
+       "tof_ms": 24.24
+      },
+      {
+       "distance_from_eye_m": 25,
+       "poi_m": 0.03187,
+       "poi_mm": 31.9,
+       "velocity_mps": 783.6,
+       "energy_j": 1267.0,
+       "tof_ms": 30.6
+      },
+      {
+       "distance_from_eye_m": 35,
+       "poi_m": 0.0691,
+       "poi_mm": 69.1,
+       "velocity_mps": 772.9,
+       "energy_j": 1233.0,
+       "tof_ms": 43.45
+      },
+      {
+       "distance_from_eye_m": 45,
+       "poi_m": 0.1047,
+       "poi_mm": 104.7,
+       "velocity_mps": 762.2,
+       "energy_j": 1199.0,
+       "tof_ms": 56.48
+      },
+      {
+       "distance_from_eye_m": 55,
+       "poi_m": 0.1386,
+       "poi_mm": 138.6,
+       "velocity_mps": 751.7,
+       "energy_j": 1166.0,
+       "tof_ms": 69.69
+      },
+      {
+       "distance_from_eye_m": 62,
+       "poi_m": 0.16131,
+       "poi_mm": 161.3,
+       "velocity_mps": 744.4,
+       "energy_j": 1144.0,
+       "tof_ms": 79.05
+      }
+     ]
+    },
+    "50_200": {
+     "label": "50 m near zero (the '50/200' zero)",
+     "zero_distance_from_eye_m": 50.0,
+     "bore_angle_rad": 0.001712662460553848,
+     "bore_angle_moa": 5.888,
+     "bore_angle_mrad": 1.7127,
+     "rear_sight_rise_mm": 0.623,
+     "crossings_from_eye_m": [
+      50.0,
+      148.1
+     ],
+     "max_ordinate_m": 0.0237,
+     "max_ordinate_range_m": 99.0,
+     "path_m": [
+      -0.0655,
+      -0.04913,
+      -0.04151,
+      -0.03429,
+      -0.02746,
+      -0.01501,
+      -0.0042,
+      0.00057,
+      0.00492,
+      0.01027,
+      0.01789,
+      0.0237,
+      0.01716,
+      -0.00265,
+      -0.03675,
+      -0.08625,
+      -0.15235,
+      -0.2364,
+      -0.33985,
+      -0.46434,
+      -0.61168,
+      -0.78388,
+      -0.98319,
+      -1.21211,
+      -1.47348,
+      -1.77046,
+      -2.1066,
+      -2.4859,
+      -2.91283,
+      -3.39216,
+      -3.92819,
+      -4.52409
+     ],
+     "poi_vs_poa": [
+      {
+       "distance_from_eye_m": 10,
+       "poi_m": -0.0501,
+       "poi_mm": -50.1,
+       "velocity_mps": 799.8,
+       "energy_j": 1320.0,
+       "tof_ms": 11.65
+      },
+      {
+       "distance_from_eye_m": 15,
+       "poi_m": -0.04244,
+       "poi_mm": -42.4,
+       "velocity_mps": 794.4,
+       "energy_j": 1302.0,
+       "tof_ms": 17.92
+      },
+      {
+       "distance_from_eye_m": 20,
+       "poi_m": -0.03517,
+       "poi_mm": -35.2,
+       "velocity_mps": 789.0,
+       "energy_j": 1285.0,
+       "tof_ms": 24.24
+      },
+      {
+       "distance_from_eye_m": 25,
+       "poi_m": -0.02829,
+       "poi_mm": -28.3,
+       "velocity_mps": 783.6,
+       "energy_j": 1267.0,
+       "tof_ms": 30.6
+      },
+      {
+       "distance_from_eye_m": 35,
+       "poi_m": -0.01574,
+       "poi_mm": -15.7,
+       "velocity_mps": 772.9,
+       "energy_j": 1233.0,
+       "tof_ms": 43.45
+      },
+      {
+       "distance_from_eye_m": 45,
+       "poi_m": -0.00483,
+       "poi_mm": -4.8,
+       "velocity_mps": 762.2,
+       "energy_j": 1199.0,
+       "tof_ms": 56.48
+      },
+      {
+       "distance_from_eye_m": 55,
+       "poi_m": 0.0044,
+       "poi_mm": 4.4,
+       "velocity_mps": 751.7,
+       "energy_j": 1166.0,
+       "tof_ms": 69.69
+      },
+      {
+       "distance_from_eye_m": 62,
+       "poi_m": 0.00983,
+       "poi_mm": 9.8,
+       "velocity_mps": 744.4,
+       "energy_j": 1144.0,
+       "tof_ms": 79.04
+      }
+     ]
+    },
+    "25_300": {
+     "label": "25 m near zero (the '25/300' zero)",
+     "zero_distance_from_eye_m": 25.0,
+     "bore_angle_rad": 0.002873304906091004,
+     "bore_angle_moa": 9.878,
+     "bore_angle_mrad": 2.8733,
+     "rear_sight_rise_mm": 1.046,
+     "crossings_from_eye_m": [
+      25.0,
+      269.3
+     ],
+     "max_ordinate_m": 0.1716,
+     "max_ordinate_range_m": 154.0,
+     "path_m": [
+      -0.0655,
+      -0.03752,
+      -0.0241,
+      -0.01108,
+      0.00155,
+      0.02561,
+      0.04803,
+      0.0586,
+      0.06875,
+      0.08223,
+      0.10493,
+      0.13976,
+      0.16224,
+      0.17144,
+      0.16636,
+      0.14588,
+      0.10879,
+      0.05376,
+      -0.02068,
+      -0.11615,
+      -0.23448,
+      -0.37766,
+      -0.54795,
+      -0.74786,
+      -0.98022,
+      -1.24818,
+      -1.55531,
+      -1.9056,
+      -2.30351,
+      -2.75383,
+      -3.26084,
+      -3.82772
+     ],
+     "poi_vs_poa": [
+      {
+       "distance_from_eye_m": 10,
+       "poi_m": -0.03922,
+       "poi_mm": -39.2,
+       "velocity_mps": 799.8,
+       "energy_j": 1320.0,
+       "tof_ms": 11.65
+      },
+      {
+       "distance_from_eye_m": 15,
+       "poi_m": -0.02576,
+       "poi_mm": -25.8,
+       "velocity_mps": 794.4,
+       "energy_j": 1302.0,
+       "tof_ms": 17.92
+      },
+      {
+       "distance_from_eye_m": 20,
+       "poi_m": -0.01268,
+       "poi_mm": -12.7,
+       "velocity_mps": 789.0,
+       "energy_j": 1285.0,
+       "tof_ms": 24.24
+      },
+      {
+       "distance_from_eye_m": 25,
+       "poi_m": -0.0,
+       "poi_mm": -0.0,
+       "velocity_mps": 783.6,
+       "energy_j": 1267.0,
+       "tof_ms": 30.6
+      },
+      {
+       "distance_from_eye_m": 35,
+       "poi_m": 0.02416,
+       "poi_mm": 24.2,
+       "velocity_mps": 772.9,
+       "energy_j": 1233.0,
+       "tof_ms": 43.45
+      },
+      {
+       "distance_from_eye_m": 45,
+       "poi_m": 0.04668,
+       "poi_mm": 46.7,
+       "velocity_mps": 762.2,
+       "energy_j": 1199.0,
+       "tof_ms": 56.48
+      },
+      {
+       "distance_from_eye_m": 55,
+       "poi_m": 0.06751,
+       "poi_mm": 67.5,
+       "velocity_mps": 751.7,
+       "energy_j": 1166.0,
+       "tof_ms": 69.69
+      },
+      {
+       "distance_from_eye_m": 62,
+       "poi_m": 0.08106,
+       "poi_mm": 81.1,
+       "velocity_mps": 744.4,
+       "energy_j": 1144.0,
+       "tof_ms": 79.04
+      }
+     ]
+    }
+   }
+  }
+ },
+ "dispersion": {
+  "model": "circular bivariate normal in angle; rifle-plus-ammunition and shooter terms add in quadrature",
+  "es10_over_sigma": 3.817,
+  "es5_over_sigma": 3.071,
+  "es_note": "mean extreme spread of an n-shot group divided by the per-axis sigma (Monte Carlo, 40,000 groups, seed 416)",
+  "rifle_ammo": {
+   "M855": {
+    "group_es10_moa": 3.0,
+    "sigma_moa": 0.786,
+    "sigma_mrad": 0.2286,
+    "mean_radius_moa": 0.985,
+    "source": "inferred: 10-shot extreme spread from a service carbine; range reports cluster around 2.5 to 4 MOA"
+   },
+   "Mk262": {
+    "group_es10_moa": 1.5,
+    "sigma_moa": 0.393,
+    "sigma_mrad": 0.1143,
+    "mean_radius_moa": 0.493,
+    "source": "inferred: 10-shot extreme spread from a chrome-lined 14.5 in service barrel; the ammunition alone shoots under 1 MOA from match barrels"
+   },
+   "M856": {
+    "group_es10_moa": 5.0,
+    "sigma_moa": 1.3101,
+    "sigma_mrad": 0.3811,
+    "mean_radius_moa": 1.642,
+    "source": "inferred: tracers group worse than ball"
+   }
+  },
+  "shooter": {
+   "bench": {
+    "sigma_moa": 0.0,
+    "source": "definition: rifle and ammunition only"
+   },
+   "aimed_supported": {
+    "sigma_moa": 1.2,
+    "source": "inferred upper bound from the US Army grouping standard (5 of 6 shots in a 4 cm circle at 25 m, about 5.5 MOA, prone supported) after removing the rifle's share"
+   },
+   "aimed": {
+    "sigma_moa": 4.0,
+    "source": "inferred: standing unsupported, iron sights, about three times the supported wobble"
+   },
+   "hip": {
+    "sigma_moa": 60.0,
+    "source": "inferred: unsighted fire from the hip, 1 degree per axis. No published standard; tune for feel"
+   }
+  },
+  "current_range_page": "uniform cone 0.0015 rad aimed (sigma about 1.5 MOA) and 0.025 rad at the hip (sigma about 0.41 degree)"
+ },
+ "terminal": {
+  "params": {
+   "paper": {
+    "hole_factor": 0.85,
+    "grease_ring_factor": 1.0,
+    "speed_loss_fraction": 0.0005,
+    "source": "inferred: pointed bullets leave a hole smaller than calibre in target paper because the fibres close back (the reason scoring plugs exist); 0.85 is a typical ratio, not a measurement of this target stock"
+   },
+   "steel": {
+    "density_kg_m3": 7850.0,
+    "momentum_transfer": 1.0,
+    "splash_half_angle_deg": 20.0,
+    "fragment_speed_fraction": [
+     0.35,
+     0.9
+    ],
+    "fragment_count": 28,
+    "fragment_size_m": [
+     0.0002,
+     0.002
+    ],
+    "fragment_drag_tau_s": 0.035,
+    "ricochet_angle_deg": 12.0,
+    "ricochet_width_deg": 3.0,
+    "pit_threshold_mps": {
+     "lead_core": 870.0,
+     "steel_core": 640.0
+    },
+    "pit_depth_per_mps_m": 4e-06,
+    "real_world_min_distance_m": 91.0,
+    "source": {
+     "density": "fact: steel 7,850 kg/m^3",
+     "momentum_transfer": "physics: the bullet shatters and its fragments leave along the plate face, so the plate takes the normal momentum once (coefficient about 1.0, within roughly 10 percent)",
+     "splash_half_angle_deg": "published guidance from steel-target makers: splatter leaves within about 20 degrees of the plate face",
+     "fragments": "inferred: speeds, count, sizes and the drag time constant are visual calibration",
+     "ricochet": "inferred: below about 12 degrees from the plate face the bullet glances mostly intact",
+     "pit_threshold_mps": "published guidance: makers rate AR500 for lead-core rifle impacts below about 2,850 ft/s (870 m/s) and forbid steel-core ammunition; the steel-core threshold and the depth slope are inferred",
+     "real_world_min_distance_m": "published guidance: 100 yd minimum for rifle on steel. The game's 20 to 55 m plates are closer than any real range allows"
+    }
+   },
+   "dirt": {
+    "density_kg_m3": 1600.0,
+    "strength_pa": 3000000.0,
+    "drag_coefficient": 1.0,
+    "tumble_area_factor": 2.5,
+    "ricochet_angle_deg": 8.0,
+    "ricochet_width_deg": 2.0,
+    "ricochet_exit_ratio": 1.3,
+    "ricochet_speed_loss_per_deg": 0.035,
+    "ricochet_drag_scale": 3.0,
+    "ricochet_scatter_deg": 3.0,
+    "crater_k_m_per_j13": 0.0087,
+    "plume_height_k_m_per_j13": 0.079,
+    "plume_width_ratio": 0.5,
+    "ejecta_speed_mps": [
+     3.0,
+     9.0
+    ],
+    "dust_linger_s": 1.6,
+    "moisture": 0.1,
+    "source": {
+     "model": "Poncelet penetration: depth = m / (2 C rho A_eff) * ln(1 + C rho v^2 / R)",
+     "density": "typical dry compacted soil or sand",
+     "strength_pa, drag_coefficient, tumble_area_factor": "inferred; chosen so 5.56 mm ball stops in roughly 10 to 15 cm of packed sand, as commonly reported (one sandbag layer stops it)",
+     "ricochet": "inferred from forensic literature ranges: critical angles for soil and sand are a few degrees up to about 10 to 15; exit angle steeper than entry; the bullet tumbles afterwards",
+     "plume": "inferred visual calibration: a 1,500 J strike on dry dirt raises a puff roughly 0.9 m high and a 10 cm scar; scaled with energy^(1/3)"
+    }
+   },
+   "berm": {
+    "inherits": "dirt",
+    "moisture": 0.25,
+    "strength_pa": 2000000.0,
+    "source": "inferred: looser, damper banked earth than the trodden ground"
+   }
+  },
+  "steel_plate_table": [
+   {
+    "ammo": "M855",
+    "plate_radius_m": 0.18,
+    "plate_thickness_m": 0.01,
+    "plate_mass_kg": 7.99,
+    "inertia_about_hinge_kgm2": 0.3236,
+    "distance_from_eye_m": 20,
+    "impact_speed_mps": 830.0,
+    "impact_energy_j": 1384.0,
+    "momentum_ns": 3.334,
+    "centre_hit_omega0_rad_s": 1.855,
+    "plate_ke_j": 0.557,
+    "plate_ke_fraction": 0.000402,
+    "max_rest_lean_to_topple_deg": 16.15,
+    "falls_at_2deg_lean": true,
+    "fall_time_s_at_2deg_lean": 0.394,
+    "landing_rate_rad_s": 9.52,
+    "contact_time_s": 2.773e-05,
+    "peak_force_n": 188909.0
+   },
+   {
+    "ammo": "M855",
+    "plate_radius_m": 0.18,
+    "plate_thickness_m": 0.01,
+    "plate_mass_kg": 7.99,
+    "inertia_about_hinge_kgm2": 0.3236,
+    "distance_from_eye_m": 35,
+    "impact_speed_mps": 814.6,
+    "impact_energy_j": 1333.0,
+    "momentum_ns": 3.273,
+    "centre_hit_omega0_rad_s": 1.82,
+    "plate_ke_j": 0.536,
+    "plate_ke_fraction": 0.000402,
+    "max_rest_lean_to_topple_deg": 15.85,
+    "falls_at_2deg_lean": true,
+    "fall_time_s_at_2deg_lean": 0.397,
+    "landing_rate_rad_s": 9.51,
+    "contact_time_s": 2.825e-05,
+    "peak_force_n": 181994.0
+   },
+   {
+    "ammo": "M855",
+    "plate_radius_m": 0.18,
+    "plate_thickness_m": 0.01,
+    "plate_mass_kg": 7.99,
+    "inertia_about_hinge_kgm2": 0.3236,
+    "distance_from_eye_m": 55,
+    "impact_speed_mps": 794.4,
+    "impact_energy_j": 1268.0,
+    "momentum_ns": 3.192,
+    "centre_hit_omega0_rad_s": 1.775,
+    "plate_ke_j": 0.51,
+    "plate_ke_fraction": 0.000402,
+    "max_rest_lean_to_topple_deg": 15.45,
+    "falls_at_2deg_lean": true,
+    "fall_time_s_at_2deg_lean": 0.402,
+    "landing_rate_rad_s": 9.51,
+    "contact_time_s": 2.897e-05,
+    "peak_force_n": 173078.0
+   },
+   {
+    "ammo": "M855",
+    "plate_radius_m": 0.2,
+    "plate_thickness_m": 0.01,
+    "plate_mass_kg": 9.86,
+    "inertia_about_hinge_kgm2": 0.4932,
+    "distance_from_eye_m": 20,
+    "impact_speed_mps": 830.0,
+    "impact_energy_j": 1384.0,
+    "momentum_ns": 3.334,
+    "centre_hit_omega0_rad_s": 1.352,
+    "plate_ke_j": 0.451,
+    "plate_ke_fraction": 0.000326,
+    "max_rest_lean_to_topple_deg": 12.39,
+    "falls_at_2deg_lean": true,
+    "fall_time_s_at_2deg_lean": 0.464,
+    "landing_rate_rad_s": 8.96,
+    "contact_time_s": 2.773e-05,
+    "peak_force_n": 188909.0
+   },
+   {
+    "ammo": "M855",
+    "plate_radius_m": 0.2,
+    "plate_thickness_m": 0.01,
+    "plate_mass_kg": 9.86,
+    "inertia_about_hinge_kgm2": 0.4932,
+    "distance_from_eye_m": 35,
+    "impact_speed_mps": 814.6,
+    "impact_energy_j": 1333.0,
+    "momentum_ns": 3.273,
+    "centre_hit_omega0_rad_s": 1.327,
+    "plate_ke_j": 0.434,
+    "plate_ke_fraction": 0.000326,
+    "max_rest_lean_to_topple_deg": 12.16,
+    "falls_at_2deg_lean": true,
+    "fall_time_s_at_2deg_lean": 0.468,
+    "landing_rate_rad_s": 8.96,
+    "contact_time_s": 2.825e-05,
+    "peak_force_n": 181994.0
+   },
+   {
+    "ammo": "M855",
+    "plate_radius_m": 0.2,
+    "plate_thickness_m": 0.01,
+    "plate_mass_kg": 9.86,
+    "inertia_about_hinge_kgm2": 0.4932,
+    "distance_from_eye_m": 55,
+    "impact_speed_mps": 794.4,
+    "impact_energy_j": 1268.0,
+    "momentum_ns": 3.192,
+    "centre_hit_omega0_rad_s": 1.294,
+    "plate_ke_j": 0.413,
+    "plate_ke_fraction": 0.000326,
+    "max_rest_lean_to_topple_deg": 11.86,
+    "falls_at_2deg_lean": true,
+    "fall_time_s_at_2deg_lean": 0.473,
+    "landing_rate_rad_s": 8.95,
+    "contact_time_s": 2.897e-05,
+    "peak_force_n": 173078.0
+   },
+   {
+    "ammo": "M855",
+    "plate_radius_m": 0.25,
+    "plate_thickness_m": 0.01,
+    "plate_mass_kg": 15.41,
+    "inertia_about_hinge_kgm2": 1.2042,
+    "distance_from_eye_m": 20,
+    "impact_speed_mps": 830.0,
+    "impact_energy_j": 1384.0,
+    "momentum_ns": 3.334,
+    "centre_hit_omega0_rad_s": 0.692,
+    "plate_ke_j": 0.289,
+    "plate_ke_fraction": 0.000209,
+    "max_rest_lean_to_topple_deg": 7.09,
+    "falls_at_2deg_lean": true,
+    "fall_time_s_at_2deg_lean": 0.646,
+    "landing_rate_rad_s": 7.95,
+    "contact_time_s": 2.773e-05,
+    "peak_force_n": 188909.0
+   },
+   {
+    "ammo": "M855",
+    "plate_radius_m": 0.25,
+    "plate_thickness_m": 0.01,
+    "plate_mass_kg": 15.41,
+    "inertia_about_hinge_kgm2": 1.2042,
+    "distance_from_eye_m": 35,
+    "impact_speed_mps": 814.6,
+    "impact_energy_j": 1333.0,
+    "momentum_ns": 3.273,
+    "centre_hit_omega0_rad_s": 0.679,
+    "plate_ke_j": 0.278,
+    "plate_ke_fraction": 0.000209,
+    "max_rest_lean_to_topple_deg": 6.95,
+    "falls_at_2deg_lean": true,
+    "fall_time_s_at_2deg_lean": 0.651,
+    "landing_rate_rad_s": 7.95,
+    "contact_time_s": 2.825e-05,
+    "peak_force_n": 181994.0
+   },
+   {
+    "ammo": "M855",
+    "plate_radius_m": 0.25,
+    "plate_thickness_m": 0.01,
+    "plate_mass_kg": 15.41,
+    "inertia_about_hinge_kgm2": 1.2042,
+    "distance_from_eye_m": 55,
+    "impact_speed_mps": 794.4,
+    "impact_energy_j": 1268.0,
+    "momentum_ns": 3.192,
+    "centre_hit_omega0_rad_s": 0.663,
+    "plate_ke_j": 0.264,
+    "plate_ke_fraction": 0.000209,
+    "max_rest_lean_to_topple_deg": 6.78,
+    "falls_at_2deg_lean": true,
+    "fall_time_s_at_2deg_lean": 0.657,
+    "landing_rate_rad_s": 7.95,
+    "contact_time_s": 2.897e-05,
+    "peak_force_n": 173078.0
+   },
+   {
+    "ammo": "M855",
+    "plate_radius_m": 0.3,
+    "plate_thickness_m": 0.01,
+    "plate_mass_kg": 22.2,
+    "inertia_about_hinge_kgm2": 2.497,
+    "distance_from_eye_m": 20,
+    "impact_speed_mps": 830.0,
+    "impact_energy_j": 1384.0,
+    "momentum_ns": 3.334,
+    "centre_hit_omega0_rad_s": 0.401,
+    "plate_ke_j": 0.2,
+    "plate_ke_fraction": 0.000145,
+    "max_rest_lean_to_topple_deg": 4.49,
+    "falls_at_2deg_lean": true,
+    "fall_time_s_at_2deg_lean": 0.848,
+    "landing_rate_rad_s": 7.24,
+    "contact_time_s": 2.773e-05,
+    "peak_force_n": 188909.0
+   },
+   {
+    "ammo": "M855",
+    "plate_radius_m": 0.3,
+    "plate_thickness_m": 0.01,
+    "plate_mass_kg": 22.2,
+    "inertia_about_hinge_kgm2": 2.497,
+    "distance_from_eye_m": 35,
+    "impact_speed_mps": 814.6,
+    "impact_energy_j": 1333.0,
+    "momentum_ns": 3.273,
+    "centre_hit_omega0_rad_s": 0.393,
+    "plate_ke_j": 0.193,
+    "plate_ke_fraction": 0.000145,
+    "max_rest_lean_to_topple_deg": 4.41,
+    "falls_at_2deg_lean": true,
+    "fall_time_s_at_2deg_lean": 0.854,
+    "landing_rate_rad_s": 7.24,
+    "contact_time_s": 2.825e-05,
+    "peak_force_n": 181994.0
+   },
+   {
+    "ammo": "M855",
+    "plate_radius_m": 0.3,
+    "plate_thickness_m": 0.01,
+    "plate_mass_kg": 22.2,
+    "inertia_about_hinge_kgm2": 2.497,
+    "distance_from_eye_m": 55,
+    "impact_speed_mps": 794.4,
+    "impact_energy_j": 1268.0,
+    "momentum_ns": 3.192,
+    "centre_hit_omega0_rad_s": 0.383,
+    "plate_ke_j": 0.184,
+    "plate_ke_fraction": 0.000145,
+    "max_rest_lean_to_topple_deg": 4.3,
+    "falls_at_2deg_lean": true,
+    "fall_time_s_at_2deg_lean": 0.863,
+    "landing_rate_rad_s": 7.24,
+    "contact_time_s": 2.897e-05,
+    "peak_force_n": 173078.0
+   },
+   {
+    "ammo": "Mk262",
+    "plate_radius_m": 0.18,
+    "plate_thickness_m": 0.01,
+    "plate_mass_kg": 7.99,
+    "inertia_about_hinge_kgm2": 0.3236,
+    "distance_from_eye_m": 20,
+    "impact_speed_mps": 754.9,
+    "impact_energy_j": 1422.0,
+    "momentum_ns": 3.767,
+    "centre_hit_omega0_rad_s": 2.095,
+    "plate_ke_j": 0.71,
+    "plate_ke_fraction": 0.0005,
+    "max_rest_lean_to_topple_deg": 18.26,
+    "falls_at_2deg_lean": true,
+    "fall_time_s_at_2deg_lean": 0.373,
+    "landing_rate_rad_s": 9.57,
+    "contact_time_s": 3.345e-05,
+    "peak_force_n": 176898.0
+   },
+   {
+    "ammo": "Mk262",
+    "plate_radius_m": 0.18,
+    "plate_thickness_m": 0.01,
+    "plate_mass_kg": 7.99,
+    "inertia_about_hinge_kgm2": 0.3236,
+    "distance_from_eye_m": 35,
+    "impact_speed_mps": 743.3,
+    "impact_energy_j": 1378.0,
+    "momentum_ns": 3.709,
+    "centre_hit_omega0_rad_s": 2.063,
+    "plate_ke_j": 0.689,
+    "plate_ke_fraction": 0.0005,
+    "max_rest_lean_to_topple_deg": 17.98,
+    "falls_at_2deg_lean": true,
+    "fall_time_s_at_2deg_lean": 0.376,
+    "landing_rate_rad_s": 9.56,
+    "contact_time_s": 3.397e-05,
+    "peak_force_n": 171510.0
+   },
+   {
+    "ammo": "Mk262",
+    "plate_radius_m": 0.18,
+    "plate_thickness_m": 0.01,
+    "plate_mass_kg": 7.99,
+    "inertia_about_hinge_kgm2": 0.3236,
+    "distance_from_eye_m": 55,
+    "impact_speed_mps": 728.0,
+    "impact_energy_j": 1322.0,
+    "momentum_ns": 3.632,
+    "centre_hit_omega0_rad_s": 2.02,
+    "plate_ke_j": 0.661,
+    "plate_ke_fraction": 0.0005,
+    "max_rest_lean_to_topple_deg": 17.6,
+    "falls_at_2deg_lean": true,
+    "fall_time_s_at_2deg_lean": 0.379,
+    "landing_rate_rad_s": 9.55,
+    "contact_time_s": 3.468e-05,
+    "peak_force_n": 164528.0
+   },
+   {
+    "ammo": "Mk262",
+    "plate_radius_m": 0.2,
+    "plate_thickness_m": 0.01,
+    "plate_mass_kg": 9.86,
+    "inertia_about_hinge_kgm2": 0.4932,
+    "distance_from_eye_m": 20,
+    "impact_speed_mps": 754.9,
+    "impact_energy_j": 1422.0,
+    "momentum_ns": 3.767,
+    "centre_hit_omega0_rad_s": 1.527,
+    "plate_ke_j": 0.575,
+    "plate_ke_fraction": 0.000405,
+    "max_rest_lean_to_topple_deg": 14.01,
+    "falls_at_2deg_lean": true,
+    "fall_time_s_at_2deg_lean": 0.441,
+    "landing_rate_rad_s": 8.98,
+    "contact_time_s": 3.345e-05,
+    "peak_force_n": 176898.0
+   },
+   {
+    "ammo": "Mk262",
+    "plate_radius_m": 0.2,
+    "plate_thickness_m": 0.01,
+    "plate_mass_kg": 9.86,
+    "inertia_about_hinge_kgm2": 0.4932,
+    "distance_from_eye_m": 35,
+    "impact_speed_mps": 743.3,
+    "impact_energy_j": 1378.0,
+    "momentum_ns": 3.709,
+    "centre_hit_omega0_rad_s": 1.504,
+    "plate_ke_j": 0.558,
+    "plate_ke_fraction": 0.000405,
+    "max_rest_lean_to_topple_deg": 13.79,
+    "falls_at_2deg_lean": true,
+    "fall_time_s_at_2deg_lean": 0.444,
+    "landing_rate_rad_s": 8.98,
+    "contact_time_s": 3.397e-05,
+    "peak_force_n": 171510.0
+   },
+   {
+    "ammo": "Mk262",
+    "plate_radius_m": 0.2,
+    "plate_thickness_m": 0.01,
+    "plate_mass_kg": 9.86,
+    "inertia_about_hinge_kgm2": 0.4932,
+    "distance_from_eye_m": 55,
+    "impact_speed_mps": 728.0,
+    "impact_energy_j": 1322.0,
+    "momentum_ns": 3.632,
+    "centre_hit_omega0_rad_s": 1.473,
+    "plate_ke_j": 0.535,
+    "plate_ke_fraction": 0.000405,
+    "max_rest_lean_to_topple_deg": 13.51,
+    "falls_at_2deg_lean": true,
+    "fall_time_s_at_2deg_lean": 0.448,
+    "landing_rate_rad_s": 8.98,
+    "contact_time_s": 3.468e-05,
+    "peak_force_n": 164528.0
+   },
+   {
+    "ammo": "Mk262",
+    "plate_radius_m": 0.25,
+    "plate_thickness_m": 0.01,
+    "plate_mass_kg": 15.41,
+    "inertia_about_hinge_kgm2": 1.2042,
+    "distance_from_eye_m": 20,
+    "impact_speed_mps": 754.9,
+    "impact_energy_j": 1422.0,
+    "momentum_ns": 3.767,
+    "centre_hit_omega0_rad_s": 0.782,
+    "plate_ke_j": 0.368,
+    "plate_ke_fraction": 0.000259,
+    "max_rest_lean_to_topple_deg": 8.0,
+    "falls_at_2deg_lean": true,
+    "fall_time_s_at_2deg_lean": 0.617,
+    "landing_rate_rad_s": 7.96,
+    "contact_time_s": 3.345e-05,
+    "peak_force_n": 176898.0
+   },
+   {
+    "ammo": "Mk262",
+    "plate_radius_m": 0.25,
+    "plate_thickness_m": 0.01,
+    "plate_mass_kg": 15.41,
+    "inertia_about_hinge_kgm2": 1.2042,
+    "distance_from_eye_m": 35,
+    "impact_speed_mps": 743.3,
+    "impact_energy_j": 1378.0,
+    "momentum_ns": 3.709,
+    "centre_hit_omega0_rad_s": 0.77,
+    "plate_ke_j": 0.357,
+    "plate_ke_fraction": 0.000259,
+    "max_rest_lean_to_topple_deg": 7.88,
+    "falls_at_2deg_lean": true,
+    "fall_time_s_at_2deg_lean": 0.62,
+    "landing_rate_rad_s": 7.96,
+    "contact_time_s": 3.397e-05,
+    "peak_force_n": 171510.0
+   },
+   {
+    "ammo": "Mk262",
+    "plate_radius_m": 0.25,
+    "plate_thickness_m": 0.01,
+    "plate_mass_kg": 15.41,
+    "inertia_about_hinge_kgm2": 1.2042,
+    "distance_from_eye_m": 55,
+    "impact_speed_mps": 728.0,
+    "impact_energy_j": 1322.0,
+    "momentum_ns": 3.632,
+    "centre_hit_omega0_rad_s": 0.754,
+    "plate_ke_j": 0.342,
+    "plate_ke_fraction": 0.000259,
+    "max_rest_lean_to_topple_deg": 7.72,
+    "falls_at_2deg_lean": true,
+    "fall_time_s_at_2deg_lean": 0.625,
+    "landing_rate_rad_s": 7.96,
+    "contact_time_s": 3.468e-05,
+    "peak_force_n": 164528.0
+   },
+   {
+    "ammo": "Mk262",
+    "plate_radius_m": 0.3,
+    "plate_thickness_m": 0.01,
+    "plate_mass_kg": 22.2,
+    "inertia_about_hinge_kgm2": 2.497,
+    "distance_from_eye_m": 20,
+    "impact_speed_mps": 754.9,
+    "impact_energy_j": 1422.0,
+    "momentum_ns": 3.767,
+    "centre_hit_omega0_rad_s": 0.453,
+    "plate_ke_j": 0.256,
+    "plate_ke_fraction": 0.00018,
+    "max_rest_lean_to_topple_deg": 5.07,
+    "falls_at_2deg_lean": true,
+    "fall_time_s_at_2deg_lean": 0.807,
+    "landing_rate_rad_s": 7.24,
+    "contact_time_s": 3.345e-05,
+    "peak_force_n": 176898.0
+   },
+   {
+    "ammo": "Mk262",
+    "plate_radius_m": 0.3,
+    "plate_thickness_m": 0.01,
+    "plate_mass_kg": 22.2,
+    "inertia_about_hinge_kgm2": 2.497,
+    "distance_from_eye_m": 35,
+    "impact_speed_mps": 743.3,
+    "impact_energy_j": 1378.0,
+    "momentum_ns": 3.709,
+    "centre_hit_omega0_rad_s": 0.446,
+    "plate_ke_j": 0.248,
+    "plate_ke_fraction": 0.00018,
+    "max_rest_lean_to_topple_deg": 4.99,
+    "falls_at_2deg_lean": true,
+    "fall_time_s_at_2deg_lean": 0.812,
+    "landing_rate_rad_s": 7.24,
+    "contact_time_s": 3.397e-05,
+    "peak_force_n": 171510.0
+   },
+   {
+    "ammo": "Mk262",
+    "plate_radius_m": 0.3,
+    "plate_thickness_m": 0.01,
+    "plate_mass_kg": 22.2,
+    "inertia_about_hinge_kgm2": 2.497,
+    "distance_from_eye_m": 55,
+    "impact_speed_mps": 728.0,
+    "impact_energy_j": 1322.0,
+    "momentum_ns": 3.632,
+    "centre_hit_omega0_rad_s": 0.436,
+    "plate_ke_j": 0.238,
+    "plate_ke_fraction": 0.00018,
+    "max_rest_lean_to_topple_deg": 4.89,
+    "falls_at_2deg_lean": true,
+    "fall_time_s_at_2deg_lean": 0.818,
+    "landing_rate_rad_s": 7.24,
+    "contact_time_s": 3.468e-05,
+    "peak_force_n": 164528.0
+   }
+  ],
+  "steel_notes": {
+   "hinge": "plate hinged along a horizontal axis at its bottom edge (hinge_offset = radius), resting lean_deg toward the shooter against a stop; I = m r^2 / 4 + m s^2",
+   "force_pulse": "half-sine of duration contact_time_s = bullet length / impact speed, carrying momentum_ns; bandwidth about 1 / contact_time, well above the audible range",
+   "energy_split": "the plate's swing takes under 0.1 percent of the bullet's energy; the rest goes to breaking and heating the bullet, the splash, and sound"
+  },
+  "dirt_table": [
+   {
+    "ammo": "M855",
+    "speed_mps": 300,
+    "energy_j": 181.0,
+    "dirt_depth_m": 0.077,
+    "berm_depth_m": 0.085,
+    "crater_diameter_m": 0.049,
+    "plume_height_dry_m": 0.45
+   },
+   {
+    "ammo": "M855",
+    "speed_mps": 500,
+    "energy_j": 502.0,
+    "dirt_depth_m": 0.097,
+    "berm_depth_m": 0.105,
+    "crater_diameter_m": 0.069,
+    "plume_height_dry_m": 0.63
+   },
+   {
+    "ammo": "M855",
+    "speed_mps": 700,
+    "energy_j": 984.0,
+    "dirt_depth_m": 0.11,
+    "berm_depth_m": 0.118,
+    "crater_diameter_m": 0.087,
+    "plume_height_dry_m": 0.79
+   },
+   {
+    "ammo": "M855",
+    "speed_mps": 800,
+    "energy_j": 1286.0,
+    "dirt_depth_m": 0.115,
+    "berm_depth_m": 0.123,
+    "crater_diameter_m": 0.095,
+    "plume_height_dry_m": 0.86
+   },
+   {
+    "ammo": "M855",
+    "speed_mps": 850,
+    "energy_j": 1451.0,
+    "dirt_depth_m": 0.118,
+    "berm_depth_m": 0.126,
+    "crater_diameter_m": 0.099,
+    "plume_height_dry_m": 0.89
+   },
+   {
+    "ammo": "Mk262",
+    "speed_mps": 300,
+    "energy_j": 225.0,
+    "dirt_depth_m": 0.095,
+    "berm_depth_m": 0.105,
+    "crater_diameter_m": 0.053,
+    "plume_height_dry_m": 0.48
+   },
+   {
+    "ammo": "Mk262",
+    "speed_mps": 500,
+    "energy_j": 624.0,
+    "dirt_depth_m": 0.12,
+    "berm_depth_m": 0.13,
+    "crater_diameter_m": 0.074,
+    "plume_height_dry_m": 0.67
+   },
+   {
+    "ammo": "Mk262",
+    "speed_mps": 700,
+    "energy_j": 1222.0,
+    "dirt_depth_m": 0.137,
+    "berm_depth_m": 0.147,
+    "crater_diameter_m": 0.093,
+    "plume_height_dry_m": 0.84
+   },
+   {
+    "ammo": "Mk262",
+    "speed_mps": 800,
+    "energy_j": 1597.0,
+    "dirt_depth_m": 0.143,
+    "berm_depth_m": 0.153,
+    "crater_diameter_m": 0.102,
+    "plume_height_dry_m": 0.92
+   },
+   {
+    "ammo": "Mk262",
+    "speed_mps": 850,
+    "energy_j": 1802.0,
+    "dirt_depth_m": 0.146,
+    "berm_depth_m": 0.156,
+    "crater_diameter_m": 0.106,
+    "plume_height_dry_m": 0.96
+   }
+  ],
+  "ricochet_probability": [
+   {
+    "angle_from_surface_deg": 1,
+    "dirt": 0.971,
+    "steel": 0.975
+   },
+   {
+    "angle_from_surface_deg": 2,
+    "dirt": 0.953,
+    "steel": 0.966
+   },
+   {
+    "angle_from_surface_deg": 3,
+    "dirt": 0.924,
+    "steel": 0.953
+   },
+   {
+    "angle_from_surface_deg": 5,
+    "dirt": 0.818,
+    "steel": 0.912
+   },
+   {
+    "angle_from_surface_deg": 8,
+    "dirt": 0.5,
+    "steel": 0.791
+   },
+   {
+    "angle_from_surface_deg": 10,
+    "dirt": 0.269,
+    "steel": 0.661
+   },
+   {
+    "angle_from_surface_deg": 12,
+    "dirt": 0.119,
+    "steel": 0.5
+   },
+   {
+    "angle_from_surface_deg": 15,
+    "dirt": 0.029,
+    "steel": 0.269
+   },
+   {
+    "angle_from_surface_deg": 20,
+    "dirt": 0.002,
+    "steel": 0.065
+   },
+   {
+    "angle_from_surface_deg": 30,
+    "dirt": 0.0,
+    "steel": 0.002
+   },
+   {
+    "angle_from_surface_deg": 45,
+    "dirt": 0.0,
+    "steel": 0.0
+   },
+   {
+    "angle_from_surface_deg": 90,
+    "dirt": 0.0,
+    "steel": 0.0
+   }
+  ],
+  "ground_strike_note": "from a 1.6 m eye height the flat ground is struck at atan(1.6 / distance): 4.6 degrees at 20 m, 1.8 degrees at 50 m. Low shots almost always skip off the dirt and carry on into the berm",
+  "paper": {
+   "M855": {
+    "hole_diameter_mm": 4.84,
+    "grease_ring_mm": 5.69,
+    "keyhole_length_mm_at_yaw_deg": {
+     "0": 5.69,
+     "2": 6.49,
+     "5": 7.67,
+     "15": 11.45,
+     "90": 23.01
+    }
+   },
+   "Mk262": {
+    "hole_diameter_mm": 4.84,
+    "grease_ring_mm": 5.69,
+    "keyhole_length_mm_at_yaw_deg": {
+     "0": 5.69,
+     "2": 6.57,
+     "5": 7.87,
+     "15": 12.03,
+     "90": 25.25
+    }
+   },
+   "M856": {
+    "hole_diameter_mm": 4.84,
+    "grease_ring_mm": 5.69,
+    "keyhole_length_mm_at_yaw_deg": {
+     "0": 5.69,
+     "2": 6.71,
+     "5": 8.21,
+     "15": 13.06,
+     "90": 29.21
+    }
+   }
+  },
+  "sonic_crack": {
+   "model": "Whitham N-wave (peak = 0.53 P0 (M^2-1)^(1/8) d / (b^(3/4) l^(1/4)))",
+   "M855": [
+    {
+     "miss_distance_m": 0.5,
+     "mach": 2.45,
+     "peak_pa": 1613.446697,
+     "peak_db_spl": 158.134493,
+     "duration_s": 8.8e-05,
+     "cone_half_angle_deg": 24.089506
+    },
+    {
+     "miss_distance_m": 1,
+     "mach": 2.45,
+     "peak_pa": 959.361146,
+     "peak_db_spl": 153.619043,
+     "duration_s": 0.000105,
+     "cone_half_angle_deg": 24.089506
+    },
+    {
+     "miss_distance_m": 3,
+     "mach": 2.45,
+     "peak_pa": 420.863424,
+     "peak_db_spl": 146.462224,
+     "duration_s": 0.000138,
+     "cone_half_angle_deg": 24.089506
+    },
+    {
+     "miss_distance_m": 10,
+     "mach": 2.45,
+     "peak_pa": 170.601217,
+     "peak_db_spl": 138.619043,
+     "duration_s": 0.000186,
+     "cone_half_angle_deg": 24.089506
+    },
+    {
+     "miss_distance_m": 0.5,
+     "mach": 2.0,
+     "peak_pa": 1513.548674,
+     "peak_db_spl": 157.579328,
+     "duration_s": 8.7e-05,
+     "cone_half_angle_deg": 30.0
+    },
+    {
+     "miss_distance_m": 1,
+     "mach": 2.0,
+     "peak_pa": 899.961426,
+     "peak_db_spl": 153.063878,
+     "duration_s": 0.000103,
+     "cone_half_angle_deg": 30.0
+    },
+    {
+     "miss_distance_m": 3,
+     "mach": 2.0,
+     "peak_pa": 394.805282,
+     "peak_db_spl": 145.907059,
+     "duration_s": 0.000136,
+     "cone_half_angle_deg": 30.0
+    },
+    {
+     "miss_distance_m": 10,
+     "mach": 2.0,
+     "peak_pa": 160.038287,
+     "peak_db_spl": 138.063878,
+     "duration_s": 0.000184,
+     "cone_half_angle_deg": 30.0
+    }
+   ]
+  }
+ },
+ "visibility": {
+  "trace_min_range_m": 100.0,
+  "trace_needs_magnification": 8.0,
+  "vapour_humidity_threshold": 0.9,
+  "vapour_max_opacity": 0.12,
+  "vapour_life_s": 0.04,
+  "glint_probability": 0.02,
+  "source": "inferred from shooting practice: 'trace' is the refractive wake of the bullet, seen from behind through a spotting scope or magnified optic in good light, usually past 100 m. To the naked eye over iron sights a ball round is not visible. Condensation in the wake needs air close to saturation and is brief and faint. Values are visual calibration"
+ },
+ "validation": {
+  "vacuum_parabola": {
+   "y_error_m": 5.773159728050814e-15,
+   "t_error_s": 3.1086244689504383e-15
+  },
+  "constant_cd_decay": {
+   "vx_sim": 97.85858793196061,
+   "vx_analytic": 97.85914890038946,
+   "note": "Mach 0.29 where G7 Cd is flat at 0.1194: vx = v0 exp(-k Cd x) to first order in the small fall angle"
+  },
+  "sierra_infinity_m855": {
+   "source": "Sierra Infinity output for M855 posted on forums.accuratereloading.com (thread 352101342): 3,025 ft/s (TM 43-0001-27), 300 yd zero, 100 F, sea level; BC 0.307 quoted in the thread. Forum transcription, not a primary source",
+   "rows": [
+    {
+     "range_yd": 0,
+     "published_in": -2.25,
+     "sim_g1_0.307_in": -2.25,
+     "sim_g1_humid_in": -2.25,
+     "sim_g7_0.151_in": -2.25
+    },
+    {
+     "range_yd": 50,
+     "published_in": 1.34,
+     "sim_g1_0.307_in": 1.18,
+     "sim_g1_humid_in": 1.15,
+     "sim_g7_0.151_in": 1.19
+    },
+    {
+     "range_yd": 100,
+     "published_in": 3.85,
+     "sim_g1_0.307_in": 3.55,
+     "sim_g1_humid_in": 3.51,
+     "sim_g7_0.151_in": 3.58
+    },
+    {
+     "range_yd": 150,
+     "published_in": 5.15,
+     "sim_g1_0.307_in": 4.76,
+     "sim_g1_humid_in": 4.7,
+     "sim_g7_0.151_in": 4.8
+    },
+    {
+     "range_yd": 200,
+     "published_in": 5.07,
+     "sim_g1_0.307_in": 4.67,
+     "sim_g1_humid_in": 4.61,
+     "sim_g7_0.151_in": 4.71
+    },
+    {
+     "range_yd": 250,
+     "published_in": 3.43,
+     "sim_g1_0.307_in": 3.14,
+     "sim_g1_humid_in": 3.1,
+     "sim_g7_0.151_in": 3.17
+    },
+    {
+     "range_yd": 300,
+     "published_in": 0.0,
+     "sim_g1_0.307_in": -0.0,
+     "sim_g1_humid_in": -0.0,
+     "sim_g7_0.151_in": -0.0
+    },
+    {
+     "range_yd": 350,
+     "published_in": -5.47,
+     "sim_g1_0.307_in": -4.95,
+     "sim_g1_humid_in": -4.87,
+     "sim_g7_0.151_in": -5.01
+    },
+    {
+     "range_yd": 400,
+     "published_in": -13.3,
+     "sim_g1_0.307_in": -11.93,
+     "sim_g1_humid_in": -11.72,
+     "sim_g7_0.151_in": -12.07
+    },
+    {
+     "range_yd": 450,
+     "published_in": -23.8,
+     "sim_g1_0.307_in": -21.19,
+     "sim_g1_humid_in": -20.8,
+     "sim_g7_0.151_in": -21.48
+    },
+    {
+     "range_yd": 500,
+     "published_in": -37.5,
+     "sim_g1_0.307_in": -33.04,
+     "sim_g1_humid_in": -32.38,
+     "sim_g7_0.151_in": -33.53
+    }
+   ],
+   "fit": "a one-parameter refit (G1 0.260 at 100 F, or 0.274 at 15 C) reproduces every posted row within 0.11 in (0.4 in at 15 C), so the posted run did not use 0.307; the integrator and geometry agree with Sierra's, the BC of that run is unknown",
+   "sim_g1_0.260_in": {
+    "0": -2.25,
+    "50": 1.33,
+    "100": 3.84,
+    "150": 5.14,
+    "200": 5.07,
+    "250": 3.43,
+    "300": 0.0,
+    "350": -5.48,
+    "400": -13.32,
+    "450": -23.89,
+    "500": -37.61
+   },
+   "max_abs_error_in_g1_0.260": 0.11,
+   "max_abs_error_in_g1": 4.46,
+   "max_abs_error_in_g1_humid": 5.12,
+   "max_abs_error_in_g7": 3.97,
+   "conditions": "sim_g1: 37.8 C, 1013.25 hPa, dry. sim_g1_humid: 37.8 C, 1000 hPa, 78 percent humidity (Army Standard Metro pressure and humidity). sim_g7: this model's M855 drag (G7 0.151) at the same velocity"
+  },
+  "g7_vs_g1_m855": [
+   {
+    "range_m": 100,
+    "v_g7": 749.4,
+    "v_g1": 750.5,
+    "drop_g7_m": -0.0739,
+    "drop_g1_m": -0.0738
+   },
+   {
+    "range_m": 200,
+    "v_g7": 655.8,
+    "v_g1": 657.9,
+    "drop_g7_m": -0.3235,
+    "drop_g1_m": -0.3229
+   },
+   {
+    "range_m": 300,
+    "v_g7": 569.3,
+    "v_g1": 572.2,
+    "drop_g7_m": -0.803,
+    "drop_g1_m": -0.8002
+   },
+   {
+    "range_m": 400,
+    "v_g7": 488.5,
+    "v_g1": 494.3,
+    "drop_g7_m": -1.5878,
+    "drop_g1_m": -1.5794
+   },
+   {
+    "range_m": 500,
+    "v_g7": 413.2,
+    "v_g1": 426.1,
+    "drop_g7_m": -2.7882,
+    "drop_g1_m": -2.7632
+   },
+   {
+    "range_m": 600,
+    "v_g7": 345.1,
+    "v_g1": 370.4,
+    "drop_g7_m": -4.5703,
+    "drop_g1_m": -4.4903
+   }
+  ],
+  "aberdeen_20in_snippet": {
+   "source": "search-result summary of a forum post citing Aberdeen data for M855 from a 20 in barrel: 2,751 / 2,420 / 2,115 ft/s at 100 / 200 / 300 m. Second hand; the muzzle velocity (assumed 3,100 ft/s) was not stated. Weak evidence",
+   "rows": [
+    {
+     "range_m": 100,
+     "published_fps": 2751,
+     "sim_fps": 2751.0
+    },
+    {
+     "range_m": 200,
+     "published_fps": 2420,
+     "sim_fps": 2424.0
+    },
+    {
+     "range_m": 300,
+     "published_fps": 2115,
+     "sim_fps": 2119.0
+    }
+   ]
+  },
+  "hk_drum_steps": {
+   "note": "bore-angle steps this model needs between HK's drum positions, and what they mean at the rear sight (sight radius 364 mm). HK manual: a quarter turn of the drum is about 1.5 in at 100 yd (0.417 mrad)",
+   "steps_mrad": {
+    "hk200yd": 0.423,
+    "hk300yd": 1.231,
+    "hk400yd": 2.281
+   },
+   "steps_mm_at_rear_sight": {
+    "hk200yd": 0.154,
+    "hk300yd": 0.448,
+    "hk400yd": 0.83
+   },
+   "quarter_turn_mm_at_rear_sight": 0.152
+  },
+  "hk_ranges": {
+   "note": "HK manual: 500 m point, 600 m area effective range",
+   "M855_at_500m": {
+    "range_m": 500,
+    "velocity_mps": 413.19,
+    "mach": 1.2142,
+    "energy_j": 342.9,
+    "momentum_ns": 1.66,
+    "tof_s": 0.84382,
+    "drop_m": -2.78816,
+    "wind_drift_10mph_m": 1.14258,
+    "spin_drift_m": 0.08401,
+    "coriolis_right_m": 0.01923,
+    "coriolis_up_m": 0.0
+   },
+   "M855_supersonic_to_m": 608.0
+  }
+ }
+}

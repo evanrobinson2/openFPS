@@ -1,0 +1,402 @@
+{
+ "inventory": {
+  "features": 349,
+  "parts_named": 301,
+  "merged_features": 48,
+  "missing_parts": [],
+  "objects_not_in_inventory": [],
+  "coverage": 1.0,
+  "passed": true
+ },
+ "assembly": {
+  "parts": 301,
+  "floating": [],
+  "fasteners": 29,
+  "fasteners_not_seated": [],
+  "passed": true
+ },
+ "animation": {
+  "clips": {
+   "charge": {
+    "frames": [
+     1,
+     30
+    ],
+    "seconds": 1.21,
+    "moving_parts": 14,
+    "animated": [
+     "bolt_carrier",
+     "charging_handle",
+     "dust_cover"
+    ],
+    "offsets_mm_at_ends": [
+     {},
+     {
+      "dust_cover": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     }
+    ],
+    "worst_penetration": {
+     "depth_mm": 0.025,
+     "frame": 15,
+     "moving": "bolt_carrier_serrations",
+     "into": "upper_body"
+    },
+    "passed": true
+   },
+   "dust_cover_open": {
+    "frames": [
+     1,
+     10
+    ],
+    "seconds": 0.38,
+    "moving_parts": 6,
+    "animated": [
+     "dust_cover"
+    ],
+    "offsets_mm_at_ends": [
+     {},
+     {
+      "dust_cover": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     }
+    ],
+    "worst_penetration": {
+     "depth_mm": 0.0
+    },
+    "passed": true
+   },
+   "mag_release": {
+    "frames": [
+     1,
+     10
+    ],
+    "seconds": 0.38,
+    "moving_parts": 5,
+    "animated": [
+     "mag_release_button"
+    ],
+    "offsets_mm_at_ends": [
+     {},
+     {}
+    ],
+    "worst_penetration": {
+     "depth_mm": 0.0
+    },
+    "passed": true
+   },
+   "mag_out": {
+    "frames": [
+     1,
+     24
+    ],
+    "seconds": 0.96,
+    "moving_parts": 23,
+    "animated": [
+     "mag_body",
+     "mag_release_button"
+    ],
+    "offsets_mm_at_ends": [
+     {},
+     {
+      "mag_body": [
+       0.0,
+       30.0,
+       -200.0
+      ]
+     }
+    ],
+    "worst_penetration": {
+     "depth_mm": 0.0
+    },
+    "passed": true
+   },
+   "mag_in": {
+    "frames": [
+     1,
+     22
+    ],
+    "seconds": 0.88,
+    "moving_parts": 23,
+    "animated": [
+     "mag_body",
+     "mag_release_button"
+    ],
+    "offsets_mm_at_ends": [
+     {
+      "mag_body": [
+       0.0,
+       30.0,
+       -200.0
+      ]
+     },
+     {}
+    ],
+    "worst_penetration": {
+     "depth_mm": 0.0
+    },
+    "passed": true
+   },
+   "bolt_catch": {
+    "frames": [
+     1,
+     12
+    ],
+    "seconds": 0.46,
+    "moving_parts": 2,
+    "animated": [
+     "bolt_catch"
+    ],
+    "offsets_mm_at_ends": [
+     {},
+     {}
+    ],
+    "worst_penetration": {
+     "depth_mm": 0.0
+    },
+    "passed": true
+   },
+   "safety_to_fire": {
+    "frames": [
+     1,
+     6
+    ],
+    "seconds": 0.21,
+    "moving_parts": 4,
+    "animated": [
+     "selector_lever_l"
+    ],
+    "offsets_mm_at_ends": [
+     {},
+     {
+      "selector_lever_l": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     }
+    ],
+    "worst_penetration": {
+     "depth_mm": 0.0
+    },
+    "passed": true
+   },
+   "safety_to_safe": {
+    "frames": [
+     1,
+     6
+    ],
+    "seconds": 0.21,
+    "moving_parts": 4,
+    "animated": [
+     "selector_lever_l"
+    ],
+    "offsets_mm_at_ends": [
+     {
+      "selector_lever_l": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     {}
+    ],
+    "worst_penetration": {
+     "depth_mm": 0.0
+    },
+    "passed": true
+   },
+   "trigger_pull": {
+    "frames": [
+     1,
+     10
+    ],
+    "seconds": 0.38,
+    "moving_parts": 1,
+    "animated": [
+     "trigger"
+    ],
+    "offsets_mm_at_ends": [
+     {},
+     {}
+    ],
+    "worst_penetration": {
+     "depth_mm": 0.0
+    },
+    "passed": true
+   },
+   "stock_extend": {
+    "frames": [
+     1,
+     46
+    ],
+    "seconds": 1.88,
+    "moving_parts": 57,
+    "animated": [
+     "stock_body",
+     "stock_latch"
+    ],
+    "offsets_mm_at_ends": [
+     {},
+     {
+      "stock_body": [
+       0.0,
+       75.0,
+       0.0
+      ],
+      "stock_latch": [
+       0.0,
+       75.0,
+       0.0
+      ]
+     }
+    ],
+    "worst_penetration": {
+     "depth_mm": 0.0
+    },
+    "passed": true
+   },
+   "stock_collapse": {
+    "frames": [
+     1,
+     46
+    ],
+    "seconds": 1.88,
+    "moving_parts": 57,
+    "animated": [
+     "stock_body",
+     "stock_latch"
+    ],
+    "offsets_mm_at_ends": [
+     {
+      "stock_body": [
+       0.0,
+       75.0,
+       0.0
+      ],
+      "stock_latch": [
+       0.0,
+       75.0,
+       0.0
+      ]
+     },
+     {}
+    ],
+    "worst_penetration": {
+     "depth_mm": 0.0
+    },
+    "passed": true
+   },
+   "sights_down": {
+    "frames": [
+     1,
+     8
+    ],
+    "seconds": 0.29,
+    "moving_parts": 8,
+    "animated": [
+     "front_sight_arm",
+     "rear_sight_arm"
+    ],
+    "offsets_mm_at_ends": [
+     {},
+     {
+      "front_sight_arm": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "rear_sight_arm": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     }
+    ],
+    "worst_penetration": {
+     "depth_mm": 0.0
+    },
+    "passed": true
+   },
+   "sights_up": {
+    "frames": [
+     1,
+     8
+    ],
+    "seconds": 0.29,
+    "moving_parts": 8,
+    "animated": [
+     "front_sight_arm",
+     "rear_sight_arm"
+    ],
+    "offsets_mm_at_ends": [
+     {
+      "front_sight_arm": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "rear_sight_arm": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     {}
+    ],
+    "worst_penetration": {
+     "depth_mm": 0.0
+    },
+    "passed": true
+   }
+  },
+  "passed": true
+ },
+ "export": {
+  "file_bytes": 6140328,
+  "built": {
+   "objects": 301,
+   "materials": 8
+  },
+  "reloaded": {
+   "objects": 301,
+   "materials": 8,
+   "triangles": 85784,
+   "animations": [
+    "bolt_catch",
+    "charge",
+    "dust_cover_open",
+    "mag_in",
+    "mag_out",
+    "mag_release",
+    "safety_to_fire",
+    "safety_to_safe",
+    "sights_down",
+    "sights_up",
+    "stock_collapse",
+    "stock_extend",
+    "trigger_pull"
+   ],
+   "empties": [
+    "socket_ads_eye",
+    "socket_eject",
+    "socket_hand_left",
+    "socket_hand_right",
+    "socket_magazine",
+    "socket_muzzle",
+    "socket_optic"
+   ]
+  },
+  "images": 9,
+  "all_images_embedded": true,
+  "barrel_length_mm": 368.3,
+  "barrel_length_in": 14.5,
+  "passed": true
+ }
+}

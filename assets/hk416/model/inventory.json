@@ -1,0 +1,3484 @@
+[
+ {
+  "region": "muzzle device",
+  "feature": "birdcage flash hider body",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "flash_hider"
+ },
+ {
+  "region": "muzzle device",
+  "feature": "flash hider slot 1 of 6 (side slots show daylight)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "flash_hider",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "muzzle device",
+  "feature": "flash hider slot 2 of 6 (side slots show daylight)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "flash_hider",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "muzzle device",
+  "feature": "flash hider slot 3 of 6 (side slots show daylight)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "flash_hider",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "muzzle device",
+  "feature": "flash hider slot 4 of 6 (side slots show daylight)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "flash_hider",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "muzzle device",
+  "feature": "flash hider slot 5 of 6 (side slots show daylight)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "flash_hider",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "muzzle device",
+  "feature": "flash hider slot 6 of 6 (side slots show daylight)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "flash_hider",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "muzzle device",
+  "feature": "flash hider wrench flat, right",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "flash_hider",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "muzzle device",
+  "feature": "flash hider wrench flat, left",
+  "seen_in": [
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "flash_hider",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "muzzle device",
+  "feature": "flash hider front chamfer and open mouth",
+  "seen_in": [
+   "profile-right-photo.png",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "flash_hider",
+  "merged": true,
+  "merge_reason": "one physical piece with the host on the real rifle (a turned or moulded feature), modelled in the host mesh"
+ },
+ {
+  "region": "muzzle device",
+  "feature": "crush washer behind the flash hider",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "crush_washer"
+ },
+ {
+  "region": "muzzle device",
+  "feature": "jam ring / thread shoulder ring",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "muzzle_jam_ring"
+ },
+ {
+  "region": "muzzle device",
+  "feature": "muzzle crown and bore opening (dark, bore not modelled)",
+  "seen_in": [
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "muzzle_bore"
+ },
+ {
+  "region": "barrel",
+  "feature": "barrel, 14.5 in",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-handguard-front.jpg",
+   "closeup-front-sight.jpg"
+  ],
+  "part_name": "barrel"
+ },
+ {
+  "region": "barrel",
+  "feature": "barrel shoulder in front of the gas block",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "barrel",
+  "merged": true,
+  "merge_reason": "one physical piece with the host on the real rifle (a turned or moulded feature), modelled in the host mesh"
+ },
+ {
+  "region": "barrel",
+  "feature": "barrel necked section (grenade-launcher style cut)",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "barrel",
+  "merged": true,
+  "merge_reason": "one physical piece with the host on the real rifle (a turned or moulded feature), modelled in the host mesh"
+ },
+ {
+  "region": "barrel",
+  "feature": "barrel muzzle shoulder before the threads",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "barrel",
+  "merged": true,
+  "merge_reason": "one physical piece with the host on the real rifle (a turned or moulded feature), modelled in the host mesh"
+ },
+ {
+  "region": "barrel",
+  "feature": "barrel section under the handguard (seen through the vents)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "barrel",
+  "merged": true,
+  "merge_reason": "one physical piece with the host on the real rifle (a turned or moulded feature), modelled in the host mesh"
+ },
+ {
+  "region": "barrel",
+  "feature": "barrel nut (seen through the rear vents)",
+  "seen_in": [
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "barrel_nut"
+ },
+ {
+  "region": "barrel",
+  "feature": "gas block",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-left-photo-416N.jpg",
+   "closeup-front-sight.jpg"
+  ],
+  "part_name": "gas_block"
+ },
+ {
+  "region": "barrel",
+  "feature": "gas block cross pin, front",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "gas_block_pin_1"
+ },
+ {
+  "region": "barrel",
+  "feature": "gas block cross pin, rear",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "gas_block_pin_2"
+ },
+ {
+  "region": "barrel",
+  "feature": "gas regulator plug at the front of the gas block",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "gas_regulator"
+ },
+ {
+  "region": "barrel",
+  "feature": "gas piston housing above the barrel (seen through the top vents)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "gas_piston_tube"
+ },
+ {
+  "region": "barrel",
+  "feature": "bayonet lug under the gas block",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "bayonet_lug"
+ },
+ {
+  "region": "front sight",
+  "feature": "front sight base on the gas block",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-left-photo-416N.jpg",
+   "closeup-front-sight.jpg"
+  ],
+  "part_name": "front_sight_base"
+ },
+ {
+  "region": "front sight",
+  "feature": "folding front sight arm",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-front-sight.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "front_sight_arm"
+ },
+ {
+  "region": "front sight",
+  "feature": "front sight post",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "front_sight_post"
+ },
+ {
+  "region": "front sight",
+  "feature": "front sight protective ear, left",
+  "seen_in": [
+   "profile-left-photo-416N.jpg",
+   "closeup-front-sight.jpg"
+  ],
+  "part_name": "front_sight_ear_l"
+ },
+ {
+  "region": "front sight",
+  "feature": "front sight protective ear, right",
+  "seen_in": [
+   "profile-right-photo.png",
+   "closeup-front-sight.jpg"
+  ],
+  "part_name": "front_sight_ear_r"
+ },
+ {
+  "region": "front sight",
+  "feature": "front sight pivot pin head, left",
+  "seen_in": [
+   "closeup-front-sight.jpg"
+  ],
+  "part_name": "front_sight_pivot_head_l"
+ },
+ {
+  "region": "front sight",
+  "feature": "front sight pivot pin head, right",
+  "seen_in": [
+   "profile-right-photo.png",
+   "closeup-front-sight.jpg"
+  ],
+  "part_name": "front_sight_pivot_head_r"
+ },
+ {
+  "region": "front sight",
+  "feature": "front sight lock detent button",
+  "seen_in": [
+   "closeup-front-sight.jpg"
+  ],
+  "part_name": "front_sight_detent"
+ },
+ {
+  "region": "front sight",
+  "feature": "front sight base clamp screw (hex socket)",
+  "seen_in": [
+   "closeup-front-sight.jpg"
+  ],
+  "part_name": "front_sight_base_screw"
+ },
+ {
+  "region": "handguard",
+  "feature": "quad-rail handguard body (octagonal free-float tube)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "handguard_body"
+ },
+ {
+  "region": "handguard",
+  "feature": "lightening vent 1 of 4, upper row, right side",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "handguard_body",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "handguard",
+  "feature": "lightening vent 2 of 4, upper row, right side",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "handguard_body",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "handguard",
+  "feature": "lightening vent 3 of 4, upper row, right side",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "handguard_body",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "handguard",
+  "feature": "lightening vent 4 of 4, upper row, right side",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "handguard_body",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "handguard",
+  "feature": "lightening vent 1 of 4, lower row, right side",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "handguard_body",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "handguard",
+  "feature": "lightening vent 2 of 4, lower row, right side",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "handguard_body",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "handguard",
+  "feature": "lightening vent 3 of 4, lower row, right side",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "handguard_body",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "handguard",
+  "feature": "lightening vent 4 of 4, lower row, right side",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "handguard_body",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "handguard",
+  "feature": "sling crescent slot under the front QD cup, right",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "handguard_body",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "handguard",
+  "feature": "lightening vent 1 of 4, upper row, left side",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "handguard_body",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "handguard",
+  "feature": "lightening vent 2 of 4, upper row, left side",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "handguard_body",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "handguard",
+  "feature": "lightening vent 3 of 4, upper row, left side",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "handguard_body",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "handguard",
+  "feature": "lightening vent 4 of 4, upper row, left side",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "handguard_body",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "handguard",
+  "feature": "lightening vent 1 of 4, lower row, left side",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "handguard_body",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "handguard",
+  "feature": "lightening vent 2 of 4, lower row, left side",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "handguard_body",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "handguard",
+  "feature": "lightening vent 3 of 4, lower row, left side",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "handguard_body",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "handguard",
+  "feature": "lightening vent 4 of 4, lower row, left side",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "handguard_body",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "handguard",
+  "feature": "sling crescent slot under the front QD cup, left",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "handguard_body",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "handguard",
+  "feature": "handguard bore (barrel and piston run inside)",
+  "seen_in": [
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "handguard_body",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "handguard",
+  "feature": "top rail rear block",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-front-sight.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_top_rear_block"
+ },
+ {
+  "region": "handguard",
+  "feature": "top rail lug 01 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-front-sight.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_top_lug_01"
+ },
+ {
+  "region": "handguard",
+  "feature": "top rail lug 02 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-front-sight.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_top_lug_02"
+ },
+ {
+  "region": "handguard",
+  "feature": "top rail lug 03 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-front-sight.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_top_lug_03"
+ },
+ {
+  "region": "handguard",
+  "feature": "top rail lug 04 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-front-sight.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_top_lug_04"
+ },
+ {
+  "region": "handguard",
+  "feature": "top rail lug 05 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-front-sight.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_top_lug_05"
+ },
+ {
+  "region": "handguard",
+  "feature": "top rail lug 06 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-front-sight.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_top_lug_06"
+ },
+ {
+  "region": "handguard",
+  "feature": "top rail lug 07 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-front-sight.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_top_lug_07"
+ },
+ {
+  "region": "handguard",
+  "feature": "top rail lug 08 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-front-sight.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_top_lug_08"
+ },
+ {
+  "region": "handguard",
+  "feature": "top rail lug 09 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-front-sight.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_top_lug_09"
+ },
+ {
+  "region": "handguard",
+  "feature": "top rail lug 10 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-front-sight.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_top_lug_10"
+ },
+ {
+  "region": "handguard",
+  "feature": "top rail lug 11 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-front-sight.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_top_lug_11"
+ },
+ {
+  "region": "handguard",
+  "feature": "top rail lug 12 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-front-sight.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_top_lug_12"
+ },
+ {
+  "region": "handguard",
+  "feature": "top rail lug 13 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-front-sight.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_top_lug_13"
+ },
+ {
+  "region": "handguard",
+  "feature": "top rail lug 14 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-front-sight.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_top_lug_14"
+ },
+ {
+  "region": "handguard",
+  "feature": "top rail lug 15 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-front-sight.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_top_lug_15"
+ },
+ {
+  "region": "handguard",
+  "feature": "top rail lug 16 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-front-sight.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_top_lug_16"
+ },
+ {
+  "region": "handguard",
+  "feature": "top rail lug 17 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-front-sight.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_top_lug_17"
+ },
+ {
+  "region": "handguard",
+  "feature": "top rail lug 18 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-front-sight.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_top_lug_18"
+ },
+ {
+  "region": "handguard",
+  "feature": "top rail lug 19 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-front-sight.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_top_lug_19"
+ },
+ {
+  "region": "handguard",
+  "feature": "top rail front block",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-front-sight.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_top_front_block"
+ },
+ {
+  "region": "handguard",
+  "feature": "bottom rail rear block",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "hg_rail_bottom_rear_block"
+ },
+ {
+  "region": "handguard",
+  "feature": "bottom rail lug 01 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "hg_rail_bottom_lug_01"
+ },
+ {
+  "region": "handguard",
+  "feature": "bottom rail lug 02 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "hg_rail_bottom_lug_02"
+ },
+ {
+  "region": "handguard",
+  "feature": "bottom rail lug 03 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "hg_rail_bottom_lug_03"
+ },
+ {
+  "region": "handguard",
+  "feature": "bottom rail lug 04 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "hg_rail_bottom_lug_04"
+ },
+ {
+  "region": "handguard",
+  "feature": "bottom rail lug 05 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "hg_rail_bottom_lug_05"
+ },
+ {
+  "region": "handguard",
+  "feature": "bottom rail lug 06 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "hg_rail_bottom_lug_06"
+ },
+ {
+  "region": "handguard",
+  "feature": "bottom rail lug 07 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "hg_rail_bottom_lug_07"
+ },
+ {
+  "region": "handguard",
+  "feature": "bottom rail lug 08 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "hg_rail_bottom_lug_08"
+ },
+ {
+  "region": "handguard",
+  "feature": "bottom rail lug 09 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "hg_rail_bottom_lug_09"
+ },
+ {
+  "region": "handguard",
+  "feature": "bottom rail lug 10 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "hg_rail_bottom_lug_10"
+ },
+ {
+  "region": "handguard",
+  "feature": "bottom rail lug 11 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "hg_rail_bottom_lug_11"
+ },
+ {
+  "region": "handguard",
+  "feature": "bottom rail lug 12 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "hg_rail_bottom_lug_12"
+ },
+ {
+  "region": "handguard",
+  "feature": "bottom rail lug 13 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "hg_rail_bottom_lug_13"
+ },
+ {
+  "region": "handguard",
+  "feature": "bottom rail lug 14 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "hg_rail_bottom_lug_14"
+ },
+ {
+  "region": "handguard",
+  "feature": "bottom rail lug 15 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "hg_rail_bottom_lug_15"
+ },
+ {
+  "region": "handguard",
+  "feature": "bottom rail lug 16 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "hg_rail_bottom_lug_16"
+ },
+ {
+  "region": "handguard",
+  "feature": "bottom rail lug 17 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "hg_rail_bottom_lug_17"
+ },
+ {
+  "region": "handguard",
+  "feature": "bottom rail lug 18 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "hg_rail_bottom_lug_18"
+ },
+ {
+  "region": "handguard",
+  "feature": "bottom rail lug 19 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "hg_rail_bottom_lug_19"
+ },
+ {
+  "region": "handguard",
+  "feature": "bottom rail front block",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "hg_rail_bottom_front_block"
+ },
+ {
+  "region": "handguard",
+  "feature": "left rail rear block",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_left_rear_block"
+ },
+ {
+  "region": "handguard",
+  "feature": "left rail lug 01 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_left_lug_01"
+ },
+ {
+  "region": "handguard",
+  "feature": "left rail lug 02 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_left_lug_02"
+ },
+ {
+  "region": "handguard",
+  "feature": "left rail lug 03 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_left_lug_03"
+ },
+ {
+  "region": "handguard",
+  "feature": "left rail lug 04 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_left_lug_04"
+ },
+ {
+  "region": "handguard",
+  "feature": "left rail lug 05 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_left_lug_05"
+ },
+ {
+  "region": "handguard",
+  "feature": "left rail lug 06 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_left_lug_06"
+ },
+ {
+  "region": "handguard",
+  "feature": "left rail lug 07 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_left_lug_07"
+ },
+ {
+  "region": "handguard",
+  "feature": "left rail lug 08 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_left_lug_08"
+ },
+ {
+  "region": "handguard",
+  "feature": "left rail lug 09 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_left_lug_09"
+ },
+ {
+  "region": "handguard",
+  "feature": "left rail lug 10 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_left_lug_10"
+ },
+ {
+  "region": "handguard",
+  "feature": "left rail lug 11 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_left_lug_11"
+ },
+ {
+  "region": "handguard",
+  "feature": "left rail lug 12 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_left_lug_12"
+ },
+ {
+  "region": "handguard",
+  "feature": "left rail lug 13 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_left_lug_13"
+ },
+ {
+  "region": "handguard",
+  "feature": "left rail lug 14 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_left_lug_14"
+ },
+ {
+  "region": "handguard",
+  "feature": "left rail lug 15 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_left_lug_15"
+ },
+ {
+  "region": "handguard",
+  "feature": "left rail lug 16 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_left_lug_16"
+ },
+ {
+  "region": "handguard",
+  "feature": "left rail lug 17 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_left_lug_17"
+ },
+ {
+  "region": "handguard",
+  "feature": "left rail lug 18 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_left_lug_18"
+ },
+ {
+  "region": "handguard",
+  "feature": "left rail lug 19 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_left_lug_19"
+ },
+ {
+  "region": "handguard",
+  "feature": "left rail front block",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_rail_left_front_block"
+ },
+ {
+  "region": "handguard",
+  "feature": "right rail rear block",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "hg_rail_right_rear_block"
+ },
+ {
+  "region": "handguard",
+  "feature": "right rail lug 01 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "hg_rail_right_lug_01"
+ },
+ {
+  "region": "handguard",
+  "feature": "right rail lug 02 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "hg_rail_right_lug_02"
+ },
+ {
+  "region": "handguard",
+  "feature": "right rail lug 03 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "hg_rail_right_lug_03"
+ },
+ {
+  "region": "handguard",
+  "feature": "right rail lug 04 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "hg_rail_right_lug_04"
+ },
+ {
+  "region": "handguard",
+  "feature": "right rail lug 05 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "hg_rail_right_lug_05"
+ },
+ {
+  "region": "handguard",
+  "feature": "right rail lug 06 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "hg_rail_right_lug_06"
+ },
+ {
+  "region": "handguard",
+  "feature": "right rail lug 07 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "hg_rail_right_lug_07"
+ },
+ {
+  "region": "handguard",
+  "feature": "right rail lug 08 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "hg_rail_right_lug_08"
+ },
+ {
+  "region": "handguard",
+  "feature": "right rail lug 09 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "hg_rail_right_lug_09"
+ },
+ {
+  "region": "handguard",
+  "feature": "right rail lug 10 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "hg_rail_right_lug_10"
+ },
+ {
+  "region": "handguard",
+  "feature": "right rail lug 11 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "hg_rail_right_lug_11"
+ },
+ {
+  "region": "handguard",
+  "feature": "right rail lug 12 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "hg_rail_right_lug_12"
+ },
+ {
+  "region": "handguard",
+  "feature": "right rail lug 13 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "hg_rail_right_lug_13"
+ },
+ {
+  "region": "handguard",
+  "feature": "right rail lug 14 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "hg_rail_right_lug_14"
+ },
+ {
+  "region": "handguard",
+  "feature": "right rail lug 15 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "hg_rail_right_lug_15"
+ },
+ {
+  "region": "handguard",
+  "feature": "right rail lug 16 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "hg_rail_right_lug_16"
+ },
+ {
+  "region": "handguard",
+  "feature": "right rail lug 17 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "hg_rail_right_lug_17"
+ },
+ {
+  "region": "handguard",
+  "feature": "right rail lug 18 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "hg_rail_right_lug_18"
+ },
+ {
+  "region": "handguard",
+  "feature": "right rail lug 19 and the slot behind it (MIL-STD-1913, 10.0 mm pitch)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "hg_rail_right_lug_19"
+ },
+ {
+  "region": "handguard",
+  "feature": "right rail front block",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "hg_rail_right_front_block"
+ },
+ {
+  "region": "handguard",
+  "feature": "retaining-bolt boss, right",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "hg_bolt_boss_r"
+ },
+ {
+  "region": "handguard",
+  "feature": "retaining-bolt boss, left",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "hg_bolt_boss_l"
+ },
+ {
+  "region": "handguard",
+  "feature": "handguard retaining bolt head (hex socket), right",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "hg_retaining_bolt"
+ },
+ {
+  "region": "handguard",
+  "feature": "handguard retaining bolt end, left",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "hg_retaining_bolt_nut"
+ },
+ {
+  "region": "handguard",
+  "feature": "front QD sling cup, right",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "hg_qd_cup_r"
+ },
+ {
+  "region": "handguard",
+  "feature": "front QD sling cup, left",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-front-sight.jpg",
+   "closeup-handguard-front.jpg"
+  ],
+  "part_name": "hg_qd_cup_l"
+ },
+ {
+  "region": "handguard",
+  "feature": "handguard front cap ring",
+  "seen_in": [
+   "profile-right-photo.png",
+   "closeup-handguard-front.jpg",
+   "closeup-front-sight.jpg"
+  ],
+  "part_name": "hg_front_cap"
+ },
+ {
+  "region": "handguard",
+  "feature": "index screw at the top rear, right",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "hg_index_screw_r"
+ },
+ {
+  "region": "handguard",
+  "feature": "index screw at the top rear, left",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)"
+  ],
+  "part_name": "hg_index_screw_l"
+ },
+ {
+  "region": "handguard",
+  "feature": "small screw near the front, lower right",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "hg_front_screw_r"
+ },
+ {
+  "region": "handguard",
+  "feature": "small screw near the front, lower left",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)"
+  ],
+  "part_name": "hg_front_screw_l"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "upper receiver body",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-right-receiver.jpg",
+   "closeup-rear-sight-charging-handle.jpg",
+   "closeup-left-lower-controls.jpg"
+  ],
+  "part_name": "upper_body"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "ejection port opening",
+  "seen_in": [
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "upper_body",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "bolt carrier bore (dark cavity behind the port)",
+  "seen_in": [
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "upper_body",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "charging handle channel",
+  "seen_in": [
+   "closeup-rear-sight-charging-handle.jpg"
+  ],
+  "part_name": "upper_body",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "flat-top rail base with dovetail undercut",
+  "seen_in": [
+   "profile-right-photo.png",
+   "closeup-rear-sight-charging-handle.jpg",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "upper_body",
+  "merged": true,
+  "merge_reason": "one physical piece with the host on the real rifle (a turned or moulded feature), modelled in the host mesh"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "receiver rail lug 01 and the slot behind it",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-rear-sight-charging-handle.jpg",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "upper_rail_lug_01"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "receiver rail lug 02 and the slot behind it",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-rear-sight-charging-handle.jpg",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "upper_rail_lug_02"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "receiver rail lug 03 and the slot behind it",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-rear-sight-charging-handle.jpg",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "upper_rail_lug_03"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "receiver rail lug 04 and the slot behind it",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-rear-sight-charging-handle.jpg",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "upper_rail_lug_04"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "receiver rail lug 05 and the slot behind it",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-rear-sight-charging-handle.jpg",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "upper_rail_lug_05"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "receiver rail lug 06 and the slot behind it",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-rear-sight-charging-handle.jpg",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "upper_rail_lug_06"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "receiver rail lug 07 and the slot behind it",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-rear-sight-charging-handle.jpg",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "upper_rail_lug_07"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "receiver rail lug 08 and the slot behind it",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-rear-sight-charging-handle.jpg",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "upper_rail_lug_08"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "receiver rail lug 09 and the slot behind it",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-rear-sight-charging-handle.jpg",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "upper_rail_lug_09"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "receiver rail lug 10 and the slot behind it",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-rear-sight-charging-handle.jpg",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "upper_rail_lug_10"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "receiver rail front block (bridges to the handguard rail)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "upper_rail_front_block"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "receiver rail rear block under the rear sight",
+  "seen_in": [
+   "profile-right-photo.png",
+   "closeup-rear-sight-charging-handle.jpg"
+  ],
+  "part_name": "upper_rail_rear_block"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "brass deflector",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "brass_deflector"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "forward assist housing",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "forward_assist_housing"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "forward assist button",
+  "seen_in": [
+   "profile-right-photo.png",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "forward_assist_button"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "forward assist roll pin",
+  "seen_in": [
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "forward_assist_pin"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "dust cover hinge lug, front",
+  "seen_in": [
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "upper_hinge_lug_front"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "dust cover hinge lug, rear",
+  "seen_in": [
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "upper_hinge_lug_rear"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "dust cover hinge rod",
+  "seen_in": [
+   "profile-right-photo.png",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "dust_cover_hinge_rod"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "dust cover rod C-clip",
+  "seen_in": [
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "dust_cover_rod_clip"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "dust cover",
+  "seen_in": [
+   "profile-right-photo.png",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "dust_cover"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "dust cover hinge knuckle, front",
+  "seen_in": [
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "dust_cover_knuckle_1"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "dust cover hinge knuckle, rear",
+  "seen_in": [
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "dust_cover_knuckle_2"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "dust cover latch housing",
+  "seen_in": [
+   "profile-right-photo.png",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "dust_cover_latch"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "dust cover stamped rib, front",
+  "seen_in": [
+   "profile-right-photo.png",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "dust_cover_rib_1"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "dust cover stamped rib, rear",
+  "seen_in": [
+   "profile-right-photo.png",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "dust_cover_rib_2"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "dust cover torsion spring",
+  "seen_in": [
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "dust_cover_spring"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "bolt carrier outer face (through the port)",
+  "seen_in": [
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "bolt_carrier"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "bolt carrier forward-assist serrations",
+  "seen_in": [
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "bolt_carrier_serrations"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "bolt carrier vent hole, front",
+  "seen_in": [
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "bolt_carrier_vent_1"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "bolt carrier vent hole, rear",
+  "seen_in": [
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "bolt_carrier_vent_2"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "bolt head at the front of the port",
+  "seen_in": [
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "bolt_head"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "teardrop boss on the left side",
+  "seen_in": [
+   "closeup-rear-sight-charging-handle.jpg"
+  ],
+  "part_name": "upper_left_boss"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "horizontal rib along the left side",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-left-lower-controls.jpg"
+  ],
+  "part_name": "upper_rib_l"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "horizontal rib along the right side",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "upper_rib_r"
+ },
+ {
+  "region": "upper receiver",
+  "feature": "upper/lower parting line",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "closeup-left-lower-controls.jpg",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "upper_body",
+  "merged": true,
+  "merge_reason": "a seam: it is the real gap between upper_body and lower_body"
+ },
+ {
+  "region": "rear sight",
+  "feature": "rear sight base",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-rear-sight-charging-handle.jpg"
+  ],
+  "part_name": "rear_sight_base"
+ },
+ {
+  "region": "rear sight",
+  "feature": "rear sight pivot lug, left",
+  "seen_in": [
+   "closeup-rear-sight-charging-handle.jpg"
+  ],
+  "part_name": "rear_sight_lug_l"
+ },
+ {
+  "region": "rear sight",
+  "feature": "rear sight pivot lug, right",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "rear_sight_lug_r"
+ },
+ {
+  "region": "rear sight",
+  "feature": "folding rear sight arm",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "closeup-rear-sight-charging-handle.jpg"
+  ],
+  "part_name": "rear_sight_arm"
+ },
+ {
+  "region": "rear sight",
+  "feature": "rear sight aperture",
+  "seen_in": [
+   "closeup-rear-sight-charging-handle.jpg"
+  ],
+  "part_name": "rear_sight_aperture"
+ },
+ {
+  "region": "rear sight",
+  "feature": "windage knob",
+  "seen_in": [
+   "profile-right-photo.png",
+   "closeup-rear-sight-charging-handle.jpg"
+  ],
+  "part_name": "rear_sight_windage_knob"
+ },
+ {
+  "region": "rear sight",
+  "feature": "windage screw end, left",
+  "seen_in": [
+   "closeup-rear-sight-charging-handle.jpg"
+  ],
+  "part_name": "rear_sight_windage_screw"
+ },
+ {
+  "region": "rear sight",
+  "feature": "rear sight pivot pin head, left",
+  "seen_in": [
+   "closeup-rear-sight-charging-handle.jpg"
+  ],
+  "part_name": "rear_sight_pivot_head_l"
+ },
+ {
+  "region": "rear sight",
+  "feature": "rear sight pivot pin head, right",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "rear_sight_pivot_head_r"
+ },
+ {
+  "region": "rear sight",
+  "feature": "rail clamp bar",
+  "seen_in": [
+   "closeup-rear-sight-charging-handle.jpg"
+  ],
+  "part_name": "rear_sight_clamp_bar"
+ },
+ {
+  "region": "rear sight",
+  "feature": "clamp screw head (hex socket)",
+  "seen_in": [
+   "closeup-rear-sight-charging-handle.jpg",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "rear_sight_clamp_screw"
+ },
+ {
+  "region": "rear sight",
+  "feature": "clamp nut",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "rear_sight_clamp_nut"
+ },
+ {
+  "region": "rear sight",
+  "feature": "rear sight lock detent",
+  "seen_in": [
+   "closeup-rear-sight-charging-handle.jpg"
+  ],
+  "part_name": "rear_sight_detent"
+ },
+ {
+  "region": "charging handle",
+  "feature": "charging handle (T handle and shaft)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-rear-sight-charging-handle.jpg"
+  ],
+  "part_name": "charging_handle"
+ },
+ {
+  "region": "charging handle",
+  "feature": "charging handle latch",
+  "seen_in": [
+   "profile-left-photo-416N.jpg",
+   "closeup-rear-sight-charging-handle.jpg"
+  ],
+  "part_name": "charging_handle_latch"
+ },
+ {
+  "region": "charging handle",
+  "feature": "charging handle latch roll pin",
+  "seen_in": [
+   "closeup-rear-sight-charging-handle.jpg"
+  ],
+  "part_name": "charging_handle_latch_pin"
+ },
+ {
+  "region": "lower receiver",
+  "feature": "lower receiver body",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-left-lower-controls.jpg",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "lower_body"
+ },
+ {
+  "region": "lower receiver",
+  "feature": "magazine well cavity",
+  "seen_in": [
+   "profile-right-photo.png",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "lower_body",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "lower receiver",
+  "feature": "fire-control pocket and trigger slot",
+  "seen_in": [
+   "closeup-left-lower-controls.jpg"
+  ],
+  "part_name": "lower_body",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "lower receiver",
+  "feature": "front pivot lugs",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "lower_body",
+  "merged": true,
+  "merge_reason": "one physical piece with the host on the real rifle (a turned or moulded feature), modelled in the host mesh"
+ },
+ {
+  "region": "lower receiver",
+  "feature": "buffer tower (receiver extension ring)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-left-lower-controls.jpg"
+  ],
+  "part_name": "lower_buffer_tower"
+ },
+ {
+  "region": "lower receiver",
+  "feature": "magazine well flare",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "magwell_flare"
+ },
+ {
+  "region": "lower receiver",
+  "feature": "magazine release fence",
+  "seen_in": [
+   "profile-right-photo.png",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "mag_release_fence"
+ },
+ {
+  "region": "lower receiver",
+  "feature": "bolt catch ear, front",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-left-lower-controls.jpg"
+  ],
+  "part_name": "bolt_catch_ear_front"
+ },
+ {
+  "region": "lower receiver",
+  "feature": "bolt catch ear, rear",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-left-lower-controls.jpg"
+  ],
+  "part_name": "bolt_catch_ear_rear"
+ },
+ {
+  "region": "lower receiver",
+  "feature": "selector stop boss (safe), left",
+  "seen_in": [
+   "closeup-left-lower-controls.jpg"
+  ],
+  "part_name": "lower_selector_stop_safe_l"
+ },
+ {
+  "region": "lower receiver",
+  "feature": "selector stop boss (fire), left",
+  "seen_in": [
+   "closeup-left-lower-controls.jpg"
+  ],
+  "part_name": "lower_selector_stop_fire_l"
+ },
+ {
+  "region": "lower receiver",
+  "feature": "selector stop boss (safe), right",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "lower_selector_stop_safe_r"
+ },
+ {
+  "region": "lower receiver",
+  "feature": "selector stop boss (fire), right",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "lower_selector_stop_fire_r"
+ },
+ {
+  "region": "lower receiver",
+  "feature": "magazine well rear rib, left",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "closeup-left-lower-controls.jpg"
+  ],
+  "part_name": "magwell_rib_l"
+ },
+ {
+  "region": "lower receiver",
+  "feature": "magazine well rear rib, right",
+  "seen_in": [
+   "profile-right-photo.png",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "magwell_rib_r"
+ },
+ {
+  "region": "lower receiver",
+  "feature": "trigger guard",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-left-lower-controls.jpg",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "trigger_guard"
+ },
+ {
+  "region": "lower receiver",
+  "feature": "marking panel, left (blank: no maker marks)",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "marking_panel_l"
+ },
+ {
+  "region": "lower receiver",
+  "feature": "marking panel, right (blank: no maker marks)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "marking_panel_r"
+ },
+ {
+  "region": "controls",
+  "feature": "safety selector lever, left",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-left-lower-controls.jpg"
+  ],
+  "part_name": "selector_lever_l"
+ },
+ {
+  "region": "controls",
+  "feature": "safety selector lever, right (ambidextrous)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "selector_lever_r"
+ },
+ {
+  "region": "controls",
+  "feature": "selector index mark, left",
+  "seen_in": [
+   "closeup-left-lower-controls.jpg"
+  ],
+  "part_name": "selector_index_l"
+ },
+ {
+  "region": "controls",
+  "feature": "selector index mark, right",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "selector_index_r"
+ },
+ {
+  "region": "controls",
+  "feature": "pictogram: safe (white crossed box), l",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-left-lower-controls.jpg"
+  ],
+  "part_name": "pictogram_safe_l"
+ },
+ {
+  "region": "controls",
+  "feature": "pictogram: single shot (red), l",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-left-lower-controls.jpg"
+  ],
+  "part_name": "pictogram_semi_l"
+ },
+ {
+  "region": "controls",
+  "feature": "pictogram: automatic (red), l",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-left-lower-controls.jpg"
+  ],
+  "part_name": "pictogram_auto_l"
+ },
+ {
+  "region": "controls",
+  "feature": "pictogram: safe (white crossed box), r",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "pictogram_safe_r"
+ },
+ {
+  "region": "controls",
+  "feature": "pictogram: single shot (red), r",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "pictogram_semi_r"
+ },
+ {
+  "region": "controls",
+  "feature": "pictogram: automatic (red), r",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "pictogram_auto_r"
+ },
+ {
+  "region": "controls",
+  "feature": "bolt catch paddle",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-left-lower-controls.jpg"
+  ],
+  "part_name": "bolt_catch"
+ },
+ {
+  "region": "controls",
+  "feature": "bolt catch grip ribs",
+  "seen_in": [
+   "closeup-left-lower-controls.jpg"
+  ],
+  "part_name": "bolt_catch_ribs"
+ },
+ {
+  "region": "controls",
+  "feature": "magazine release button",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "mag_release_button"
+ },
+ {
+  "region": "controls",
+  "feature": "magazine release button rib 1",
+  "seen_in": [
+   "profile-right-photo.png",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "mag_button_rib_1"
+ },
+ {
+  "region": "controls",
+  "feature": "magazine release button rib 2",
+  "seen_in": [
+   "profile-right-photo.png",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "mag_button_rib_2"
+ },
+ {
+  "region": "controls",
+  "feature": "magazine release button rib 3",
+  "seen_in": [
+   "profile-right-photo.png",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "mag_button_rib_3"
+ },
+ {
+  "region": "controls",
+  "feature": "magazine catch bar, left",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-left-lower-controls.jpg"
+  ],
+  "part_name": "mag_catch"
+ },
+ {
+  "region": "controls",
+  "feature": "trigger",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-left-lower-controls.jpg",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "trigger"
+ },
+ {
+  "region": "pins",
+  "feature": "pivot pin head, right",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "pivot_pin_head_r"
+ },
+ {
+  "region": "pins",
+  "feature": "pivot pin end, left",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)"
+  ],
+  "part_name": "pivot_pin_end_l"
+ },
+ {
+  "region": "pins",
+  "feature": "takedown pin head, right",
+  "seen_in": [
+   "profile-right-photo.png",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "takedown_pin_head_r"
+ },
+ {
+  "region": "pins",
+  "feature": "takedown pin end, left",
+  "seen_in": [
+   "closeup-left-lower-controls.jpg"
+  ],
+  "part_name": "takedown_pin_end_l"
+ },
+ {
+  "region": "pins",
+  "feature": "trigger pin, left",
+  "seen_in": [
+   "closeup-left-lower-controls.jpg"
+  ],
+  "part_name": "trigger_pin_l"
+ },
+ {
+  "region": "pins",
+  "feature": "trigger pin, right",
+  "seen_in": [
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "trigger_pin_r"
+ },
+ {
+  "region": "pins",
+  "feature": "hammer pin, left",
+  "seen_in": [
+   "closeup-left-lower-controls.jpg"
+  ],
+  "part_name": "hammer_pin_l"
+ },
+ {
+  "region": "pins",
+  "feature": "hammer pin, right",
+  "seen_in": [
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "hammer_pin_r"
+ },
+ {
+  "region": "pins",
+  "feature": "auto sear pin, left",
+  "seen_in": [
+   "closeup-left-lower-controls.jpg"
+  ],
+  "part_name": "sear_pin_l"
+ },
+ {
+  "region": "pins",
+  "feature": "auto sear pin, right",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "sear_pin_r"
+ },
+ {
+  "region": "pins",
+  "feature": "bolt catch roll pin",
+  "seen_in": [
+   "closeup-left-lower-controls.jpg"
+  ],
+  "part_name": "bolt_catch_pin"
+ },
+ {
+  "region": "grip",
+  "feature": "pistol grip body with beavertail",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-left-lower-controls.jpg",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "grip_body"
+ },
+ {
+  "region": "grip",
+  "feature": "stippled side panel, left",
+  "seen_in": [
+   "profile-left-photo-416N.jpg",
+   "closeup-left-lower-controls.jpg"
+  ],
+  "part_name": "grip_panel_l"
+ },
+ {
+  "region": "grip",
+  "feature": "stippled side panel, right",
+  "seen_in": [
+   "profile-right-photo.png",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "grip_panel_r"
+ },
+ {
+  "region": "grip",
+  "feature": "stippled backstrap pad",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "grip_backstrap_pad"
+ },
+ {
+  "region": "grip",
+  "feature": "frontstrap pad",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "grip_frontstrap_pad"
+ },
+ {
+  "region": "grip",
+  "feature": "finger bump on the frontstrap",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)"
+  ],
+  "part_name": "grip_finger_bump"
+ },
+ {
+  "region": "grip",
+  "feature": "grip bottom cap (storage door)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "grip_cap"
+ },
+ {
+  "region": "grip",
+  "feature": "grip cap latch",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "grip_cap_latch"
+ },
+ {
+  "region": "grip",
+  "feature": "mould parting line front and back",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "grip_body",
+  "merged": true,
+  "merge_reason": "a mould seam 0.1 mm high: carried by the polymer normal map, not geometry"
+ },
+ {
+  "region": "magazine",
+  "feature": "curved 30-round magazine body",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "mag_body"
+ },
+ {
+  "region": "magazine",
+  "feature": "magazine catch notch",
+  "seen_in": [
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "mag_body",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "magazine",
+  "feature": "magazine stiffening rib 1, l",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "mag_rib_l_1"
+ },
+ {
+  "region": "magazine",
+  "feature": "magazine stiffening rib 2, l",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "mag_rib_l_2"
+ },
+ {
+  "region": "magazine",
+  "feature": "magazine stiffening rib 3, l",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "mag_rib_l_3"
+ },
+ {
+  "region": "magazine",
+  "feature": "magazine stiffening rib 1, r",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "mag_rib_r_1"
+ },
+ {
+  "region": "magazine",
+  "feature": "magazine stiffening rib 2, r",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "mag_rib_r_2"
+ },
+ {
+  "region": "magazine",
+  "feature": "magazine stiffening rib 3, r",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "mag_rib_r_3"
+ },
+ {
+  "region": "magazine",
+  "feature": "front spine",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "mag_spine_front"
+ },
+ {
+  "region": "magazine",
+  "feature": "rear spine",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "mag_spine_rear"
+ },
+ {
+  "region": "magazine",
+  "feature": "floorplate",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "mag_floorplate"
+ },
+ {
+  "region": "magazine",
+  "feature": "floorplate latch",
+  "seen_in": [
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "mag_floorplate_latch"
+ },
+ {
+  "region": "magazine",
+  "feature": "follower (seen during reload)",
+  "seen_in": [
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "mag_follower"
+ },
+ {
+  "region": "magazine",
+  "feature": "feed lip, left",
+  "seen_in": [
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "mag_feed_lip_l"
+ },
+ {
+  "region": "magazine",
+  "feature": "feed lip, right",
+  "seen_in": [
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "mag_feed_lip_r"
+ },
+ {
+  "region": "magazine",
+  "feature": "top cartridge case",
+  "seen_in": [
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "mag_round_1_case"
+ },
+ {
+  "region": "magazine",
+  "feature": "top cartridge bullet",
+  "seen_in": [
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "mag_round_1_bullet"
+ },
+ {
+  "region": "magazine",
+  "feature": "second cartridge case",
+  "seen_in": [
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "mag_round_2_case"
+ },
+ {
+  "region": "magazine",
+  "feature": "second cartridge bullet",
+  "seen_in": [
+   "closeup-right-receiver.jpg"
+  ],
+  "part_name": "mag_round_2_bullet"
+ },
+ {
+  "region": "buffer tube",
+  "feature": "receiver extension (buffer tube)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg",
+   "closeup-rear-sight-charging-handle.jpg"
+  ],
+  "part_name": "buffer_tube"
+ },
+ {
+  "region": "buffer tube",
+  "feature": "castle nut",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "castle_nut"
+ },
+ {
+  "region": "buffer tube",
+  "feature": "castle nut wrench notch 1",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "castle_nut",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "buffer tube",
+  "feature": "castle nut wrench notch 2",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "castle_nut",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "buffer tube",
+  "feature": "castle nut wrench notch 3",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "castle_nut",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "buffer tube",
+  "feature": "castle nut wrench notch 4",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "castle_nut",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "buffer tube",
+  "feature": "receiver end plate",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "receiver_end_plate"
+ },
+ {
+  "region": "stock",
+  "feature": "adjustable stock body",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "stock_body"
+ },
+ {
+  "region": "stock",
+  "feature": "stock bore for the buffer tube",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "stock_body",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "stock",
+  "feature": "sling slot through the stock",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "stock_body",
+  "merged": true,
+  "merge_reason": "a void: cut into the host part with a boolean, so it has no solid of its own"
+ },
+ {
+  "region": "stock",
+  "feature": "front collar",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "stock_front_collar"
+ },
+ {
+  "region": "stock",
+  "feature": "side ridge along the tube, l",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "stock_ridge_l"
+ },
+ {
+  "region": "stock",
+  "feature": "label plate, l",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)"
+  ],
+  "part_name": "stock_label_plate_l"
+ },
+ {
+  "region": "stock",
+  "feature": "diagonal web rib 1, l",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "stock_web_rib_l_1"
+ },
+ {
+  "region": "stock",
+  "feature": "diagonal web rib 2, l",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "stock_web_rib_l_2"
+ },
+ {
+  "region": "stock",
+  "feature": "diagonal web rib 3, l",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "stock_web_rib_l_3"
+ },
+ {
+  "region": "stock",
+  "feature": "diagonal web rib 4, l",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "stock_web_rib_l_4"
+ },
+ {
+  "region": "stock",
+  "feature": "diagonal web rib 5, l",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "stock_web_rib_l_5"
+ },
+ {
+  "region": "stock",
+  "feature": "side ridge along the tube, r",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "stock_ridge_r"
+ },
+ {
+  "region": "stock",
+  "feature": "label plate, r",
+  "seen_in": [
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "stock_label_plate_r"
+ },
+ {
+  "region": "stock",
+  "feature": "diagonal web rib 1, r",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "stock_web_rib_r_1"
+ },
+ {
+  "region": "stock",
+  "feature": "diagonal web rib 2, r",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "stock_web_rib_r_2"
+ },
+ {
+  "region": "stock",
+  "feature": "diagonal web rib 3, r",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "stock_web_rib_r_3"
+ },
+ {
+  "region": "stock",
+  "feature": "diagonal web rib 4, r",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "stock_web_rib_r_4"
+ },
+ {
+  "region": "stock",
+  "feature": "diagonal web rib 5, r",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)"
+  ],
+  "part_name": "stock_web_rib_r_5"
+ },
+ {
+  "region": "stock",
+  "feature": "length-adjust latch",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "stock_latch"
+ },
+ {
+  "region": "stock",
+  "feature": "latch pin",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "stock_latch_pin"
+ },
+ {
+  "region": "buttpad",
+  "feature": "butt plate (hard frame)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttplate"
+ },
+ {
+  "region": "buttpad",
+  "feature": "rubber buttpad (convex)",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad grip rib 01",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_rib_01"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad grip rib 02",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_rib_02"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad grip rib 03",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_rib_03"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad grip rib 04",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_rib_04"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad grip rib 05",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_rib_05"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad grip rib 06",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_rib_06"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad grip rib 07",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_rib_07"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad grip rib 08",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_rib_08"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad grip rib 09",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_rib_09"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad grip rib 10",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_rib_10"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad grip rib 11",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_rib_11"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad grip rib 12",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_rib_12"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad grip rib 13",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_rib_13"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad grip rib 14",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_rib_14"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad grip rib 15",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_rib_15"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad grip rib 16",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_rib_16"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad grip rib 17",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_rib_17"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad grip rib 18",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_rib_18"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad grip rib 19",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_rib_19"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad grip rib 20",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_rib_20"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad grip rib 21",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_rib_21"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad grip rib 22",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_rib_22"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad lattice strut 1, l",
+  "seen_in": [
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_truss_l_1"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad lattice strut 2, l",
+  "seen_in": [
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_truss_l_2"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad lattice strut 3, l",
+  "seen_in": [
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_truss_l_3"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad lattice strut 4, l",
+  "seen_in": [
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_truss_l_4"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad lattice strut 5, l",
+  "seen_in": [
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_truss_l_5"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad lattice strut 6, l",
+  "seen_in": [
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_truss_l_6"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad lattice strut 7, l",
+  "seen_in": [
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "buttpad_truss_l_7"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad lattice strut 1, r",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "buttpad_truss_r_1"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad lattice strut 2, r",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "buttpad_truss_r_2"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad lattice strut 3, r",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "buttpad_truss_r_3"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad lattice strut 4, r",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "buttpad_truss_r_4"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad lattice strut 5, r",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "buttpad_truss_r_5"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad lattice strut 6, r",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "buttpad_truss_r_6"
+ },
+ {
+  "region": "buttpad",
+  "feature": "buttpad lattice strut 7, r",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "buttpad_truss_r_7"
+ },
+ {
+  "region": "sling points",
+  "feature": "sling loop at the top of the buttplate",
+  "seen_in": [
+   "profile-right-photo.png",
+   "profile-both-sides-drawing.jpg (right side, bottom)",
+   "profile-both-sides-drawing.jpg (left side, top)",
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "stock_sling_loop"
+ },
+ {
+  "region": "sling points",
+  "feature": "end plate sling eye, left",
+  "seen_in": [
+   "profile-left-photo-416N.jpg"
+  ],
+  "part_name": "end_plate_sling_eye_l"
+ },
+ {
+  "region": "sling points",
+  "feature": "end plate sling eye, right",
+  "seen_in": [
+   "profile-right-photo.png"
+  ],
+  "part_name": "end_plate_sling_eye_r"
+ }
+]

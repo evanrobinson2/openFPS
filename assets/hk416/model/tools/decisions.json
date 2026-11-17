@@ -1,0 +1,13 @@
+[
+ "Frame: Blender Z up, metres, muzzle toward -Y (MODELER.md: front faces -Y), right side at -X. Origin on the bore axis at the upper receiver's front face. In glTF the muzzle points +Z.",
+ "Rest pose matches the right photo: stock collapsed, both sights up, dust cover closed, selector on safe, magazine in.",
+ "Fasteners that never move sit under `fasteners`; fasteners on a moving part are parented to that part (stock latch pin, charging handle latch pin) so they travel with it.",
+ "Front sight folds forward over the barrel; rear sight folds forward over the rail. Both paths were chosen because they are the only ones clear of other parts.",
+ "The `charge` clip also flips the dust cover open in its first four frames, as the real bolt carrier does; it stays open at the end of the clip.",
+ "`mag_in` and `mag_out` press the magazine catch for as long as the magazine body passes its tooth.",
+ "The handguard vents are real through-cuts; the barrel and piston housing sit so that daylight shows through them in side view, as in the photo.",
+ "Bullets are a muted gilding-metal yellow and the fire pictograms deep red: nothing on the model is orange.",
+ "Clip tracks are muted in the build scene so the GLB's node transforms are the rest pose, not the first frame of a clip.",
+ "Textures: one 2048 px set per baked material (Anodized, Polymer, Steel): base colour, occlusion-roughness-metallic and tangent normal, stored as JPEG in the GLB. Paint, brass, gilding metal and the dark cavity are plain factors. LOD1 has its own 1024 px sets.",
+ "Triangle budget: LOD0 sits at the low end of 80k to 150k because flat-sided machined parts need few triangles; round parts use 36 to 60 segments."
+]

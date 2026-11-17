@@ -1,0 +1,59 @@
+[
+ {
+  "ref": "refs/closeup-right-receiver.jpg",
+  "render": "r/closeup_right_receiver.png",
+  "matches": "ejection port with the bolt carrier face behind it (two vent holes, forward-assist serrations), dust cover hanging open from a hinge rod along the bottom of the port with its torsion spring and two knuckles, brass deflector behind the port, forward assist, magazine release button in its fence, selector on the right with its marks, pivot pin head, rail lugs above.",
+  "differences": [
+   "The replica's bolt is bright bare steel; the model's carrier is phosphate grey like the service rifle.",
+   "The replica carries maker text on the magazine well and the words SAFE and FIRE; the model has a blank panel and pictograms only (brief: no maker marks).",
+   "The replica's handguard is a slim slotted tube with one QD socket; the model keeps the quad rail of the profiles (profiles win).",
+   "The replica's forward assist sits in a scalloped fairing cast into the receiver; the model's is a plain angled housing.",
+   "The replica's dust cover is one stamping with a pressed centre panel; the model has two ribs and a separate latch housing."
+  ],
+  "fixed": "the first render showed the cover closed; the comparison is now rendered with the cover open at 175 degrees, and the hinge lugs, C-clip and spring were checked to sit on the rod (assembly check)."
+ },
+ {
+  "ref": "refs/closeup-left-lower-controls.jpg",
+  "render": "r/closeup_left_lower_controls.png",
+  "matches": "bolt catch with its ribbed upper pad between two ears at the front, selector hub with the thumb lever pointing to the rear, safe pictogram ahead of the hub and fire above it, two stop bosses above the hub, trigger and hammer pins, rear takedown pin, trigger in the guard.",
+  "differences": [
+   "The replica prints FIRE and SAFE under its pictograms; the model has pictograms only.",
+   "The replica has a slotted screw where the model has the rear takedown pin end.",
+   "The model has a third pictogram (automatic) behind the hub, as the military rifle in the drawing does; the semi-automatic replica has two.",
+   "The replica's selector lever has fine grooves and its receiver a cast texture with a raised fence line around the grip; the model carries these as normal-map grain only."
+  ],
+  "fixed": "pictogram frames were built from overlapping bars that showed black corners; they are now butt-jointed. The selector stops were moved clear of the auto sear pin."
+ },
+ {
+  "ref": "refs/closeup-front-sight.jpg",
+  "render": "r/closeup_front_sight.png",
+  "matches": "a folding front sight with two protective ears, a post, a cross pivot pin with a visible head, a detent button and a clamp screw; rail lugs with 45 degree flanks behind it; barrel shoulder ahead.",
+  "differences": [
+   "The replica's sight is a low rail-mounted unit shown folded; the profile photo shows a tall arm on the gas block in front of the handguard, standing. The model follows the profile.",
+   "The replica's rail slots carry white numbers (28, 30); the model has no slot numbers.",
+   "The replica's handguard is slim with long slots; the model is the quad rail."
+  ],
+  "fixed": "the sight base was two ears and a bridge as overlapping solids, which shaded black at the joins; it is now one U-shaped piece and the arm one outline with a half-round foot on the pivot."
+ },
+ {
+  "ref": "refs/closeup-rear-sight-charging-handle.jpg",
+  "render": "r/closeup_rear_sight_charging_handle.png",
+  "matches": "a folding rear sight on a rail clamp with a hex clamp screw, pivot lugs with a pivot pin head, the charging handle T with its latch on the left, the teardrop boss on the left of the upper, rail lugs ahead, castle nut and stock behind.",
+  "differences": [
+   "The replica's sight leaf is a thin plate with a round aperture and a small windage knob; the profile photo shows a bulkier diopter-style unit. The model is a compromise: full-length pivot lugs for the photo's lower block, a folding arm with a ghost ring and windage knob.",
+   "The replica's charging handle has a large extended latch with a serrated face; the model's latch is a plain hooked bar.",
+   "The replica's upper has a scalloped shelf behind the boss; the model has a straight rib."
+  ],
+  "fixed": "the sight arm was a box plus a cylinder; rotating it pushed a bevelled corner 2.5 mm into the base. It is now one outline, the aperture was opened to a 4.6 mm ghost ring so the front post is visible from socket_ads_eye, and the T handle got swept wings."
+ },
+ {
+  "ref": "refs/closeup-handguard-front.jpg",
+  "render": "r/closeup_handguard_front.png",
+  "matches": "birdcage flash hider with a crush washer, stepped barrel, folding front sight at the handguard front, long vents along the handguard, top rail lugs.",
+  "differences": [
+   "The replica has a slim M-LOK-style handguard with a QD socket at the rear; the model is the quad rail with four Picatinny rails, 8 vents per side and a QD cup at the front, as the profiles show.",
+   "The replica's barrel has no necked section; the profile photo does, and the model follows it."
+  ],
+  "fixed": "the front QD cup and its sling crescent were too small against the photo (99 px mismatch); hole 6.8 mm, crescent 7 to 10.5 mm radius now."
+ }
+]

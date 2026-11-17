@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HK416 sound model</title>
+<style>
+  :root { --fg:#e9eef2; --dim:#9aa6b0; --acc:#ffb347; --bg:#0d1014; --panel:#161b21; --line:#2a323b; }
+  html,body { margin:0; background:var(--bg); color:var(--fg); font:14px/1.45 ui-monospace,Menlo,monospace; }
+  main { max-width:1040px; margin:0 auto; padding:20px 16px 48px; }
+  h1 { font-size:20px; margin:0 0 4px; letter-spacing:.04em; } p { color:var(--dim); margin:4px 0 14px; }
+  .row { display:flex; flex-wrap:wrap; gap:10px 16px; align-items:end; background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:12px; }
+  label { display:grid; gap:4px; color:var(--dim); font-size:12px; }
+  select,button,input[type=range] { font:inherit; color:var(--fg); background:#0f1318; border:1px solid var(--line); border-radius:6px; padding:6px 8px; }
+  button { cursor:pointer; } button.go { border-color:var(--acc); color:var(--acc); padding:6px 18px; } button:disabled { opacity:.4; cursor:default; }
+  .chk { display:flex; gap:6px; align-items:center; color:var(--fg); font-size:13px; }
+  canvas { width:100%; display:block; background:#07090c; border:1px solid var(--line); border-radius:8px; margin-top:12px; }
+  #meta { margin-top:12px; color:var(--dim); white-space:pre-wrap; } #meta b { color:var(--fg); font-weight:600; }
+  #refs { margin-top:12px; } #refs button { margin:0 8px 6px 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>HK416 D14.5RS: simulated discharge</h1>
+  <p>Synthesised in this page by <code>hk416-sound.js</code> from <code>params.json</code> (physics in <code>sim.py</code>, see README.md). Nothing plays until you press Play. Start with the volume low.</p>
+  <div class="row">
+    <label>Sound <select id="what"></select></label>
+    <label>Perspective <select id="persp"></select></label>
+    <label>Environment <select id="env"></select></label>
+    <label class="chk"><input type="checkbox" id="hpd"> Earmuffs</label>
+    <label class="chk" title="Playback mapping, not physics: a compressor so tails 40-60 dB under the shot stay audible"><input type="checkbox" id="ear" checked> Ear compression</label>
+    <label>Volume <input type="range" id="vol" min="0" max="1" step="0.01" value="0.3"></label>
+    <button class="go" id="play" disabled>Loading…</button>
+    <button id="stop">Stop</button>
+  </div>
+  <canvas id="wave" width="1000" height="180"></canvas>
+  <canvas id="spec" width="1000" height="260"></canvas>
+  <div id="meta"></div>
+</main>
+<script type="module">
+import HK416Sound from './hk416-sound.js';
+const $ = (id) => document.getElementById(id);
+const AC = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 48000 });
+const master = AC.createGain(); master.gain.value = +$('vol').value; master.connect(AC.destination);
+$('vol').oninput = () => { master.gain.value = +$('vol').value; };
+let S, playing = null, lastKey = '', rendered = null;
+const opt = (sel, v, t) => { const o = document.createElement('option'); o.value = v; o.textContent = t; sel.appendChild(o); };
+
+function fillEnv() {
+  const p = $('persp').value, keep = $('env').value; $('env').innerHTML = ''; opt($('env'), 'dry', 'Dry (free field, no reflections)');
+  for (const [k, v] of Object.entries(S.overlays)) if (v.perspectives.includes(p)) opt($('env'), k, v.title);
+  $('env').value = [...$('env').options].some((o) => o.value === keep) ? keep : 'open_field';
+}
+function source() { // the dry buffer for the current choice
+  const [kind, id] = $('what').value.split(':'), perspective = $('persp').value;
+  if (kind === 'shot') return S.shot(id, { perspective });
+  if (kind === 'mech') return S.mech(id, { perspective });
+  return S.steel(S.params.steel[id].radius, { seed: (Math.random() * 1e6) | 0 });
+}
+async function render() { // dry -> room -> earmuffs -> ear compression, rendered offline so the plots show what is played
+  const src = source(), kind = $('what').value.split(':')[0], env = kind === 'steel' ? 'dry' : $('env').value, persp = $('persp').value;
+  const irLen = env === 'dry' ? 0 : S.params.overlays[env].persp[persp].len;
+  const off = new OfflineAudioContext(1, Math.ceil((src.duration + irLen + 0.3) * 48000), 48000);
+  const chain = await S.chain({ overlay: env, perspective: persp, hpd: $('hpd').checked, ear: $('ear').checked }, off);
+  const n = off.createBufferSource(); n.buffer = src; n.connect(chain.input); chain.output.connect(off.destination); n.start();
+  const out = await off.startRendering(); let pk = 0; const d = out.getChannelData(0); for (let i = 0; i < d.length; i++) pk = Math.max(pk, Math.abs(d[i]));
+  if (pk > 0.98) for (let i = 0; i < d.length; i++) d[i] *= 0.98 / pk; // never clip the output
+  return { out, src, env, pk };
+}
+function draw(buf, label) {
+  const d = buf.getChannelData(0), W = 1000, cw = $('wave').getContext('2d'), H = 180;
+  cw.clearRect(0, 0, W, H); cw.strokeStyle = '#ffb347'; cw.beginPath();
+  const step = d.length / W; for (let x = 0; x < W; x++) { let lo = 1, hi = -1; for (let i = Math.floor(x * step); i < Math.floor((x + 1) * step); i++) { if (d[i] < lo) lo = d[i]; if (d[i] > hi) hi = d[i]; } cw.moveTo(x + .5, H / 2 - hi * H / 2); cw.lineTo(x + .5, H / 2 - lo * H / 2 + 1); } cw.stroke();
+  cw.fillStyle = '#9aa6b0'; cw.font = '11px ui-monospace,Menlo,monospace'; cw.fillText(label + '  ·  ' + buf.duration.toFixed(2) + ' s', 8, 14);
+  // spectrogram: 1024-point Hann STFT, 0-20 kHz, 70 dB range
+  const cs = $('spec').getContext('2d'), SH = 260, N = 1024, img = cs.createImageData(W, SH), re = new Float64Array(N), im = new Float64Array(N), hop = Math.max(1, (d.length - N) / W), col = new Float32Array(SH);
+  let mx = -200; const cols = [];
+  for (let x = 0; x < W; x++) { const s = Math.floor(x * hop); for (let i = 0; i < N; i++) { re[i] = (d[s + i] || 0) * (0.5 - 0.5 * Math.cos(2 * Math.PI * i / N)); im[i] = 0; } HK416Sound.fft(re, im, false); const c = new Float32Array(SH); for (let y = 0; y < SH; y++) { const k = Math.floor((1 - y / SH) * (N / 2) * (20000 / 24000)); c[y] = 10 * Math.log10(re[k] * re[k] + im[k] * im[k] + 1e-12); if (c[y] > mx) mx = c[y]; } cols.push(c); }
+  for (let x = 0; x < W; x++) for (let y = 0; y < SH; y++) { const v = Math.max(0, Math.min(1, (cols[x][y] - mx + 70) / 70)), o = (y * W + x) * 4; img.data[o] = 255 * Math.min(1, v * 1.6); img.data[o + 1] = 255 * v * v; img.data[o + 2] = 255 * Math.max(0, 0.35 - Math.abs(v - 0.35)) * 2; img.data[o + 3] = 255; }
+  cs.putImageData(img, 0, 0); cs.fillStyle = '#9aa6b0'; cs.font = '11px ui-monospace,Menlo,monospace'; cs.fillText('20 kHz', 8, 14); cs.fillText('0', 8, SH - 6);
+}
+function stop() { if (playing) { try { playing.stop(); } catch (e) {} playing = null; } }
+function play(buf) { stop(); AC.resume(); const n = AC.createBufferSource(); n.buffer = buf; n.connect(master); n.start(); playing = n; }
+async function go() {
+  $('play').disabled = true; $('play').textContent = 'Rendering…';
+  try {
+    const r = await render(), i = S.info(r.src) || {}; rendered = r.out; draw(r.out, $('what').selectedOptions[0].textContent + ' / ' + $('env').selectedOptions[0].textContent);
+    $('meta').innerHTML = `True simulated level of the dry source at this listener: <b>${i.peak_db_spl ? i.peak_db_spl.toFixed(1) + ' dB SPL peak' : 'n/a'}</b> (${i.peak_pa ? i.peak_pa.toFixed(1) + ' Pa' : ''}). Playback is normalised; 1.0 full scale of the dry source = ${i.pa_per_fullscale ? i.pa_per_fullscale.toFixed(1) : '?'} Pa.\nChain: dry → ${r.env === 'dry' ? 'no room' : 'IR ' + r.env} → ${$('hpd').checked ? 'earmuff FIR (+12 dB make-up)' : 'no earmuffs'} → ${$('ear').checked ? 'ear compression (playback mapping)' : 'linear'}. Peak after the chain: ${(20 * Math.log10(r.pk)).toFixed(1)} dBFS.`;
+    play(r.out);
+  } catch (e) { $('meta').textContent = 'Error: ' + e.message; console.error(e); }
+  $('play').disabled = false; $('play').textContent = 'Play';
+}
+$('play').onclick = go; $('stop').onclick = stop;
+
+HK416Sound.build(AC).then((s) => {
+  S = s; window.S = s;
+  for (const v of S.variants) opt($('what'), 'shot:' + v, { single: 'Single shot', semi3: 'Semi, 3 rounds', auto1s: 'Auto, 1 s burst (850 rpm)' }[v] || v);
+  for (const c of S.mechClips) opt($('what'), 'mech:' + c, 'Mechanical: ' + c.replace(/_/g, ' '));
+  for (const k of S.steelKeys) opt($('what'), 'steel:' + k, `Steel plate r = ${S.params.steel[k].radius} m at ${S.params.steel[k].dist} m`);
+  for (const p of S.perspectives) opt($('persp'), p, { shooter: "Shooter's ear", bystander: 'Bystander 5 m to the side', downrange: 'Downrange 50 m (2 m off the line)' }[p]);
+  fillEnv(); $('persp').onchange = fillEnv; $('play').disabled = false; $('play').textContent = 'Play';
+});
+
+</script>
+</body>
+</html>
