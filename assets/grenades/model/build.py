@@ -1,7 +1,8 @@
 """openFPS grenades: frag, impact (game-only), flash, smoke (red/yellow/green/violet) and smoke-white.
 Rebuilds every variant from nothing. Exterior only: every body is a solid placeholder, nothing inside is modelled.
 
-    blender -b --python build.py                              # all variants, LOD0 + LOD1  -> work/*.glb (ignored by git)
+    blender -b --python build.py                              # all variants, LOD0 + LOD1  -> ../refs-local/build/*.glb
+                                                              # (meshes are build outputs: that folder is ignored by git and by tools/check_assets.py)
     blender -b --python build.py -- --only frag,flash --lod 0
     blender -b --python build.py -- --m18-livery figure       # M18 paint as Fig. B-3 shows it (dark body, light marks)
     blender -b --python build.py -- --flash-holes 12          # Table A-5 hole count (6 columns x 2 rows) instead of Fig. A-12's 6 x 3
@@ -542,8 +543,10 @@ def build(variant, lod):
     sc.frame_start = 1; sc.frame_end = 24
     work = os.path.join(HERE, 'work'); os.makedirs(work, exist_ok=True)
     stem = f'grenade_{variant}' + ('_figurelivery' if info.get('livery') == 'figure' else '') + ('_h12' if variant == 'flash' and FLASH_HOLES != 18 else '') + ('' if lod == 0 else f'_lod{lod}')
-    bpy.ops.wm.save_as_mainfile(filepath=os.path.join(work, stem + '.blend'))
-    bpy.ops.export_scene.gltf(filepath=os.path.join(work, stem + '.glb'), export_format='GLB', export_animations=True, export_animation_mode='NLA_TRACKS',
+    out = os.path.join(HERE, '..', 'refs-local', 'build'); os.makedirs(out, exist_ok=True)
+    bpy.context.preferences.filepaths.save_version = 0
+    bpy.ops.wm.save_as_mainfile(filepath=os.path.join(out, stem + '.blend'))
+    bpy.ops.export_scene.gltf(filepath=os.path.join(out, stem + '.glb'), export_format='GLB', export_animations=True, export_animation_mode='NLA_TRACKS',
                               export_apply=False, export_yup=True)
     hier = {o.name: (o.parent.name if o.parent else None) for o in OBJ.values()}
     stats = dict(variant=variant, lod=lod, parts=len(meshes), triangles=sum(tris.values()), by_part=tris,

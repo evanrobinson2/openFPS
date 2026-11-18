@@ -12,7 +12,7 @@ VIEWS = json.load(open(os.path.join(HERE, 'tools', 'views.json')))
 os.makedirs(os.path.join(HERE, 'r'), exist_ok=True)
 
 def setup(stem):
-    bpy.ops.wm.open_mainfile(filepath=os.path.join(HERE, 'work', stem + '.blend'))
+    bpy.ops.wm.open_mainfile(filepath=os.path.join(HERE, '..', 'refs-local', 'build', stem + '.blend'))
     sc = bpy.context.scene
     sc.render.engine = 'CYCLES'; sc.cycles.device = 'CPU'; sc.cycles.samples = SAMPLES; sc.cycles.use_denoising = True
     sc.render.film_transparent = True; sc.view_settings.view_transform = 'Standard'
@@ -40,7 +40,7 @@ def aim(cam, az, el, dist, roll=0.0, look=(0, 0, 0)):
 
 for name, v in VIEWS.items():
     if name.startswith('_') or (ONLY and name not in ONLY): continue
-    if not os.path.exists(os.path.join(HERE, 'work', v['stem'] + '.blend')): print('MISSING', v['stem']); continue
+    if not os.path.exists(os.path.join(HERE, '..', 'refs-local', 'build', v['stem'] + '.blend')): print('MISSING', v['stem']); continue
     sc, cam = setup(v['stem'])
     x0, y0, x1, y1 = v['crop']; Wp, Hp = x1 - x0, y1 - y0
     sc.render.resolution_x = Wp; sc.render.resolution_y = Hp; sc.render.resolution_percentage = 200
@@ -56,7 +56,7 @@ for name, v in VIEWS.items():
 PRES = ['grenade_frag', 'grenade_impact', 'grenade_flash', 'grenade_smoke-red', 'grenade_smoke-yellow', 'grenade_smoke-green', 'grenade_smoke-violet', 'grenade_smoke-white']
 for stem in PRES:
     if ONLY and stem not in ONLY and 'pres' not in ONLY: continue
-    if not os.path.exists(os.path.join(HERE, 'work', stem + '.blend')): continue
+    if not os.path.exists(os.path.join(HERE, '..', 'refs-local', 'build', stem + '.blend')): continue
     for view, az, el in (('front', 0, 4), ('lever', 90, 4), ('back', 180, 4), ('three_quarter', 35, 22), ('top', 20, 80)):
         sc, cam = setup(stem); sc.render.resolution_x = 640; sc.render.resolution_y = 800; sc.render.resolution_percentage = 100
         cam.data.lens = 150; cd = aim(cam, az, el, 0.62, look=(0, 0, 0.012)); lights(sc, cd)
