@@ -18,7 +18,18 @@
 // y = asinh(k x) / asinh(k), k = params.ear_map_k: about 2:1 over the top 30 dB, a fixed lift below. sim.py ear_map() is the same mapping.
 // 'hpd' is a two-shelf approximation of an earmuff (about 24 dB NRR, the minimum the manual asks for, p. 13).
 
-const P_REF = 20e-6;
+import '../../../shared/cinematic-sound/cinematic-sound.js';   // -> globalThis.OpenFPSCinematicSound (the shared cinematic synthesis)
+
+const P_REF = 20e-6, CS = globalThis.OpenFPSCinematicSound;
+// Simulation values the cinematic design reads that are not in params.json. Copied from action/action.json (pistol muzzle energy and velocity,
+// the guessed charge mass); shared/cinematic-sound/check.mjs fails if they drift. Bore 5.6 mm and barrel 102 mm: the maker's table
+// (notes/MANUAL_NOTES.md). cyclic_period_s: the simulation's trigger reset time, the fastest a second shot can follow.
+const CINE_SIM = {
+  common: { bore_mm: 5.6, barrel_mm: 102, bullet_diam_mm: 5.7, bullet_len_mm: 11.6, cyclic_period_s: 0.13 },
+  cci_standard_velocity: { muzzle_energy_J: 95.3, muzzle_velocity: 271.24, gas_mass_g: 0.085 },
+  cci_mini_mag: { muzzle_energy_J: 116.4, muzzle_velocity: 299.64, gas_mass_g: 0.11 },
+  cci_quiet_22: { muzzle_energy_J: 44.7, muzzle_velocity: 185.62, gas_mass_g: 0.045 },
+};
 const fnv1a = (s) => { let h = 0x811c9dc5; for (const c of new TextEncoder().encode(s)) { h ^= c; h = Math.imul(h, 0x01000193) >>> 0; } return h >>> 0; };
 class Rng { // mulberry32; identical to sim.py
   constructor(name) { this.a = fnv1a(name); }
@@ -85,7 +96,13 @@ function makeCore(P) {
     for (let k = k0; k < n; k++) { const t = (k - k0) / fs; z += tl.lp * (rng.gauss() - z); h[k] += tl.level * z * Math.exp(-6.907755 * t / tl.rt60); }
     return h;
   }
-  return { dry, mech, ir };
+  // one shot's blast and its action noise apart (free field), for the cinematic layers; dry() is unchanged
+  function dryParts(load, persp = 'shooter') {
+    const L = P.loads[load], ps = P.perspectives[persp], n = Math.floor(P.dur_shot * fs), blast = new Float64Array(n), m = new Float64Array(n);
+    addConv(blast, sourceBlast(L, n), ps.blast.direct.fir, ps.blast.direct.n, ps.blast.direct.gain); addConv(m, sourceMech(L.mech || [], L.friction, n, 0, 'mech|' + load), ps.mech.direct.fir, ps.mech.direct.n, ps.mech.direct.gain);
+    return { blast, mech: m };
+  }
+  return { dry, mech, ir, dryParts };
 }
 async function build(ctx, opts = {}) {
   const url = opts.params || new URL('params.json', import.meta.url), P = opts.data || await (await fetch(url)).json(), core = makeCore(P), levels = new WeakMap();
@@ -97,14 +114,15 @@ async function build(ctx, opts = {}) {
   }
   const K = P.ear_map_k || 30, curve = new Float32Array(16385);       // input -1..1 is half scale: curve(u) = asinh(2 K u) / asinh(K)
   for (let i = 0; i < curve.length; i++) curve[i] = Math.asinh(2 * K * (i / 8192 - 1)) / Math.asinh(K);
+  let G = null;
   const S = {
     params: P, loads: Object.keys(P.loads), perspectives: Object.keys(P.perspectives), clips: Object.keys(P.clips), overlays: Object.keys(P.overlays), raw: core,
-    shot: (load = 'cci_standard_velocity', o = {}) => toBuffer(core.dry(load, o.perspective || 'shooter', !!o.ground), true),
-    mech: (clip, o = {}) => toBuffer(core.mech(clip, o.perspective || 'shooter'), true),
+    realShot: (load = 'cci_standard_velocity', o = {}) => toBuffer(core.dry(load, o.perspective || 'shooter', !!o.ground), true),
+    realMech: (clip, o = {}) => toBuffer(core.mech(clip, o.perspective || 'shooter'), true),
     ir: (overlay) => toBuffer(core.ir(overlay), false),
-    info: (b) => levels.get(b),
-    chain(o = {}) {
-      const input = ctx.createGain(), conv = ctx.createConvolver(), dryG = ctx.createGain(), lo = ctx.createBiquadFilter(), hi = ctx.createBiquadFilter(), output = ctx.createGain();
+    info: (b) => levels.get(b) || (G && G.info(b)),
+    realChain(o = {}, actx = ctx) {
+      const ctx = actx, input = ctx.createGain(), conv = ctx.createConvolver(), dryG = ctx.createGain(), lo = ctx.createBiquadFilter(), hi = ctx.createBiquadFilter(), output = ctx.createGain();
       const loud = ctx.createBiquadFilter(), pre = ctx.createGain(), shaper = ctx.createWaveShaper(), post = ctx.createGain();
       conv.normalize = false; lo.type = 'lowshelf'; lo.frequency.value = 250; hi.type = 'highshelf'; hi.frequency.value = 1000;
       loud.type = 'lowshelf'; loud.frequency.value = 150; loud.gain.value = 10; pre.gain.value = 0.5; shaper.curve = curve; shaper.oversample = 'none'; post.gain.value = 0.85;
@@ -120,8 +138,30 @@ async function build(ctx, opts = {}) {
       return api.set(o);
     }
   };
+  // ---- cinematic mode (the default since 2026-11-17): shared/cinematic-sound/cinematic-sound.js sized by this pistol's simulation.
+  // S.realShot / S.realMech / S.realChain above are the physical simulation, unchanged; S.shot / S.mech / S.chain follow S.mode.
+  const physCache = {}, KIND = { outdoor_berm: 'outdoor', indoor_range: 'indoor' };                                   // design label: which kind of tail each simulated place gets
+  const adapter = {
+    id: 'g44v', fs: P.fs, defaultKey: 'cci_standard_velocity', defaultOverlay: 'outdoor_berm', builtSuppressed: null,
+    sim: (k) => ({ ...CINE_SIM.common, ...CINE_SIM[k], gas_energy_J: P.loads[k].gas_energy_J, supersonic_to_m: 0 }),
+    times: (k) => ({ base: k, times: [0] }),
+    perspective: (p) => { const pp = P.perspectives[p]; return !pp ? null : p === 'shooter' ? { distance: 0, bearing: 'front' } : { distance: Math.round(pp.r), bearing: pp.theta_deg < 60 ? 'front' : 'side' }; },
+    physical: (k) => physCache[k] || (physCache[k] = core.dryParts(k)),
+    suppression: () => 0,
+    mechClip: (name) => { const C = P.clips[name], mx = Math.max(...C.events.map((e) => e.noise.a)), fr = C.friction; return { phys: core.mech(name), events: C.events.map((e) => ({ t: 0.002 + e.t, w: e.noise.a / mx, ms: 0.15 })), slides: fr ? [{ t0: 0.002 + fr.t, t1: 0.002 + fr.t + (fr.env.length - 1) * fr.step / P.fs, w: 1 }] : [] }; },
+    env: (ov) => { const O = ov && P.overlays[ov]; if (!O || !KIND[ov]) return null; const far = O.taps.filter((t) => t.delay > 0.05).sort((a, b) => b.gain - a.gain)[0]; return { kind: KIND[ov], rt60: O.tail.rt60, slaps: KIND[ov] === 'outdoor' && far ? [{ t: far.delay, db: 20 * Math.log10(far.gain) }] : [] }; },
+    realShot: (k, o = {}) => S.realShot(k, o), realMech: (c, o = {}) => S.realMech(c, o),
+    realChain: (ro, cx) => S.realChain(ro, cx),
+    hpd: null,
+  };
+  G = CS.makeGun(ctx, adapter, { mode: opts.mode });
+  Object.defineProperty(S, 'mode', { get: () => G.mode, set: (m) => { G.setMode(m); }, enumerable: true });
+  S.setMode = (m) => { G.setMode(m); return S; }; S.design = G.design; S.cinematic = G; S.defaultOverlay = adapter.defaultOverlay;
+  S.shot = (load = 'cci_standard_velocity', o = {}) => (o.mode || G.mode) === 'realistic' ? S.realShot(load, o) : G.shot(load, o);
+  S.mech = (clip, o = {}) => (o.mode || G.mode) === 'realistic' ? S.realMech(clip, o) : G.mech(clip, o);
+  S.chain = (o = {}, actx = ctx) => G.chain(o, actx);
   return S;
 }
-const G44VSound = { build, makeCore };
+const G44VSound = { build, makeCore, CINE_SIM };
 export default G44VSound;
 export { G44VSound, build, makeCore };

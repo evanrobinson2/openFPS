@@ -14,7 +14,7 @@ ammunition, surroundings and earmuffs, the slide cycle and recoil in slow motion
 | Geometry (`model/`) | Ready as a recipe. `build.py` is Blender Python: 60 named objects covering all 38 items of the manual's component list (pp. 36-37), internals included; 13 sockets; 8 clips. It writes `build/g44v/g44v.glb` at the repository root, a build output that is never committed. Renders of a build are in `renders/` (v1's in `renders/v1/`). Silhouette against the reference: IoU 0.987. v2 is the detail pass that followed the owner's review of v1 (`notes/DETAIL_PASS_V2.md`); **v2 itself has not been reviewed**. |
 | Action and recoil (`action/`) | Ready. Three named CCI loads, calibrated to CCI's test-barrel velocities; slide mass and spring loads are inferred (not published). JS matches Python to 1e-15. |
 | Ballistics (`ballistics/`) | Ready. G1 point mass; reproduces CCI's downrange tables to 4.5 fps and 0.06 in. JS matches Python exactly. |
-| Sound (`sound/`) | Ready, version 2. Synthesised in the browser from `params.json`; JS matches Python to -297 dB. Level calibrated to a published .22 pistol at the ear and checked against seven other published figures (pistol within 1 dB, rifles 3 to 5 dB high). Not validated by listening; no recording of this pistol exists. |
+| Sound (`sound/`) | Cinematic mode is the default (designed sound, measured, **not yet heard by the owner**); the physical simulation is mode `'realistic'`, version 2. Synthesised in the browser from `params.json`; JS matches Python to -297 dB. Level calibrated to a published .22 pistol at the ear and checked against seven other published figures (pistol within 1 dB, rifles 3 to 5 dB high). Not validated by listening; no recording of this pistol exists. |
 
 ## Run the sample
 
@@ -54,6 +54,26 @@ const hits = shot.advance(dt, targets);                 // per frame, or shot.tr
 
 Ammunition keys: `cci_standard_velocity`, `cci_mini_mag`, `cci_quiet_22`. Full APIs: `action/README.md`,
 `ballistics/README.md`, `sound/README.md`.
+
+## Sound: cinematic by default
+
+Since 2026-11-17 `G44VSound.build(ac)` plays a **designed, game-style shot** (mode `'cinematic'`): crack, body, falling
+thump, the slide's action brought forward, a tail that follows the surroundings, and a compressed bus. The owner's
+decision: the physical shot is a 0.14 ms shock that speakers cannot play. The physical simulation is still here,
+unchanged, as mode `'realistic'`. Both are synthesised from the simulation; neither is a recording. The calls above
+work in both modes. The simplest way to play the pistol:
+
+```js
+const S = await G44VSound.build(ac);                     // or { mode: 'realistic' }
+const chain = await S.chain({ overlay: 'outdoor_berm' }); chain.output.connect(ac.destination);   // omit overlay for the default; null = no tail
+chain.fire({ key: 'cci_mini_mag' });                     // one shot of a load (default: cci_standard_velocity)
+chain.mech('slide_rack');                                // a mechanical sound: S.clips
+await chain.set({ distance: 50 });                       // heard 50 m away (subsonic: there is no bullet crack)
+await chain.set({ hpd: true });                          // earmuffs
+await chain.set({ mode: 'realistic' });                  // the physical simulation
+```
+
+Design, full API, measurements and limits: [`shared/cinematic-sound/README.md`](../../shared/cinematic-sound/README.md).
 
 ## Frame and units
 

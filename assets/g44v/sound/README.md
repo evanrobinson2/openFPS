@@ -4,6 +4,23 @@ Everything here is synthesised from the action simulation and stated physics. No
 is in this repository; no audio files are committed. There is no reference recording of this pistol: the model is checked
 against published measurements only. `g44v-sound.js` synthesises the sound in the browser at load. Credit: carpetshark.
 
+## Cinematic mode (the default since 2026-11-17)
+
+The owner decided that a game needs designed sound: the physical shot plays as a click on speakers. `G44VSound.build(ctx)`
+now defaults to `mode: 'cinematic'`: the shared synthesis in [`shared/cinematic-sound/`](../../../shared/cinematic-sound/README.md),
+sized by this pistol's simulation (muzzle energy 95 J, gas energy 167 J, 0.085 g charge, 5.6 mm bore, 102 mm barrel for
+CCI Standard Velocity; the physical blast waveform as the crack; the simulated slide cycle as the action layer; each
+overlay's decay time and berm delay as the tail). It is the smallest gun of the set by design: size 0.00, thump at
+105 Hz, 2.5 dB of trim. Everything else in this file describes the physical simulation, which is unchanged and is
+`mode: 'realistic'` (`S.realShot`, `S.realMech`, `S.realChain`; `S.shot`, `S.mech` and `S.chain` follow `S.mode`).
+
+- API and a copy-paste example: the shared README. `chain()` now also takes an `OfflineAudioContext` as its second argument.
+- In cinematic mode an omitted `overlay` means `outdoor_berm`; `null` means no tail. In realistic mode it means open air, as before.
+- Measured on the page's chain (outdoors): 2.4 % of the energy in the first 2 ms, crest 12.8 dB, audible tail 611 ms,
+  peak -5.0 dBFS. Realistic is identical to the merged commit sample for sample.
+- `CINE_SIM` in `g44v-sound.js` holds the values copied from `action/action.json`; `node shared/cinematic-sound/check.mjs`
+  fails if they drift. `core.dryParts(load)` returns one shot's blast and action noise apart; `dry()` is unchanged.
+
 ```
 python3 sim.py          # params.json (stage A), compare/check.json, compare/sim_shots.png   (run ../action/sim.py first)
 python3 sim.py render   # the same, plus listening WAVs in audio/ (ignored by git)

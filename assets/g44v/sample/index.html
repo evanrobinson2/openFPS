@@ -26,7 +26,8 @@
 <div class="row">
   <label>Ammunition <select id="ammo"></select></label>
   <label>Hold <select id="stance"><option value="two_hand">two hands</option><option value="one_hand">one hand</option></select></label>
-  <label>Surroundings <select id="overlay"><option value="">open air</option><option value="outdoor_berm">outdoor range, berm</option><option value="indoor_range">indoor range</option></select></label>
+  <label>Surroundings <select id="overlay"><option value="">open air (no tail)</option><option value="outdoor_berm" selected>outdoor range, berm</option><option value="indoor_range">indoor range</option></select></label>
+  <label>Sound <select id="mode"><option value="cinematic">Cinematic (default)</option><option value="realistic">Realistic (simulation)</option></select></label>
   <label><input type="checkbox" id="hpd"> earmuffs</label>
   <label><input type="checkbox" id="last"> last round</label>
   <button class="fire" id="fire">Fire</button>
@@ -72,14 +73,15 @@ function tables() {
   row(tb, 'Peak chamber pressure', L.pistol.p_max_MPa.toFixed(0) + ' MPa'); row(tb, 'Slide peak speed', L.slide_peak_speed_mps.toFixed(2) + ' m/s');
   row(tb, 'Slide travel', L.max_travel_mm.toFixed(1) + ' of ' + D.mechanics.full_travel_mm + ' mm'); row(tb, 'Outcome', L.outcome);
   row(tb, 'Back in battery', L.cycle_time_ms.toFixed(1) + ' ms'); row(tb, 'Muzzle rise, ' + $('stance').value.replace('_', ' '), L.recoil[$('stance').value].peak_pitch_deg.toFixed(2) + ' deg');
-  if (S) { const b = S.shot(k), i = S.info(b); row(tb, 'Peak level at the ear', i.peak_db_spl.toFixed(1) + ' dB'); }
+  if (S) { const b = S.shot(k, { mode: 'realistic' }), i = S.info(b); row(tb, 'Peak level at the ear', i.peak_db_spl.toFixed(1) + ' dB'); }
   const tp = $('poi'); tp.innerHTML = '<tr><th>Range</th><th>Path</th><th>Velocity</th><th>Energy</th><th>Time</th></tr>';
   for (const d of [10, 25, 50, 75, 100]) { const p = B.poi(k, 25, d), tr = tp.insertRow(); [d + ' m', (p.y * 1e3).toFixed(0) + ' mm', p.v.toFixed(0) + ' m/s', p.energy.toFixed(0) + ' J', (p.tof * 1e3).toFixed(0) + ' ms'].forEach((x) => tr.insertCell().textContent = x); }
 }
 async function audio() { if (!ac) { ac = new AudioContext({ sampleRate: 48000 }); S = await G44VSound.build(ac); } await ac.resume(); return S; }
-function play(buf) { const ch = S.chain({ overlay: $('overlay').value || null, hpd: $('hpd').checked, ear: true }); ch.output.connect(ac.destination); const src = ac.createBufferSource(); src.buffer = buf; src.connect(ch.input); src.start(); }
-$('fire').onclick = async () => { await audio(); play(S.shot($('ammo').value, { ground: !$('overlay').value })); shotOpts = { ammo: $('ammo').value, stance: $('stance').value, lastRound: $('last').checked }; t0 = performance.now(); tables(); };
-$('rack').onclick = async () => { await audio(); play(S.mech($('last').checked ? 'slide_lock_open' : 'slide_rack')); };
+// one chain per sound: mode 'cinematic' (default) is the designed shot, tail and bus; 'realistic' is the physical simulation with its ear mapping
+function chain() { const ch = S.chain({ mode: $('mode').value, overlay: $('overlay').value || null, hpd: $('hpd').checked, ear: true, ground: !$('overlay').value }); ch.output.connect(ac.destination); return ch; }
+$('fire').onclick = async () => { await audio(); chain().fire({ key: $('ammo').value }); shotOpts = { ammo: $('ammo').value, stance: $('stance').value, lastRound: $('last').checked }; t0 = performance.now(); tables(); };
+$('rack').onclick = async () => { await audio(); chain().mech($('last').checked ? 'slide_lock_open' : 'slide_rack'); };
 $('ammo').onchange = $('stance').onchange = tables;
 function frame() { const t = t0 == null ? 0 : (performance.now() - t0) / 1000 / SLOW; draw(A.sample(Math.min(t, 0.2), shotOpts || { ammo: $('ammo').value })); requestAnimationFrame(frame); }
 tables(); frame(); $('status').textContent = 'Ready. Press Fire: the sound plays at full speed, the mechanism replays ' + SLOW + ' times slower.';

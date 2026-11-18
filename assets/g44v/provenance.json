@@ -6,7 +6,8 @@
     { "part": "action and recoil simulation (action/)", "model": "Claude Fable 5.2", "date": "2026-11-17" },
     { "part": "ballistics simulation (ballistics/)", "model": "Claude Fable 5.2", "date": "2026-11-17" },
     { "part": "sound simulation (sound/)", "model": "Claude Fable 5.2", "date": "2026-11-17" },
-    { "part": "sample page (sample/index.html)", "model": "Claude Fable 5.2", "date": "2026-11-17" }
+    { "part": "sample page (sample/index.html)", "model": "Claude Fable 5.2", "date": "2026-11-17" },
+    { "part": "cinematic sound mode (sound/g44v-sound.js adapter; shared/cinematic-sound/)", "model": "Claude Fable 5.2", "date": "2026-11-17" }
   ],
   "reviewed_by": [],
   "status": "Parametric geometry recipe (Blender Python) with internals, clips and sockets; simulation-grade action, ballistics and sound. Owner review of the visual match pending."
