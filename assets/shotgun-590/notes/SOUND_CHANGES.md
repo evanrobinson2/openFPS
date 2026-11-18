@@ -1,0 +1,54 @@
+# Shotgun 590: sound change requests
+
+Rule 7: each change request and what changed. Kept apart from `NOTES.md` so the geometry and sound histories do
+not collide. Credit: carpetshark.
+
+## Sound change request 1 (2026-11-17, from the owner, through the coordinating session): the sounds are clicks
+
+**Request.** The owner, on the openFPS sound models: "the sounds are clicks", "they aren't not sounding like the
+recording", and of the shots, "like a click on a keyboard or a crackle". The page's playback had already been
+fixed, so the fault was in the models: more body in the blast and in the action noise, from physics and published
+measurements only. There is no reference recording of this gun, and none was used.
+
+**Diagnosis** (numbers in `sound/compare/bands_v1.json`, method in `sound/measure.py`).
+
+- Version 1's shot was one 0.5 ms pulse, a ground reflection 16.6 dB under it, a guessed noise tail and an invented
+  95 Hz tone. The tone held most of the late energy (46 % of all energy under 250 Hz), where small speakers play
+  nothing. In the bands that are heard, 250 Hz to 8 kHz, the shot was 12 to 18 dB down by 10 to 50 ms.
+- The rack's impacts were three guessed tones at 3.1, 5.2 and 7.4 kHz lasting 2 to 4 ms.
+
+**What changed** (sound version 2; `sound/README.md` has the physics and the checks).
+
+| Term | Version 1 | Version 2 |
+|---|---|---|
+| Blast level and directivity | two guessed coefficients | fitted to four published levels (Maher and Shaw 2010; Murphy and Tubbs 2007; Krammer), rms error 1.6 dB |
+| Positive phase | 0.5 R0 / c, a guess | set from the published 456 µs (Kardous and Willson 2004) |
+| Gas noise | guessed noise lasting 60 ms; a 95 Hz tone | jet noise from the bore's blow-down (3.8 ms choked), arriving 1.6 ms after the blast behind the gun; the tone is gone |
+| Ground | half amplitude, the rear ray's level | the reflected ray's own direction and length, Delany-Bazley grass as a filter |
+| Surroundings | none | four builds of every shot: a room (default), a covered firing point, open grass, free field |
+| Impacts | guessed tones | momentum from the model's masses and the action simulation's speeds, Hertz contact time, modes of six parts |
+| Rack events | 6 | 9, plus sliding noise in three bands and the action bars' rattle |
+
+**Results.** Energy in the first 2 ms of the default shot: 35 % before, 9 % after. Time for the 500 Hz to 8 kHz
+bands to stay 20 dB down: 61 to 88 ms before, 449 to 591 ms after. B-duration: 29.9 ms before, 181.8 ms after
+(published for this gun indoors: 30 to 62 ms and 172 to 185 ms). The dry shot is shorter than version 1's, not
+longer: 93 % of its energy in 2 ms. That is what the published free-field energy supports.
+
+**Consequential choices and inferences.**
+
+- **The default shot is now indoors.** Published free-field levels leave no room for a longer outdoor shot, and
+  the only published durations for this gun are indoor ones. The names are unchanged, so the sample page plays the
+  room shot without edits; the outdoor and dry shots have new names (`_covered`, `_field`, `_free`).
+- The room and the covered firing point are chosen layouts with handbook absorption, not measured places.
+- Jet-noise efficiency, source position and directivity, the scattering figures, every mechanical level, loss
+  factor and part weight are recalled, inferred or guessed, and are labelled so in `sound/sim.py`.
+- Mechanical peak levels changed with the new model: `shell_insert` 91 to 78 dB, `dry_fire` 99 to 93 dB, `safety`
+  80 to 68 dB, `action_release` 75 to 64 dB. Both sets are guesses; a page that mixes by peak level is unaffected
+  when it plays normalised, as the sample does.
+
+**Not validated.** Nobody has listened. One published statement is not met (a third-octave band above 130 dB,
+Murphy and Tubbs): `sound/README.md` explains why it cannot be reconciled with the published energy. The
+front-to-back difference is 1 to 2 dB short of the published 15 to 16 dB.
+
+**Files.** `sound/sim.py`, `sound/measure.py` (new), `sound/shotgun590-sound.js`, `sound/params.json`,
+`sound/verify_js.py`, `sound/README.md`, `sound/compare/*`, `USAGE.md` (sound section), this file.
