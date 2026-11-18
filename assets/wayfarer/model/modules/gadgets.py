@@ -214,6 +214,178 @@ def thrusters_and_lights(H):
         mb.sphere(p, 0.07, m, n=10); mb.cyl((p[0] - 0.1, p[1], p[2]), (p[0] + 0.1, p[1], p[2]), 0.05, 'structure_steel', n=8)
     return mb
 
+# ------------------------------------------------------------------ outer hull detail: what a ground crew touches
+SEG = {'0': 'abcdef', '1': 'bc', '2': 'abged', '7': 'abc', 'F': 'aefg', '-': 'g'}
+
+def hull_details(H):
+    """Seam straps, access panels with latches, a rung ladder, lifting lugs, louvres, walkway rails, belly fittings and
+    the hull number. Everything stands on a pad that starts at the nominal skin, because the armour plates sit at three
+    heights and a fitting must not float over a low one."""
+    mb = MB(); bolts = MB()
+    TOPP = spec.PANEL_LAYERS[-1] + 0.025          # just proud of the highest plate
+
+    def frame(i, j, sd, off=0.0):
+        p = np.array(H.pt(i, j, off, sd)); n = np.array(H.nrm(i, j, sd)); n = n / np.linalg.norm(n)
+        u = np.array((1.0, 0.0, 0.0)) - n * n[0]; u = u / np.linalg.norm(u)
+        v = np.cross(n, u)
+        if v[2] < 0 and abs(n[2]) < 0.9: v = -v                     # v points up the flank
+        return p, n, u, v
+
+    def clear(i, j, sd, ri=2, rj=1):
+        a = H.tag[sd][max(i - ri, 0):min(i + ri, H.ni - 1), max(j - rj, 0):min(j + rj, H.nr)]
+        return a.size > 0 and not a.any()
+
+    def slab(p, n, u, v, hu, hv, z0, z1, m):
+        """Box on the hull: centre p on the skin, half sizes hu x hv, from height z0 to z1 along the normal."""
+        c = p + n * 0.5 * (z0 + z1); a, b, d = u * hu, v * hv, n * 0.5 * (z1 - z0)
+        if np.dot(np.cross(a, b), d) < 0: b = -b
+        mb.obox(tuple(c), tuple(a), tuple(b), tuple(d), m)
+
+    # ---- A. seam straps round the barrel at the three main joints
+    for s in (6.55, 13.8, 21.3):
+        i = H.si(s)
+        for sd in (1, -1):
+            j = 1
+            while j < 27:
+                k = j
+                while k < 27 and not H.tag[sd][i - 1, k] and not H.tag[sd][i, k]: k += 1
+                if k > j:
+                    H.rib_s(mb, i, j, k, sd, TOPP, 0.0, 0.07, 'armour_gunmetal_d')
+                    for q in range(j, k + 1):
+                        for ds in (-0.04, 0.04):
+                            pp, n, u, v = frame(i, q, sd, TOPP)
+                            bolts.bolt(tuple(pp + np.array((ds, 0, 0))), tuple(n), r=0.013, h=0.009)
+                j = k + 1
+
+    # ---- B. access panels: pad, door, four quarter-turn latches, hinge, placard
+    panels = [(6.0, 7, 0.34, 0.22), (11.4, 7, 0.40, 0.24), (14.6, 8, 0.30, 0.20), (19.6, 7, 0.40, 0.24), (12.6, 5, 0.26, 0.26), (20.4, 5, 0.30, 0.20),
+              (5.7, 25, 0.30, 0.20), (9.8, 25, 0.36, 0.22), (13.6, 25, 0.26, 0.26), (16.0, 25, 0.40, 0.22), (19.2, 25, 0.30, 0.20), (3.3, 21, 0.26, 0.18), (3.6, 9, 0.24, 0.18)]
+    for q, (s, j, hu, hv) in enumerate(panels):
+        i = H.si(s)
+        for sd in (1, -1):
+            if not clear(i, j, sd): continue
+            p, n, u, v = frame(i, j, sd)
+            slab(p, n, u, v, hu + 0.04, hv + 0.04, 0.0, TOPP, 'armour_gunmetal_d')
+            slab(p, n, u, v, hu, hv, TOPP, TOPP + 0.012, ('armour_gunmetal_c', 'armour_gunmetal_a', 'armour_paint_red_dark')[q % 3])
+            for (a, b) in ((-1, -1), (1, -1), (-1, 1), (1, 1)):
+                c = p + u * a * (hu - 0.05) + v * b * (hv - 0.05) + n * (TOPP + 0.012)
+                mb.cyl(tuple(c), tuple(c + n * 0.008), 0.022, 'machinery_bare', n=10)
+                slab(c - n * 0.0, n, u, v, 0.017, 0.003, 0.008, 0.011, 'machinery_dark')
+                bolts.bolt(tuple(p + u * a * (hu + 0.02) + v * b * (hv + 0.02) + n * TOPP), tuple(n), r=0.010, h=0.007)
+            for a in (-0.5, 0.5):                                                                      # hinge barrels on the lower edge
+                c = p + u * a * hu - v * (hv + 0.012) + n * (TOPP + 0.008)
+                mb.cyl(tuple(c - u * 0.05), tuple(c + u * 0.05), 0.011, 'machinery_bare', n=6)
+            slab(p + v * (hv * 0.35), n, u, v, hu * 0.45, 0.022, TOPP + 0.012, TOPP + 0.014, 'placard_white')
+            if q % 3 == 2:
+                slab(p - v * (hv * 0.3), n, u, v, hu * 0.6, 0.018, TOPP + 0.012, TOPP + 0.014, 'hazard_yellow')
+
+    # ---- C. rung ladder up the flank just aft of the canopy, both sides
+    i = H.si(4.55)
+    for sd in (1, -1):
+        for j in range(3, 26):
+            if not clear(i, j, sd, ri=1, rj=0) and H.tag[sd][i, j]: continue
+            p, n, u, v = frame(i, j, sd)
+            slab(p, n, u, v, 0.24, 0.035, 0.0, TOPP, 'armour_gunmetal_d')
+            a, b = p - u * 0.19, p + u * 0.19
+            m = 'hazard_yellow' if j in (3, 25) else 'machinery_bare'
+            mb.pipe([tuple(a + n * TOPP), tuple(a + n * (TOPP + 0.085)), tuple(b + n * (TOPP + 0.085)), tuple(b + n * TOPP)], 0.013, m, n=6)
+            for c in (a, b):
+                bolts.bolt(tuple(c + u * 0.035 * (1 if c is b else -1) + n * TOPP), tuple(n), r=0.009, h=0.006, washer=False)
+
+    # ---- D. lifting lugs on the shoulders
+    for s in (7.0, 12.0, 14.4, 20.0):
+        i = H.si(s)
+        for sd in (1, -1):
+            if not clear(i, 6, sd): continue
+            p, n, u, v = frame(i, 6, sd)
+            slab(p, n, u, v, 0.16, 0.12, 0.0, TOPP + 0.01, 'structure_steel')
+            c = p + n * (TOPP + 0.07)
+            mb.tube(tuple(c - v * 0.02), tuple(c + v * 0.02), 0.065, 0.03, 'hazard_yellow', n=14)
+            slab(p, n, u, v, 0.07, 0.02, TOPP + 0.01, TOPP + 0.04, 'structure_steel')
+            for (a, b) in ((-1, -1), (1, -1), (-1, 1), (1, 1)):
+                bolts.bolt(tuple(p + u * a * 0.12 + v * b * 0.085 + n * (TOPP + 0.01)), tuple(n), r=0.013, h=0.009)
+
+    # ---- E. louvred vents low on the flank
+    for s in (11.5, 17.3, 7.4):
+        i = H.si(s)
+        for sd in (1, -1):
+            if not clear(i, 24, sd, ri=3): continue
+            p, n, u, v = frame(i, 24, sd)
+            slab(p, n, u, v, 0.36, 0.17, 0.0, TOPP + 0.02, 'armour_gunmetal_d')
+            slab(p, n, u, v, 0.31, 0.12, TOPP + 0.02, TOPP + 0.022, 'substructure_dark')
+            for k in range(5):
+                c = p + v * (-0.096 + 0.048 * k) + n * (TOPP + 0.03)
+                a, b, d = u * 0.31, (v * 0.6 + n * 0.8) / 1.0 * 0.022, (n * 0.6 - v * 0.8) * 0.003
+                if np.dot(np.cross(a, b), d) < 0: b = -b
+                mb.obox(tuple(c), tuple(a), tuple(b), tuple(d), 'machinery_dark')
+            for (a, b) in ((-1, -1), (1, -1), (-1, 1), (1, 1), (0, -1), (0, 1)):
+                bolts.bolt(tuple(p + u * a * 0.335 + v * b * 0.145 + n * (TOPP + 0.02)), tuple(n), r=0.010, h=0.007)
+
+    # ---- I. walkway rails and non-slip pads either side of the spine
+    ia, ib = H.si(10.4), H.si(14.7)
+    for sd in (1, -1):
+        pts = []
+        for i in range(ia, ib + 1, 3):
+            p, n, u, v = frame(i, 4, sd)
+            pts.append(tuple(p + n * 0.42))
+            mb.cyl(tuple(p), tuple(p + n * 0.42), 0.014, 'machinery_bare', n=6)
+            slab(p, n, u, v, 0.05, 0.05, 0.0, TOPP, 'structure_steel')
+        mb.pipe(pts, 0.016, 'hazard_yellow', n=6)
+        for i in range(ia + 1, ib, 4):
+            p, n, u, v = frame(i, 2, sd)
+            slab(p, n, u, v, 0.26, 0.11, 0.0, TOPP + 0.004, 'rubber_black')
+
+    # ---- F. formation light strips between the waist and the bays; flood lamps over the lift
+    for s in (10.2, 17.9):
+        i = H.si(s)
+        for sd in (1, -1):
+            if not clear(i, 18, sd, ri=3, rj=0): continue
+            p, n, u, v = frame(i, 18, sd)
+            slab(p, n, u, v, 0.34, 0.035, 0.0, TOPP, 'armour_gunmetal_d'); slab(p, n, u, v, 0.30, 0.018, TOPP, TOPP + 0.008, 'screen_glow')
+    for s in (9.25, 13.5):
+        i = H.si(s)
+        for sd in (1, -1):
+            if not clear(i, 32, sd, ri=1): continue
+            p, n, u, v = frame(i, 32, sd)
+            slab(p, n, u, v, 0.11, 0.08, 0.0, TOPP + 0.05, 'machinery_dark'); slab(p, n, u, v, 0.085, 0.055, TOPP + 0.05, TOPP + 0.056, 'light_panel')
+
+    # ---- G. belly: drain masts, ground power receptacle, a blade antenna
+    for (s, j, kind) in ((4.4, 33, 'mast'), (8.95, 33, 'mast'), (4.9, 31, 'gpu'), (3.7, 34, 'blade')):
+        i = H.si(s)
+        for sd in ((1, -1) if kind != 'gpu' else (-1,)):
+            if not clear(i, min(j, H.nr - 1), sd, ri=1): continue
+            p, n, u, v = frame(i, j, sd)
+            slab(p, n, u, v, 0.10, 0.06, 0.0, TOPP, 'structure_steel')
+            if kind == 'mast':
+                mb.cyl(tuple(p + n * TOPP), tuple(p + n * (TOPP + 0.16) + u * 0.06), 0.014, 'machinery_bare', n=6)
+            elif kind == 'blade':
+                a, b, c, d = p - u * 0.14 + n * TOPP, p + u * 0.14 + n * TOPP, p + u * 0.16 + n * (TOPP + 0.26), p + u * 0.06 + n * (TOPP + 0.26)
+                e = v * 0.022
+                mb.prism([tuple(x - e * 0.5) for x in (a, b, c, d)], tuple(e), 'machinery_dark')
+            else:
+                slab(p, n, u, v, 0.22, 0.14, 0.0, TOPP + 0.012, 'armour_gunmetal_c')
+                for a in (-0.10, 0.02, 0.12):
+                    c = p + u * a + n * (TOPP + 0.012)
+                    mb.cyl(tuple(c), tuple(c + n * 0.03), 0.035 if a < 0 else 0.022, 'machinery_bare', n=10)
+                    mb.cyl(tuple(c + n * 0.03), tuple(c + n * 0.033), 0.026 if a < 0 else 0.015, 'copper_pipe' if a < 0 else 'hazard_yellow', n=10)
+                slab(p + v * 0.09, n, u, v, 0.16, 0.02, TOPP + 0.012, TOPP + 0.014, 'placard_white')
+
+    # ---- H. hull number forward of the waist, reading nose-to-tail from outside on both sides
+    segs = dict(a=(0, 1, 1, 0), d=(0, -1, 1, 0), g=(0, 0, 1, 0), f=(-1, 0.5, 0, 1), b=(1, 0.5, 0, 1), e=(-1, -0.5, 0, 1), c=(1, -0.5, 0, 1))
+    hh = 0.20; ww = 0.11; pitch = 0.36; text = 'F-27'
+    i = H.si(5.62)
+    for sd in (1, -1):
+        p, n, u, v = frame(i, 17, sd)
+        slab(p, n, u, v, 0.76, 0.32, 0.0, TOPP, 'armour_gunmetal_d')
+        rd = u if sd < 0 else -u                    # reading direction as seen from outside
+        for k, ch in enumerate(text):
+            c0 = p + rd * (k - (len(text) - 1) / 2) * pitch
+            for sg in SEG[ch]:
+                cx, cy, hor, ver = segs[sg]
+                c = c0 + rd * cx * ww + v * cy * hh * 1.0
+                slab(c, n, rd, v, (ww * (0.6 if ch == '-' else 1.0)) if hor else 0.022, 0.022 if hor else hh / 2, TOPP, TOPP + 0.004, 'placard_white')
+    return mb, bolts
+
 def build(H):
     parent = empty('gadgets', 'wayfarer')
     allb = MB()
@@ -225,5 +397,6 @@ def build(H):
     mb, b = bay_contents(H); finish('equipment_bay_contents', mb, parent, group='gadgets'); allb.merge(b)
     mb, b = waist_conduits(H); finish('waist_conduits', mb, parent, group='gadgets'); allb.merge(b)
     finish('thruster_quads_and_lights', thrusters_and_lights(H), parent, group='gadgets')
+    mb, b = hull_details(H); finish('hull_details', mb, parent, group='gadgets'); allb.merge(b)
     finish('gadget_bolts', allb, parent, sharp=60, group='fasteners')
     return dict(bays=len([n for n in H.openings if n.startswith('bay_')]) * 2)

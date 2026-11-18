@@ -65,6 +65,9 @@ def build():
         t1 = time.time()
         info[name] = m.build(H) or {}
         print(f'BUILT {name} in {time.time() - t1:.1f} s', info[name], flush=True)
+    if '--no-wear' not in ARGV:
+        import wear
+        t1 = time.time(); nw = wear.apply(); print(f'WEAR on {nw} meshes in {time.time() - t1:.1f} s', flush=True)
     sockets = build_sockets(mods)
     clips = kit.bake_clips()
     print('CLIPS', clips)
@@ -82,7 +85,8 @@ def build():
         os.makedirs(os.path.join(HERE, 'out'), exist_ok=True)
         out = os.path.join(HERE, 'out', tag + '.glb')
         bpy.ops.export_scene.gltf(filepath=out, export_format='GLB', export_apply=True, export_yup=True, export_animations=True,
-                                  export_animation_mode='NLA_TRACKS', export_extras=True)
+                                  export_animation_mode='NLA_TRACKS', export_extras=True,
+                                  export_vertex_color='ACTIVE', export_all_vertex_colors=False)
         print('GLB', out, round(os.path.getsize(out) / 1e6, 1), 'MB')
 
 if __name__ == '__main__':

@@ -533,10 +533,10 @@ def engineering_details(parent):
     mb.cyl((S['eng_fwd'] + 0.78, wl - 0.10, ZL + 1.05), (S['eng_fwd'] + 0.78, wl - 0.15, ZL + 1.05), 0.035, 'armour_paint_red', n=10)           # scram button
     for sd in (-1, 1):
         mb.box(s0 + 0.1, s1 - 0.1, sd * 0.98 - 0.025, sd * 0.98 + 0.025, ZL + 0.001, ZL + 0.003, 'hazard_yellow')
-        mb.cyl((0.5 * (s0 + s1) - 0.5, sd * 0.745, z), (0.5 * (s0 + s1) - 0.5, sd * 0.75, z), 0.13, 'hazard_yellow', n=16)                       # warning disc on the vessel
-        mb.cyl((0.5 * (s0 + s1) - 0.5, sd * 0.749, z), (0.5 * (s0 + s1) - 0.5, sd * 0.753, z), 0.045, 'machinery_dark', n=10)
-        mb.cyl((0.5 * (s0 + s1) + 0.45, sd * 0.70, z + 0.2), (0.5 * (s0 + s1) + 0.45, sd * 0.84, z + 0.2), 0.03, 'machinery_bare', n=8)          # instrument tap
-        mb.cyl((0.5 * (s0 + s1) + 0.45, sd * 0.84, z + 0.2), (0.5 * (s0 + s1) + 0.45, sd * 0.865, z + 0.2), 0.055, 'placard_white', n=12)
+        mb.cyl((0.5 * (s0 + s1) - 0.25, sd * 0.745, z), (0.5 * (s0 + s1) - 0.25, sd * 0.75, z), 0.13, 'hazard_yellow', n=16)                       # warning disc on the vessel
+        mb.cyl((0.5 * (s0 + s1) - 0.25, sd * 0.749, z), (0.5 * (s0 + s1) - 0.25, sd * 0.753, z), 0.045, 'machinery_dark', n=10)
+        mb.cyl((0.5 * (s0 + s1) + 0.25, sd * 0.70, z + 0.2), (0.5 * (s0 + s1) + 0.25, sd * 0.84, z + 0.2), 0.03, 'machinery_bare', n=8)          # instrument tap
+        mb.cyl((0.5 * (s0 + s1) + 0.25, sd * 0.84, z + 0.2), (0.5 * (s0 + s1) + 0.25, sd * 0.865, z + 0.2), 0.055, 'placard_white', n=12)
     mb.pipe([(s0 + 0.5, 0, z - 0.74), (s0 + 0.5, 0, ZL + 0.12), (s0 + 0.5, 0.5, ZL + 0.12)], 0.03, 'copper_pipe', n=8)
     mb.tube((s0 + 0.5, 0.5, ZL + 0.12), (s0 + 0.5, 0.52, ZL + 0.12), 0.06, 0.045, 'armour_paint_red', n=12)
     finish('engineering_details', mb, parent, group='interior'); finish('engineering_detail_bolts', bolts, parent, sharp=60, group='fasteners')

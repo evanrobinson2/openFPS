@@ -83,6 +83,8 @@ PALETTE = {
     'blockout_shell': (0.60, 0.62, 0.66, 0.0, 0.7, 0, 0.22),
 }
 
+WEAR_CLEAN = ('placard_white', 'figure_grey', 'seat_fabric')     # kept clean by the wear layer
+
 def mat(name):
     if name in MATS:
         return MATS[name]
@@ -102,6 +104,14 @@ def mat(name):
             m.surface_render_method = 'BLENDED'
         except Exception:
             pass
+    if not em and al >= 1 and name not in WEAR_CLEAN:
+        # role colour x the 'wear' colour attribute (see wear.py). The glTF exporter reads this as baseColorFactor x COLOR_0.
+        vc = m.node_tree.nodes.new('ShaderNodeVertexColor'); vc.layer_name = 'wear'
+        mix = m.node_tree.nodes.new('ShaderNodeMix'); mix.data_type = 'RGBA'; mix.blend_type = 'MULTIPLY'
+        mix.inputs['Factor'].default_value = 1.0
+        mix.inputs['B'].default_value = (r, g, b, 1)
+        m.node_tree.links.new(vc.outputs['Color'], mix.inputs['A'])
+        m.node_tree.links.new(mix.outputs['Result'], bsdf.inputs['Base Color'])
     m.use_backface_culling = al >= 1          # exported single-sided, except glass
     m.diffuse_color = (r, g, b, al)
     MATS[name] = m
