@@ -1,0 +1,131 @@
+{
+ "tolerance": 1e-9,
+ "cases": {
+  "run_shot_bare": {
+   "numbers": 115,
+   "max_rel_diff": 0,
+   "at": "",
+   "js_ms": 21
+  },
+  "acoustics_bare": {
+   "numbers": 48,
+   "max_rel_diff": 0,
+   "at": ""
+  },
+  "run_shot_first_round": {
+   "numbers": 164,
+   "max_rel_diff": 0,
+   "at": "",
+   "js_ms": 87
+  },
+  "acoustics_first_round": {
+   "numbers": 48,
+   "max_rel_diff": 0,
+   "at": ""
+  },
+  "run_shot_subsequent": {
+   "numbers": 164,
+   "max_rel_diff": 0,
+   "at": "",
+   "js_ms": 69
+  },
+  "acoustics_subsequent": {
+   "numbers": 48,
+   "max_rel_diff": 0,
+   "at": ""
+  },
+  "sound_overlay": {
+   "numbers": 161,
+   "max_rel_diff": 0,
+   "at": ""
+  },
+  "flash_input": {
+   "numbers": 19,
+   "max_rel_diff": 0,
+   "at": ""
+  },
+  "heat_string": {
+   "numbers": 35,
+   "max_rel_diff": 0,
+   "at": ""
+  }
+ },
+ "hk416_sound": {
+  "first_round": {
+   "shooter": {
+    "bare_dB": 157.07,
+    "suppressed_dB": 136.94,
+    "reduction_dB": 20.14,
+    "table_reduction_dB": 18.99
+   },
+   "bystander": {
+    "bare_dB": 146.66,
+    "suppressed_dB": 126.12,
+    "reduction_dB": 20.54,
+    "table_reduction_dB": 18.26
+   },
+   "downrange": {
+    "bare_dB": 134.63,
+    "suppressed_dB": 107.57,
+    "reduction_dB": 27.06,
+    "table_reduction_dB": 21.64
+   }
+  },
+  "subsequent": {
+   "shooter": {
+    "bare_dB": 157.07,
+    "suppressed_dB": 135.27,
+    "reduction_dB": 21.81,
+    "table_reduction_dB": 20.5
+   },
+   "bystander": {
+    "bare_dB": 146.66,
+    "suppressed_dB": 123.97,
+    "reduction_dB": 22.69,
+    "table_reduction_dB": 20.25
+   },
+   "downrange": {
+    "bare_dB": 134.63,
+    "suppressed_dB": 106.68,
+    "reduction_dB": 27.95,
+    "table_reduction_dB": 23.84
+   }
+  },
+  "hot": {
+   "shooter": {
+    "bare_dB": 157.07,
+    "suppressed_dB": 138.04,
+    "reduction_dB": 19.04,
+    "table_reduction_dB": 17.86
+   },
+   "bystander": {
+    "bare_dB": 146.66,
+    "suppressed_dB": 125.76,
+    "reduction_dB": 20.9,
+    "table_reduction_dB": 18.57
+   },
+   "downrange": {
+    "bare_dB": 134.63,
+    "suppressed_dB": 107.1,
+    "reduction_dB": 27.52,
+    "table_reduction_dB": 22.64
+   }
+  }
+ },
+ "crack": {
+  "identical_samples": true,
+  "peak_dB": 147.58
+ },
+ "downrange_total_peak_dB": {
+  "bare": 147.58,
+  "suppressed": 147.58
+ },
+ "action": {
+  "bare_rpm": 800.9,
+  "suppressed_rpm": 827.1,
+  "bare_peak_carrier_mps": 5.915,
+  "suppressed_peak_carrier_mps": 5.688
+ },
+ "passed": true,
+ "node": "v24.4.1"
+}

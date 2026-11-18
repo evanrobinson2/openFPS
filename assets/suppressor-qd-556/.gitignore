@@ -1,0 +1,3 @@
+# build outputs: meshes are never committed
+model/build/
+__pycache__/
