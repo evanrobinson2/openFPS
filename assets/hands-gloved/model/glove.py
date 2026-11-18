@@ -33,20 +33,11 @@ def face_materials(sh):
     return m
 
 def _box(c, ax, ay, az, hx, hy, hz, bev=0.8):
-    """Rounded-ish box: 8 corners pulled in by bev on a subdivided shell would be overkill; a chamfered slab is enough."""
-    pts = []
-    for sx in (-1, 1):
-        for sy in (-1, 1):
-            for sz in (-1, 1):
-                for k in range(3):
-                    d = [hx, hy, hz]; d[k] -= bev; d2 = [hx - bev, hy - bev, hz - bev]; d2[k] += bev
-                    pts.append(c + sx * d2[0] * ax + sy * d2[1] * ay + sz * d2[2] * az)
-    from scipy.spatial import ConvexHull
-    pts = np.array(pts); h = ConvexHull(pts); F = h.simplices.copy(); cen = pts.mean(0)
-    for i, f in enumerate(F):
-        n = np.cross(pts[f[1]] - pts[f[0]], pts[f[2]] - pts[f[0]])
-        if np.dot(n, pts[f[0]] - cen) < 0: F[i] = f[::-1]
-    return pts, F.astype(np.int32)
+    """A slab with its top edges pulled in by bev (a simple chamfer): 8 corners, 12 outward triangles."""
+    pts = np.array([c + sx * (hx - (bev if sz > 0 else 0)) * ax + sy * (hy - (bev if sz > 0 else 0)) * ay + sz * hz * az for sz in (-1, 1) for sy in (-1, 1) for sx in (-1, 1)])
+    F = np.array([(0, 2, 1), (1, 2, 3), (4, 5, 6), (5, 7, 6), (0, 1, 4), (1, 5, 4), (2, 6, 3), (3, 6, 7), (0, 4, 2), (2, 4, 6), (1, 3, 5), (3, 7, 5)], np.int32)
+    if np.dot(np.cross(ax, ay), az) < 0: F = F[:, ::-1].copy()
+    return pts, F
 
 def detail_parts(hand):
     """Raised parts, each rigid to one bone: name -> dict(V, F, bone, mat).  Canonical left hand, rest pose, mm."""

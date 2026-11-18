@@ -1,0 +1,12 @@
+{
+  "asset": "hands-gloved",
+  "credit": "carpetshark",
+  "modelled_by": [
+    { "part": "hand recipe: proportions, skeleton, joint limits, glove shells, skinning (model/)", "model": "Claude Fable 5.2", "date": "2026-11-17" },
+    { "part": "grip solver and grips (grips/)", "model": "Claude Fable 5.2", "date": "2026-11-17" },
+    { "part": "hand clips synced to the HK416 clips (clips/, hands-gloved.json)", "model": "Claude Fable 5.2", "date": "2026-11-17" },
+    { "part": "runtime module and sample (hands-gloved.js, sample/)", "model": "Claude Fable 5.2", "date": "2026-11-17" },
+    { "part": "checks and reference decomposition (checks/, notes/)", "model": "Claude Fable 5.2", "date": "2026-11-17" }
+  ],
+  "status": "Version 1. Structural checks pass (joint limits, interpenetration under 1.0 mm, runtime parity). The matched comparison with the references shows clear differences in the firing grip; references and result await owner review (notes/NOTES.md)."
+}

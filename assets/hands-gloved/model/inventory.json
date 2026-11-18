@@ -1,0 +1,342 @@
+{
+ "asset": "hands-gloved",
+ "parts": {
+  "finger_index_left": {
+   "vertices": 922,
+   "triangles": 1840,
+   "skinned_to": [
+    "hand",
+    "index_01",
+    "index_02",
+    "index_03"
+   ]
+  },
+  "finger_middle_left": {
+   "vertices": 1062,
+   "triangles": 2120,
+   "skinned_to": [
+    "hand",
+    "middle_01",
+    "middle_02",
+    "middle_03"
+   ]
+  },
+  "finger_ring_left": {
+   "vertices": 1022,
+   "triangles": 2040,
+   "skinned_to": [
+    "ring_01",
+    "ring_02",
+    "ring_03",
+    "ring_meta"
+   ]
+  },
+  "finger_little_left": {
+   "vertices": 862,
+   "triangles": 1720,
+   "skinned_to": [
+    "little_01",
+    "little_02",
+    "little_03",
+    "little_meta"
+   ]
+  },
+  "thumb_left": {
+   "vertices": 1102,
+   "triangles": 2200,
+   "skinned_to": [
+    "hand",
+    "thumb_01",
+    "thumb_02",
+    "thumb_03"
+   ]
+  },
+  "palm_left": {
+   "vertices": 1202,
+   "triangles": 2400,
+   "skinned_to": [
+    "hand",
+    "little_meta",
+    "ring_meta"
+   ]
+  },
+  "web_left": {
+   "vertices": 182,
+   "triangles": 360,
+   "skinned_to": [
+    "hand",
+    "thumb_01"
+   ]
+  },
+  "cuff_left": {
+   "vertices": 222,
+   "triangles": 440,
+   "skinned_to": [
+    "forearm",
+    "hand"
+   ]
+  },
+  "sleeve_left": {
+   "vertices": 902,
+   "triangles": 1800,
+   "skinned_to": [
+    "forearm"
+   ]
+  },
+  "cuff_strap_left": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "hand"
+   ]
+  },
+  "cuff_pull_tab_left": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "hand"
+   ]
+  },
+  "cuff_placeholder_panel_left": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "hand"
+   ]
+  },
+  "palm_heel_patch_left": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "hand"
+   ]
+  },
+  "finger_index_right": {
+   "vertices": 922,
+   "triangles": 1840,
+   "skinned_to": [
+    "hand",
+    "index_01",
+    "index_02",
+    "index_03"
+   ]
+  },
+  "finger_middle_right": {
+   "vertices": 1062,
+   "triangles": 2120,
+   "skinned_to": [
+    "hand",
+    "middle_01",
+    "middle_02",
+    "middle_03"
+   ]
+  },
+  "finger_ring_right": {
+   "vertices": 1022,
+   "triangles": 2040,
+   "skinned_to": [
+    "ring_01",
+    "ring_02",
+    "ring_03",
+    "ring_meta"
+   ]
+  },
+  "finger_little_right": {
+   "vertices": 862,
+   "triangles": 1720,
+   "skinned_to": [
+    "little_01",
+    "little_02",
+    "little_03",
+    "little_meta"
+   ]
+  },
+  "thumb_right": {
+   "vertices": 1102,
+   "triangles": 2200,
+   "skinned_to": [
+    "hand",
+    "thumb_01",
+    "thumb_02",
+    "thumb_03"
+   ]
+  },
+  "palm_right": {
+   "vertices": 1202,
+   "triangles": 2400,
+   "skinned_to": [
+    "hand",
+    "little_meta",
+    "ring_meta"
+   ]
+  },
+  "web_right": {
+   "vertices": 182,
+   "triangles": 360,
+   "skinned_to": [
+    "hand",
+    "thumb_01"
+   ]
+  },
+  "cuff_right": {
+   "vertices": 222,
+   "triangles": 440,
+   "skinned_to": [
+    "forearm",
+    "hand"
+   ]
+  },
+  "sleeve_right": {
+   "vertices": 902,
+   "triangles": 1800,
+   "skinned_to": [
+    "forearm"
+   ]
+  },
+  "cuff_strap_right": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "hand"
+   ]
+  },
+  "cuff_pull_tab_right": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "hand"
+   ]
+  },
+  "cuff_placeholder_panel_right": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "hand"
+   ]
+  },
+  "palm_heel_patch_right": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "hand"
+   ]
+  }
+ },
+ "bones": [
+  "forearm",
+  "hand",
+  "index_meta",
+  "index_01",
+  "index_02",
+  "index_03",
+  "middle_meta",
+  "middle_01",
+  "middle_02",
+  "middle_03",
+  "ring_meta",
+  "ring_01",
+  "ring_02",
+  "ring_03",
+  "little_meta",
+  "little_01",
+  "little_02",
+  "little_03",
+  "thumb_01",
+  "thumb_02",
+  "thumb_03"
+ ],
+ "materials": [
+  "glove_back_knit",
+  "glove_palm_synthetic_leather",
+  "glove_fingertip",
+  "glove_flex_rib",
+  "glove_terry",
+  "glove_cuff",
+  "sleeve_fabric",
+  "glove_seam",
+  "glove_tab"
+ ],
+ "clips": {
+  "idle": {
+   "frames": 1,
+   "rifle_clip": null,
+   "pre_roll": 0
+  },
+  "finger_to_trigger": {
+   "frames": 6,
+   "rifle_clip": null,
+   "pre_roll": 0
+  },
+  "finger_off_trigger": {
+   "frames": 6,
+   "rifle_clip": null,
+   "pre_roll": 0
+  },
+  "trigger_pull": {
+   "frames": 10,
+   "rifle_clip": "trigger_pull",
+   "pre_roll": 0
+  },
+  "mag_release": {
+   "frames": 16,
+   "rifle_clip": "mag_release",
+   "pre_roll": 3
+  },
+  "safety_to_fire": {
+   "frames": 14,
+   "rifle_clip": "safety_to_fire",
+   "pre_roll": 4
+  },
+  "safety_to_safe": {
+   "frames": 14,
+   "rifle_clip": "safety_to_safe",
+   "pre_roll": 4
+  },
+  "bolt_catch": {
+   "frames": 36,
+   "rifle_clip": "bolt_catch",
+   "pre_roll": 12
+  },
+  "mag_out": {
+   "frames": 36,
+   "rifle_clip": "mag_out",
+   "pre_roll": 12
+  },
+  "mag_in": {
+   "frames": 35,
+   "rifle_clip": "mag_in",
+   "pre_roll": 0
+  },
+  "charge": {
+   "frames": 49,
+   "rifle_clip": "charge",
+   "pre_roll": 13
+  },
+  "dust_cover_open": {
+   "frames": 10,
+   "rifle_clip": "dust_cover_open",
+   "pre_roll": 0
+  }
+ },
+ "sockets": [
+  "socket_palm_left",
+  "socket_index_tip_left",
+  "socket_thumb_tip_left",
+  "socket_wrist_left",
+  "socket_palm_right",
+  "socket_index_tip_right",
+  "socket_thumb_tip_right",
+  "socket_wrist_right"
+ ],
+ "skinning_parity": {
+  "grips": 6,
+  "worst_vertex_difference_mm": 8e-05,
+  "note": "Blender's armature modifier against handlib's linear-blend skinning, every shell vertex, every grip"
+ },
+ "totals": {
+  "parts": 26,
+  "triangles": 29936,
+  "bones_per_hand": 21,
+  "clips": 12
+ }
+}

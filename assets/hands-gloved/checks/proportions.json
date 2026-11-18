@@ -1,0 +1,241 @@
+{
+ "asset": "hands-gloved",
+ "size": {
+  "percentile": 50,
+  "length": 1.0,
+  "breadth": 1.0
+ },
+ "percentile_note": "ANSUR II male mean; the 50th percentile differs by at most 0.5 mm in the dimensions used",
+ "sources": {
+  "A": "ANSUR II male working database (Gordon et al. 2014, NATICK/TR-15/007), n = 4,082; mean and percentiles recomputed on 2026-11-17 from the public CSV (ANSUR_II_MALE_Public.csv, Penn State OpenLab mirror)",
+  "B": "Buryanov & Kotiuk 2010, Int. J. Morphol. 28(3):755-758, Table I (X-ray, 66 adults, both sexes); values carried over from the paused build, table not re-read this session (the publisher blocked the request)",
+  "H": "Hsiao, Whitestone, Kau & Hildreth 2015, Human Factors 57(8):1359-1377, firefighter hand anthropometry, men; values carried over from the paused build, table not re-read this session"
+ },
+ "rows": [
+  {
+   "dimension": "hand length (stylion to tip of digit III)",
+   "model_mm": 193.3,
+   "reference_mm": 193.3,
+   "difference_mm": 0.0,
+   "difference_pct": 0.0,
+   "source": "A",
+   "kind": "by construction",
+   "how": "skeleton: wrist offset + bone lengths; the 1.04 scale on B was set to give this"
+  },
+  {
+   "dimension": "hand breadth (across the metacarpal heads)",
+   "model_mm": 88.3,
+   "reference_mm": 88.3,
+   "difference_mm": 0.0,
+   "difference_pct": 0.0,
+   "source": "A",
+   "kind": "by construction",
+   "how": "widest ring of the palm shell, less 2 x glove"
+  },
+  {
+   "dimension": "hand circumference (round the metacarpal heads)",
+   "model_mm": 212.25,
+   "reference_mm": 212.3,
+   "difference_mm": -0.05,
+   "difference_pct": -0.02,
+   "source": "A",
+   "kind": "fitted",
+   "how": "perimeter of the palm shell ring at 80 % of the palm, less 2 pi x glove; the section exponent (3.8) was tuned to this with the 29.5 mm thickness held",
+   "tolerance_pct": 1.0,
+   "pass": true
+  },
+  {
+   "dimension": "wrist circumference",
+   "model_mm": 176.55,
+   "reference_mm": 175.9,
+   "difference_mm": 0.65,
+   "difference_pct": 0.37,
+   "source": "A",
+   "kind": "fitted",
+   "how": "perimeter of the palm shell ring at the wrist joint, less 2 pi x glove; the half-axes 30.8 x 21.4 mm were tuned to this",
+   "tolerance_pct": 1.0,
+   "pass": true
+  },
+  {
+   "dimension": "palm length (wrist crease to the crease of digit III)",
+   "model_mm": 116.5,
+   "reference_mm": 116.5,
+   "difference_mm": -0.0,
+   "difference_pct": -0.0,
+   "source": "A",
+   "kind": "by construction",
+   "how": "MCP III + 19.2 mm crease offset (set to give this)"
+  },
+  {
+   "dimension": "forearm (radiale to stylion)",
+   "model_mm": 267.9,
+   "reference_mm": 267.9,
+   "difference_mm": 0.0,
+   "difference_pct": 0.0,
+   "source": "A",
+   "kind": "by construction",
+   "how": "forearm bone length"
+  },
+  {
+   "dimension": "index finger length (base to tip), scaled to the 195.5 mm hands of H",
+   "model_mm": 72.27,
+   "reference_mm": 75.2,
+   "difference_mm": -2.93,
+   "difference_pct": -3.9,
+   "source": "H",
+   "kind": "check",
+   "how": "MCP to tip less a base offset of 13.8 mm fitted on the middle finger",
+   "tolerance_pct": 6.0,
+   "pass": true
+  },
+  {
+   "dimension": "middle finger length (base to tip), scaled to the 195.5 mm hands of H",
+   "model_mm": 83.3,
+   "reference_mm": 83.3,
+   "difference_mm": 0.0,
+   "difference_pct": 0.0,
+   "source": "H",
+   "kind": "fitted",
+   "how": "MCP to tip less a base offset of 13.8 mm fitted on the middle finger"
+  },
+  {
+   "dimension": "ring finger length (base to tip), scaled to the 195.5 mm hands of H",
+   "model_mm": 79.05,
+   "reference_mm": 79.1,
+   "difference_mm": -0.05,
+   "difference_pct": -0.06,
+   "source": "H",
+   "kind": "check",
+   "how": "MCP to tip less a base offset of 13.8 mm fitted on the middle finger",
+   "tolerance_pct": 6.0,
+   "pass": true
+  },
+  {
+   "dimension": "little finger length (base to tip), scaled to the 195.5 mm hands of H",
+   "model_mm": 60.4,
+   "reference_mm": 64.3,
+   "difference_mm": -3.9,
+   "difference_pct": -6.06,
+   "source": "H",
+   "kind": "check",
+   "how": "MCP to tip less a base offset of 13.8 mm fitted on the middle finger",
+   "tolerance_pct": 6.0,
+   "pass": false
+  },
+  {
+   "dimension": "thumb length (MCP joint to tip), scaled to the hands of H",
+   "model_mm": 61.96,
+   "reference_mm": 69.9,
+   "difference_mm": -7.94,
+   "difference_pct": -11.35,
+   "source": "H",
+   "kind": "reported",
+   "how": "H's thumb base landmark is not the joint centre; no tolerance set"
+  },
+  {
+   "dimension": "index breadth at the PIP joint",
+   "model_mm": 22.1,
+   "reference_mm": 22.1,
+   "difference_mm": 0.0,
+   "difference_pct": 0.0,
+   "source": "H",
+   "kind": "by construction",
+   "how": "width of the shell ring at the joint, less 2 x glove"
+  },
+  {
+   "dimension": "middle breadth at the PIP joint",
+   "model_mm": 22.0,
+   "reference_mm": 22.0,
+   "difference_mm": 0.0,
+   "difference_pct": 0.0,
+   "source": "H",
+   "kind": "by construction",
+   "how": "width of the shell ring at the joint, less 2 x glove"
+  },
+  {
+   "dimension": "ring breadth at the PIP joint",
+   "model_mm": 21.3,
+   "reference_mm": 21.3,
+   "difference_mm": -0.0,
+   "difference_pct": -0.0,
+   "source": "H",
+   "kind": "by construction",
+   "how": "width of the shell ring at the joint, less 2 x glove"
+  },
+  {
+   "dimension": "little breadth at the PIP joint",
+   "model_mm": 19.3,
+   "reference_mm": 19.3,
+   "difference_mm": -0.0,
+   "difference_pct": -0.0,
+   "source": "H",
+   "kind": "by construction",
+   "how": "width of the shell ring at the joint, less 2 x glove"
+  },
+  {
+   "dimension": "thumb breadth at the IP joint",
+   "model_mm": 23.6,
+   "reference_mm": 23.6,
+   "difference_mm": -0.0,
+   "difference_pct": -0.0,
+   "source": "H",
+   "kind": "by construction",
+   "how": "width of the shell ring at the joint, less 2 x glove"
+  },
+  {
+   "dimension": "index: proximal / middle / distal phalanx ratio check (proximal share)",
+   "model_mm": 51.01,
+   "reference_mm": 51.01,
+   "difference_mm": 0.0,
+   "difference_pct": 0.01,
+   "source": "B",
+   "kind": "by construction",
+   "how": "percent of the three phalanges"
+  },
+  {
+   "dimension": "middle: proximal / middle / distal phalanx ratio check (proximal share)",
+   "model_mm": 50.51,
+   "reference_mm": 50.51,
+   "difference_mm": -0.0,
+   "difference_pct": -0.0,
+   "source": "B",
+   "kind": "by construction",
+   "how": "percent of the three phalanges"
+  },
+  {
+   "dimension": "ring: proximal / middle / distal phalanx ratio check (proximal share)",
+   "model_mm": 49.06,
+   "reference_mm": 49.06,
+   "difference_mm": 0.0,
+   "difference_pct": 0.01,
+   "source": "B",
+   "kind": "by construction",
+   "how": "percent of the three phalanges"
+  },
+  {
+   "dimension": "little: proximal / middle / distal phalanx ratio check (proximal share)",
+   "model_mm": 49.0,
+   "reference_mm": 49.0,
+   "difference_mm": 0.0,
+   "difference_pct": 0.01,
+   "source": "B",
+   "kind": "by construction",
+   "how": "percent of the three phalanges"
+  },
+  {
+   "dimension": "gloved finger breadth, mean of three (R2-S01: 24.7 mm, winter glove)",
+   "model_mm": 23.27,
+   "reference_mm": 24.7,
+   "difference_mm": -1.43,
+   "difference_pct": -5.8,
+   "source": "reference R2",
+   "kind": "reported",
+   "how": "model glove is 1.2 mm thick; the glove in R2 is a thicker cold-weather glove"
+  }
+ ],
+ "summary": {
+  "independent_checks": 5,
+  "passed": 4,
+  "worst_pct": 6.06
+ }
+}

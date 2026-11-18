@@ -19,7 +19,7 @@ fingers are 21.7 to 24.5 mm at the middle joint).
 | Finger depths, joint centres across the palm, the metacarpal arc and arch, thumb base position and direction, palm thickness 29.5 mm | none found | inferred |
 | Joint ranges | Bain 2015, Hume 1990, Cooney 1981, AAOS 1965, Kapandji | measured (several recalled, see `NOTES.md`) |
 
-Construction: a skeleton of 20 bones per hand (forearm, hand, four metacarpals, twelve finger phalanges, three thumb
+Construction: a skeleton of 21 bones per hand (forearm, hand, four metacarpals, twelve finger phalanges, three thumb
 segments), each finger a chain MCP (flexion and spread), PIP, DIP; the thumb a chain CMC (three axes), MCP, IP; the
 ring and little metacarpals flex a little at their bases so the palm can cup.
 
@@ -58,11 +58,13 @@ Rules, each with its evidence:
    the shoulder position, which is **inferred**.
 5. The thumb goes round the left side of the grip and rests below the selector. **inferred** (never visible).
 
-What the solver does with them (`grips/solve.py`): the open hand is seated by pushing it up, forward and sideways
-until it touches (rule 1); middle, ring and little fingers close until they touch (rule 2); the index pad is placed
-on a named point, the right face of the receiver 10 mm behind the magazine release or the front face of the trigger
-(rule 3); the thumb pad is placed on the left side of the grip 26 mm below the selector axis (rule 5); the elbow
-swivels about the shoulder-wrist line to keep the wrist inside its range (rule 4).
+What the solver does with them (`grips/solve.py`): the palm is placed by matching three of its pads to points on
+the grip (the middle and little knuckle pads on the right side at the front edge, the web at the top of the back),
+lowered 8 mm and turned 10 degrees, then backed off until nothing is inside the rifle (rule 1); middle, ring and little
+fingers search their joints for the pose that puts their pads on the grip (rule 2); the index pad is placed on a named
+point, beside the magazine release or on the trigger face (rule 3); the thumb pad is placed on the left of the grip
+(rule 5); the elbow swivel is chosen to keep the wrist inside its range (rule 4). `NOTES.md` says how far the result
+is from the references.
 
 ## Study 4: the support grip (R2)
 
@@ -74,8 +76,8 @@ swivels about the shoulder-wrist line to keep the wrist inside its range (rule 4
 4. The hand is centred about 100 mm ahead of the receiver (R2-S06); the rifle's `socket_hand_left` is 110 mm ahead.
    **observed**
 
-Solver: the open hand is pushed up under the handguard until it touches; the far-palm pad is held near
-`socket_hand_left`; four fingers close until they touch; the thumb pad is placed on the top rail.
+Solver: the hand's pose is searched; each candidate is pushed up under the handguard until it touches, with the
+far-palm pad held 100 mm ahead of the receiver; four fingers close on the handguard; the thumb pad is placed on the top rail.
 
 ## Study 5: the magazine grip (R1-S01, R3-S01, R3-S02)
 

@@ -64,11 +64,12 @@ P = dict(
     rest_abd=dict(index=6.0, middle=0.0, ring=-5.0, little=-11.0),     # I: rest spread (deg, + = radial), the neutral of MCP abduction
     depth_pip=0.90, depth_dip=0.80, dip_breadth=0.87,                  # I: depth / breadth ratios (order of Garrett 1971, not re-read)
     dorsal_share=0.42,                 # I: share of a finger's depth that lies dorsal of the bone axis
-    thumb_cmc=(22.0, 8.0, -12.0),      # I: trapeziometacarpal joint centre
+    thumb_cmc=(24.0, 18.0, -12.0),     # I: trapeziometacarpal joint centre (the trapezium sits about 20 mm distal and 25 mm radial of the wrist centre)
     thumb_dir=(0.60, 0.72, -0.35),     # I: rest direction of the thumb metacarpal (relaxed, mid-range)
     thumb_dorsal=(0.80, -0.25, 0.55),  # I: rest direction of the thumbnail normal
     thick_dorsal=12.0, thick_palmar=17.5,   # I: at the metacarpal heads (29.5 mm thick), set so the circumference matches A
-    wrist_half=(31.5, 22.2),           # I: wrist half-breadth and half-depth, set so the circumference matches A
+    wrist_half=(30.8, 21.4),           # I: wrist half-breadth and half-depth, set so the circumference matches A
+    palm_expo=3.8,                     # I: superellipse exponent of the palm's section at the knuckles (2 = ellipse), set so the circumference matches A
     web_offset=19.2,                   # I: the finger web / proximal digital crease lies this far distal of the MCP joint centre
     cuff_len=42.0, sleeve_len=210.0,   # I: glove cuff past the wrist; forearm sleeve shown
 )
@@ -272,7 +273,7 @@ class Hand:
             hw = wh[0] + g + (hbm - wh[0] - g) * smooth(u / 0.72); cx = -1.0 + (-9.0 + 1.0) * smooth(u / 0.8)
             zt = wh[1] + g + (P['thick_dorsal'] + g - wh[1] - g) * smooth(u / 0.75); zp = wh[1] + g + (P['thick_palmar'] + g - wh[1] - g) * smooth(u / 0.85)
             k = 1.0 if u < 0.93 else math.sqrt(max(0.0, 1 - ((u - 0.93) / 0.075) ** 2)) * 0.92 + 0.08
-            c, sn = np.cos(th), np.sin(th); e = 2.0 / 2.6; cc = np.sign(c) * np.abs(c) ** e; ss = np.sign(sn) * np.abs(sn) ** e
+            c, sn = np.cos(th), np.sin(th); e = 2.0 / (2.6 + (P['palm_expo'] - 2.6) * smooth(u / 0.6)); cc = np.sign(c) * np.abs(c) ** e; ss = np.sign(sn) * np.abs(sn) ** e
             x = cx + hw * cc * (0.985 + 0.015 * k); z = np.where(ss >= 0, zt, zp) * ss * k
             hyp = np.exp(-((x + 30) / 14.0) ** 2) * np.exp(-((u - 0.30) / 0.30) ** 2) * 4.5      # hypothenar eminence (I)
             z = np.where(ss < 0, z - hyp * k, z) - 0.0022 * (x + 9.0) ** 2 * u                  # transverse arch (I)

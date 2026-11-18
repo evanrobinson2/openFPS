@@ -55,15 +55,16 @@ for fi, fr in enumerate(meta['frames']):
         if g in skip: continue
         M = motion.get(g); Vg = V if M is None else (V - M[:3, 3]) @ M[:3, :3]          # glove in the mover's rest frame
         if np.any(Vg.max(0) < G['lo'] - 0.5) or np.any(Vg.min(0) > G['hi'] + 0.5): continue
-        def test_pt(p, shell):
-            for n in groups[g]:
+        def test_pt(p, shell, names=None):
+            for n in (names or groups[g]):
                 P_ = parts[n]
                 if np.all(p >= P_['lo']) and np.all(p <= P_['hi']) and inside(P_['t'], p):
                     d = depth(P_['t'], p)
                     if d > best['depth']: best.update(depth=float(d), part=n, shell=shell, kind='glove point in rifle part', at=[round(float(x), 1) for x in p])
-        # 1. glove vertices
-        cand = np.where(np.all(Vg >= G['lo'], 1) & np.all(Vg <= G['hi'], 1))[0]
-        for i in cand: test_pt(Vg[i], shell_names[sid[i]])
+        # 1. glove vertices (box test vectorised per part)
+        for n in groups[g]:
+            P_ = parts[n]
+            for i in np.where(np.all(Vg >= P_['lo'], 1) & np.all(Vg <= P_['hi'], 1))[0]: test_pt(Vg[i], shell_names[sid[i]], (n,))
         # 2. intersecting triangle pairs, per shell
         for s, sn in enumerate(shell_names):
             fm = np.where(sid[Fh[:, 0]] == s)[0]; vi = np.where(sid == s)[0]

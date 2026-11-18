@@ -28,14 +28,21 @@ for i, m in enumerate(meta['meshes']):
         if m.get('autosmooth'):
             md = o.modifiers.new('n', 'NODES') if False else None
 cam = meta['camera']; cd = bpy.data.cameras.new('cam'); co = bpy.data.objects.new('cam', cd); sc.collection.objects.link(co); sc.camera = co
-eye = Vector(to_bl([cam['eye']])[0]); tgt = Vector(to_bl([cam['target']])[0]); up = Vector((cam.get('up', [0, 1, 0])[0], -cam.get('up', [0, 1, 0])[2], cam.get('up', [0, 1, 0])[1]))
-fwd = (tgt - eye).normalized(); right = fwd.cross(up).normalized(); up2 = right.cross(fwd)
-co.matrix_world = Matrix((( right.x, up2.x, -fwd.x, eye.x), (right.y, up2.y, -fwd.y, eye.y), (right.z, up2.z, -fwd.z, eye.z), (0, 0, 0, 1)))
 W, H = meta.get('size', [1280, 853]); sc.render.resolution_x = W; sc.render.resolution_y = H; sc.render.resolution_percentage = 100
-if 'ortho_mm' in cam: cd.type = 'ORTHO'; cd.ortho_scale = cam['ortho_mm'] * 0.001
+if 'cv' in cam:
+    # a fitted photo camera: world (asset frame, mm) -> camera (OpenCV: x right, y down, z forward) as R, t; focal length and principal point in pixels
+    R = np.array(cam['cv']['R'], float); tv = np.array(cam['cv']['t'], float); eye_a = -R.T @ tv; A2B = np.array([[1, 0, 0], [0, 0, -1], [0, 1, 0.0]])
+    Rb = A2B @ R.T @ np.diag([1.0, -1.0, -1.0]); e = A2B @ eye_a * 0.001
+    co.matrix_world = Matrix(((Rb[0, 0], Rb[0, 1], Rb[0, 2], e[0]), (Rb[1, 0], Rb[1, 1], Rb[1, 2], e[1]), (Rb[2, 0], Rb[2, 1], Rb[2, 2], e[2]), (0, 0, 0, 1)))
+    cd.sensor_fit = 'HORIZONTAL'; cd.sensor_width = 36.0; cd.lens = cam['cv']['f'] * 36.0 / W; cd.shift_x = -(cam['cv']['c'][0] - W / 2) / W; cd.shift_y = (cam['cv']['c'][1] - H / 2) / W
 else:
-    cd.sensor_fit = 'HORIZONTAL'; cd.sensor_width = 36.0; cd.lens = 18.0 / math.tan(math.radians(cam['fov_deg']) / 2)
-    cd.shift_x = cam.get('shift', [0, 0])[0]; cd.shift_y = cam.get('shift', [0, 0])[1]
+    eye = Vector(to_bl([cam['eye']])[0]); tgt = Vector(to_bl([cam['target']])[0]); up = Vector((cam.get('up', [0, 1, 0])[0], -cam.get('up', [0, 1, 0])[2], cam.get('up', [0, 1, 0])[1]))
+    fwd = (tgt - eye).normalized(); right = fwd.cross(up).normalized(); up2 = right.cross(fwd)
+    co.matrix_world = Matrix((( right.x, up2.x, -fwd.x, eye.x), (right.y, up2.y, -fwd.y, eye.y), (right.z, up2.z, -fwd.z, eye.z), (0, 0, 0, 1)))
+    if 'ortho_mm' in cam: cd.type = 'ORTHO'; cd.ortho_scale = cam['ortho_mm'] * 0.001
+    else:
+        cd.sensor_fit = 'HORIZONTAL'; cd.sensor_width = 36.0; cd.lens = 18.0 / math.tan(math.radians(cam['fov_deg']) / 2)
+        cd.shift_x = cam.get('shift', [0, 0])[0]; cd.shift_y = cam.get('shift', [0, 0])[1]
 cd.clip_start = 0.01; cd.clip_end = 50
 w = bpy.data.worlds.new('w'); sc.world = w; w.use_nodes = True; bg = w.node_tree.nodes['Background']; bg.inputs[0].default_value = (*meta.get('sky', [0.80, 0.83, 0.88]), 1); bg.inputs[1].default_value = meta.get('sky_strength', 0.9)
 sd = bpy.data.lights.new('sun', 'SUN'); sd.energy = meta.get('sun', 2.2); sd.angle = 0.35; so = bpy.data.objects.new('sun', sd); sc.collection.objects.link(so)

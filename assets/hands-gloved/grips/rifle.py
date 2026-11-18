@@ -8,7 +8,7 @@ import os, json, time, numpy as np
 from scipy.spatial import cKDTree
 from scipy.ndimage import map_coordinates, distance_transform_edt, label
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); BUILD = os.path.join(HERE, 'refs-local', 'build')
-REGION = np.array([[-95.0, -235.0, -275.0], [95.0, 85.0, 255.0]]); CAP = 10.0; H = 1.0
+REGION = np.array([[-95.0, -235.0, -275.0], [95.0, 85.0, 255.0]]); CAP = 10.0; H = 1.0; CLOSE = 4.0
 class Rifle:
     def __init__(self):
         self.z = np.load(os.path.join(BUILD, 'rifle.npz')); self.meta = json.load(open(os.path.join(BUILD, 'rifle.json')))
@@ -63,6 +63,14 @@ class Rifle:
                 if np.any(b <= a): continue
                 sub = g[o[0]:o[0] + b[0] - a[0], o[1]:o[1] + b[1] - a[1], o[2]:o[2] + b[2] - a[2]]
                 G[a[0]:b[0], a[1]:b[1], a[2]:b[2]] = np.minimum(G[a[0]:b[0], a[1]:b[1], a[2]:b[2]], sub)      # grids share the 1 mm lattice (origins are whole mm)
+            # close grooves narrower than a fingertip (rail slots, vents): a glove bridges them, and the 1 mm grid cannot
+            # resolve a 4.8 mm rail lug between two samples of the glove.  Closing = dilate by CLOSE mm, then erode by CLOSE mm.
+            cache = os.path.join(BUILD, 'union_' + ('_'.join(key) or 'rest') + '.npy')
+            if os.path.exists(cache): G = np.load(cache)
+            else:
+                dil = G < CLOSE; closed = distance_transform_edt(dil) * H >= CLOSE + 0.5
+                sd = np.where(closed, -(distance_transform_edt(closed) * H - 0.5), distance_transform_edt(~closed) * H - 0.5)
+                G = np.minimum(G, sd + 0.75).astype(np.float32); np.save(cache, G)
             self._u[key] = G
         return self._u[key]
     def sdf(self, Q, motion=None, mirror=False, skip=(), only=None):
