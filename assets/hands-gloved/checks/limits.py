@@ -28,7 +28,7 @@ for clip, fl in E.items():
     clips[clip] = dict(frames=len(fl), smallest_margin_deg=round(worst[0], 2), at=worst[1], pass_=bool(worst[0] >= -1e-6))
 joints = {a: dict(min_seen=round(v[0], 2), max_seen=round(v[1], 2), limit_min=(hl.limit_of(a) if a in hl.ANGLES else hl.LIMITS[a][:2])[0], limit_max=(hl.limit_of(a) if a in hl.ANGLES else hl.LIMITS[a][:2])[1],
                   source=hl.LIMITS[a if a in hl.LIMITS else a.split('_', 1)[1]][2]) for a, v in obs.items()}
-out = dict(asset='hands-gloved', values_checked=int(nvals), outside_limits=int(nbad), all_within_limits=bool(nbad == 0), sources={k: hl.SRC[k] for k in ('BA', 'HU', 'CO', 'AA', 'K', 'I')},
+out = dict(asset='hands-gloved', values_checked=int(nvals), outside_limits=int(nbad), all_within_limits=bool(nbad == 0), sources={k: hl.SRC[k] for k in ('BA', 'HU', 'CO', 'ES', 'AA', 'K', 'I')},
            note='Arm angles depend on the assumed shoulder position (an inference) and on the elbow swivel chosen per frame.', clips=clips, joints=joints)
 json.dump(out, open(os.path.join(HERE, 'checks', 'limits.json'), 'w'), indent=1)
 json.dump(dict(tips=list(TIPS), units='metres, rifle frame', clips=ref), open(os.path.join(HERE, 'checks', 'fk_reference.json'), 'w'), separators=(',', ':'))

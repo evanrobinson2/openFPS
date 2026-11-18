@@ -57,7 +57,8 @@
    "skinned_to": [
     "hand",
     "little_meta",
-    "ring_meta"
+    "ring_meta",
+    "thumb_01"
    ]
   },
   "web_left": {
@@ -167,7 +168,8 @@
    "skinned_to": [
     "hand",
     "little_meta",
-    "ring_meta"
+    "ring_meta",
+    "thumb_01"
    ]
   },
   "web_right": {
@@ -278,9 +280,9 @@
    "pre_roll": 0
   },
   "mag_release": {
-   "frames": 16,
+   "frames": 20,
    "rifle_clip": "mag_release",
-   "pre_roll": 3
+   "pre_roll": 5
   },
   "safety_to_fire": {
    "frames": 14,
@@ -329,7 +331,7 @@
   "socket_wrist_right"
  ],
  "skinning_parity": {
-  "grips": 6,
+  "grips": 7,
   "worst_vertex_difference_mm": 8e-05,
   "note": "Blender's armature modifier against handlib's linear-blend skinning, every shell vertex, every grip"
  },

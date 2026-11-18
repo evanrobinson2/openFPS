@@ -2,189 +2,193 @@
  "asset": "hands-gloved",
  "tolerance_mm": 1.0,
  "method": "exact triangle test, see tools/bvh_check.py",
- "unique_poses_measured": 298,
- "frames_measured": 466,
- "max_depth_mm": 0.6,
+ "unique_poses_measured": 308,
+ "frames_measured": 474,
+ "max_depth_mm": 0.566,
  "all_within_tolerance": true,
  "clips": {
   "idle": {
    "frames": 1,
-   "max_depth_mm": 0.133,
+   "max_depth_mm": 0.0,
    "worst": {
     "frame": 1,
-    "hand": "L",
-    "rifle_part": "hg_rail_bottom_lug_12",
-    "glove_part": "palm",
-    "kind": "rifle point in glove shell"
+    "hand": "R",
+    "rifle_part": null,
+    "glove_part": null,
+    "kind": null
    },
    "frames_over_tolerance": [],
    "per_frame_max_mm": [
-    0.133
+    0.0
    ]
   },
   "finger_to_trigger": {
    "frames": 6,
-   "max_depth_mm": 0.133,
+   "max_depth_mm": 0.05,
    "worst": {
-    "frame": 1,
-    "hand": "L",
-    "rifle_part": "hg_rail_bottom_lug_12",
-    "glove_part": "palm",
+    "frame": 6,
+    "hand": "R",
+    "rifle_part": "trigger",
+    "glove_part": "finger_index",
     "kind": "rifle point in glove shell"
    },
    "frames_over_tolerance": [],
    "per_frame_max_mm": [
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.05
    ]
   },
   "finger_off_trigger": {
    "frames": 6,
-   "max_depth_mm": 0.133,
+   "max_depth_mm": 0.05,
    "worst": {
     "frame": 1,
-    "hand": "L",
-    "rifle_part": "hg_rail_bottom_lug_12",
-    "glove_part": "palm",
+    "hand": "R",
+    "rifle_part": "trigger",
+    "glove_part": "finger_index",
     "kind": "rifle point in glove shell"
    },
    "frames_over_tolerance": [],
    "per_frame_max_mm": [
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133
+    0.05,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
    ]
   },
   "trigger_pull": {
    "frames": 10,
-   "max_depth_mm": 0.133,
+   "max_depth_mm": 0.264,
    "worst": {
-    "frame": 1,
-    "hand": "L",
-    "rifle_part": "hg_rail_bottom_lug_12",
-    "glove_part": "palm",
-    "kind": "rifle point in glove shell"
+    "frame": 2,
+    "hand": "R",
+    "rifle_part": "trigger",
+    "glove_part": "finger_index",
+    "kind": "glove point in rifle part"
    },
    "frames_over_tolerance": [],
    "per_frame_max_mm": [
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133
+    0.104,
+    0.264,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
    ]
   },
   "mag_release": {
-   "frames": 16,
-   "max_depth_mm": 0.133,
+   "frames": 20,
+   "max_depth_mm": 0.108,
    "worst": {
-    "frame": 1,
-    "hand": "L",
-    "rifle_part": "hg_rail_bottom_lug_12",
-    "glove_part": "palm",
-    "kind": "rifle point in glove shell"
+    "frame": 9,
+    "hand": "R",
+    "rifle_part": "mag_release_fence",
+    "glove_part": "finger_index",
+    "kind": "glove point in rifle part"
    },
    "frames_over_tolerance": [],
    "per_frame_max_mm": [
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.108,
+    0.04,
+    0.035,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.032,
+    0.072,
+    0.0,
+    0.0
    ]
   },
   "safety_to_fire": {
    "frames": 14,
-   "max_depth_mm": 0.133,
+   "max_depth_mm": 0.0,
    "worst": {
     "frame": 1,
-    "hand": "L",
-    "rifle_part": "hg_rail_bottom_lug_12",
-    "glove_part": "palm",
-    "kind": "rifle point in glove shell"
+    "hand": "R",
+    "rifle_part": null,
+    "glove_part": null,
+    "kind": null
    },
    "frames_over_tolerance": [],
    "per_frame_max_mm": [
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
    ]
   },
   "safety_to_safe": {
    "frames": 14,
-   "max_depth_mm": 0.133,
+   "max_depth_mm": 0.0,
    "worst": {
     "frame": 1,
-    "hand": "L",
-    "rifle_part": "hg_rail_bottom_lug_12",
-    "glove_part": "palm",
-    "kind": "rifle point in glove shell"
+    "hand": "R",
+    "rifle_part": null,
+    "glove_part": null,
+    "kind": null
    },
    "frames_over_tolerance": [],
    "per_frame_max_mm": [
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
    ]
   },
   "bolt_catch": {
    "frames": 36,
-   "max_depth_mm": 0.133,
+   "max_depth_mm": 0.088,
    "worst": {
-    "frame": 1,
+    "frame": 13,
     "hand": "L",
-    "rifle_part": "hg_rail_bottom_lug_12",
-    "glove_part": "palm",
+    "rifle_part": "hg_rail_left_lug_01",
+    "glove_part": "finger_middle",
     "kind": "rifle point in glove shell"
    },
    "frames_over_tolerance": [],
    "per_frame_max_mm": [
-    0.133,
+    0.0,
     0.0,
     0.0,
     0.0,
@@ -219,7 +223,7 @@
     0.0,
     0.0,
     0.0,
-    0.133
+    0.0
    ]
   },
   "mag_out": {
@@ -234,7 +238,6 @@
    },
    "frames_over_tolerance": [],
    "per_frame_max_mm": [
-    0.133,
     0.0,
     0.0,
     0.0,
@@ -243,7 +246,8 @@
     0.0,
     0.0,
     0.0,
-    0.0,
+    0.072,
+    0.032,
     0.0,
     0.0,
     0.0,
@@ -318,25 +322,25 @@
     0.0,
     0.0,
     0.0,
-    0.133
+    0.0
    ]
   },
   "charge": {
    "frames": 49,
-   "max_depth_mm": 0.6,
+   "max_depth_mm": 0.566,
    "worst": {
-    "frame": 38,
+    "frame": 14,
     "hand": "L",
-    "rifle_part": "lower_body",
-    "glove_part": "finger_ring",
+    "rifle_part": "charging_handle_latch",
+    "glove_part": "finger_index",
     "kind": "rifle point in glove shell"
    },
    "frames_over_tolerance": [],
    "per_frame_max_mm": [
-    0.133,
     0.0,
     0.0,
-    0.156,
+    0.0,
+    0.0,
     0.0,
     0.0,
     0.0,
@@ -370,7 +374,6 @@
     0.0,
     0.0,
     0.0,
-    0.6,
     0.0,
     0.0,
     0.0,
@@ -381,31 +384,32 @@
     0.0,
     0.0,
     0.0,
-    0.133
+    0.0,
+    0.0
    ]
   },
   "dust_cover_open": {
    "frames": 10,
-   "max_depth_mm": 0.133,
+   "max_depth_mm": 0.0,
    "worst": {
     "frame": 1,
-    "hand": "L",
-    "rifle_part": "hg_rail_bottom_lug_12",
-    "glove_part": "palm",
-    "kind": "rifle point in glove shell"
+    "hand": "R",
+    "rifle_part": null,
+    "glove_part": null,
+    "kind": null
    },
    "frames_over_tolerance": [],
    "per_frame_max_mm": [
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133,
-    0.133
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
    ]
   }
  }

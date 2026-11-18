@@ -28,12 +28,22 @@ i_w = int(np.argmin([abs(-7.0 + u * (hl.mcp3_y() + 12.0)) for u in us])); pw = r
 row('wrist circumference', perim(pw) - 2 * math.pi * g, A['wrist_circumference'][0], 'A', 'fitted', 'perimeter of the palm shell ring at the wrist joint, less 2 pi x glove; the half-axes 30.8 x 21.4 mm were tuned to this', 1.0)
 row('palm length (wrist crease to the crease of digit III)', hl.mcp3_y() + hl.P['web_offset'] - hl.P['stylion_y'], A['palm_length'][0], 'A', 'by construction', 'MCP III + 19.2 mm crease offset (set to give this)')
 row('forearm (radiale to stylion)', h.J['forearm'][2], A['radiale_stylion'][0], 'A', 'by construction', 'forearm bone length')
-# finger lengths against an independent sample: base landmark fitted on the middle finger, the other digits compared
-k = 195.5 / A['hand_length'][0]; base = (hl.finger_len('middle') - hl.P['glove_tip']) * k - hl.HSIAO_LENGTH['middle']
-for f in hl.FING:
-    m = (hl.finger_len(f) - hl.P['glove_tip']) * k - base
-    row(f'{f} finger length (base to tip), scaled to the 195.5 mm hands of H', m, hl.HSIAO_LENGTH[f], 'H',
-        'fitted' if f == 'middle' else 'check', f'MCP to tip less a base offset of {base:.1f} mm fitted on the middle finger', None if f == 'middle' else 6.0)
+# finger lengths against two independent surveys (CR-1 item 5).  The surveys measure from the crease at the finger's base
+# to its tip; the recipe has joint centres.  Version 1 took the crease to lie the same distance beyond every knuckle
+# (fitted on the middle finger), which left the little finger 6.1 % short.  Both surveys give little / middle = 0.772,
+# and the bones (B) give 0.764 for the phalanges alone: a surface ratio that close to the bone ratio is only possible if
+# the crease offset shrinks with the finger.  So the offset is now taken as a fixed share of the proximal phalanx (I),
+# fitted on the middle finger; the constant-offset rows are kept as 'reported'.
+for key, ref, hand in (('H', hl.HSIAO_LENGTH, 195.5), ('G', hl.GREINER_LENGTH, hl.GREINER_HAND)):
+    k = hand / A['hand_length'][0]; tip = lambda f: (hl.finger_len(f) - hl.P['glove_tip']) * k
+    base = tip('middle') - ref['middle']; share = base / (hl.seg('middle')['pp'] * k)
+    for f in hl.FING:
+        row(f'{f} finger length (crease to tip), scaled to the {hand} mm hands of {key}', tip(f) - share * hl.seg(f)['pp'] * k, ref[f], key,
+            'fitted' if f == 'middle' else 'check', f'MCP to tip less {share:.3f} of the proximal phalanx (share fitted on the middle finger)', None if f == 'middle' else 6.0)
+    for f in ('index', 'ring', 'little'):
+        row(f'{f} finger length, version 1 method (constant offset), against {key}', tip(f) - base, ref[f], key, 'reported', f'MCP to tip less {base:.1f} mm for every finger')
+    row(f'little / middle finger length ratio x 100, against {key}', 100 * (tip('little') - share * hl.seg('little')['pp'] * k) / ref['middle'], round(100 * ref['little'] / ref['middle'], 2), key, 'check', 'ratio of the two rows above', 6.0)
+k = 195.5 / A['hand_length'][0]
 s = hl.seg('thumb'); row('thumb length (MCP joint to tip), scaled to the hands of H', (s['pp'] + s['dp'] + s['tip']) * k, hl.HSIAO_LENGTH['thumb'], 'H', 'reported', "H's thumb base landmark is not the joint centre; no tolerance set")
 # finger breadths at the middle joint
 for f in hl.FING + ('thumb',):
@@ -48,7 +58,7 @@ for f in hl.FING:
 mean3 = np.mean([hl.breadth(f) + 2 * g for f in ('middle', 'ring', 'little')])
 row('gloved finger breadth, mean of three (R2-S01: 24.7 mm, winter glove)', mean3, 24.7, 'reference R2', 'reported', 'model glove is 1.2 mm thick; the glove in R2 is a thicker cold-weather glove')
 checks = [r for r in rows if 'pass' in r]
-out = dict(asset='hands-gloved', size=hl.SIZE, percentile_note='ANSUR II male mean; the 50th percentile differs by at most 0.5 mm in the dimensions used', sources={k: hl.SRC[k] for k in ('A', 'B', 'H')},
+out = dict(asset='hands-gloved', size=hl.SIZE, percentile_note='ANSUR II male mean; the 50th percentile differs by at most 0.5 mm in the dimensions used', sources={k: hl.SRC[k] for k in ('A', 'B', 'H', 'G')},
            rows=rows, summary=dict(independent_checks=len(checks), passed=sum(r['pass'] for r in checks), worst_pct=max(abs(r['difference_pct']) for r in checks)))
 json.dump(out, open(os.path.join(HERE, 'checks', 'proportions.json'), 'w'), indent=1)
 for r in rows: print(f"{r['dimension'][:62]:62s} {r['model_mm']:8.2f} vs {r['reference_mm']:7.2f}  {r['difference_pct']:+6.2f} %  {r['kind']:16s} {r.get('pass', '')}")

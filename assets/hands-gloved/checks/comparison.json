@@ -17,10 +17,10 @@
       250
      ],
      "model": [
-      1222.2,
-      311.1
+      1106.8,
+      300.6
      ],
-     "error_mm": 26.6
+     "error_mm": 15.7
     },
     "ring_tip": {
      "photo": [
@@ -28,10 +28,10 @@
       200
      ],
      "model": [
-      1287.0,
-      282.3
+      1171.4,
+      279.5
      ],
-     "error_mm": 30.1
+     "error_mm": 22.4
     },
     "middle_tip": {
      "photo": [
@@ -39,10 +39,10 @@
       215
      ],
      "model": [
-      1386.6,
-      301.1
+      1279.3,
+      275.2
      ],
-     "error_mm": 30.8
+     "error_mm": 17.0
     },
     "index_tip": {
      "photo": [
@@ -50,10 +50,10 @@
       322
      ],
      "model": [
-      1607.4,
-      405.2
+      1459.9,
+      339.1
      ],
-     "error_mm": 52.0
+     "error_mm": 10.1
     },
     "thumb_tip": {
      "photo": [
@@ -61,45 +61,98 @@
       120
      ],
      "model": [
-      1535.7,
-      206.8
+      1367.0,
+      198.4
      ],
-     "error_mm": 65.2
+     "error_mm": 26.8
     }
    },
-   "mean_error_mm": 40.9,
-   "max_error_mm": 65.2,
+   "mean_error_mm": 18.4,
+   "max_error_mm": 26.8,
    "hand_centre_along_bore_mm": {
     "photo": 89.5,
-    "model": 117.3
+    "model": 85.7
    },
    "note": "The glove in R2 is a thick cold-weather glove (24.7 mm per finger against the model's 23.3 mm); its thumb tip stands about 10 mm higher over the rail than a thin glove would."
   },
   "R1": {
    "grip": "fire",
    "camera": {
-    "kind": "set by eye",
-    "rejected_fit": {
-     "kind": "perspective pose from six points of the rifle, focal length 70 mm from EXIF",
-     "points": [
-      "selector axis, right",
-      "takedown pin, right",
-      "magazine release button",
-      "magazine well, bottom rear corner",
-      "ejection port cover hinge, rear end",
-      "ejection port cover hinge, front end"
+    "kind": "scaled orthographic, fitted",
+    "px_per_mm": 6.768,
+    "points": [
+     "magazine release button, centre",
+     "selector, right side, pivot",
+     "magazine well, bottom rear corner",
+     "ejection port cover hinge, rear end",
+     "ejection port cover hinge, front end"
+    ],
+    "reprojection_rms_px": 10.6,
+    "reprojection_rms_mm": 1.6,
+    "behind_square_on_deg": 47.5,
+    "below_deg": 7.9,
+    "note": "In-plane map from five points on the receiver's right side; the across-rifle direction follows from the camera being rigid. No point off that plane was available to test it."
+   },
+   "landmarks_px": {
+    "index_mcp_dorsal": {
+     "photo": [
+      765,
+      335
      ],
-     "reprojection_rms_px_of_photo": 10.3,
-     "eye_mm": [
-      -1274.0,
-      295.0,
-      1204.0
+     "model": [
+      655.0,
+      400.6
      ],
-     "why_rejected": "points nearly coplanar and read by eye; the fitted view shows the rifle at the wrong size and from the wrong side"
+     "error_mm": 18.9
+    },
+    "middle_mcp_dorsal": {
+     "photo": [
+      843,
+      470
+     ],
+     "model": [
+      706.1,
+      533.4
+     ],
+     "error_mm": 22.3
+    },
+    "ring_mcp_dorsal": {
+     "photo": [
+      852,
+      620
+     ],
+     "model": [
+      715.2,
+      672.5
+     ],
+     "error_mm": 21.6
+    },
+    "little_mcp_dorsal": {
+     "photo": [
+      818,
+      790
+     ],
+     "model": [
+      681.7,
+      816.7
+     ],
+     "error_mm": 20.5
+    },
+    "hand_back": {
+     "photo": [
+      520,
+      500
+     ],
+     "model": [
+      556.1,
+      628.6
+     ],
+     "error_mm": 19.7
     }
    },
-   "landmarks_px": {},
-   "note": "No numbers are claimed for R1. The support hand in R1 holds the front of the magazine well (R1-S01); that hold is not one of this asset's grips and is not drawn. The shooter in R1 is prone; the model's forearm is solved for standing."
+   "mean_error_mm": 20.6,
+   "max_error_mm": 22.3,
+   "note": "Photo points are the knuckles as they show on the outline of the back of the hand, good to about 20 px (4 mm); the model points are joint landmarks on the glove. The shooter in R1 is prone; the model stands. The support hand in R1 holds the front of the magazine well (R1-S01); that hold is not one of this asset's grips and is not drawn."
   },
   "R3": {
    "grips": [
@@ -110,7 +163,83 @@
     "kind": "set by eye: the rifle in R3 is wrapped in cloth and shows too few points to fit"
    },
    "landmarks_px": {},
-   "note": "Compared by grid region only (notes/NOTES.md). No numbers are claimed for R3."
+   "measures": {
+    "index_finger_against_the_three_wrapped_fingers_deg": {
+     "photo": 2.5,
+     "model": 14.0,
+     "how": "photo: index axis against the mean direction of the three gaps between the wrapped fingers; model: index knuckle-to-tip against the mean knuckle-to-middle-joint direction of the three fingers, seen square from the right"
+    },
+    "index_finger_against_the_bore_deg": {
+     "photo": null,
+     "model": 13.1,
+     "how": "the photo has no bore line (rifle wrapped); in the picture the finger lies -5.6 deg from the picture's horizontal"
+    },
+    "index_tip_from_magazine_release_in_finger_breadths": {
+     "photo": {
+      "ahead": 0.15,
+      "above": -0.84
+     },
+     "model": {
+      "ahead": 0.12,
+      "above": -0.85
+     },
+     "how": "tip of the index finger relative to the centre of the button, in units of one gloved finger breadth (photo: 145 px between the gaps; model: 23.3 mm)"
+    }
+   },
+   "photo_readings_px": {
+    "index_axis": [
+     [
+      650,
+      215
+     ],
+     [
+      955,
+      245
+     ]
+    ],
+    "gaps_between_wrapped_fingers": [
+     [
+      [
+       665,
+       295
+      ],
+      [
+       800,
+       330
+      ]
+     ],
+     [
+      [
+       680,
+       455
+      ],
+      [
+       790,
+       470
+      ]
+     ],
+     [
+      [
+       650,
+       580
+      ],
+      [
+       800,
+       585
+      ]
+     ]
+    ],
+    "index_tip": [
+     960,
+     250
+    ],
+    "button": [
+     938,
+     128
+    ],
+    "finger_pitch_px": 145.0
+   },
+   "note": "Read by eye, about 15 px; angles good to about 5 deg. The glove in R3 is a thick cold-weather glove. The magazine grip is compared by grid region only (notes/NOTES.md)."
   }
  },
  "verdict": "Not a fidelity score. Structural, visual and owner-review results are reported separately in notes/NOTES.md."

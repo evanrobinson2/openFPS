@@ -47,11 +47,11 @@ def opened(p, back, amount=0.45, clip=None, r=1):
         if d == 'thumb': q[idx[3:]] *= amount; q[idx[1]] = q[idx[1]] * amount - 8 * (1 - amount)
         else: q[[idx[0], idx[2], idx[3]]] *= amount
     H = p.H(clip, r).copy(); H[:3, 3] += np.asarray(back, float); return Pose(p.side, q, H, 'static')
-P = {k: from_grip(k) for k in ('fire_indexed', 'fire', 'support', 'mag_grip', 'catch_ready', 'charge_grip')}
+P = {k: from_grip(k) for k in ('fire_indexed', 'fire', 'fire_reach', 'support', 'mag_grip', 'catch_ready', 'charge_grip')}
 BACK = dict(support=(0, -32, 0), mag_grip=(34, -4, 0), catch_ready=(30, 0, 0), charge_grip=(26, 8, 10))
 
 # ------------------------------------------------------------------ digit targets on moving controls (rest position, real frame)
-CONTROL = dict(trigger=('trigger', (-1.5, -58.0, -105.4)), mag_button=('mag_release_button', (-16.3, -39.0, -86.5)),
+CONTROL = dict(trigger=('trigger', solve.TRIGGER_FACE), mag_button=('mag_release_button', (-16.1, -37.0, -85.0)),
                selector=('selector_lever_l', (15.6, -34.6, -157.0)), paddle=('bolt_catch', (19.8, -9.0, -80.0)))
 def control_point(name, clip, r):
     mover, p = CONTROL[name]; M = mover_mat(clip, r, mover); return M[:3, :3] @ np.array(p) + M[:3, 3]
@@ -60,11 +60,28 @@ def place_digit(side, digit, q, H_real, landmark, target, clip, r, prior=None, t
     q2, err = S.ik(digit, q, canon(side, H_real), landmark, S.world(side, target), iters=iters, w_touch=touch, prior=prior if prior is not None else q[DIGIT_IDX[digit]])
     S.motion = None; return q2, err
 
+MAG_PARTS = ('mag_release_button', 'mag_button_rib_1', 'mag_button_rib_2', 'mag_button_rib_3'); LEVER_PARTS = ('selector_lever_l',)
+def close_gap(side, digit, q, H_real, parts, clip, r, iters=220):
+    """CR-1 item 4: bring a digit's glove as near the control as it will go without entering the rifle: a search on the digit's
+    own joints for the smallest distance from its shell to the control's exact triangles.  Returns q and the gap (mm)."""
+    mo = motion(clip, r); T = []
+    for n in parts:
+        V = R.z['V_' + n].astype(float); mv = R.meta['parts'][n]['mover']
+        if mv in mo: V = V @ mo[mv][:3, :3].T + mo[mv][:3, 3]
+        T.append(V[R.z['T_' + n]])
+    T = np.concatenate(T); A_, B_, C_ = T[:, 0][None], T[:, 1][None], T[:, 2][None]; idx = np.array(DIGIT_IDX[digit]); lo, hi = hl.LO[idx] + 0.5, hl.HI[idx] - 0.5
+    shell = 'thumb' if digit == 'thumb' else 'finger_' + digit; Hc = canon(side, H_real); S.motion = mo or None; S.mir = side == 'R'; S.skip = (); mir = np.array([-1.0, 1, 1]) if side == 'R' else np.ones(3)
+    def gap(a):
+        c = q.copy(); c[idx] = a; Sk = S.skin(c, Hc); return float(solve.tri_dist(S.h.pose_shell(shell, Sk) * mir, A_, B_, C_).min()), Sk
+    def fun(a): g_, Sk = gap(a); return g_ + 100.0 * S.pen(digit, Sk) + 0.002 * np.abs(a - q[idx]).sum()
+    a, _ = solve.es_min(fun, q[idx], np.full(len(idx), 3.0), lo, hi, iters, np.random.default_rng(23)); q2 = q.copy(); q2[idx] = a; g_ = gap(a)[0]; S.motion = None
+    return q2, g_
+
 # ------------------------------------------------------------------ clips
 class Clip:
     def __init__(self, name, rifle_clip, pre=0, post=0, note=''):
         self.name = name; self.rifle = rifle_clip; self.pre = pre; self.post = post; self.note = note
-        self.n_rifle = R.meta['clips'][rifle_clip]['frames'] if rifle_clip else 0; self.n = pre + self.n_rifle + post; self.fr = {s: [None] * self.n for s in 'RL'}; self.err = {}
+        self.n_rifle = R.meta['clips'][rifle_clip]['frames'] if rifle_clip else 0; self.n = pre + self.n_rifle + post; self.fr = {s: [None] * self.n for s in 'RL'}; self.err = {}; self.gap = {}
     def r(self, f): return f - self.pre + 1 if self.rifle else 1            # rifle frame (1-based, may run outside 1..n and is clamped when sampled)
     def rc(self, f): return min(max(self.r(f), 1), max(self.n_rifle, 1))
     def set(self, side, f, q, H): self.fr[side][f] = (np.array(q, float), np.array(H, float))
@@ -78,11 +95,13 @@ class Clip:
         """pa -> backed-off pa -> backed-off pb -> pb."""
         oa = opened(pa, back_a, clip=self.rifle, r=self.rc(f0)); ob = opened(pb, back_b, clip=self.rifle, r=self.rc(f1))
         self.move(side, pa, oa, f0, f0 + n_a); self.move(side, oa, ob, f0 + n_a, f1 - n_b); self.move(side, ob, pb, f1 - n_b, f1)
-    def digit(self, side, digit, landmark, target_fn, f0, f1, touch=0.6):
-        """Re-place one digit on target_fn(f) for frames f0..f1, keeping the rest of the frame."""
+    def digit(self, side, digit, landmark, target_fn, f0, f1, touch=0.6, close=None, close_from=0):
+        """Re-place one digit on target_fn(f) for frames f0..f1, keeping the rest of the frame.  close: parts of the control
+        the digit is then brought up against (from frame close_from on)."""
         prior = None
         for f in range(f0, f1 + 1):
             q, H = self.fr[side][f]; q2, e = place_digit(side, digit, q, H, landmark, target_fn(f), self.rifle, self.rc(f), prior=prior, touch=touch)
+            if close and f >= close_from: q2, self.gap[(side, digit, f)] = close_gap(side, digit, q2, H, close, self.rifle, self.rc(f))
             prior = q2[DIGIT_IDX[digit]]; self.set(side, f, q2, H); self.err[(side, digit, f)] = e
     def blend_digit(self, side, digit, f0, f1, toward_end=True):
         """Ease one digit's joints between whatever frames f0 and f1 hold."""
@@ -109,14 +128,18 @@ def build():
     c = Clip('trigger_pull', 'trigger_pull', note='Starts and ends with the finger on the trigger (grip fire).'); c.hold('R', fire); c.hold('L', sup)
     c.digit('R', 'index', 'index_pad', lambda f: control_point('trigger', 'trigger_pull', c.rc(f)), 0, c.n - 1); C[c.name] = c
     # magazine release: the straight finger presses the button
-    def press_release(c, f_touch, f_last, f_back):
-        c.digit('R', 'index', 'index_tip', lambda f: control_point('mag_button', c.rifle, c.rc(f)) + (np.array([-2.5, 0, 0]) if f < f_touch else 0), f_touch - 1, f_last)
+    frp = P['fire_reach']
+    def press_release(c, f_touch, f_last, f_back, f_start=0):
+        # CR-1: the hand slides 9 mm forward on the grip (grip fire_reach) before the press and back after it
+        c.move('R', fi, frp, f_start, f_touch - 1); c.hold('R', frp, f_touch - 1, f_last + 1); c.move('R', frp, fi, f_last, f_back)
+        c.digit('R', 'index', 'index_pad', lambda f: control_point('mag_button', c.rifle, c.rc(f)) + (np.array([-2.5, 0, 0]) if f < f_touch else 0), f_touch - 1, f_last, close=MAG_PARTS, close_from=f_touch)
         c.blend_digit('R', 'index', 0, f_touch - 1); c.blend_digit('R', 'index', f_last, f_back)
-    c = Clip('mag_release', 'mag_release', pre=3, post=3, note='Trigger finger presses the magazine release and returns.'); c.hold('R', fi); c.hold('L', sup); press_release(c, 3, 12, 15); C[c.name] = c
+    c = Clip('mag_release', 'mag_release', pre=5, post=5, note='The firing hand slides 9 mm forward on the grip, the trigger finger presses the magazine release, and the hand returns.'); c.hold('R', fi); c.hold('L', sup); press_release(c, 5, 14, 19); C[c.name] = c
     # selector: the thumb rides the left lever
     for nm in ('safety_to_fire', 'safety_to_safe'):
-        c = Clip(nm, nm, pre=4, post=4, note='Firing thumb goes up to the selector lever on the left side as the lever turns. With this hand and this grip the thumb tip stops short of the lever (see notes/NOTES.md, limits).'); c.hold('R', fi); c.hold('L', sup)
+        c = Clip(nm, nm, pre=4, post=4, note='Firing thumb goes toward the selector lever on the left side as the lever turns. It does not reach it: the gap is measured in checks/contact.json and explained in notes/NOTES.md.'); c.hold('R', fi); c.hold('L', sup)
         mid = 4 + c.n_rifle // 2; q2, e = place_digit('R', 'thumb', fi.q, fi.H(), 'thumb_tip', control_point('selector', nm, c.rc(mid)), nm, c.rc(mid), touch=0.0, iters=400)
+        q2, c.gap[('R', 'thumb', mid)] = close_gap('R', 'thumb', q2, fi.H(), LEVER_PARTS, nm, c.rc(mid), iters=500)
         for f in range(4, 4 + c.n_rifle): c.set('R', f, q2, fi.H())
         c.blend_digit('R', 'thumb', 0, 4); c.blend_digit('R', 'thumb', 4 + c.n_rifle - 1, c.n - 1); c.err[('R', 'thumb', mid)] = e; C[c.name] = c
     # bolt catch: support hand to the magazine well, thumb on the paddle
@@ -127,7 +150,7 @@ def build():
     # magazine out: finger on the release, support hand takes the magazine and goes with it
     mg = P['mag_grip']
     c = Clip('mag_out', 'mag_out', pre=12, note='Trigger finger holds the release; the support hand takes the magazine and draws it out. Ends holding the magazine below the rifle.'); c.hold('R', fi)
-    c.via('L', sup, mg, 0, 13, BACK['support'], BACK['mag_grip']); c.hold('L', mg, 13); press_release(c, 12, 12 + 17, 12 + 21); C[c.name] = c
+    c.via('L', sup, mg, 0, 13, BACK['support'], BACK['mag_grip']); c.hold('L', mg, 13); press_release(c, 12, 12 + 17, 12 + 21, f_start=6); C[c.name] = c
     # magazine in: the hand brings the magazine up, seats it and returns to the handguard
     c = Clip('mag_in', 'mag_in', post=13, note='Starts holding the magazine below the rifle (where mag_out ends); seats it and returns to the handguard.'); c.hold('R', fi)
     c.hold('L', mg, 0, c.n_rifle); c.via('L', mg, sup, c.n_rifle - 1, c.n - 1, BACK['mag_grip'], BACK['support']); C[c.name] = c
@@ -142,7 +165,8 @@ def build():
     return C
 
 # ------------------------------------------------------------------ keep every frame clear of the rifle
-ESCAPE = dict(L=hl.unit([0.85, -0.5, 0.15]), R=hl.unit([-0.85, -0.5, -0.15]))        # I: a hand in the way of the rifle moves outboard and down
+ESCAPE = dict(L=hl.unit([0.85, -0.5, 0.15]), R=hl.unit([-0.6, -0.1, -0.8]))          # I: a hand in the way of the rifle moves outboard and down; the firing hand,
+                                                                                      # whose thumb lies behind the grip, moves outboard and back (CR-1)
 def sanitize(C):
     """In-between frames can cut through the rifle.  For each frame: if the palm is inside the rifle (signed distance
     field, 0.5 mm margin) the hand is moved along ESCAPE until it is not; the move is smoothed over neighbouring frames;
@@ -154,9 +178,10 @@ def sanitize(C):
             esc = ESCAPE[s]; d = np.zeros(c.n)
             def state(f): S.motion = motion(c.rifle, c.rc(f)) or None; S.mir = s == 'R'; S.skip = ()
             def ok(f, q, H):
-                Sk = S.skin(q, canon(s, H))
-                if S.pen('base', Sk) > 0: return None
-                q2 = q
+                Sk = S.skin(q, canon(s, H)); q2 = q
+                if S.pen('base', Sk) > 0:                 # CR-1: the thenar part of the palm moves with the thumb, so open the thumb before moving the hand
+                    q2, _ = S.clear('thumb', q, canon(s, H))
+                    if S.pen('base', S.skin(q2, canon(s, H))) > 0: return None
                 for dg in DIGIT_IDX:
                     q2, free = S.clear(dg, q2, canon(s, H))
                     if not free: return None
@@ -185,10 +210,10 @@ def evaluate(C):
             fr = dict(rifle_frame=c.rc(f) if c.rifle else None)
             for s in 'RL':
                 q, H = c.fr[s][f]; Hc = canon(s, H); best = None
-                for sw in np.arange(solve.SWIVEL[0], solve.SWIVEL[1] + 0.1, 2.5):
+                for sw in np.arange(solve.SWIVEL[0], solve.SWIVEL[1] + 0.1, 1.0):
                     F, a = hl.forearm_and_wrist(Hc, S.world(s, solve.SHOULDER[s]), solve.pole_of(sw))
                     viol = sum(max(0.0, hl.LIMITS[k][0] - a[k], a[k] - hl.LIMITS[k][1]) for k in ('wrist_flex', 'wrist_dev', 'pronation', 'elbow_flex'))
-                    key = (round(viol, 2), abs(sw - sw_prev[s]) if sw_prev[s] is not None else abs(a['wrist_flex']) + abs(a['wrist_dev']))
+                    key = (round(viol, 2), abs(sw - sw_prev[s]) if sw_prev[s] is not None else -solve.arm_margin(a))
                     if best is None or key < best[0]: best = (key, F, dict(a, swivel=float(sw)))
                 sw_prev[s] = best[2]['swivel']
                 S.motion = motion(c.rifle, c.rc(f)) or None; S.mir = s == 'R'; S.skip = (); Sk = S.skin(q, Hc); d = min(float(S.sdf(S.pts(g, Sk)).min()) for g in S.grp); S.motion = None

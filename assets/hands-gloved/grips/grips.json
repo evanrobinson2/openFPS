@@ -15,91 +15,91 @@
  "grips": {
   "fire_indexed": {
    "side": "R",
-   "doc": "Firing hand on the pistol grip, trigger finger straight along the receiver (R3-F03). Placed by contact: the middle and little knuckle pads on the right side of the grip at its front edge, one under the trigger guard and one 40 mm down the grip; the web between thumb and index under the rear of the receiver.",
+   "doc": "Firing hand on the pistol grip, trigger finger straight along the receiver (R3-F03). CR-1: the palm folds round the grip.  The hand's pose and the palm's joints are searched together so that the web sits in the notch under the receiver's rear, the thenar pad and the knuckle pads lie on the grip, and nothing is inside it; then three fingers wrap, the index finger is laid along the receiver and the thumb on the left side.",
    "carried_by": "static",
    "socket": "socket_hand_right",
    "hand_in_socket": [
-    -0.0487274,
-    -0.0294268,
-    -0.0616353,
-    0.3270118,
-    -0.5996253,
-    -0.4242053,
-    0.5946114
+    -0.0403212,
+    -0.0111015,
+    -0.0617676,
+    0.403851,
+    -0.555783,
+    -0.4500855,
+    0.5704671
    ],
    "hand": [
-    -0.0487274,
-    -0.1364498,
-    -0.2400073,
-    0.3270118,
-    -0.5996253,
-    -0.4242053,
-    0.5946114
+    -0.0403212,
+    -0.1181245,
+    -0.2401396,
+    0.403851,
+    -0.555783,
+    -0.4500855,
+    0.5704671
    ],
    "forearm": [
-    -0.2432174,
-    -0.302224,
-    -0.3204001,
-    -0.0735784,
-    -0.478883,
-    -0.4303378,
-    0.761621
+    -0.2662025,
+    -0.2286709,
+    -0.3324843,
+    -0.0200951,
+    -0.346661,
+    -0.5415495,
+    0.765602
    ],
    "angles_deg": {
-    "index_mcp_flex": -6.78,
-    "index_mcp_abd": -7.12,
-    "index_pip_flex": 9.98,
-    "index_dip_flex": -3.18,
-    "middle_mcp_flex": 11.98,
-    "middle_mcp_abd": 7.7,
-    "middle_pip_flex": 3.28,
-    "middle_dip_flex": 82.74,
-    "ring_mcp_flex": 14.06,
-    "ring_mcp_abd": 19.5,
-    "ring_pip_flex": 66.52,
-    "ring_dip_flex": 42.99,
-    "little_mcp_flex": 32.15,
-    "little_mcp_abd": -14.22,
-    "little_pip_flex": 73.5,
-    "little_dip_flex": 22.0,
-    "thumb_cmc_flex": 6.34,
-    "thumb_cmc_abd": 1.06,
+    "index_mcp_flex": -9.95,
+    "index_mcp_abd": -8.11,
+    "index_pip_flex": 32.38,
+    "index_dip_flex": -2.39,
+    "middle_mcp_flex": 25.15,
+    "middle_mcp_abd": -19.5,
+    "middle_pip_flex": 92.37,
+    "middle_dip_flex": 17.92,
+    "ring_mcp_flex": 39.34,
+    "ring_mcp_abd": 1.49,
+    "ring_pip_flex": 75.04,
+    "ring_dip_flex": 36.06,
+    "little_mcp_flex": 37.26,
+    "little_mcp_abd": -10.52,
+    "little_pip_flex": 74.38,
+    "little_dip_flex": 19.44,
+    "thumb_cmc_flex": -2.61,
+    "thumb_cmc_abd": -6.31,
     "thumb_cmc_rot": 8.0,
-    "thumb_mcp_flex": 20.75,
-    "thumb_ip_flex": 7.85,
-    "mc4_flex": 4.0,
-    "mc5_flex": 10.0
+    "thumb_mcp_flex": 40.96,
+    "thumb_ip_flex": 5.07,
+    "mc4_flex": -2.07,
+    "mc5_flex": 1.99
    },
    "arm_deg": {
-    "wrist_flex": -45.5,
-    "wrist_dev": -28.8,
-    "pronation": -18.9,
-    "elbow_flex": 138.1,
-    "swivel": 45.0
+    "wrist_flex": -58.3,
+    "wrist_dev": -18.9,
+    "pronation": -42.7,
+    "elbow_flex": 123.3,
+    "swivel": 60.0
    },
    "solver": {
     "pads_gap_mm": {
-     "thenar": 12.35,
-     "middle_pad_mid": 3.87,
-     "ring_pad_mid": 3.95,
-     "little_pad_mid": 10.0,
-     "middle_pad": 3.59,
-     "ring_pad": 5.13,
-     "little_pad": 1.06,
-     "middle_pad_prox": 4.33,
-     "ring_pad_prox": 3.7
+     "web": 8.74,
+     "thenar": 17.26,
+     "middle_pad_mid": 11.79,
+     "ring_pad_mid": 6.98,
+     "little_pad_mid": 10.17,
+     "middle_pad": 2.83,
+     "ring_pad": 1.68,
+     "little_pad": 2.0,
+     "middle_pad_prox": 5.71,
+     "ring_pad_prox": 3.0
     },
     "digit_target_error_mm": {
      "middle": 0.0,
      "ring": 0.0,
      "little": 0.0,
-     "index": 15.62,
-     "thumb": 10.51
+     "index": 1.07,
+     "thumb": 16.93
     },
     "min_clearance_mm_approx": 0.5,
     "limit_violation_deg": 0.0,
-    "place_fit_rms": 6.33,
-    "backed_off": 13.0
+    "place_fit_rms": 0.39
    }
   },
   "fire": {
@@ -108,82 +108,79 @@
    "carried_by": "static",
    "socket": "socket_hand_right",
    "hand_in_socket": [
-    -0.0487274,
-    -0.0294268,
-    -0.0616353,
-    0.3270118,
-    -0.5996253,
-    -0.4242053,
-    0.5946114
+    -0.0403212,
+    -0.0111015,
+    -0.0617676,
+    0.403851,
+    -0.555783,
+    -0.4500855,
+    0.5704671
    ],
    "hand": [
-    -0.0487274,
-    -0.1364498,
-    -0.2400073,
-    0.3270118,
-    -0.5996253,
-    -0.4242053,
-    0.5946114
+    -0.0403212,
+    -0.1181245,
+    -0.2401396,
+    0.403851,
+    -0.555783,
+    -0.4500855,
+    0.5704671
    ],
    "forearm": [
-    -0.2432174,
-    -0.302224,
-    -0.3204001,
-    -0.0735784,
-    -0.478883,
-    -0.4303378,
-    0.761621
+    -0.2662025,
+    -0.2286709,
+    -0.3324843,
+    -0.0200951,
+    -0.346661,
+    -0.5415495,
+    0.765602
    ],
    "angles_deg": {
-    "index_mcp_flex": 3.08,
-    "index_mcp_abd": -15.42,
-    "index_pip_flex": 23.36,
-    "index_dip_flex": 19.23,
-    "middle_mcp_flex": 11.98,
-    "middle_mcp_abd": 7.7,
-    "middle_pip_flex": 3.28,
-    "middle_dip_flex": 82.74,
-    "ring_mcp_flex": 14.06,
-    "ring_mcp_abd": 19.5,
-    "ring_pip_flex": 66.52,
-    "ring_dip_flex": 42.99,
-    "little_mcp_flex": 32.15,
-    "little_mcp_abd": -14.22,
-    "little_pip_flex": 73.5,
-    "little_dip_flex": 22.0,
-    "thumb_cmc_flex": 6.34,
-    "thumb_cmc_abd": 1.06,
+    "index_mcp_flex": -9.18,
+    "index_mcp_abd": -8.06,
+    "index_pip_flex": 65.47,
+    "index_dip_flex": 2.25,
+    "middle_mcp_flex": 25.15,
+    "middle_mcp_abd": -19.5,
+    "middle_pip_flex": 92.37,
+    "middle_dip_flex": 17.92,
+    "ring_mcp_flex": 39.34,
+    "ring_mcp_abd": 1.49,
+    "ring_pip_flex": 75.04,
+    "ring_dip_flex": 36.06,
+    "little_mcp_flex": 37.26,
+    "little_mcp_abd": -10.52,
+    "little_pip_flex": 74.38,
+    "little_dip_flex": 19.44,
+    "thumb_cmc_flex": -2.61,
+    "thumb_cmc_abd": -6.31,
     "thumb_cmc_rot": 8.0,
-    "thumb_mcp_flex": 20.75,
-    "thumb_ip_flex": 7.85,
-    "mc4_flex": 4.0,
-    "mc5_flex": 10.0
+    "thumb_mcp_flex": 40.96,
+    "thumb_ip_flex": 5.07,
+    "mc4_flex": -2.07,
+    "mc5_flex": 1.99
    },
    "arm_deg": {
-    "wrist_flex": -45.5,
-    "wrist_dev": -28.8,
-    "pronation": -18.9,
-    "elbow_flex": 138.1,
-    "swivel": 45.0
+    "wrist_flex": -58.3,
+    "wrist_dev": -18.9,
+    "pronation": -42.7,
+    "elbow_flex": 123.3,
+    "swivel": 60.0
    },
    "solver": {
     "pads_gap_mm": {
-     "thenar": 12.35,
-     "middle_pad_mid": 3.87,
-     "ring_pad_mid": 3.95,
-     "little_pad_mid": 10.0,
-     "middle_pad": 3.59,
-     "ring_pad": 5.13,
-     "little_pad": 1.06,
-     "middle_pad_prox": 4.33,
-     "ring_pad_prox": 3.7
+     "web": 8.74,
+     "thenar": 17.26,
+     "middle_pad_mid": 11.79,
+     "ring_pad_mid": 6.98,
+     "little_pad_mid": 10.17,
+     "middle_pad": 2.83,
+     "ring_pad": 1.68,
+     "little_pad": 2.0,
+     "middle_pad_prox": 5.71,
+     "ring_pad_prox": 3.0
     },
     "digit_target_error_mm": {
-     "middle": 0.0,
-     "ring": 0.0,
-     "little": 0.0,
-     "index": 11.59,
-     "thumb": 10.51
+     "index": 3.38
     },
     "min_clearance_mm_approx": 0.5,
     "limit_violation_deg": 0.0
@@ -195,84 +192,84 @@
    "carried_by": "static",
    "socket": "socket_hand_left",
    "hand_in_socket": [
-    0.0640966,
-    -0.0140399,
-    -0.0492807,
-    0.6399275,
-    -0.1951374,
-    0.3725865,
-    0.6431123
+    0.0473849,
+    -0.0185277,
+    -0.0690819,
+    0.6393485,
+    -0.1975723,
+    0.3602566,
+    0.6499337
    ],
    "hand": [
-    0.0640966,
-    -0.0452549,
-    0.0607193,
-    0.6399275,
-    -0.1951374,
-    0.3725865,
-    0.6431123
+    0.0473849,
+    -0.0497427,
+    0.0409181,
+    0.6393485,
+    -0.1975723,
+    0.3602566,
+    0.6499337
    ],
    "forearm": [
-    0.1454772,
-    -0.2317863,
-    -0.1135036,
-    0.3761945,
-    -0.1585098,
-    0.1016928,
-    0.9071995
+    0.1029796,
+    -0.2541631,
+    -0.1230695,
+    0.3394351,
+    -0.1497764,
+    0.0570961,
+    0.9268715
    ],
    "angles_deg": {
-    "index_mcp_flex": 10.39,
-    "index_mcp_abd": -1.19,
-    "index_pip_flex": 41.5,
-    "index_dip_flex": 14.23,
-    "middle_mcp_flex": 47.75,
-    "middle_mcp_abd": -18.33,
-    "middle_pip_flex": 34.34,
-    "middle_dip_flex": 53.81,
-    "ring_mcp_flex": 53.83,
-    "ring_mcp_abd": -18.27,
-    "ring_pip_flex": 35.9,
-    "ring_dip_flex": 36.94,
-    "little_mcp_flex": 56.84,
-    "little_mcp_abd": -0.16,
-    "little_pip_flex": 15.63,
-    "little_dip_flex": 40.38,
-    "thumb_cmc_flex": 15.55,
-    "thumb_cmc_abd": -14.88,
-    "thumb_cmc_rot": 7.97,
-    "thumb_mcp_flex": 5.71,
-    "thumb_ip_flex": 8.86,
+    "index_mcp_flex": 29.69,
+    "index_mcp_abd": -2.52,
+    "index_pip_flex": 38.87,
+    "index_dip_flex": 29.6,
+    "middle_mcp_flex": 61.28,
+    "middle_mcp_abd": -9.76,
+    "middle_pip_flex": 44.3,
+    "middle_dip_flex": 28.47,
+    "ring_mcp_flex": 71.95,
+    "ring_mcp_abd": -1.97,
+    "ring_pip_flex": 33.23,
+    "ring_dip_flex": 35.87,
+    "little_mcp_flex": 81.81,
+    "little_mcp_abd": 1.16,
+    "little_pip_flex": 5.31,
+    "little_dip_flex": 30.49,
+    "thumb_cmc_flex": -3.17,
+    "thumb_cmc_abd": -20.5,
+    "thumb_cmc_rot": -8.0,
+    "thumb_mcp_flex": 37.49,
+    "thumb_ip_flex": 30.52,
     "mc4_flex": 3.0,
     "mc5_flex": 8.0
    },
    "arm_deg": {
-    "wrist_flex": -48.6,
-    "wrist_dev": -25.9,
-    "pronation": -78.7,
-    "elbow_flex": 74.8,
-    "swivel": -5.0
+    "wrist_flex": -54.6,
+    "wrist_dev": -27.8,
+    "pronation": -76.0,
+    "elbow_flex": 86.0,
+    "swivel": -10.0
    },
    "solver": {
     "pads_gap_mm": {
-     "palm_distal": 5.62,
-     "thenar": 14.12,
-     "middle_pad": 2.47,
-     "index_pad": 3.85,
-     "ring_pad": 3.45,
-     "little_pad": 2.84,
-     "middle_pad_prox": 1.78,
-     "ring_pad_prox": 5.65,
-     "index_pad_prox": 2.72
+     "palm_distal": 12.67,
+     "thenar": 7.17,
+     "middle_pad": 2.95,
+     "index_pad": 5.13,
+     "ring_pad": 1.47,
+     "little_pad": 2.08,
+     "middle_pad_prox": 10.63,
+     "ring_pad_prox": 14.37,
+     "index_pad_prox": 3.8
     },
     "digit_target_error_mm": {
      "index": 0.0,
      "middle": 0.0,
      "ring": 0.0,
      "little": 0.0,
-     "thumb": 8.13
+     "thumb": 23.42
     },
-    "min_clearance_mm_approx": 0.59,
+    "min_clearance_mm_approx": 0.52,
     "limit_violation_deg": 0.0
    }
   },
@@ -300,13 +297,13 @@
     0.6607008
    ],
    "forearm": [
-    0.1609937,
-    -0.3480456,
-    -0.2505278,
-    0.1481125,
-    0.5516891,
-    0.3694396,
-    0.7329504
+    0.1412576,
+    -0.3589521,
+    -0.2490215,
+    0.1612618,
+    0.5727562,
+    0.3347568,
+    0.7306729
    ],
    "angles_deg": {
     "index_mcp_flex": 21.7,
@@ -334,10 +331,10 @@
     "mc5_flex": 8.0
    },
    "arm_deg": {
-    "wrist_flex": -6.8,
-    "wrist_dev": -16.9,
-    "pronation": 25.9,
-    "elbow_flex": 103.1,
+    "wrist_flex": -2.4,
+    "wrist_dev": -19.3,
+    "pronation": 24.3,
+    "elbow_flex": 110.5,
     "swivel": -10.0
    },
    "solver": {
@@ -387,13 +384,13 @@
     0.6708204
    ],
    "forearm": [
-    0.1402343,
-    -0.3248642,
-    -0.2234587,
-    0.1058254,
-    0.6276622,
-    0.3233924,
-    0.7001846
+    0.126653,
+    -0.3374666,
+    -0.2122469,
+    0.1031705,
+    0.6425919,
+    0.2856866,
+    0.7034306
    ],
    "angles_deg": {
     "index_mcp_flex": 12.98,
@@ -421,11 +418,11 @@
     "mc5_flex": 4.0
    },
    "arm_deg": {
-    "wrist_flex": -18.7,
-    "wrist_dev": -1.0,
-    "pronation": 35.9,
-    "elbow_flex": 103.2,
-    "swivel": -10.0
+    "wrist_flex": -15.7,
+    "wrist_dev": -4.6,
+    "pronation": 33.1,
+    "elbow_flex": 110.8,
+    "swivel": -7.5
    },
    "solver": {
     "pads_gap_mm": {
@@ -471,13 +468,13 @@
     0.9186007
    ],
    "forearm": [
-    0.2632985,
-    -0.3095193,
-    -0.1356415,
-    -0.0656609,
-    0.1016618,
-    0.2906746,
-    0.9491374
+    0.2883163,
+    -0.2825023,
+    -0.0959119,
+    -0.1417823,
+    0.0702442,
+    0.3451443,
+    0.9251157
    ],
    "angles_deg": {
     "index_mcp_flex": -18.5,
@@ -505,11 +502,11 @@
     "mc5_flex": 4.0
    },
    "arm_deg": {
-    "wrist_flex": -1.3,
-    "wrist_dev": -10.7,
-    "pronation": -37.9,
-    "elbow_flex": 126.3,
-    "swivel": 37.5
+    "wrist_flex": -11.5,
+    "wrist_dev": -5.0,
+    "pronation": -44.5,
+    "elbow_flex": 133.4,
+    "swivel": 50.0
    },
    "solver": {
     "pads_gap_mm": {
@@ -526,6 +523,95 @@
     "limit_violation_deg": 0.0,
     "place_fit_rms": 0.0,
     "backed_off": 0.0
+   }
+  },
+  "fire_reach": {
+   "side": "R",
+   "doc": "Firing hand slid 5 mm forward along the grip, trigger finger straight: the hold from which the fingertip reaches the magazine release (inferred: no reference shows the press; a hand of this size cannot reach the button from the firing grip without moving).",
+   "carried_by": "static",
+   "socket": "socket_hand_right",
+   "hand_in_socket": [
+    -0.0415041,
+    -0.0109766,
+    -0.0557297,
+    0.4013912,
+    -0.5493087,
+    -0.4532037,
+    0.5759787
+   ],
+   "hand": [
+    -0.0415041,
+    -0.1179996,
+    -0.2341017,
+    0.4013912,
+    -0.5493087,
+    -0.4532037,
+    0.5759787
+   ],
+   "forearm": [
+    -0.2659626,
+    -0.2274113,
+    -0.3311473,
+    -0.0080904,
+    -0.3444454,
+    -0.5438125,
+    0.7652188
+   ],
+   "angles_deg": {
+    "index_mcp_flex": -18.5,
+    "index_mcp_abd": -7.35,
+    "index_pip_flex": 47.33,
+    "index_dip_flex": 0.23,
+    "middle_mcp_flex": 38.01,
+    "middle_mcp_abd": -17.11,
+    "middle_pip_flex": 83.76,
+    "middle_dip_flex": 31.97,
+    "ring_mcp_flex": 40.84,
+    "ring_mcp_abd": 1.57,
+    "ring_pip_flex": 80.87,
+    "ring_dip_flex": 37.5,
+    "little_mcp_flex": 56.58,
+    "little_mcp_abd": -16.97,
+    "little_pip_flex": 56.12,
+    "little_dip_flex": 27.8,
+    "thumb_cmc_flex": 1.23,
+    "thumb_cmc_abd": -9.35,
+    "thumb_cmc_rot": 7.46,
+    "thumb_mcp_flex": 33.75,
+    "thumb_ip_flex": 35.79,
+    "mc4_flex": 1.01,
+    "mc5_flex": 2.57
+   },
+   "arm_deg": {
+    "wrist_flex": -56.5,
+    "wrist_dev": -17.9,
+    "pronation": -43.9,
+    "elbow_flex": 122.0,
+    "swivel": 60.0
+   },
+   "solver": {
+    "pads_gap_mm": {
+     "web": 4.55,
+     "thenar": 12.19,
+     "middle_pad_mid": 10.1,
+     "ring_pad_mid": 8.22,
+     "little_pad_mid": 6.07,
+     "middle_pad": 1.89,
+     "ring_pad": 1.57,
+     "little_pad": 1.86,
+     "middle_pad_prox": 5.55,
+     "ring_pad_prox": 5.58
+    },
+    "digit_target_error_mm": {
+     "middle": 0.0,
+     "ring": 0.0,
+     "little": 0.0,
+     "index": 0.71,
+     "thumb": 19.73
+    },
+    "min_clearance_mm_approx": 0.5,
+    "limit_violation_deg": 0.0,
+    "place_fit_rms": 0.39
    }
   }
  }

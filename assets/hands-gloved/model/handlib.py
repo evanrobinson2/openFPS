@@ -21,12 +21,22 @@ SRC = {
           'the active-range end points -19..90, -7..101, -6..84 are recalled and agree with those percentages',
     'HU': 'Hume, Gellman, McKellop & Brumfield 1990, J Hand Surg Am 15(2):240-243 (citation and functional averages '
           'confirmed this session; thumb MP 0..56 and IP -5..73 active range recalled, not re-read)',
-    'CO': 'Cooney, Lucca, Chao & Linscheid 1981, J Bone Joint Surg Am 63(9):1371-1381, trapeziometacarpal joint: '
-          'flexion-extension 53, abduction-adduction 42, axial rotation 17 deg total (citation confirmed; values recalled)',
+    'CO': 'Cooney, Lucca, Chao & Linscheid 1981, J Bone Joint Surg Am 63(9):1371-1381, trapeziometacarpal joint, 19 subjects: '
+          'average total motion 53 deg flexion-extension, 42 abduction-adduction, 17 axial rotation; adduction with flexion is '
+          'the commonest position in use (abstract, read 2026-11-17 through the PubMed API)',
     'AA': 'American Academy of Orthopaedic Surgeons 1965, Joint Motion: Method of Measuring and Recording (wrist 80 '
           'flexion / 70 extension / 20 radial / 30 ulnar, forearm 80 / 80, elbow 0..150; recalled, not re-read)',
     'K': 'Kapandji, The Physiology of the Joints vol. 1: finger MCP abduction-adduction 20-30 deg each way (recalled)',
     'RG': 'Rijpkema & Girard 1991, Computer Graphics 25(4):339-348: DIP flexion is about 2/3 of PIP flexion (recalled)',
+    'ES': 'El-Shennawy, Nakamura, Patterson & Viegas 2001, J Hand Surg Am 26(6):1030-1035 (cadaver, 3-D motion analysis): overall '
+          'flexion-extension of the 2nd to 5th carpometacarpal joints 11, 7, 20 and 27 deg; radial-ulnar deviation 2, 4, 7, 13; '
+          'pronation-supination 5, 5, 27, 22 (abstract, read 2026-11-17 through the PubMed API)',
+    'KA': 'Kawanishi, Oka, Tanaka, Okada, Sugamoto & Murase 2018, J Hand Surg Am 43(2):182.e1-e7 (CT, 9 volunteers): from radial '
+          'abduction to opposition the first metacarpal abducts, rotates internally and flexes on the trapezium (abstract, read '
+          '2026-11-17; it gives directions, no angles)',
+    'G': 'Greiner 1991, Hand Anthropometry of U.S. Army Personnel, NATICK/TR-92/011, men n = 1,003: digit 2 / 3 / 4 / 5 length '
+         '(tip to the digit\'s base landmark) 75.3 / 83.8 / 79.2 / 64.7 mm, hand length 194.1 mm (pp. 61, 85, 109, 133, 159; read '
+         '2026-11-17 from the scanned report\'s text layer, which is rough: each mean was checked against its 50th percentile)',
     'I': 'inference (no measurement found); see notes/NOTES.md',
 }
 
@@ -43,6 +53,7 @@ BURY = dict(  # soft tissue at the tip, distal, middle, proximal phalanx, metaca
     little=(3.73, 15.96, 18.11, 32.74, 53.69))
 HSIAO_BREADTH = dict(thumb=23.6, index=22.1, middle=22.0, ring=21.3, little=19.3)   # at the PIP joint (thumb: IP) (H)
 HSIAO_LENGTH = dict(thumb=69.9, index=75.2, middle=83.3, ring=79.1, little=64.3)    # crease to tip (H); check only
+GREINER_LENGTH = dict(index=75.3, middle=83.8, ring=79.2, little=64.7); GREINER_HAND = 194.1   # tip to the digit's base landmark, men (G); check only
 FING = ('index', 'middle', 'ring', 'little')
 
 # the size of this hand: the ANSUR II male mean (the 50th percentile is within 0.3 mm of it for every dimension used)
@@ -71,6 +82,7 @@ P = dict(
     wrist_half=(30.8, 21.4),           # I: wrist half-breadth and half-depth, set so the circumference matches A
     palm_expo=3.8,                     # I: superellipse exponent of the palm's section at the knuckles (2 = ellipse), set so the circumference matches A
     web_offset=19.2,                   # I: the finger web / proximal digital crease lies this far distal of the MCP joint centre
+    thenar_crease=(-4.0, 9.0, 12.0),   # I: thenar crease: x at the wrist, x at 62 % of the palm, blend width (mm); CR-1
     cuff_len=42.0, sleeve_len=210.0,   # I: glove cuff past the wrist; forearm sleeve shown
 )
 
@@ -91,7 +103,8 @@ LIMITS = dict(   # joint: (min, max, source key, note)
     thumb_cmc_abd=(-21, 21, 'CO', 'half of 42 each way from the relaxed mid-range rest (I)'),
     thumb_cmc_rot=(-8.5, 8.5, 'CO', 'half of 17 each way'),
     thumb_mcp_flex=(0, 56, 'HU', 'active range'), thumb_ip_flex=(-5, 73, 'HU', 'active range'),
-    mc4_flex=(0, 10, 'I', 'ring carpometacarpal, about 10 deg'), mc5_flex=(0, 20, 'I', 'little carpometacarpal, about 20 deg'),
+    mc4_flex=(-3, 17, 'ES', 'ring carpometacarpal: the 20 deg arc, the flat hand taken 15 % into it (I)'),
+    mc5_flex=(-4, 23, 'ES', 'little carpometacarpal: the 27 deg arc, the flat hand taken 15 % into it (I)'),
     wrist_flex=(-70, 80, 'AA', 'extension 70, flexion 80'), wrist_dev=(-30, 20, 'AA', 'ulnar 30 (-), radial 20 (+)'),
     pronation=(-80, 80, 'AA', 'supination 80 (-), pronation 80 (+) from the thumb-up neutral'),
     elbow_flex=(0, 150, 'AA', 'extension 0, flexion 150'))
@@ -286,8 +299,16 @@ class Hand:
         V = np.vstack([V, V[:R].mean(0), V[-R:].mean(0)]); uu = np.r_[uu, 0, 1]
         F += [(len(V) - 2, (j + 1) % R, j) for j in range(R)]; o2 = (n - 1) * R; F += [(len(V) - 1, o2 + j, o2 + (j + 1) % R) for j in range(R)]
         W = np.zeros((len(V), len(ORDER))); tr = smooth((-10.0 - V[:, 0]) / 12.0) * smooth(uu / 0.6); tl = smooth((-29.0 - V[:, 0]) / 10.0) * smooth(uu / 0.6)
-        W[:, BI['little_meta']] = tl; W[:, BI['ring_meta']] = tr - tl * tr; W[:, BI['hand']] = 1 - W.sum(1)
+        W[:, BI['little_meta']] = tl; W[:, BI['ring_meta']] = tr - tl * tr
+        # CR-1: the thenar part of the palm follows the thumb metacarpal, so the palm folds along the thenar crease when the
+        # thumb opposes (KA: the metacarpal abducts, rotates and flexes on the trapezium).  The crease runs from the wrist's
+        # middle to the web; radial of it the skin goes with the thumb: fully on the palmar side, 35 % on the back (I).
+        cr = P['thenar_crease']; xc = cr[0] + (cr[1] - cr[0]) * np.clip(uu / 0.62, 0, 1)
+        W[:, BI['thumb_01']] = smooth((V[:, 0] - xc) / cr[2]) * smooth((uu - 0.08) / 0.16) * smooth((0.70 - uu) / 0.20) * (0.35 + 0.65 * smooth((2.0 - V[:, 2]) / 10.0))
+        W[:, BI['hand']] = 0; W[:, BI['hand']] = 1 - W.sum(1)
         self.shells['palm'] = dict(V=V, F=np.array(F, np.int32), W=W, s=uu, ang=np.zeros(len(V)), ring=np.r_[np.repeat(np.arange(n), R), 0, n - 1], kind='palm')
+        lm('thenar_base', 'thumb_01', o + Y * s1 * 0.15 - Z * 14.5); lm('thenar_ulnar', 'thumb_01', o + Y * s1 * 0.5 - Z * 12.0 - X * 12.5)
+        lm('index_meta_palmar', 'hand', (16.0, m3 * 0.72, -P['thick_palmar'] - g + 1.5)); lm('hypothenar_distal', 'little_meta', (-36.0, m3 * 0.62, -P['thick_palmar'] - g - 1.0))
         lm('palm_centre', 'hand', (-6.0, m3 * 0.55, -P['thick_palmar'] - g + 1.0)); lm('hypothenar', 'hand', (-32.0, m3 * 0.30, -P['thick_palmar'] - g - 4.0))
         lm('palm_heel', 'hand', (-6.0, 8.0, -wh[1] - g)); lm('palm_distal', 'hand', (-8.0, m3 * 0.86, -P['thick_palmar'] - g))
         lm('hand_back', 'hand', (-6.0, m3 * 0.5, 15.0)); lm('wrist_dorsal', 'hand', (0, 0, wh[1] + g)); lm('wrist_palmar', 'hand', (0, 0, -wh[1] - g))

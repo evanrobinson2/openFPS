@@ -9,6 +9,18 @@ from scipy.spatial import cKDTree
 from scipy.ndimage import map_coordinates, distance_transform_edt, label
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); BUILD = os.path.join(HERE, 'refs-local', 'build')
 REGION = np.array([[-95.0, -235.0, -275.0], [95.0, 85.0, 255.0]]); CAP = 10.0; H = 1.0; CLOSE = 4.0
+def tri_dist(P, A, B, C):
+    """Smallest distance from each point of P to the triangles (A, B, C): closest point by region (Ericson, Real-Time Collision Detection 5.1.5)."""
+    P = P[:, None, :]; ab = B - A; ac = C - A; ap = P - A
+    d1 = (ab * ap).sum(-1); d2 = (ac * ap).sum(-1); bp = P - B; d3 = (ab * bp).sum(-1); d4 = (ac * bp).sum(-1); cp = P - C; d5 = (ab * cp).sum(-1); d6 = (ac * cp).sum(-1)
+    va = d3 * d6 - d5 * d4; vb = d5 * d2 - d1 * d6; vc = d1 * d4 - d3 * d2; den = np.where(np.abs(va + vb + vc) < 1e-12, 1.0, va + vb + vc)
+    v = vb / den; w = vc / den; Q = A + ab * v[..., None] + ac * w[..., None]                                   # inside the face
+    def put(mask, pts): Q[mask] = np.broadcast_to(pts, Q.shape)[mask]
+    t = np.clip(d1 / np.where(d1 - d3 == 0, 1, d1 - d3), 0, 1)[..., None]; put((vc <= 0) & (d1 >= 0) & (d3 <= 0), A + ab * t)
+    t = np.clip(d2 / np.where(d2 - d6 == 0, 1, d2 - d6), 0, 1)[..., None]; put((vb <= 0) & (d2 >= 0) & (d6 <= 0), A + ac * t)
+    t = np.clip((d4 - d3) / np.where((d4 - d3) + (d5 - d6) == 0, 1, (d4 - d3) + (d5 - d6)), 0, 1)[..., None]; put((va <= 0) & (d4 - d3 >= 0) & (d5 - d6 >= 0), B + (C - B) * t)
+    put((d1 <= 0) & (d2 <= 0), A + 0 * ap); put((d3 >= 0) & (d4 <= d3), B + 0 * ap); put((d6 >= 0) & (d5 <= d6), C + 0 * ap)
+    return np.linalg.norm(P - Q, axis=-1).min(1)
 class Rifle:
     def __init__(self):
         self.z = np.load(os.path.join(BUILD, 'rifle.npz')); self.meta = json.load(open(os.path.join(BUILD, 'rifle.json')))
