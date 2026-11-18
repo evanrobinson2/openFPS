@@ -1,0 +1,33 @@
+{
+ "side_0.05ms_peak_cd_m2": 8782.133655199284,
+ "side_0.15ms_peak_cd_m2": 5277.488535281195,
+ "side_0.23ms_peak_cd_m2": 16937.305799338472,
+ "side_0.3ms_peak_cd_m2": 2572.446913508402,
+ "side_0.5ms_peak_cd_m2": 910.0605351199268,
+ "side_1ms_peak_cd_m2": 73.04827775255022,
+ "side_integrated_white_cd_s_m2": 0.5151749160894573,
+ "rear_0.05ms_peak_cd_m2": 0.0,
+ "rear_0.15ms_peak_cd_m2": 17.406407185328483,
+ "rear_0.23ms_peak_cd_m2": 386.21877544605076,
+ "rear_0.3ms_peak_cd_m2": 32.93908068435065,
+ "rear_0.5ms_peak_cd_m2": 4.648540672573052,
+ "rear_1ms_peak_cd_m2": 0.2847498288910296,
+ "rear_integrated_white_cd_s_m2": 0.01058051293659828,
+ "ads_0.05ms_peak_cd_m2": 0.0,
+ "ads_0.15ms_peak_cd_m2": 16.5653454585842,
+ "ads_0.23ms_peak_cd_m2": 371.48352290303586,
+ "ads_0.3ms_peak_cd_m2": 31.657160843487226,
+ "ads_0.5ms_peak_cd_m2": 4.450819955670022,
+ "ads_1ms_peak_cd_m2": 0.0,
+ "ads_integrated_white_cd_s_m2": 0.010831089715037778,
+ "smoke_tau_max_side": [
+  2.437,
+  1.525,
+  3.199,
+  0.967,
+  0.309,
+  0.132,
+  0.092,
+  0.067
+ ]
+}

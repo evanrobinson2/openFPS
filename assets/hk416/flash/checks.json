@@ -1,0 +1,114 @@
+{
+ "generator": "assets/hk416/flash/sim.py",
+ "drive_against_action_json": {
+  "note": "the bore state used here against the numbers printed in action/action.json (same model, re-run through action/sim.py ib_solve with the stored calibration)",
+  "muzzle_velocity_m_s": [
+   850.036,
+   850.036
+  ],
+  "peak_chamber_pressure_MPa": [
+   358.487,
+   358.487
+  ],
+  "barrel_time_ms": [
+   0.976,
+   0.976
+  ],
+  "reservoir_pressure_MPa_at_sample": [
+   122.62,
+   122.62
+  ],
+  "reservoir_temperature_K_at_sample": [
+   1788.2,
+   1788.0
+  ],
+  "order": "[this simulation, action.json]"
+ },
+ "velocity_against_manual": [
+  {
+   "barrel_in": 10,
+   "model_m_s": 745.6,
+   "manual_m_s": 774
+  },
+  {
+   "barrel_in": 14.5,
+   "model_m_s": 850.0,
+   "manual_m_s": 850
+  },
+  {
+   "barrel_in": 16.5,
+   "model_m_s": 885.3,
+   "manual_m_s": 880
+  },
+  {
+   "barrel_in": 20,
+   "model_m_s": 935.3,
+   "manual_m_s": 915
+  }
+ ],
+ "literature": {
+  "note": "model against published rifle measurements. The published rifle is a 7.62 mm (M14 class), not this one, so agreement to about 10 % is the most these can show.",
+  "temperatures_K": [
+   {
+    "what": "primary flash, next to the muzzle",
+    "model_bare_muzzle_exit": 1603.0,
+    "model_in_the_hider_cage": 1795.0,
+    "published": 1645,
+    "source": "Klingenberg & Mach 1976 (emission-absorption, 7.62 mm rifle)",
+    "status": "prediction: the temperature is action/'s reservoir temperature at exit, nothing fitted here"
+   },
+   {
+    "what": "intermediate flash, behind the Mach disc",
+    "model_at_onset": 1660.0,
+    "model_peak": 1960.0,
+    "published": "1600 rising to 1940",
+    "source": "Klingenberg & Mach 1976 (Na and K line reversal, 100 to 300 mm from the muzzle)",
+    "status": "onset is a prediction; the 300 K rise is taken from this same paper, so the peak is not independent"
+   },
+   {
+    "what": "secondary flash",
+    "model": 2400.0,
+    "published": "about 2500",
+    "source": "Klingenberg & Mach 1976",
+    "status": "input, not a check"
+   },
+   {
+    "what": "gas in the intermediate flash region late in the event",
+    "model_reservoir_at_0p70_ms": 1432.0,
+    "model_reservoir_at_1p53_ms": 1143.0,
+    "published": "1468 K at 0.70 ms falling to about 500 K at 1.53 ms",
+    "source": "CARS temperature measurements in the muzzle flash region of a 7.62 mm rifle (DTIC ADA190786)",
+    "status": "mismatch late: the model keeps the shocked gas at the reservoir temperature and has no mixing with cold air, so it stays far too hot after about 1 ms (it has stopped glowing by then: glow_floor). The time origin of the published figures was not confirmed."
+   }
+  ],
+  "mach_disc": {
+   "bare_muzzle_steady_mm_lewis_carlson": 113.8,
+   "bare_muzzle_steady_calibres": 20.25,
+   "bare_muzzle_steady_mm_ashkenas_sherman": 132.6,
+   "note": "two published correlations for the Mach disc of a steady under-expanded jet, fed with action/'s exit pressure: x/D = 0.69 M sqrt(gamma p_e/p_inf) (Lewis & Carlson 1964) and x/D = 0.67 sqrt(p_0/p_inf) (Ashkenas & Sherman 1966). They differ by 16 %, which is the uncertainty of the jet model before any hider. The muzzle jet never reaches the steady value: the pressure has fallen by the time the disc is established.",
+   "hk416_with_hider_max_mm": 125.3,
+   "hk416_with_hider_max_t_ms": 0.227,
+   "hk416_bare_max_mm": 91.36,
+   "ref_16in_5slot_max_mm": 125.0,
+   "photo_ttag_a2_upstream_face_mm": "123 +- 12",
+   "photo_status": "fitted (slot_cd), not a prediction"
+  },
+  "light_meter": {
+   "a2_birdcage_lux": [
+    0.48,
+    0.48
+   ],
+   "bare_muzzle_lux": [
+    10760.0,
+    10760
+   ],
+   "order": "[model, TTAG]",
+   "uncalibrated_model_over_measured": 10.19,
+   "status": "calibration, not a check: one factor (0.0981) on all thermal light makes the 16 in / 5-slot run read 0.48 lx; the secondary peak is set by the bare-muzzle reading. Before calibration the thermal model is 10 times too bright."
+  }
+ },
+ "see_also": [
+  "compare/measurements.json (photos)",
+  "parity.json (JS against Python)"
+ ]
+}
