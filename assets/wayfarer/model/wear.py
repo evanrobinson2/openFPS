@@ -20,7 +20,7 @@ EXTERIOR = ('armour_', 'substructure_', 'recess_floors', 'opening_coamings', 'co
             'chin_', 'dorsal_', 'hull_details', 'keel_', 'nose_', 'thruster_', 'ventral_', 'waist_', 'equipment_bay',
             'gadget_bolts', 'lander_door', 'crew_hatch', 'viewport_trim')
 CLEAN = kit.WEAR_CLEAN
-NOMINAL = 0.90          # a clean vertex sits a little under 1 so that lighter patches have room
+NOMINAL = 0.82          # a clean vertex sits a little under 1 so that lighter patches have room
 
 def clean(material_name):
     r, g, b, me, ro, em, al = kit.PALETTE[material_name]
@@ -82,25 +82,26 @@ def colours(o, exterior):
     tone = fbm(P, 0.45, 1); fine = vnoise(P, 6.0, 2)
     f = np.ones(nv)
     if exterior:
-        f *= 1 + 0.18 * (tone - 0.5)
+        f *= 1 + 0.30 * (tone - 0.5)
         f *= 1 + 0.07 * (fine - 0.5)
         if any(n.startswith('armour_') or n == 'fastener_steel' for n in names):
             lab = _islands(nv, lv, lf, starts)
             isl = _hash(lab, lab * 0 + 7, lab * 0 + 3, zlib.crc32(o.name.encode()) % 1000)
-            f *= 1 + 0.16 * (isl - 0.5)
+            f *= 1 + 0.30 * (isl - 0.5)
+            f *= np.where(isl > 0.93, 1.22, np.where(isl < 0.06, 0.72, 1.0))            # the odd replaced plate, the odd scorched one
         belly = np.clip((-0.8 - P[:, 2]) / 2.2, 0, 1)
-        f *= 1 - 0.24 * belly * (0.4 + 0.6 * fbm(P, 0.9, 3))
+        f *= 1 - 0.40 * belly * (0.4 + 0.6 * fbm(P, 0.9, 3))
         side = 1 - np.abs(nz)
         streak = np.clip((vnoise(P, (5.0, 0.0, 0.35), 4) - 0.52) / 0.48, 0, 1)
-        f *= 1 - 0.16 * streak * side
+        f *= 1 - 0.26 * streak * side
         soot = np.clip((P[:, 0] - 25.2) / 3.6, 0, 1)
-        f *= 1 - 0.32 * soot * (0.55 + 0.45 * tone)
+        f *= 1 - 0.50 * soot * (0.55 + 0.45 * tone)
         f *= 1 + 0.05 * np.clip(nz, 0, 1)
     else:
         f *= 1 + 0.07 * (tone - 0.5) + 0.03 * (fine - 0.5)
         dz = np.minimum(np.where(P[:, 2] >= spec.Z_MAIN - 0.02, P[:, 2] - spec.Z_MAIN, 9.0), np.where(P[:, 2] >= spec.Z_LOWER - 0.02, P[:, 2] - spec.Z_LOWER, 9.0))
         f *= 1 - 0.10 * np.clip(1 - dz / 0.35, 0, 1) * (0.5 + 0.5 * fine)
-    f = np.clip(NOMINAL * f, 0.40, 1.0)
+    f = np.clip(NOMINAL * f, 0.30, 1.0)
     d = np.clip((NOMINAL - f) * 2.5, 0, 1)                                              # darker reads warmer: dust and oil, not grey paint
     C = np.stack([f, f * (1 - 0.07 * d), f * (1 - 0.16 * d), np.ones(nv)], axis=1)
     L = C[lv]
