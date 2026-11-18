@@ -12,6 +12,7 @@ audio files; every asset ships `USAGE.md`, a sample page and `provenance.json`; 
 | Asset | What | Sample |
 |---|---|---|
 | [HK416 D14.5RS](assets/hk416/USAGE.md) | 5.56 mm rifle: action and recoil, ballistics (M855, Mk 262, M856), synthesised sound with ten surroundings and earmuffs. Parametric geometry recipe: 301 named parts, 13 clips, 7 sockets. | [`assets/hk416/sample/`](assets/hk416/sample/index.html) |
+| [Pump shotgun 590](assets/shotgun-590/USAGE.md) | 12 gauge pump action: pump cycle and controls from the owner's manual, recoil, ballistics (00 buck, rifled slug), synthesised sound. Parametric geometry recipe: 40 named parts, 10 clips, 14 sockets. | [`assets/shotgun-590/sample/`](assets/shotgun-590/sample/index.html) |
 
 ## Try it
 

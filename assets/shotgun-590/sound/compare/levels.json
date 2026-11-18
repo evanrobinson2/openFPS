@@ -1,0 +1,203 @@
+{
+ "note": "peak levels of every synthesised sound, dB re 20 uPa, at the listener of that sound",
+ "levels": {
+  "shot_buck00_shooter": {
+   "peak_pa": 1895.309,
+   "peak_db": 159.5,
+   "duration": 1.4,
+   "components": 409
+  },
+  "shot_buck00_shooter_room": {
+   "peak_pa": 1895.309,
+   "peak_db": 159.5,
+   "duration": 2.0,
+   "components": 78
+  },
+  "shot_buck00_shooter_covered": {
+   "peak_pa": 1895.309,
+   "peak_db": 159.5,
+   "duration": 0.6,
+   "components": 121
+  },
+  "shot_buck00_shooter_field": {
+   "peak_pa": 1895.309,
+   "peak_db": 159.5,
+   "duration": 0.3,
+   "components": 28
+  },
+  "shot_buck00_shooter_free": {
+   "peak_pa": 1895.309,
+   "peak_db": 159.5,
+   "duration": 0.3,
+   "components": 27
+  },
+  "shot_buck00_bystander": {
+   "peak_pa": 779.0805,
+   "peak_db": 151.8,
+   "duration": 1.4,
+   "components": 477
+  },
+  "shot_buck00_bystander_room": {
+   "peak_pa": 855.5246,
+   "peak_db": 152.6,
+   "duration": 2.0,
+   "components": 146
+  },
+  "shot_buck00_bystander_covered": {
+   "peak_pa": 779.0805,
+   "peak_db": 151.8,
+   "duration": 0.6,
+   "components": 141
+  },
+  "shot_buck00_bystander_field": {
+   "peak_pa": 779.0805,
+   "peak_db": 151.8,
+   "duration": 0.3,
+   "components": 28
+  },
+  "shot_buck00_bystander_free": {
+   "peak_pa": 779.0805,
+   "peak_db": 151.8,
+   "duration": 0.3,
+   "components": 27
+  },
+  "shot_slug_shooter": {
+   "peak_pa": 2190.4375,
+   "peak_db": 160.8,
+   "duration": 1.4,
+   "components": 409
+  },
+  "shot_slug_shooter_room": {
+   "peak_pa": 2190.4375,
+   "peak_db": 160.8,
+   "duration": 2.0,
+   "components": 78
+  },
+  "shot_slug_shooter_covered": {
+   "peak_pa": 2190.4375,
+   "peak_db": 160.8,
+   "duration": 0.6,
+   "components": 121
+  },
+  "shot_slug_shooter_field": {
+   "peak_pa": 2190.4375,
+   "peak_db": 160.8,
+   "duration": 0.3,
+   "components": 28
+  },
+  "shot_slug_shooter_free": {
+   "peak_pa": 2190.4375,
+   "peak_db": 160.8,
+   "duration": 0.3,
+   "components": 27
+  },
+  "shot_slug_bystander": {
+   "peak_pa": 900.6173,
+   "peak_db": 153.1,
+   "duration": 1.4,
+   "components": 477
+  },
+  "shot_slug_bystander_room": {
+   "peak_pa": 948.364,
+   "peak_db": 153.5,
+   "duration": 2.0,
+   "components": 146
+  },
+  "shot_slug_bystander_covered": {
+   "peak_pa": 900.6173,
+   "peak_db": 153.1,
+   "duration": 0.6,
+   "components": 141
+  },
+  "shot_slug_bystander_field": {
+   "peak_pa": 900.6173,
+   "peak_db": 153.1,
+   "duration": 0.3,
+   "components": 28
+  },
+  "shot_slug_bystander_free": {
+   "peak_pa": 900.6173,
+   "peak_db": 153.1,
+   "duration": 0.3,
+   "components": 27
+  },
+  "shot_buck00_range_side_25m": {
+   "peak_pa": 111.203,
+   "peak_db": 134.9,
+   "duration": 1.37,
+   "components": 399
+  },
+  "shot_buck00_range_front_25m": {
+   "peak_pa": 182.4102,
+   "peak_db": 139.2,
+   "duration": 1.37,
+   "components": 394
+  },
+  "shot_buck00_range_side_50m": {
+   "peak_pa": 51.4409,
+   "peak_db": 128.2,
+   "duration": 1.45,
+   "components": 447
+  },
+  "shot_buck00_range_front_50m": {
+   "peak_pa": 89.6542,
+   "peak_db": 133.0,
+   "duration": 1.45,
+   "components": 448
+  },
+  "shot_buck00_range_side_100m": {
+   "peak_pa": 22.9958,
+   "peak_db": 121.2,
+   "duration": 1.59,
+   "components": 477
+  },
+  "shot_buck00_range_front_100m": {
+   "peak_pa": 39.2175,
+   "peak_db": 125.8,
+   "duration": 1.59,
+   "components": 421
+  },
+  "pump": {
+   "peak_pa": 4.1921,
+   "peak_db": 106.4,
+   "duration": 0.57,
+   "components": 400
+  },
+  "pump_back": {
+   "peak_pa": 4.1093,
+   "peak_db": 106.3,
+   "duration": 0.39,
+   "components": 206
+  },
+  "pump_forward": {
+   "peak_pa": 4.4208,
+   "peak_db": 106.9,
+   "duration": 0.41,
+   "components": 194
+  },
+  "dry_fire": {
+   "peak_pa": 0.9238,
+   "peak_db": 93.3,
+   "duration": 0.2,
+   "components": 15
+  },
+  "shell_insert": {
+   "peak_pa": 0.1587,
+   "peak_db": 78.0,
+   "duration": 0.32,
+   "components": 26
+  },
+  "safety": {
+   "peak_pa": 0.0517,
+   "peak_db": 68.2,
+   "duration": 0.12,
+   "components": 6
+  },
+  "action_release": {
+   "peak_pa": 0.0298,
+   "peak_db": 63.5,
+   "duration": 0.12,
+   "components": 6
+  }
+ }
+}

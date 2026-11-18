@@ -1,0 +1,854 @@
+{
+ "units": "SI: metres, seconds, kilograms, radians unless a key says otherwise",
+ "atmosphere": {
+  "rho": 1.225,
+  "c": 340.294,
+  "note": "ICAO standard, sea level, 15 C"
+ },
+ "gravity": 9.80665,
+ "loads": {
+  "slug": {
+   "name": "1 oz rifled slug, 2 3/4 in",
+   "kind": "slug",
+   "count": 1,
+   "mass_kg": 0.028381922579999996,
+   "muzzle_velocity": 490.728,
+   "drag": "G1",
+   "bc_lb_in2": 0.11,
+   "diameter_m": 0.0185,
+   "source": {
+    "all": "published: Federal Premium, Power-Shok Rifled Slug F127 RS product page (438 gr, 1610 ft/s, BC .110), read 2026-11-17",
+    "diameter_m": "nominal 12 gauge bore, 18.5 mm (not on the page)"
+   }
+  },
+  "buck00": {
+   "name": "00 buckshot, nine pellets, 2 3/4 in",
+   "kind": "shot",
+   "count": 9,
+   "pellet_diameter_m": 0.008382,
+   "pellet_density": 11350.0,
+   "muzzle_velocity": 403.86,
+   "drag": "sphere",
+   "source": {
+    "muzzle_velocity": "published: Federal Premium, Power-Shok Buckshot F127 00 product page (9 pellets, 1325), read 2026-11-17",
+    "pellet_density": "published: the same page (lead, 11.35 g/cc)",
+    "pellet_diameter_m": "published: 00 buck is .33 caliber (R. Mann, \"Buckshot Basics\", Shooting Illustrated, 31 Jan 2012)",
+    "mass_kg": "derived: sphere volume x density = 3.50 g (54.0 gr)"
+   },
+   "mass_kg": 0.0034997534742121647
+  }
+ },
+ "gun": {
+  "muzzle_z": 0.516396694214876,
+  "sights": {
+   "bead_flat": {
+    "rear": [
+     -0.16065674931129473,
+     0.023556614631160103
+    ],
+    "front": [
+     0.5032955188246095,
+     0.0135
+    ],
+    "note": "line of sight from the rear edge of the receiver's flat top over the bead (model geometry, traced from the profile photo). An inference: the manual says nothing about the sight picture."
+   },
+   "bore": {
+    "rear": [
+     0.0,
+     0.0
+    ],
+    "front": [
+     1.0,
+     0.0
+    ],
+    "note": "along the bore axis (no sights)"
+   }
+  },
+  "velocity_note": "Published shotshell velocities are test-barrel figures. This simulation uses them unchanged as the muzzle velocity; action/sim.py estimates what a 20 in barrel loses."
+ },
+ "pattern": {
+  "spread_in_per_yd": 1.0,
+  "source": "published rule of thumb for a 12 gauge cylinder bore: about 1 in of pattern spread per yard (R. Mann, \"Buckshot Basics\", Shooting Illustrated, 31 Jan 2012). The same article reports loads patterning at half that; this is a nominal, not a measurement of this load.",
+  "definition": "spread = the largest distance between any two of the nine pellet holes (extreme spread), averaged over shots",
+  "model": "each pellet leaves with an independent angular error, normal on each axis with standard deviation sigma; sigma is set so the mean extreme spread of nine pellets equals the rule",
+  "sigma_rad": 0.00749569,
+  "mean_extreme_spread_in_sigmas": 3.7058,
+  "calibration": "4000 seeded nine-pellet shots (seed 590)"
+ },
+ "drag_tables": {
+  "G1": [
+   [
+    0.0,
+    0.2629
+   ],
+   [
+    0.05,
+    0.2558
+   ],
+   [
+    0.1,
+    0.2487
+   ],
+   [
+    0.15,
+    0.2413
+   ],
+   [
+    0.2,
+    0.2344
+   ],
+   [
+    0.25,
+    0.2278
+   ],
+   [
+    0.3,
+    0.2214
+   ],
+   [
+    0.35,
+    0.2155
+   ],
+   [
+    0.4,
+    0.2104
+   ],
+   [
+    0.45,
+    0.2061
+   ],
+   [
+    0.5,
+    0.2032
+   ],
+   [
+    0.55,
+    0.202
+   ],
+   [
+    0.6,
+    0.2034
+   ],
+   [
+    0.7,
+    0.2165
+   ],
+   [
+    0.725,
+    0.223
+   ],
+   [
+    0.75,
+    0.2313
+   ],
+   [
+    0.775,
+    0.2417
+   ],
+   [
+    0.8,
+    0.2546
+   ],
+   [
+    0.825,
+    0.2706
+   ],
+   [
+    0.85,
+    0.2901
+   ],
+   [
+    0.875,
+    0.3136
+   ],
+   [
+    0.9,
+    0.3415
+   ],
+   [
+    0.925,
+    0.3734
+   ],
+   [
+    0.95,
+    0.4084
+   ],
+   [
+    0.975,
+    0.4448
+   ],
+   [
+    1.0,
+    0.4805
+   ],
+   [
+    1.025,
+    0.5136
+   ],
+   [
+    1.05,
+    0.5427
+   ],
+   [
+    1.075,
+    0.5677
+   ],
+   [
+    1.1,
+    0.5883
+   ],
+   [
+    1.125,
+    0.6053
+   ],
+   [
+    1.15,
+    0.6191
+   ],
+   [
+    1.2,
+    0.6393
+   ],
+   [
+    1.25,
+    0.6518
+   ],
+   [
+    1.3,
+    0.6589
+   ],
+   [
+    1.35,
+    0.6621
+   ],
+   [
+    1.4,
+    0.6625
+   ],
+   [
+    1.45,
+    0.6607
+   ],
+   [
+    1.5,
+    0.6573
+   ],
+   [
+    1.55,
+    0.6528
+   ],
+   [
+    1.6,
+    0.6474
+   ],
+   [
+    1.65,
+    0.6413
+   ],
+   [
+    1.7,
+    0.6347
+   ],
+   [
+    1.75,
+    0.628
+   ],
+   [
+    1.8,
+    0.621
+   ],
+   [
+    1.85,
+    0.6141
+   ],
+   [
+    1.9,
+    0.6072
+   ],
+   [
+    1.95,
+    0.6003
+   ],
+   [
+    2.0,
+    0.5934
+   ]
+  ],
+  "sphere": [
+   [
+    0.0,
+    0.47
+   ],
+   [
+    0.3,
+    0.47
+   ],
+   [
+    0.5,
+    0.5
+   ],
+   [
+    0.6,
+    0.52
+   ],
+   [
+    0.7,
+    0.56
+   ],
+   [
+    0.8,
+    0.62
+   ],
+   [
+    0.9,
+    0.72
+   ],
+   [
+    1.0,
+    0.84
+   ],
+   [
+    1.1,
+    0.92
+   ],
+   [
+    1.2,
+    0.96
+   ],
+   [
+    1.4,
+    1.0
+   ],
+   [
+    1.6,
+    1.0
+   ],
+   [
+    2.0,
+    0.98
+   ]
+  ]
+ },
+ "checks": {
+  "slug_vs_federal_table": {
+   "source": "published: Federal Premium F127 RS ballistics table (100 yd zero, sights 0.5 in above the bore, 10 mph crosswind), read 2026-11-17. The page shows no path value at 100 yd; 0.0 is implied by the zero.",
+   "rows": [
+    {
+     "range_yd": 0,
+     "v_fps_pub": 1610,
+     "v_fps_sim": 1610.0,
+     "energy_ftlb_pub": 2521,
+     "energy_ftlb_sim": 2521.0,
+     "drift_in_pub": 0.0,
+     "drift_in_sim": 0.0,
+     "path_in_pub": null,
+     "path_in_sim": -0.5
+    },
+    {
+     "range_yd": 25,
+     "v_fps_pub": 1467,
+     "v_fps_sim": 1465.4,
+     "energy_ftlb_pub": 2092,
+     "energy_ftlb_sim": 2088.0,
+     "drift_in_pub": 0.3,
+     "drift_in_sim": 0.4,
+     "path_in_pub": 1.4,
+     "path_in_sim": 1.36
+    },
+    {
+     "range_yd": 50,
+     "v_fps_pub": 1340,
+     "v_fps_sim": 1335.9,
+     "energy_ftlb_pub": 1746,
+     "energy_ftlb_sim": 1735.0,
+     "drift_in_pub": 1.6,
+     "drift_in_sim": 1.64,
+     "path_in_pub": 2.2,
+     "path_in_sim": 2.2
+    },
+    {
+     "range_yd": 75,
+     "v_fps_pub": 1229,
+     "v_fps_sim": 1224.2,
+     "energy_ftlb_pub": 1469,
+     "energy_ftlb_sim": 1457.0,
+     "drift_in_pub": 3.7,
+     "drift_in_sim": 3.77,
+     "path_in_pub": 1.8,
+     "path_in_sim": 1.83
+    },
+    {
+     "range_yd": 100,
+     "v_fps_pub": 1139,
+     "v_fps_sim": 1132.9,
+     "energy_ftlb_pub": 1262,
+     "energy_ftlb_sim": 1248.0,
+     "drift_in_pub": 6.6,
+     "drift_in_sim": 6.8,
+     "path_in_pub": 0.0,
+     "path_in_sim": 0.0
+    },
+    {
+     "range_yd": 125,
+     "v_fps_pub": 1068,
+     "v_fps_sim": 1062.1,
+     "energy_ftlb_pub": 1110,
+     "energy_ftlb_sim": 1097.0,
+     "drift_in_pub": 10.4,
+     "drift_in_sim": 10.65,
+     "path_in_pub": -3.5,
+     "path_in_sim": -3.52
+    }
+   ],
+   "max_velocity_error_pct": 0.55,
+   "max_path_error_in": 0.04,
+   "max_drift_error_in": 0.25,
+   "passed": true,
+   "tolerance": "velocity 2 %, path 0.5 in, drift 1.0 in"
+  },
+  "pattern_vs_rule": {
+   "source": "published rule of thumb for a 12 gauge cylinder bore: about 1 in of pattern spread per yard (R. Mann, \"Buckshot Basics\", Shooting Illustrated, 31 Jan 2012). The same article reports loads patterning at half that; this is a nominal, not a measurement of this load.",
+   "rows": [
+    {
+     "range_yd": 7,
+     "mean_spread_in": 7.05,
+     "p10_in": 5.27,
+     "p90_in": 8.94,
+     "rule_in": 7.0
+    },
+    {
+     "range_yd": 15,
+     "mean_spread_in": 15.06,
+     "p10_in": 11.48,
+     "p90_in": 19.03,
+     "rule_in": 15.0
+    },
+    {
+     "range_yd": 25,
+     "mean_spread_in": 25.02,
+     "p10_in": 18.7,
+     "p90_in": 31.89,
+     "rule_in": 25.0
+    },
+    {
+     "range_yd": 40,
+     "mean_spread_in": 40.25,
+     "p10_in": 30.45,
+     "p90_in": 51.32,
+     "rule_in": 40.0
+    }
+   ],
+   "passed": true,
+   "note": "a calibration check: sigma was fitted to this rule, so this shows the fit and the shot-to-shot scatter, not an independent validation"
+  },
+  "pattern_on_torso_plate": {
+   "target": "18 in wide x 30 in tall, centred aim (our choice of plate)",
+   "rows": [
+    {
+     "range_yd": 10,
+     "mean_pellets_on": 8.99,
+     "p_all_nine_on": 0.991
+    },
+    {
+     "range_yd": 20,
+     "mean_pellets_on": 8.12,
+     "p_all_nine_on": 0.402
+    },
+    {
+     "range_yd": 30,
+     "mean_pellets_on": 6.18,
+     "p_all_nine_on": 0.03
+    },
+    {
+     "range_yd": 40,
+     "mean_pellets_on": 4.47,
+     "p_all_nine_on": 0.003
+    }
+   ],
+   "article": "\"beyond 20 yards at least one pellet will likely miss a human-size target; beyond 30, half will be hard to keep on a silhouette\" (paraphrase of the same article)",
+   "reading": "at 20 yd the model drops at least one pellet off the plate in about 60 % of shots, and at 40 yd it keeps about half on: the same picture as the article, a little kinder at 30 yd. A normal scatter has no fliers; real patterns do"
+  }
+ },
+ "tables": {
+  "slug": [
+   {
+    "range_m": 0,
+    "v": 490.73,
+    "energy_j": 3417.4,
+    "tof_s": 0.0,
+    "drop_m": -0.0
+   },
+   {
+    "range_m": 5,
+    "v": 480.74,
+    "energy_j": 3279.6,
+    "tof_s": 0.01029,
+    "drop_m": 0.00052
+   },
+   {
+    "range_m": 10,
+    "v": 470.93,
+    "energy_j": 3147.2,
+    "tof_s": 0.0208,
+    "drop_m": 0.00209
+   },
+   {
+    "range_m": 15,
+    "v": 461.33,
+    "energy_j": 3020.2,
+    "tof_s": 0.03153,
+    "drop_m": 0.00478
+   },
+   {
+    "range_m": 20,
+    "v": 451.94,
+    "energy_j": 2898.5,
+    "tof_s": 0.04248,
+    "drop_m": 0.00861
+   },
+   {
+    "range_m": 25,
+    "v": 442.76,
+    "energy_j": 2781.9,
+    "tof_s": 0.05366,
+    "drop_m": 0.01365
+   },
+   {
+    "range_m": 30,
+    "v": 433.8,
+    "energy_j": 2670.5,
+    "tof_s": 0.06507,
+    "drop_m": 0.01993
+   },
+   {
+    "range_m": 40,
+    "v": 416.59,
+    "energy_j": 2462.8,
+    "tof_s": 0.08859,
+    "drop_m": 0.03647
+   },
+   {
+    "range_m": 50,
+    "v": 400.37,
+    "energy_j": 2274.7,
+    "tof_s": 0.11308,
+    "drop_m": 0.05866
+   },
+   {
+    "range_m": 75,
+    "v": 364.65,
+    "energy_j": 1887.0,
+    "tof_s": 0.17859,
+    "drop_m": 0.14198
+   },
+   {
+    "range_m": 100,
+    "v": 336.56,
+    "energy_j": 1607.4,
+    "tof_s": 0.25007,
+    "drop_m": 0.27141
+   }
+  ],
+  "buck00": [
+   {
+    "range_m": 0,
+    "v": 403.86,
+    "energy_j": 285.4,
+    "tof_s": 0.0,
+    "drop_m": -0.0
+   },
+   {
+    "range_m": 5,
+    "v": 385.86,
+    "energy_j": 260.5,
+    "tof_s": 0.01267,
+    "drop_m": 0.00078
+   },
+   {
+    "range_m": 10,
+    "v": 369.05,
+    "energy_j": 238.3,
+    "tof_s": 0.02592,
+    "drop_m": 0.0032
+   },
+   {
+    "range_m": 15,
+    "v": 353.54,
+    "energy_j": 218.7,
+    "tof_s": 0.03977,
+    "drop_m": 0.00742
+   },
+   {
+    "range_m": 20,
+    "v": 339.26,
+    "energy_j": 201.4,
+    "tof_s": 0.05421,
+    "drop_m": 0.01361
+   },
+   {
+    "range_m": 25,
+    "v": 326.2,
+    "energy_j": 186.2,
+    "tof_s": 0.06924,
+    "drop_m": 0.02192
+   },
+   {
+    "range_m": 30,
+    "v": 314.31,
+    "energy_j": 172.9,
+    "tof_s": 0.08486,
+    "drop_m": 0.03254
+   },
+   {
+    "range_m": 40,
+    "v": 293.4,
+    "energy_j": 150.6,
+    "tof_s": 0.11781,
+    "drop_m": 0.06141
+   },
+   {
+    "range_m": 50,
+    "v": 275.41,
+    "energy_j": 132.7,
+    "tof_s": 0.15301,
+    "drop_m": 0.10168
+   },
+   {
+    "range_m": 75,
+    "v": 238.73,
+    "energy_j": 99.7,
+    "tof_s": 0.25072,
+    "drop_m": 0.26252
+   },
+   {
+    "range_m": 100,
+    "v": 209.42,
+    "energy_j": 76.7,
+    "tof_s": 0.3627,
+    "drop_m": 0.53136
+   }
+  ]
+ },
+ "sight_bead_flat": {
+  "bore_above_sight_line_rad": 0.01515,
+  "sight_line_height_at_muzzle_m": 0.0133,
+  "poi": {
+   "slug": [
+    {
+     "range_m": 5,
+     "above_sight_line_m": 0.0619
+    },
+    {
+     "range_m": 10,
+     "above_sight_line_m": 0.1361
+    },
+    {
+     "range_m": 15,
+     "above_sight_line_m": 0.2091
+    },
+    {
+     "range_m": 20,
+     "above_sight_line_m": 0.281
+    },
+    {
+     "range_m": 25,
+     "above_sight_line_m": 0.3517
+    },
+    {
+     "range_m": 30,
+     "above_sight_line_m": 0.4212
+    },
+    {
+     "range_m": 40,
+     "above_sight_line_m": 0.5561
+    },
+    {
+     "range_m": 50,
+     "above_sight_line_m": 0.6854
+    },
+    {
+     "range_m": 75,
+     "above_sight_line_m": 0.9807
+    },
+    {
+     "range_m": 100,
+     "above_sight_line_m": 1.2299
+    }
+   ],
+   "buck00": [
+    {
+     "range_m": 5,
+     "above_sight_line_m": 0.0617
+    },
+    {
+     "range_m": 10,
+     "above_sight_line_m": 0.135
+    },
+    {
+     "range_m": 15,
+     "above_sight_line_m": 0.2065
+    },
+    {
+     "range_m": 20,
+     "above_sight_line_m": 0.276
+    },
+    {
+     "range_m": 25,
+     "above_sight_line_m": 0.3434
+    },
+    {
+     "range_m": 30,
+     "above_sight_line_m": 0.4085
+    },
+    {
+     "range_m": 40,
+     "above_sight_line_m": 0.5311
+    },
+    {
+     "range_m": 50,
+     "above_sight_line_m": 0.6423
+    },
+    {
+     "range_m": 75,
+     "above_sight_line_m": 0.8601
+    },
+    {
+     "range_m": 100,
+     "above_sight_line_m": 0.9699
+    }
+   ]
+  },
+  "note": "With the bead seen resting on the receiver's flat top, the bore points up by this angle and shots land high. Model-derived from the traced receiver top and a bead that is 2 px tall in the photo (about +/- 1.5 mrad), not a published figure. A shooter whose eye sits above the receiver sees more barrel and shoots flatter: a game may aim along the bore instead."
+ },
+ "reference_scatter_rad": {
+  "seed": 2026,
+  "shots": [
+   [
+    [
+     -0.003378142,
+     0.008773524
+    ],
+    [
+     -0.00501512,
+     -0.004619898
+    ],
+    [
+     0.002559375,
+     0.014315555
+    ],
+    [
+     0.002078223,
+     -0.006208587
+    ],
+    [
+     0.011318043,
+     0.00310912
+    ],
+    [
+     -0.012750603,
+     -0.011910538
+    ],
+    [
+     0.007749673,
+     0.006789325
+    ],
+    [
+     -0.006773873,
+     0.012129466
+    ],
+    [
+     0.008837257,
+     -0.004795864
+    ]
+   ],
+   [
+    [
+     0.008008486,
+     8.7133e-05
+    ],
+    [
+     -0.002182118,
+     0.013189434
+    ],
+    [
+     0.005084459,
+     -0.001532617
+    ],
+    [
+     0.000245961,
+     -0.002574755
+    ],
+    [
+     -0.001807643,
+     0.0118483
+    ],
+    [
+     -0.002272457,
+     0.009691591
+    ],
+    [
+     0.003723926,
+     -0.005672969
+    ],
+    [
+     0.010127933,
+     -0.005680954
+    ],
+    [
+     0.016280999,
+     0.004268141
+    ]
+   ],
+   [
+    [
+     0.00161997,
+     -0.010960894
+    ],
+    [
+     -0.004573951,
+     0.00355219
+    ],
+    [
+     -0.000861101,
+     -0.001729249
+    ],
+    [
+     -0.004775217,
+     0.005409424
+    ],
+    [
+     0.019725298,
+     -0.000873907
+    ],
+    [
+     0.013526641,
+     -0.002878907
+    ],
+    [
+     -0.000695604,
+     0.004507766
+    ],
+    [
+     0.003927866,
+     0.008007529
+    ],
+    [
+     -0.001327898,
+     -0.000967476
+    ]
+   ]
+  ]
+ },
+ "muzzle": {
+  "slug": {
+   "v": 490.73,
+   "energy_j": 3417.4,
+   "momentum": 13.928
+  },
+  "buck00": {
+   "v": 403.86,
+   "energy_j": 2568.7,
+   "momentum": 12.721
+  }
+ }
+}

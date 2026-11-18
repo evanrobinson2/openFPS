@@ -1,0 +1,592 @@
+{
+ "about": "Source-indexed decomposition of the chosen references. Regions are pixel boxes [x0, y0, x1, y1] in the named source. P = refs-local/commons-atf-mossberg-590.jpg (1148 x 263, right side, public domain). L = refs-local/commons-peo-590a1-cropped-1280.jpg (1920 x 389, left side of a 590A1, public domain; left-side controls only). M = owner's manual 103855, by PDF page and figure (not committed). status: built | merged (into the part named) | omitted (reason in notes/NOTES.md).",
+ "grid": "P was inspected in a 12 px column grid (model/tools/trace_reference.py prints every column's covered runs) and in three enlarged crops: stock x 0..500, receiver x 333..733, front x 667..1148.",
+ "features": [
+  {
+   "id": "P01",
+   "src": "P",
+   "region": [
+    29,
+    75,
+    365,
+    229
+   ],
+   "what": "buttstock: straight comb rising to the receiver, pistol-grip wrist, belly line to the toe",
+   "material": "black polymer, light texture",
+   "parts": [
+    "stock"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "P02",
+   "src": "P",
+   "region": [
+    29,
+    100,
+    76,
+    229
+   ],
+   "what": "recoil pad, joint line slanted (top x 54, bottom x 75), toe further forward than heel",
+   "material": "black rubber",
+   "parts": [
+    "recoil_pad"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "P03",
+   "src": "P",
+   "region": [
+    33,
+    108,
+    72,
+    222
+   ],
+   "what": "slanted vent slots moulded into the pad's side (about 12)",
+   "material": "rubber",
+   "parts": [
+    "recoil_pad"
+   ],
+   "status": "omitted"
+  },
+  {
+   "id": "P04",
+   "src": "P",
+   "region": [
+    129,
+    190,
+    140,
+    201
+   ],
+   "what": "rear sling swivel stud under the stock",
+   "material": "steel",
+   "parts": [
+    "rear_swivel_stud"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "P05",
+   "src": "P",
+   "region": [
+    357,
+    31,
+    577,
+    99
+   ],
+   "what": "receiver: flat sides, flat top from x 405 to 570, rear slope down to the stock joint, small bevel at the front",
+   "material": "dark anodised alloy, matte",
+   "parts": [
+    "receiver"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "P06",
+   "src": "P",
+   "region": [
+    376,
+    37,
+    399,
+    46
+   ],
+   "what": "safety button: ribbed slider on the top rear slope",
+   "material": "black",
+   "parts": [
+    "safety_button",
+    "safety_red_dot"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "P07",
+   "src": "P",
+   "region": [
+    483,
+    47,
+    556,
+    71
+   ],
+   "what": "ejection port, rounded corners; the bolt fills it with the action closed",
+   "material": "opening",
+   "parts": [
+    "receiver",
+    "bolt"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "P08",
+   "src": "P",
+   "region": [
+    535,
+    55,
+    556,
+    61
+   ],
+   "what": "extractor and its slot at the bolt's front right",
+   "material": "steel",
+   "parts": [
+    "extractor"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "P09",
+   "src": "P",
+   "region": [
+    393,
+    81,
+    401,
+    89
+   ],
+   "what": "trigger housing retainer pin, round head",
+   "material": "steel",
+   "parts": [
+    "trigger_housing_pin"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "P10",
+   "src": "P",
+   "region": [
+    492,
+    84,
+    498,
+    90
+   ],
+   "what": "small hole under the port: taken as an elevator stud hole (manual p16: the elevator's studs fit 1/4 in holes in the receiver)",
+   "material": "hole",
+   "parts": [
+    "elevator_stud_r",
+    "elevator_stud_l"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "P11",
+   "src": "P",
+   "region": [
+    405,
+    62,
+    412,
+    68
+   ],
+   "what": "small round plug on the receiver side, upper rear; the left-side photo shows one at the same place (L04). Function not identified",
+   "material": "steel",
+   "parts": [
+    "receiver_side_plug_r"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "P12",
+   "src": "P",
+   "region": [
+    436,
+    33,
+    512,
+    37
+   ],
+   "what": "two filler screws seen at the top edge (x 446 and 510)",
+   "material": "steel",
+   "parts": [
+    "receiver_top_screw_1",
+    "receiver_top_screw_2"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "P13",
+   "src": "P",
+   "region": [
+    395,
+    96,
+    466,
+    128
+   ],
+   "what": "trigger guard loop and the housing's lower edge under the receiver",
+   "material": "black polymer",
+   "parts": [
+    "trigger_housing",
+    "trigger_guard"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "P14",
+   "src": "P",
+   "region": [
+    405,
+    99,
+    418,
+    123
+   ],
+   "what": "trigger blade, curved forward at the tip",
+   "material": "steel",
+   "parts": [
+    "trigger"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "P15",
+   "src": "P",
+   "region": [
+    577,
+    38,
+    1117,
+    67
+   ],
+   "what": "barrel: collar at the receiver, taper over the first 230 px, then parallel to the muzzle",
+   "material": "parkerised steel",
+   "parts": [
+    "barrel"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "P16",
+   "src": "P",
+   "region": [
+    1100,
+    39,
+    1106,
+    44
+   ],
+   "what": "bead front sight",
+   "material": "brass",
+   "parts": [
+    "front_bead"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "P17",
+   "src": "P",
+   "region": [
+    577,
+    71,
+    1084,
+    98
+   ],
+   "what": "magazine tube under the barrel, full length",
+   "material": "parkerised steel",
+   "parts": [
+    "magazine_tube"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "P18",
+   "src": "P",
+   "region": [
+    578,
+    70,
+    700,
+    79
+   ],
+   "what": "action slide bar between barrel and tube, running into the forend (right bar seen; left assumed by symmetry, manual Fig. 22 names bars in the plural)",
+   "material": "steel",
+   "parts": [
+    "action_bar_right",
+    "action_bar_left"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "P19",
+   "src": "P",
+   "region": [
+    683,
+    67,
+    903,
+    110
+   ],
+   "what": "forend: round, rear lip, about 19 ring ribs from x 735 to 850, smooth nose with a rounded front",
+   "material": "black polymer",
+   "parts": [
+    "forend"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "P20",
+   "src": "P",
+   "region": [
+    955,
+    64,
+    987,
+    115
+   ],
+   "what": "band around barrel and tube with a lug hanging below it (bayonet lug)",
+   "material": "parkerised steel",
+   "parts": [
+    "lug_band"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "P21",
+   "src": "P",
+   "region": [
+    1059,
+    64,
+    1085,
+    101
+   ],
+   "what": "barrel takedown ring around the tube (manual p6: the barrel's takedown mount hole slides over the magazine tube)",
+   "material": "parkerised steel",
+   "parts": [
+    "barrel_ring"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "P22",
+   "src": "P",
+   "region": [
+    1083,
+    72,
+    1112,
+    99
+   ],
+   "what": "magazine cap with the front swivel stud at its tip",
+   "material": "parkerised steel",
+   "parts": [
+    "magazine_cap",
+    "front_swivel_stud"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "P23",
+   "src": "P",
+   "region": [
+    357,
+    50,
+    372,
+    99
+   ],
+   "what": "stock to receiver joint, slanted",
+   "material": "joint",
+   "parts": [
+    "stock",
+    "receiver"
+   ],
+   "status": "merged"
+  },
+  {
+   "id": "P24",
+   "src": "P",
+   "region": [
+    0,
+    0,
+    1148,
+    263
+   ],
+   "what": "lighting and surface: flat frontal flash on a white ground, matte dark finishes, wear specks on barrel and tube",
+   "material": "-",
+   "parts": [],
+   "status": "omitted"
+  },
+  {
+   "id": "L01",
+   "src": "L",
+   "region": [
+    1268,
+    130,
+    1283,
+    139
+   ],
+   "what": "action lock lever behind the trigger guard, left side (manual p6 Fig. 4)",
+   "material": "steel",
+   "parts": [
+    "action_lock_lever"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "L02",
+   "src": "L",
+   "region": [
+    1064,
+    60,
+    1070,
+    66
+   ],
+   "what": "ejector screw head on the left wall (manual p28 items 10 and 11)",
+   "material": "steel",
+   "parts": [
+    "ejector_screw",
+    "ejector"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "L03",
+   "src": "L",
+   "region": [
+    350,
+    35,
+    975,
+    75
+   ],
+   "what": "perforated heat shield over the barrel (a 590A1 fitting, also manual p30 items 31 to 34)",
+   "material": "steel",
+   "parts": [],
+   "status": "omitted"
+  },
+  {
+   "id": "L04",
+   "src": "L",
+   "region": [
+    1240,
+    68,
+    1249,
+    77
+   ],
+   "what": "round plug on the left side, upper rear (mirror of P11)",
+   "material": "steel",
+   "parts": [
+    "receiver_side_plug_l"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "L05",
+   "src": "L",
+   "region": [
+    1010,
+    127,
+    1137,
+    145
+   ],
+   "what": "loading port in the receiver's underside, in front of the trigger guard, with the elevator closing it",
+   "material": "opening",
+   "parts": [
+    "receiver",
+    "elevator"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "L06",
+   "src": "L",
+   "region": [
+    1105,
+    80,
+    1290,
+    112
+   ],
+   "what": "maker's roll marks and serial number on the receiver",
+   "material": "engraving",
+   "parts": [],
+   "status": "omitted"
+  },
+  {
+   "id": "M01",
+   "src": "M",
+   "region": "p5 Fig. 2 and 3",
+   "what": "safety: rearward is ON (SAFE) and covers the red dot; forward is OFF (FIRE) and shows it",
+   "parts": [
+    "safety_button",
+    "safety_red_dot"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "M02",
+   "src": "M",
+   "region": "p6 Fig. 4",
+   "what": "action lock lever: press it up to unlock and open the action without pulling the trigger",
+   "parts": [
+    "action_lock_lever"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "M03",
+   "src": "M",
+   "region": "p13 Fig. 17, p17 Fig. 23",
+   "what": "cartridge stop (right wall) and cartridge interrupter (left wall), loose bars held by the trigger housing",
+   "parts": [
+    "cartridge_stop",
+    "cartridge_interrupter"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "M04",
+   "src": "M",
+   "region": "p14 Fig. 19, p16 Fig. 21",
+   "what": "elevator: a fork with two arms and studs that pivot in the receiver; the front end lifts the shell",
+   "parts": [
+    "elevator"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "M05",
+   "src": "M",
+   "region": "p14 Fig. 18, p17 Fig. 22",
+   "what": "bolt slide under the bolt, driven by notches in both action slide bars; bolt lock on the bolt",
+   "parts": [
+    "bolt_slide",
+    "bolt_lock"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "M06",
+   "src": "M",
+   "region": "p14 Fig. 19, p16 Fig. 21",
+   "what": "bolt assembly, removed forwards through the barrel opening; ejector on the wall opposite the port",
+   "parts": [
+    "bolt",
+    "ejector"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "M07",
+   "src": "M",
+   "region": "p13 Fig. 16, p18 Fig. 24",
+   "what": "trigger housing assembly lifts out rear first once its pin is pushed out; front lugs hook in receiver slots",
+   "parts": [
+    "trigger_housing"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "M08",
+   "src": "M",
+   "region": "p28 and p30 parts lists",
+   "what": "magazine follower and spring inside the tube",
+   "parts": [
+    "magazine_follower"
+   ],
+   "status": "built"
+  },
+  {
+   "id": "M09",
+   "src": "M",
+   "region": "p28 and p30 parts lists",
+   "what": "magazine spring; retaining ring and washer of the swivel stud; action slide tube nut; hammer and the trigger housing's internals",
+   "parts": [],
+   "status": "omitted"
+  },
+  {
+   "id": "M10",
+   "src": "M",
+   "region": "p31 exploded view item 16",
+   "what": "action slide assembly: a tube over the magazine tube carrying both bars; the forend fits over it",
+   "parts": [
+    "action_slide_tube"
+   ],
+   "status": "built"
+  }
+ ]
+}

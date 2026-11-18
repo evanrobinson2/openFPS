@@ -1,0 +1,27 @@
+{
+  "asset": "suppressor-qd-556",
+  "credit": "carpetshark",
+  "modelled_by": [
+    {
+      "part": "geometry recipe (model/geom.py, model/build.py)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    },
+    {
+      "part": "gas dynamics, sound, back-pressure, heat and flash-input simulation (sim/)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    },
+    {
+      "part": "sample page (sample/index.html)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    },
+    {
+      "part": "sound patch for HK416 sound v2 and the cinematic chain (sim/suppressor-qd-556.js soundOverlay, sim/core.py)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    }
+  ],
+  "status": "Simulation-grade gas dynamics, sound patch, action input, heat and flash input; parametric geometry recipe (Python and Blender Python). Generic design: no product was measured. Not yet reviewed by the owner or validated by listening."
+}

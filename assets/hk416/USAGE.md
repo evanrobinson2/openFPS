@@ -10,7 +10,7 @@ choice of surroundings and earmuffs, the bolt carrier and recoil in slow motion,
 
 | Part | State |
 |---|---|
-| Sound (`sound/`) | Ready. Synthesised in the browser from `params.json`; the JS port matches the Python to -160 dB. Not yet validated by listening. |
+| Sound (`sound/`) | Cinematic mode is the default (designed sound, measured, **not yet heard by the owner**); the physical simulation below is mode `'realistic'`. Version 2. Synthesised in the browser from `params.json`; the JS port matches the Python to -160 dB. Muzzle source and action noise are driven by `action/action.json`. Checked by measurement; the owner has not yet listened to version 2. |
 | Action and recoil (`action/`) | Ready. Calibrated to the manual: 850 m/s, 52,000 psi, about 800 rpm, 3.49 kg. |
 | Ballistics (`ballistics/`) | Ready. M855, Mk 262 and M856 with G7 drag, HK's zeros, dispersion and terminal effects. |
 | Geometry (`model/`) | Ready as a recipe. `build.py` is Blender Python: 301 named parts, 13 clips, 7 sockets, two LODs. It writes `hk416.glb`, a build output that is never committed. The sample page doesn't draw the model yet. Renders of a build are in `renders/`. |
@@ -40,7 +40,7 @@ const S = await HK416Sound.build(ac);                 // loads params.json next 
 await HK416Action.load('assets/hk416/action/action.json');
 
 // one shot: sound now, mechanism and recoil sampled every frame from t = 0 (the trigger break)
-const chain = await S.chain({ overlay: 'range_berm', hpd: false, ear: true });
+const chain = await S.chain({ overlay: 'range_berm', hpd: false, ear: true });   // omit overlay for S.defaultOverlay; null or 'dry' = free field
 chain.output.connect(ac.destination);
 const src = ac.createBufferSource(); src.buffer = S.shot('single'); src.connect(chain.input); src.start();
 const s = HK416Action.sample(t, { stance: 'ads', mode: 'semi' });   // s.carrierZ, s.boltRot, s.recoil.{pos,pitch,yaw,pivot}
@@ -52,6 +52,29 @@ const hits = shot.trace(targets);                     // or shot.advance(dt, tar
 ```
 
 Full APIs: `sound/README.md`, `action/README.md`, `ballistics/README.md`.
+
+## Sound: cinematic by default
+
+Since 2026-11-17 `HK416Sound.build(ac)` plays a **designed, game-style shot** (mode `'cinematic'`): crack, body,
+falling thump, the bolt carrier's action brought forward, a long tail that follows the surroundings, and a
+compressed bus. The owner's decision: the physical shot is a 0.2 ms shock that speakers cannot play. The physical
+simulation is still here, unchanged, as mode `'realistic'`. Both are synthesised from the simulation; neither is a
+recording. The calls above work in both modes. The simplest way to play the rifle:
+
+```js
+const S = await HK416Sound.build(ac);                    // or { mode: 'realistic' }
+const chain = await S.chain({ overlay: 'range_berm' });  chain.output.connect(ac.destination);
+chain.fire();                                            // one shot
+chain.auto({ shots: 10 });                               // 10 rounds at the simulated 800 rpm (or fire() per shot)
+chain.mech('charge');                                    // a mechanical sound: S.mechClips
+await chain.set({ distance: 50, bearing: 'front' });     // heard 50 m down the line of fire: the bullet's crack, then the blast
+await chain.set({ hpd: true });                          // earmuffs
+await chain.set({ suppressor: SuppressorQD556.soundParams(hkParams, 'subsequent') });   // null takes it off
+await chain.set({ mode: 'realistic' });                  // the physical simulation
+```
+
+Design, full API, measurements and limits: [`shared/cinematic-sound/README.md`](../../shared/cinematic-sound/README.md).
+`sound/index.html` stays on the physical simulation.
 
 ## Frame and units
 
@@ -74,7 +97,7 @@ Sockets include `socket_optic`, `socket_muzzle`, `socket_ads_eye` and `socket_ha
 
 - The model is the exterior a player sees; hidden internals are not modelled (no hammer or firing pin nodes).
 - The selector has no auto position; the rear sight is a folding ring rather than HK's diopter drum.
-- Sound: the dry shot's body comes from the room overlays; it has not been checked by listening.
+- Sound: played linearly, a shot in the open is a 0.2 ms shock and little else; that is the physics. The `ear` stage of `S.chain()` (on by default) models the ear's own peak limit and is what makes it play as a shot. The two reference recordings are overloaded and validate timing and decay only (`sound/README.md`).
 - See `notes/MANUAL_COMPARE.md` and each simulation's README for the rest.
 
 ## Sources
@@ -82,3 +105,9 @@ Sockets include `socket_optic`, `socket_muzzle`, `socket_ads_eye` and `socket_ha
 `notes/MANUAL_NOTES.md` summarises the facts used from HK's maintenance manual, with page numbers.
 `notes/REFERENCES.md` cites the reference images used to measure the shape. Neither the manual nor the images are in
 this repository.
+
+## Attachments
+
+| Asset | Fits | What it changes |
+|---|---|---|
+| [`assets/suppressor-qd-556/`](../suppressor-qd-556/USAGE.md) | `socket_muzzle` | Generic QD suppressor: a patch for `sound/params.json`, an overlay for `action/action.json`, can heating, flash scales. |

@@ -1,0 +1,929 @@
+{
+ "note": "band envelopes and summary measures of every sound of version 1 (params.json at commit 48d0d2c), measured with measure.py; simulation only. bands.json holds the same measures of the current version",
+ "sounds": {
+  "shot_buck00_shooter": {
+   "peak_db": 158.3,
+   "sel_db": 123.8,
+   "b_duration_ms": 29.94,
+   "energy_after_2ms_db": -1.9,
+   "energy_after_10ms_db": -3.5,
+   "energy_after_50ms_db": -10.9,
+   "spectral_centroid_hz": 1279,
+   "energy_below_250hz_db": -3.4,
+   "bands": {
+    "63": {
+     "sel_db": 114.1,
+     "rms_0_2ms_db": 131.6,
+     "rms_2_10ms_db": 128.6,
+     "rms_10_50ms_db": 121.3,
+     "rms_50_200ms_db": 110.9,
+     "rms_200_500ms_db": 112.0,
+     "stays_20db_down_after_ms": 438.9
+    },
+    "125": {
+     "sel_db": 119.3,
+     "rms_0_2ms_db": 118.2,
+     "rms_2_10ms_db": 132.4,
+     "rms_10_50ms_db": 130.8,
+     "rms_50_200ms_db": 120.4,
+     "rms_200_500ms_db": 110.5,
+     "stays_20db_down_after_ms": 438.9
+    },
+    "250": {
+     "sel_db": 111.0,
+     "rms_0_2ms_db": 132.7,
+     "rms_2_10ms_db": 125.7,
+     "rms_10_50ms_db": 114.8,
+     "rms_50_200ms_db": 104.4,
+     "rms_200_500ms_db": 99.5,
+     "stays_20db_down_after_ms": 437.6
+    },
+    "500": {
+     "sel_db": 114.9,
+     "rms_0_2ms_db": 138.2,
+     "rms_2_10ms_db": 127.0,
+     "rms_10_50ms_db": 119.9,
+     "rms_50_200ms_db": 109.6,
+     "rms_200_500ms_db": 100.8,
+     "stays_20db_down_after_ms": 64.2
+    },
+    "1000": {
+     "sel_db": 115.7,
+     "rms_0_2ms_db": 137.9,
+     "rms_2_10ms_db": 127.1,
+     "rms_10_50ms_db": 123.6,
+     "rms_50_200ms_db": 112.7,
+     "rms_200_500ms_db": 99.4,
+     "stays_20db_down_after_ms": 71.8
+    },
+    "2000": {
+     "sel_db": 113.7,
+     "rms_0_2ms_db": 134.5,
+     "rms_2_10ms_db": 127.0,
+     "rms_10_50ms_db": 122.1,
+     "rms_50_200ms_db": 111.0,
+     "rms_200_500ms_db": 94.5,
+     "stays_20db_down_after_ms": 87.6
+    },
+    "4000": {
+     "sel_db": 112.2,
+     "rms_0_2ms_db": 132.9,
+     "rms_2_10ms_db": 126.6,
+     "rms_10_50ms_db": 121.1,
+     "rms_50_200ms_db": 108.4,
+     "rms_200_500ms_db": 86.8,
+     "stays_20db_down_after_ms": 64.8
+    },
+    "8000": {
+     "sel_db": 109.3,
+     "rms_0_2ms_db": 130.1,
+     "rms_2_10ms_db": 122.5,
+     "rms_10_50ms_db": 118.5,
+     "rms_50_200ms_db": 105.3,
+     "rms_200_500ms_db": 84.5,
+     "stays_20db_down_after_ms": 60.7
+    }
+   }
+  },
+  "shot_buck00_bystander": {
+   "peak_db": 151.2,
+   "sel_db": 117.1,
+   "b_duration_ms": 29.67,
+   "energy_after_2ms_db": -1.7,
+   "energy_after_10ms_db": -3.9,
+   "energy_after_50ms_db": -11.3,
+   "spectral_centroid_hz": 1271,
+   "energy_below_250hz_db": -3.6,
+   "bands": {
+    "63": {
+     "sel_db": 108.0,
+     "rms_0_2ms_db": 125.4,
+     "rms_2_10ms_db": 122.6,
+     "rms_10_50ms_db": 115.2,
+     "rms_50_200ms_db": 104.3,
+     "rms_200_500ms_db": 104.1,
+     "stays_20db_down_after_ms": 426.9
+    },
+    "125": {
+     "sel_db": 112.1,
+     "rms_0_2ms_db": 119.0,
+     "rms_2_10ms_db": 124.5,
+     "rms_10_50ms_db": 123.5,
+     "rms_50_200ms_db": 113.4,
+     "rms_200_500ms_db": 102.5,
+     "stays_20db_down_after_ms": 426.9
+    },
+    "250": {
+     "sel_db": 104.3,
+     "rms_0_2ms_db": 125.0,
+     "rms_2_10ms_db": 120.1,
+     "rms_10_50ms_db": 108.6,
+     "rms_50_200ms_db": 97.7,
+     "rms_200_500ms_db": 92.2,
+     "stays_20db_down_after_ms": 51.4
+    },
+    "500": {
+     "sel_db": 108.7,
+     "rms_0_2ms_db": 131.0,
+     "rms_2_10ms_db": 123.5,
+     "rms_10_50ms_db": 113.3,
+     "rms_50_200ms_db": 102.6,
+     "rms_200_500ms_db": 93.8,
+     "stays_20db_down_after_ms": 64.3
+    },
+    "1000": {
+     "sel_db": 109.1,
+     "rms_0_2ms_db": 131.6,
+     "rms_2_10ms_db": 121.7,
+     "rms_10_50ms_db": 116.4,
+     "rms_50_200ms_db": 105.6,
+     "rms_200_500ms_db": 89.8,
+     "stays_20db_down_after_ms": 71.6
+    },
+    "2000": {
+     "sel_db": 106.7,
+     "rms_0_2ms_db": 127.8,
+     "rms_2_10ms_db": 120.4,
+     "rms_10_50ms_db": 114.9,
+     "rms_50_200ms_db": 103.8,
+     "rms_200_500ms_db": 84.2,
+     "stays_20db_down_after_ms": 87.5
+    },
+    "4000": {
+     "sel_db": 105.4,
+     "rms_0_2ms_db": 125.7,
+     "rms_2_10ms_db": 120.6,
+     "rms_10_50ms_db": 113.9,
+     "rms_50_200ms_db": 101.2,
+     "rms_200_500ms_db": 79.8,
+     "stays_20db_down_after_ms": 64.8
+    },
+    "8000": {
+     "sel_db": 102.6,
+     "rms_0_2ms_db": 123.1,
+     "rms_2_10ms_db": 117.4,
+     "rms_10_50ms_db": 111.3,
+     "rms_50_200ms_db": 98.1,
+     "rms_200_500ms_db": 76.6,
+     "stays_20db_down_after_ms": 60.7
+    }
+   }
+  },
+  "shot_slug_shooter": {
+   "peak_db": 159.4,
+   "sel_db": 125.2,
+   "b_duration_ms": 29.98,
+   "energy_after_2ms_db": -2.1,
+   "energy_after_10ms_db": -3.6,
+   "energy_after_50ms_db": -11.0,
+   "spectral_centroid_hz": 1244,
+   "energy_below_250hz_db": -3.4,
+   "bands": {
+    "63": {
+     "sel_db": 115.5,
+     "rms_0_2ms_db": 132.9,
+     "rms_2_10ms_db": 130.0,
+     "rms_10_50ms_db": 122.7,
+     "rms_50_200ms_db": 112.2,
+     "rms_200_500ms_db": 113.3,
+     "stays_20db_down_after_ms": 439.0
+    },
+    "125": {
+     "sel_db": 120.5,
+     "rms_0_2ms_db": 116.9,
+     "rms_2_10ms_db": 133.1,
+     "rms_10_50ms_db": 132.1,
+     "rms_50_200ms_db": 121.7,
+     "rms_200_500ms_db": 111.8,
+     "stays_20db_down_after_ms": 439.0
+    },
+    "250": {
+     "sel_db": 113.4,
+     "rms_0_2ms_db": 135.4,
+     "rms_2_10ms_db": 128.1,
+     "rms_10_50ms_db": 116.2,
+     "rms_50_200ms_db": 105.8,
+     "rms_200_500ms_db": 102.2,
+     "stays_20db_down_after_ms": 437.7
+    },
+    "500": {
+     "sel_db": 116.5,
+     "rms_0_2ms_db": 139.9,
+     "rms_2_10ms_db": 128.3,
+     "rms_10_50ms_db": 121.1,
+     "rms_50_200ms_db": 110.9,
+     "rms_200_500ms_db": 102.7,
+     "stays_20db_down_after_ms": 63.6
+    },
+    "1000": {
+     "sel_db": 117.0,
+     "rms_0_2ms_db": 139.2,
+     "rms_2_10ms_db": 128.4,
+     "rms_10_50ms_db": 124.8,
+     "rms_50_200ms_db": 114.0,
+     "rms_200_500ms_db": 100.9,
+     "stays_20db_down_after_ms": 71.7
+    },
+    "2000": {
+     "sel_db": 114.9,
+     "rms_0_2ms_db": 135.6,
+     "rms_2_10ms_db": 128.2,
+     "rms_10_50ms_db": 123.3,
+     "rms_50_200ms_db": 112.2,
+     "rms_200_500ms_db": 96.0,
+     "stays_20db_down_after_ms": 87.6
+    },
+    "4000": {
+     "sel_db": 113.4,
+     "rms_0_2ms_db": 134.0,
+     "rms_2_10ms_db": 127.8,
+     "rms_10_50ms_db": 122.3,
+     "rms_50_200ms_db": 109.6,
+     "rms_200_500ms_db": 88.0,
+     "stays_20db_down_after_ms": 64.9
+    },
+    "8000": {
+     "sel_db": 110.5,
+     "rms_0_2ms_db": 131.2,
+     "rms_2_10ms_db": 123.7,
+     "rms_10_50ms_db": 119.7,
+     "rms_50_200ms_db": 106.6,
+     "rms_200_500ms_db": 85.7,
+     "stays_20db_down_after_ms": 60.7
+    }
+   }
+  },
+  "shot_slug_bystander": {
+   "peak_db": 152.3,
+   "sel_db": 118.5,
+   "b_duration_ms": 29.92,
+   "energy_after_2ms_db": -1.9,
+   "energy_after_10ms_db": -4.1,
+   "energy_after_50ms_db": -11.4,
+   "spectral_centroid_hz": 1221,
+   "energy_below_250hz_db": -3.6,
+   "bands": {
+    "63": {
+     "sel_db": 109.7,
+     "rms_0_2ms_db": 127.1,
+     "rms_2_10ms_db": 124.4,
+     "rms_10_50ms_db": 116.9,
+     "rms_50_200ms_db": 105.8,
+     "rms_200_500ms_db": 105.7,
+     "stays_20db_down_after_ms": 427.0
+    },
+    "125": {
+     "sel_db": 113.3,
+     "rms_0_2ms_db": 121.2,
+     "rms_2_10ms_db": 125.3,
+     "rms_10_50ms_db": 124.7,
+     "rms_50_200ms_db": 114.7,
+     "rms_200_500ms_db": 104.0,
+     "stays_20db_down_after_ms": 427.0
+    },
+    "250": {
+     "sel_db": 106.5,
+     "rms_0_2ms_db": 127.6,
+     "rms_2_10ms_db": 122.0,
+     "rms_10_50ms_db": 110.1,
+     "rms_50_200ms_db": 99.1,
+     "rms_200_500ms_db": 94.2,
+     "stays_20db_down_after_ms": 51.2
+    },
+    "500": {
+     "sel_db": 110.4,
+     "rms_0_2ms_db": 132.8,
+     "rms_2_10ms_db": 125.0,
+     "rms_10_50ms_db": 114.6,
+     "rms_50_200ms_db": 104.0,
+     "rms_200_500ms_db": 95.7,
+     "stays_20db_down_after_ms": 64.2
+    },
+    "1000": {
+     "sel_db": 110.4,
+     "rms_0_2ms_db": 132.9,
+     "rms_2_10ms_db": 123.0,
+     "rms_10_50ms_db": 117.6,
+     "rms_50_200ms_db": 106.8,
+     "rms_200_500ms_db": 91.3,
+     "stays_20db_down_after_ms": 71.4
+    },
+    "2000": {
+     "sel_db": 107.9,
+     "rms_0_2ms_db": 128.9,
+     "rms_2_10ms_db": 121.6,
+     "rms_10_50ms_db": 116.1,
+     "rms_50_200ms_db": 105.0,
+     "rms_200_500ms_db": 85.6,
+     "stays_20db_down_after_ms": 87.6
+    },
+    "4000": {
+     "sel_db": 106.6,
+     "rms_0_2ms_db": 126.8,
+     "rms_2_10ms_db": 121.8,
+     "rms_10_50ms_db": 115.1,
+     "rms_50_200ms_db": 102.4,
+     "rms_200_500ms_db": 81.0,
+     "stays_20db_down_after_ms": 64.9
+    },
+    "8000": {
+     "sel_db": 103.8,
+     "rms_0_2ms_db": 124.2,
+     "rms_2_10ms_db": 118.6,
+     "rms_10_50ms_db": 112.6,
+     "rms_50_200ms_db": 99.4,
+     "rms_200_500ms_db": 77.8,
+     "stays_20db_down_after_ms": 60.7
+    }
+   }
+  },
+  "pump": {
+   "peak_db": 106.2,
+   "sel_db": 80.4,
+   "b_duration_ms": 185.44,
+   "energy_after_2ms_db": -0.0,
+   "energy_after_10ms_db": -0.0,
+   "energy_after_50ms_db": -0.0,
+   "spectral_centroid_hz": 2023,
+   "energy_below_250hz_db": -7.0,
+   "bands": {
+    "63": {
+     "sel_db": 59.6,
+     "rms_0_2ms_db": 43.6,
+     "rms_2_10ms_db": 49.0,
+     "rms_10_50ms_db": 51.6,
+     "rms_50_200ms_db": 65.3,
+     "rms_200_500ms_db": 61.1,
+     "stays_20db_down_after_ms": 382.8
+    },
+    "125": {
+     "sel_db": 67.6,
+     "rms_0_2ms_db": 58.2,
+     "rms_2_10ms_db": 58.8,
+     "rms_10_50ms_db": 59.8,
+     "rms_50_200ms_db": 73.2,
+     "rms_200_500ms_db": 69.3,
+     "stays_20db_down_after_ms": 352.3
+    },
+    "250": {
+     "sel_db": 71.7,
+     "rms_0_2ms_db": 57.7,
+     "rms_2_10ms_db": 58.3,
+     "rms_10_50ms_db": 59.5,
+     "rms_50_200ms_db": 77.4,
+     "rms_200_500ms_db": 73.4,
+     "stays_20db_down_after_ms": 354.1
+    },
+    "500": {
+     "sel_db": 76.2,
+     "rms_0_2ms_db": 41.7,
+     "rms_2_10ms_db": 45.0,
+     "rms_10_50ms_db": 50.7,
+     "rms_50_200ms_db": 81.3,
+     "rms_200_500ms_db": 78.5,
+     "stays_20db_down_after_ms": 445.2
+    },
+    "1000": {
+     "sel_db": 67.4,
+     "rms_0_2ms_db": 50.4,
+     "rms_2_10ms_db": 55.1,
+     "rms_10_50ms_db": 58.3,
+     "rms_50_200ms_db": 72.7,
+     "rms_200_500ms_db": 69.4,
+     "stays_20db_down_after_ms": 374.8
+    },
+    "2000": {
+     "sel_db": 70.7,
+     "rms_0_2ms_db": 55.7,
+     "rms_2_10ms_db": 58.5,
+     "rms_10_50ms_db": 66.8,
+     "rms_50_200ms_db": 76.5,
+     "rms_200_500ms_db": 72.2,
+     "stays_20db_down_after_ms": 359.5
+    },
+    "4000": {
+     "sel_db": 72.5,
+     "rms_0_2ms_db": 58.3,
+     "rms_2_10ms_db": 61.7,
+     "rms_10_50ms_db": 71.0,
+     "rms_50_200ms_db": 77.9,
+     "rms_200_500ms_db": 74.3,
+     "stays_20db_down_after_ms": 319.1
+    },
+    "8000": {
+     "sel_db": 69.6,
+     "rms_0_2ms_db": 58.8,
+     "rms_2_10ms_db": 59.7,
+     "rms_10_50ms_db": 68.3,
+     "rms_50_200ms_db": 75.3,
+     "rms_200_500ms_db": 71.0,
+     "stays_20db_down_after_ms": 312.1
+    }
+   }
+  },
+  "pump_back": {
+   "peak_db": 106.2,
+   "sel_db": 77.8,
+   "b_duration_ms": 89.58,
+   "energy_after_2ms_db": -0.0,
+   "energy_after_10ms_db": -0.0,
+   "energy_after_50ms_db": -0.1,
+   "spectral_centroid_hz": 2015,
+   "energy_below_250hz_db": -6.9,
+   "bands": {
+    "63": {
+     "sel_db": 57.2,
+     "rms_0_2ms_db": 42.2,
+     "rms_2_10ms_db": 47.4,
+     "rms_10_50ms_db": 50.1,
+     "rms_50_200ms_db": 65.3,
+     "rms_200_500ms_db": 48.1,
+     "stays_20db_down_after_ms": 181.7
+    },
+    "125": {
+     "sel_db": 65.2,
+     "rms_0_2ms_db": 56.1,
+     "rms_2_10ms_db": 56.9,
+     "rms_10_50ms_db": 58.0,
+     "rms_50_200ms_db": 73.3,
+     "rms_200_500ms_db": 56.7,
+     "stays_20db_down_after_ms": 172.1
+    },
+    "250": {
+     "sel_db": 69.2,
+     "rms_0_2ms_db": 56.4,
+     "rms_2_10ms_db": 56.4,
+     "rms_10_50ms_db": 57.8,
+     "rms_50_200ms_db": 77.4,
+     "rms_200_500ms_db": 56.7,
+     "stays_20db_down_after_ms": 176.7
+    },
+    "500": {
+     "sel_db": 73.5,
+     "rms_0_2ms_db": 40.9,
+     "rms_2_10ms_db": 46.9,
+     "rms_10_50ms_db": 50.7,
+     "rms_50_200ms_db": 81.3,
+     "rms_200_500ms_db": 72.4,
+     "stays_20db_down_after_ms": 277.2
+    },
+    "1000": {
+     "sel_db": 64.6,
+     "rms_0_2ms_db": 50.4,
+     "rms_2_10ms_db": 55.1,
+     "rms_10_50ms_db": 58.3,
+     "rms_50_200ms_db": 72.7,
+     "rms_200_500ms_db": 57.3,
+     "stays_20db_down_after_ms": 216.0
+    },
+    "2000": {
+     "sel_db": 68.4,
+     "rms_0_2ms_db": 55.8,
+     "rms_2_10ms_db": 58.6,
+     "rms_10_50ms_db": 66.8,
+     "rms_50_200ms_db": 76.5,
+     "rms_200_500ms_db": 54.1,
+     "stays_20db_down_after_ms": 181.5
+    },
+    "4000": {
+     "sel_db": 69.9,
+     "rms_0_2ms_db": 58.3,
+     "rms_2_10ms_db": 61.7,
+     "rms_10_50ms_db": 71.0,
+     "rms_50_200ms_db": 77.9,
+     "rms_200_500ms_db": 40.1,
+     "stays_20db_down_after_ms": 143.0
+    },
+    "8000": {
+     "sel_db": 67.2,
+     "rms_0_2ms_db": 58.7,
+     "rms_2_10ms_db": 59.9,
+     "rms_10_50ms_db": 68.3,
+     "rms_50_200ms_db": 75.2,
+     "rms_200_500ms_db": 39.6,
+     "stays_20db_down_after_ms": 133.8
+    }
+   }
+  },
+  "pump_forward": {
+   "peak_db": 105.5,
+   "sel_db": 76.9,
+   "b_duration_ms": 83.23,
+   "energy_after_2ms_db": -0.0,
+   "energy_after_10ms_db": -0.0,
+   "energy_after_50ms_db": -0.1,
+   "spectral_centroid_hz": 1978,
+   "energy_below_250hz_db": -7.0,
+   "bands": {
+    "63": {
+     "sel_db": 55.7,
+     "rms_0_2ms_db": 32.2,
+     "rms_2_10ms_db": 45.0,
+     "rms_10_50ms_db": 47.4,
+     "rms_50_200ms_db": 63.9,
+     "rms_200_500ms_db": 46.1,
+     "stays_20db_down_after_ms": 189.8
+    },
+    "125": {
+     "sel_db": 64.4,
+     "rms_0_2ms_db": 52.0,
+     "rms_2_10ms_db": 55.2,
+     "rms_10_50ms_db": 55.9,
+     "rms_50_200ms_db": 72.5,
+     "rms_200_500ms_db": 56.1,
+     "stays_20db_down_after_ms": 184.6
+    },
+    "250": {
+     "sel_db": 68.0,
+     "rms_0_2ms_db": 56.8,
+     "rms_2_10ms_db": 54.5,
+     "rms_10_50ms_db": 56.3,
+     "rms_50_200ms_db": 76.2,
+     "rms_200_500ms_db": 55.3,
+     "stays_20db_down_after_ms": 190.1
+    },
+    "500": {
+     "sel_db": 72.8,
+     "rms_0_2ms_db": 41.7,
+     "rms_2_10ms_db": 47.1,
+     "rms_10_50ms_db": 50.5,
+     "rms_50_200ms_db": 80.4,
+     "rms_200_500ms_db": 72.5,
+     "stays_20db_down_after_ms": 284.2
+    },
+    "1000": {
+     "sel_db": 64.2,
+     "rms_0_2ms_db": 53.4,
+     "rms_2_10ms_db": 53.4,
+     "rms_10_50ms_db": 56.0,
+     "rms_50_200ms_db": 72.2,
+     "rms_200_500ms_db": 58.2,
+     "stays_20db_down_after_ms": 207.6
+    },
+    "2000": {
+     "sel_db": 66.8,
+     "rms_0_2ms_db": 55.9,
+     "rms_2_10ms_db": 57.7,
+     "rms_10_50ms_db": 64.7,
+     "rms_50_200ms_db": 74.9,
+     "rms_200_500ms_db": 56.0,
+     "stays_20db_down_after_ms": 203.4
+    },
+    "4000": {
+     "sel_db": 68.8,
+     "rms_0_2ms_db": 60.8,
+     "rms_2_10ms_db": 62.2,
+     "rms_10_50ms_db": 67.2,
+     "rms_50_200ms_db": 76.9,
+     "rms_200_500ms_db": 43.3,
+     "stays_20db_down_after_ms": 158.0
+    },
+    "8000": {
+     "sel_db": 65.6,
+     "rms_0_2ms_db": 57.5,
+     "rms_2_10ms_db": 60.6,
+     "rms_10_50ms_db": 65.8,
+     "rms_50_200ms_db": 73.6,
+     "rms_200_500ms_db": 42.1,
+     "stays_20db_down_after_ms": 146.8
+    }
+   }
+  },
+  "dry_fire": {
+   "peak_db": 98.7,
+   "sel_db": 65.2,
+   "b_duration_ms": 10.1,
+   "energy_after_2ms_db": -3.7,
+   "energy_after_10ms_db": -16.5,
+   "energy_after_50ms_db": -29.0,
+   "spectral_centroid_hz": 5193,
+   "energy_below_250hz_db": -30.6,
+   "bands": {
+    "63": {
+     "sel_db": 27.8,
+     "rms_0_2ms_db": 46.1,
+     "rms_2_10ms_db": 42.7,
+     "rms_10_50ms_db": 32.6,
+     "rms_50_200ms_db": 34.5,
+     "rms_200_500ms_db": null,
+     "stays_20db_down_after_ms": 114.0
+    },
+    "125": {
+     "sel_db": 30.4,
+     "rms_0_2ms_db": 50.7,
+     "rms_2_10ms_db": 45.8,
+     "rms_10_50ms_db": 31.2,
+     "rms_50_200ms_db": 32.4,
+     "rms_200_500ms_db": null,
+     "stays_20db_down_after_ms": 114.0
+    },
+    "250": {
+     "sel_db": 30.3,
+     "rms_0_2ms_db": 51.6,
+     "rms_2_10ms_db": 43.4,
+     "rms_10_50ms_db": 30.4,
+     "rms_50_200ms_db": 30.1,
+     "rms_200_500ms_db": null,
+     "stays_20db_down_after_ms": 113.8
+    },
+    "500": {
+     "sel_db": 35.7,
+     "rms_0_2ms_db": 54.9,
+     "rms_2_10ms_db": 50.0,
+     "rms_10_50ms_db": 37.8,
+     "rms_50_200ms_db": 34.8,
+     "rms_200_500ms_db": null,
+     "stays_20db_down_after_ms": 114.0
+    },
+    "1000": {
+     "sel_db": 52.0,
+     "rms_0_2ms_db": 71.2,
+     "rms_2_10ms_db": 69.0,
+     "rms_10_50ms_db": 61.4,
+     "rms_50_200ms_db": 48.6,
+     "rms_200_500ms_db": null,
+     "stays_20db_down_after_ms": 57.2
+    },
+    "2000": {
+     "sel_db": 53.8,
+     "rms_0_2ms_db": 79.2,
+     "rms_2_10ms_db": 68.2,
+     "rms_10_50ms_db": 47.4,
+     "rms_50_200ms_db": 35.8,
+     "rms_200_500ms_db": null,
+     "stays_20db_down_after_ms": 10.8
+    },
+    "4000": {
+     "sel_db": 62.9,
+     "rms_0_2ms_db": 87.0,
+     "rms_2_10ms_db": 80.6,
+     "rms_10_50ms_db": 53.6,
+     "rms_50_200ms_db": 38.0,
+     "rms_200_500ms_db": null,
+     "stays_20db_down_after_ms": 10.2
+    },
+    "8000": {
+     "sel_db": 59.0,
+     "rms_0_2ms_db": 84.0,
+     "rms_2_10ms_db": 75.4,
+     "rms_10_50ms_db": 50.0,
+     "rms_50_200ms_db": 38.1,
+     "rms_200_500ms_db": null,
+     "stays_20db_down_after_ms": 9.0
+    }
+   }
+  },
+  "shell_insert": {
+   "peak_db": 90.6,
+   "sel_db": 61.8,
+   "b_duration_ms": 79.29,
+   "energy_after_2ms_db": -0.0,
+   "energy_after_10ms_db": -0.0,
+   "energy_after_50ms_db": -0.4,
+   "spectral_centroid_hz": 3355,
+   "energy_below_250hz_db": -7.8,
+   "bands": {
+    "63": {
+     "sel_db": 38.7,
+     "rms_0_2ms_db": 15.8,
+     "rms_2_10ms_db": 31.4,
+     "rms_10_50ms_db": 33.7,
+     "rms_50_200ms_db": 46.8,
+     "rms_200_500ms_db": 30.5,
+     "stays_20db_down_after_ms": 162.7
+    },
+    "125": {
+     "sel_db": 43.4,
+     "rms_0_2ms_db": 32.1,
+     "rms_2_10ms_db": 32.2,
+     "rms_10_50ms_db": 37.9,
+     "rms_50_200ms_db": 51.5,
+     "rms_200_500ms_db": 32.4,
+     "stays_20db_down_after_ms": 119.0
+    },
+    "250": {
+     "sel_db": 54.3,
+     "rms_0_2ms_db": 37.6,
+     "rms_2_10ms_db": 36.9,
+     "rms_10_50ms_db": 39.7,
+     "rms_50_200ms_db": 62.6,
+     "rms_200_500ms_db": 31.4,
+     "stays_20db_down_after_ms": 117.5
+    },
+    "500": {
+     "sel_db": 49.2,
+     "rms_0_2ms_db": 32.8,
+     "rms_2_10ms_db": 39.3,
+     "rms_10_50ms_db": 47.0,
+     "rms_50_200ms_db": 57.4,
+     "rms_200_500ms_db": 30.7,
+     "stays_20db_down_after_ms": 154.9
+    },
+    "1000": {
+     "sel_db": 50.0,
+     "rms_0_2ms_db": 41.7,
+     "rms_2_10ms_db": 47.9,
+     "rms_10_50ms_db": 56.2,
+     "rms_50_200ms_db": 57.5,
+     "rms_200_500ms_db": 29.7,
+     "stays_20db_down_after_ms": 106.1
+    },
+    "2000": {
+     "sel_db": 53.6,
+     "rms_0_2ms_db": 46.3,
+     "rms_2_10ms_db": 51.3,
+     "rms_10_50ms_db": 59.6,
+     "rms_50_200ms_db": 61.0,
+     "rms_200_500ms_db": 29.6,
+     "stays_20db_down_after_ms": 103.2
+    },
+    "4000": {
+     "sel_db": 57.4,
+     "rms_0_2ms_db": 48.8,
+     "rms_2_10ms_db": 51.2,
+     "rms_10_50ms_db": 60.4,
+     "rms_50_200ms_db": 65.3,
+     "rms_200_500ms_db": 23.0,
+     "stays_20db_down_after_ms": 101.0
+    },
+    "8000": {
+     "sel_db": 52.8,
+     "rms_0_2ms_db": 39.8,
+     "rms_2_10ms_db": 46.9,
+     "rms_10_50ms_db": 57.6,
+     "rms_50_200ms_db": 60.5,
+     "rms_200_500ms_db": 10.3,
+     "stays_20db_down_after_ms": 100.1
+    }
+   }
+  },
+  "safety": {
+   "peak_db": 80.4,
+   "sel_db": 46.7,
+   "b_duration_ms": 10.02,
+   "energy_after_2ms_db": -4.3,
+   "energy_after_10ms_db": -21.4,
+   "energy_after_50ms_db": -300.0,
+   "spectral_centroid_hz": 5532,
+   "energy_below_250hz_db": -26.3,
+   "bands": {
+    "63": {
+     "sel_db": 13.5,
+     "rms_0_2ms_db": 32.6,
+     "rms_2_10ms_db": 28.7,
+     "rms_10_50ms_db": 17.5,
+     "rms_50_200ms_db": 24.1,
+     "rms_200_500ms_db": null,
+     "stays_20db_down_after_ms": 75.0
+    },
+    "125": {
+     "sel_db": 15.6,
+     "rms_0_2ms_db": 35.1,
+     "rms_2_10ms_db": 31.0,
+     "rms_10_50ms_db": 17.2,
+     "rms_50_200ms_db": 22.3,
+     "rms_200_500ms_db": null,
+     "stays_20db_down_after_ms": 75.0
+    },
+    "250": {
+     "sel_db": 18.8,
+     "rms_0_2ms_db": 41.0,
+     "rms_2_10ms_db": 33.1,
+     "rms_10_50ms_db": 16.9,
+     "rms_50_200ms_db": 20.8,
+     "rms_200_500ms_db": null,
+     "stays_20db_down_after_ms": 73.9
+    },
+    "500": {
+     "sel_db": 19.9,
+     "rms_0_2ms_db": 43.9,
+     "rms_2_10ms_db": 33.1,
+     "rms_10_50ms_db": 15.7,
+     "rms_50_200ms_db": 17.9,
+     "rms_200_500ms_db": null,
+     "stays_20db_down_after_ms": 73.3
+    },
+    "1000": {
+     "sel_db": 24.8,
+     "rms_0_2ms_db": 49.2,
+     "rms_2_10ms_db": 40.9,
+     "rms_10_50ms_db": 16.6,
+     "rms_50_200ms_db": 11.9,
+     "rms_200_500ms_db": null,
+     "stays_20db_down_after_ms": 9.6
+    },
+    "2000": {
+     "sel_db": 32.8,
+     "rms_0_2ms_db": 55.4,
+     "rms_2_10ms_db": 50.7,
+     "rms_10_50ms_db": 32.7,
+     "rms_50_200ms_db": 26.2,
+     "rms_200_500ms_db": null,
+     "stays_20db_down_after_ms": 14.0
+    },
+    "4000": {
+     "sel_db": 45.1,
+     "rms_0_2ms_db": 69.8,
+     "rms_2_10ms_db": 62.0,
+     "rms_10_50ms_db": 37.4,
+     "rms_50_200ms_db": 31.7,
+     "rms_200_500ms_db": null,
+     "stays_20db_down_after_ms": 9.9
+    },
+    "8000": {
+     "sel_db": 40.1,
+     "rms_0_2ms_db": 65.2,
+     "rms_2_10ms_db": 56.2,
+     "rms_10_50ms_db": 33.3,
+     "rms_50_200ms_db": 30.4,
+     "rms_200_500ms_db": null,
+     "stays_20db_down_after_ms": 9.8
+    }
+   }
+  },
+  "action_release": {
+   "peak_db": 74.8,
+   "sel_db": 43.2,
+   "b_duration_ms": 11.04,
+   "energy_after_2ms_db": -3.3,
+   "energy_after_10ms_db": -21.7,
+   "energy_after_50ms_db": -300.0,
+   "spectral_centroid_hz": 5492,
+   "energy_below_250hz_db": -27.4,
+   "bands": {
+    "63": {
+     "sel_db": 8.8,
+     "rms_0_2ms_db": 27.8,
+     "rms_2_10ms_db": 23.9,
+     "rms_10_50ms_db": 12.8,
+     "rms_50_200ms_db": 19.5,
+     "rms_200_500ms_db": null,
+     "stays_20db_down_after_ms": 75.0
+    },
+    "125": {
+     "sel_db": 11.4,
+     "rms_0_2ms_db": 31.0,
+     "rms_2_10ms_db": 27.3,
+     "rms_10_50ms_db": 12.5,
+     "rms_50_200ms_db": 17.7,
+     "rms_200_500ms_db": null,
+     "stays_20db_down_after_ms": 75.0
+    },
+    "250": {
+     "sel_db": 14.1,
+     "rms_0_2ms_db": 36.4,
+     "rms_2_10ms_db": 28.7,
+     "rms_10_50ms_db": 11.7,
+     "rms_50_200ms_db": 15.7,
+     "rms_200_500ms_db": null,
+     "stays_20db_down_after_ms": 73.9
+    },
+    "500": {
+     "sel_db": 15.4,
+     "rms_0_2ms_db": 39.8,
+     "rms_2_10ms_db": 28.0,
+     "rms_10_50ms_db": 11.3,
+     "rms_50_200ms_db": 12.4,
+     "rms_200_500ms_db": null,
+     "stays_20db_down_after_ms": 13.4
+    },
+    "1000": {
+     "sel_db": 21.5,
+     "rms_0_2ms_db": 42.1,
+     "rms_2_10ms_db": 40.0,
+     "rms_10_50ms_db": 13.1,
+     "rms_50_200ms_db": 9.8,
+     "rms_200_500ms_db": null,
+     "stays_20db_down_after_ms": 10.6
+    },
+    "2000": {
+     "sel_db": 34.0,
+     "rms_0_2ms_db": 57.0,
+     "rms_2_10ms_db": 52.2,
+     "rms_10_50ms_db": 28.9,
+     "rms_50_200ms_db": 27.9,
+     "rms_200_500ms_db": null,
+     "stays_20db_down_after_ms": 8.0
+    },
+    "4000": {
+     "sel_db": 40.6,
+     "rms_0_2ms_db": 64.7,
+     "rms_2_10ms_db": 58.1,
+     "rms_10_50ms_db": 34.4,
+     "rms_50_200ms_db": 29.2,
+     "rms_200_500ms_db": null,
+     "stays_20db_down_after_ms": 10.6
+    },
+    "8000": {
+     "sel_db": 37.1,
+     "rms_0_2ms_db": 60.5,
+     "rms_2_10ms_db": 55.4,
+     "rms_10_50ms_db": 29.4,
+     "rms_50_200ms_db": 24.0,
+     "rms_200_500ms_db": null,
+     "stays_20db_down_after_ms": 10.9
+    }
+   }
+  }
+ }
+}

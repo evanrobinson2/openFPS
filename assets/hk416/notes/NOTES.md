@@ -237,3 +237,40 @@ Fixed after this review: the front QD cup and its sling crescent were too small 
 | buffer tube | castle nut wrench notch 4 | `castle_nut` | a void: cut into the host part with a boolean, so it has no solid of its own |
 | stock | stock bore for the buffer tube | `stock_body` | a void: cut into the host part with a boolean, so it has no solid of its own |
 | stock | sling slot through the stock | `stock_body` | a void: cut into the host part with a boolean, so it has no solid of its own |
+
+## Change requests
+
+Rule 7: each change request and what changed. Nothing is replaced silently; earlier versions are in git history.
+
+### 2026-11-17, sound version 2: "the sounds are clicks"
+
+**Request (owner).** "the sounds are clicks", "they aren't not sounding like the recording", then "if the recording can be trusted". Later the same day: the shot must clearly not read as "a click on a keyboard or a crackle", and independent recordings, not listening, are the gate; nothing may be fitted to them.
+
+**Findings.**
+- The two reference recordings cannot record the blast (164 dB into microphones limited at 130 and 154 dB). Their peak, attack, crest factor and early/late energy split are artefacts; event timing and decay time are sound. Numbers: `sound/compare/recording_trust.json`, `sound/README.md`.
+- Version 1's action timeline never read `action/action.json` (it expected another layout and fell back to a built-in table without failing).
+- Version 1's shock implied 0.37 L of gas behind the gun where conservation of the action simulation's gas volume and momentum requires the equivalent of 3.4 L.
+- Version 1's playback "ear" stage was a compressor. In a real browser it left the crest factor at 24 to 27 dB: no compressor with an attack time acts on a 0.2 ms pulse. This was the main reason the page played a click.
+
+**Changed (`sound/`, `params.json` version 2).**
+- Muzzle source: shock still anchored to the published 164 dB; new gas-volume body from conservation (monopole of 8.3 L, dipole of 2.06 N s, both from the action simulation); jet noise from the simulated blow-down in place of an inferred burst; directivity per octave band for the overlays.
+- Action: times, masses and speeds from `action/action.json`; levels from impact energy times a published radiation efficiency; modes from the model recipe's dimensions; trigger break, bolt pick-up, rod stop and chambering added as events; carrier sliding noise added. Cyclic rate is now the action simulation's 801 rpm (was 850).
+- Ground: roughness splits the bounce into a specular part and scattered hiss.
+- New overlay `outdoor_range` (an assumed layout) and far-field listeners at 25, 50 and 100 m, side-on and in front.
+- Ear stage: a memoryless limit at 134 dB (the middle ear's own limit) in place of the compressor.
+- API unchanged for existing callers; additions listed in `sound/README.md`.
+
+**Not changed.** No parameter was tuned to any recording. Steel plates, hearing protection and the room recipes are as version 1 apart from the band directivity.
+
+**Open.** The owner has not listened to version 2. Far-field decay depends on the surroundings of a real range, which are assumed here. Scoring against independent recordings is done by the main session, not by this build.
+
+### 2026-11-17, cinematic sound becomes the default
+
+**Request (owner, through the coordinating session).** The physical shots still sound "like a click on a keyboard or a crackle". Decision: an FPS needs designed sound, because the sound at a shooter's ear cannot be reproduced on speakers; "don't copy the mp3, we're simulating". Cinematic is to be the default for every gun, the physical simulation stays as `realistic` with its numbers unchanged, and nothing may be taken from a recording or a video.
+
+**Changed.**
+- New shared synthesis `shared/cinematic-sound/` (outside `assets/`, because `tools/check_assets.py` treats every folder there as an asset). `sound/hk416-sound.js` gains `mode: 'cinematic' | 'realistic'` (default cinematic), `chain.fire()`, `chain.auto()`, `chain.mech()`, and the chain options `distance`, `bearing`, `suppressor`. The old functions are kept as `realShot`, `realMech`, `realChain`.
+- `sample/index.html` has a mode switch; `sound/index.html` is pinned to `realistic`.
+- `params.json` and `sim.py` are untouched. Realistic output is identical to commit aa037ac, sample for sample (`shared/cinematic-sound/compare/results.json`, `check.json`).
+
+**Inferences and limits.** Every cinematic constant is a design choice, not a physical claim. Nobody has listened to the result: it is checked by measurement only (`shared/cinematic-sound/README.md`). No Python counterpart.

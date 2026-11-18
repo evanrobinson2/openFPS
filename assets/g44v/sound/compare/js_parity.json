@@ -1,0 +1,119 @@
+{
+ "note": "max sample difference between sim.py and g44v-sound.js, dB relative to the signal peak; js_ms is node synthesis time",
+ "outputs": 28,
+ "worst_db": -296.9,
+ "by_output": {
+  "dry_cci_standard_velocity_shooter_free": {
+   "max_error_db_re_peak": -309.1,
+   "js_ms": 11
+  },
+  "dry_cci_standard_velocity_shooter_field": {
+   "max_error_db_re_peak": -309.1,
+   "js_ms": 9
+  },
+  "dry_cci_standard_velocity_bystander_free": {
+   "max_error_db_re_peak": -305.3,
+   "js_ms": 8
+  },
+  "dry_cci_standard_velocity_bystander_field": {
+   "max_error_db_re_peak": -305.3,
+   "js_ms": 9
+  },
+  "dry_cci_standard_velocity_downrange_free": {
+   "max_error_db_re_peak": -301.8,
+   "js_ms": 8
+  },
+  "dry_cci_standard_velocity_downrange_field": {
+   "max_error_db_re_peak": -296.9,
+   "js_ms": 8
+  },
+  "dry_cci_mini_mag_shooter_free": {
+   "max_error_db_re_peak": -315.3,
+   "js_ms": 8
+  },
+  "dry_cci_mini_mag_shooter_field": {
+   "max_error_db_re_peak": -315.3,
+   "js_ms": 9
+  },
+  "dry_cci_mini_mag_bystander_free": {
+   "max_error_db_re_peak": -303.8,
+   "js_ms": 8
+  },
+  "dry_cci_mini_mag_bystander_field": {
+   "max_error_db_re_peak": -303.8,
+   "js_ms": 9
+  },
+  "dry_cci_mini_mag_downrange_free": {
+   "max_error_db_re_peak": -302.5,
+   "js_ms": 8
+  },
+  "dry_cci_mini_mag_downrange_field": {
+   "max_error_db_re_peak": -305.0,
+   "js_ms": 8
+  },
+  "dry_cci_quiet_22_shooter_free": {
+   "max_error_db_re_peak": -308.0,
+   "js_ms": 5
+  },
+  "dry_cci_quiet_22_shooter_field": {
+   "max_error_db_re_peak": -308.0,
+   "js_ms": 6
+  },
+  "dry_cci_quiet_22_bystander_free": {
+   "max_error_db_re_peak": -302.0,
+   "js_ms": 5
+  },
+  "dry_cci_quiet_22_bystander_field": {
+   "max_error_db_re_peak": -302.0,
+   "js_ms": 6
+  },
+  "dry_cci_quiet_22_downrange_free": {
+   "max_error_db_re_peak": -300.6,
+   "js_ms": 5
+  },
+  "dry_cci_quiet_22_downrange_field": {
+   "max_error_db_re_peak": -299.3,
+   "js_ms": 6
+  },
+  "mech_trigger": {
+   "max_error_db_re_peak": -307.3,
+   "js_ms": 1
+  },
+  "mech_dry_fire": {
+   "max_error_db_re_peak": -307.2,
+   "js_ms": 2
+  },
+  "mech_slide_rack": {
+   "max_error_db_re_peak": -309.7,
+   "js_ms": 9
+  },
+  "mech_slide_lock_open": {
+   "max_error_db_re_peak": -307.2,
+   "js_ms": 4
+  },
+  "mech_slide_release": {
+   "max_error_db_re_peak": -316.3,
+   "js_ms": 5
+  },
+  "mech_magazine_out": {
+   "max_error_db_re_peak": -308.1,
+   "js_ms": 1
+  },
+  "mech_magazine_in": {
+   "max_error_db_re_peak": -309.0,
+   "js_ms": 0
+  },
+  "mech_case_ground": {
+   "max_error_db_re_peak": -311.4,
+   "js_ms": 1
+  },
+  "ir_outdoor_berm": {
+   "max_error_db_re_peak": -349.2,
+   "js_ms": 1
+  },
+  "ir_indoor_range": {
+   "max_error_db_re_peak": -337.2,
+   "js_ms": 1
+  }
+ }
+}

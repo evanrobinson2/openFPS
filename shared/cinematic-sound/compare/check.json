@@ -1,0 +1,351 @@
+{
+ "checks": [
+  {
+   "ok": true,
+   "check": "hk416 muzzle energy 1451.3 J = ballistics table 1451.3 J = m v^2 / 2"
+  },
+  {
+   "ok": true,
+   "check": "hk416 muzzle velocity 850 m/s and barrel 368.3 mm = action.json and ballistics.json"
+  },
+  {
+   "ok": true,
+   "check": "hk416 M855 still supersonic at 600 m (supersonic_to_m 600)"
+  },
+  {
+   "ok": true,
+   "check": "hk416 bare peak at the ear 157.49 dB (CINE_SIM 157.5)"
+  },
+  {
+   "ok": true,
+   "check": "g44v cci_standard_velocity: 95.3 J, 271.24 m/s, 0.085 g charge = action.json"
+  },
+  {
+   "ok": true,
+   "check": "g44v cci_standard_velocity is subsonic from the pistol (no bullet crack)"
+  },
+  {
+   "ok": true,
+   "check": "g44v cci_mini_mag: 116.4 J, 299.64 m/s, 0.11 g charge = action.json"
+  },
+  {
+   "ok": true,
+   "check": "g44v cci_mini_mag is subsonic from the pistol (no bullet crack)"
+  },
+  {
+   "ok": true,
+   "check": "g44v cci_quiet_22: 44.7 J, 185.62 m/s, 0.045 g charge = action.json"
+  },
+  {
+   "ok": true,
+   "check": "g44v cci_quiet_22 is subsonic from the pistol (no bullet crack)"
+  },
+  {
+   "ok": true,
+   "check": "shotgun-590 buck00: 2568.7 J, 403.86 m/s, bore and barrel = action.json and ballistics.json"
+  },
+  {
+   "ok": true,
+   "check": "shotgun-590 buck00 goes subsonic at 18.6 m (supersonic_to_m 18.6)"
+  },
+  {
+   "ok": true,
+   "check": "shotgun-590 slug: 3417.4 J, 490.73 m/s, bore and barrel = action.json and ballistics.json"
+  },
+  {
+   "ok": true,
+   "check": "shotgun-590 slug goes subsonic at 94.1 m (supersonic_to_m 94.1)"
+  },
+  {
+   "ok": true,
+   "check": "shotgun-590: the default mode is cinematic"
+  },
+  {
+   "ok": true,
+   "check": "shotgun-590: dry cinematic shot is finite and cached (45962 samples)"
+  },
+  {
+   "ok": true,
+   "check": "shotgun-590: dry shot before the bus: 1.6 % of the energy in the first 2 ms, peak -1 dBFS"
+  },
+  {
+   "ok": true,
+   "check": "shotgun-590: cinematic mechanical clip 'pump' (31200 samples)"
+  },
+  {
+   "ok": true,
+   "check": "shotgun-590: mode 'realistic' returns the physical shot"
+  },
+  {
+   "ok": true,
+   "check": "hk416: the default mode is cinematic"
+  },
+  {
+   "ok": true,
+   "check": "hk416: dry cinematic shot is finite and cached (72337 samples)"
+  },
+  {
+   "ok": true,
+   "check": "hk416: dry shot before the bus: 3.4 % of the energy in the first 2 ms, peak -1 dBFS"
+  },
+  {
+   "ok": true,
+   "check": "hk416: cinematic mechanical clip 'charge' (63840 samples)"
+  },
+  {
+   "ok": true,
+   "check": "hk416: mode 'realistic' returns the physical shot"
+  },
+  {
+   "ok": true,
+   "check": "g44v: the default mode is cinematic"
+  },
+  {
+   "ok": true,
+   "check": "g44v: dry cinematic shot is finite and cached (24245 samples)"
+  },
+  {
+   "ok": true,
+   "check": "g44v: dry shot before the bus: 6.2 % of the energy in the first 2 ms, peak -1 dBFS"
+  },
+  {
+   "ok": true,
+   "check": "g44v: cinematic mechanical clip 'slide_rack' (18240 samples)"
+  },
+  {
+   "ok": true,
+   "check": "g44v: mode 'realistic' returns the physical shot"
+  },
+  {
+   "ok": true,
+   "check": "size order: g44v 0 < hk416 0.5486 < shotgun-590 0.9257"
+  },
+  {
+   "ok": true,
+   "check": "thump pitch after one decay time: g44v 105 Hz > hk416 65.28 Hz > shotgun-590 47.08 Hz"
+  },
+  {
+   "ok": true,
+   "check": "hk416 realistic: 27 raw outputs (shots, mechanical clips, impulse responses, earmuff filter) bit-identical to aa037ac"
+  },
+  {
+   "ok": true,
+   "check": "g44v realistic: 28 raw outputs bit-identical to aa037ac"
+  },
+  {
+   "ok": true,
+   "check": "shotgun-590 realistic: 33 rendered sounds bit-identical to aa037ac"
+  },
+  {
+   "ok": true,
+   "check": "hk416/sound/params.json is byte-identical to aa037ac"
+  },
+  {
+   "ok": true,
+   "check": "g44v/sound/params.json is byte-identical to aa037ac"
+  },
+  {
+   "ok": true,
+   "check": "shotgun-590/sound/params.json is byte-identical to aa037ac"
+  }
+ ],
+ "guns": {
+  "shotgun-590": {
+   "design": {
+    "size": 0.9257,
+    "energy_term": 0.8856,
+    "bore_term": 1,
+    "g_crack": 1,
+    "f_crack": 3164,
+    "tau_crack": 0.009602,
+    "g_cracknoise": 0.5126,
+    "f_body": 178,
+    "tau_body": 0.04762,
+    "tau_roar": 0.1418,
+    "g_body": 0.8777,
+    "g_roar": 0.4777,
+    "f_sub_end": 47.08,
+    "sub_ratio": 3.2,
+    "tau_sub": 0.1352,
+    "g_sub": 0.7718,
+    "sub_h2": 0.7,
+    "sub_h3": 0.45,
+    "sub_drive": 1.6,
+    "g_mech": 0,
+    "tail_rt_scale": 1.259,
+    "tail_lp": 3186,
+    "tail_db": -13.52,
+    "trim_db": -0.1858,
+    "steal_s": 0.03,
+    "steal_floor": 0.08,
+    "duck_floor": 0.1,
+    "duck_tau": 0.25,
+    "pump_delay_s": 0.45,
+    "mach": 1.177,
+    "supersonic_to_m": 18.6
+   },
+   "sim": {
+    "muzzle_energy_J": 2568.7,
+    "gas_energy_J": 4127.8,
+    "gas_mass_g": 1.75,
+    "bore_mm": 18.5,
+    "barrel_mm": 508,
+    "muzzle_velocity": 403.86,
+    "cyclic_period_s": null,
+    "bullet_diam_mm": 8.382,
+    "bullet_len_mm": 8.382,
+    "supersonic_to_m": 18.6
+   },
+   "dry_shot_before_bus": {
+    "peak_dbfs": -1,
+    "clipped_run": 0,
+    "share_0_2ms": 1.6,
+    "share_2_10ms": 18.4,
+    "share_10_50ms": 35.6,
+    "share_50_300ms": 43.4,
+    "share_after_300ms": 1,
+    "crest_db": 17.08,
+    "t_minus20_ms": 226,
+    "tail_minus40_ms": 593,
+    "band_40_120_db": -7.42,
+    "band_120_300_db": -10.16,
+    "band_300_2k_db": -5.38,
+    "band_2k_up_db": -15.15,
+    "centroid_hz": 398,
+    "loudness_db": -19.35
+   }
+  },
+  "hk416": {
+   "design": {
+    "size": 0.5486,
+    "energy_term": 0.844,
+    "bore_term": 0,
+    "g_crack": 1,
+    "f_crack": 3993,
+    "tau_crack": 0.009409,
+    "g_cracknoise": 0.4749,
+    "f_body": 299.9,
+    "tau_body": 0.03556,
+    "tau_roar": 0.04495,
+    "g_body": 0.7646,
+    "g_roar": 0.3646,
+    "f_sub_end": 65.28,
+    "sub_ratio": 3.2,
+    "tau_sub": 0.03746,
+    "g_sub": 0.6285,
+    "sub_h2": 0.7,
+    "sub_h3": 0.45,
+    "sub_drive": 1.6,
+    "g_mech": 0.1778,
+    "tail_rt_scale": 1.052,
+    "tail_lp": 4128,
+    "tail_db": -16.16,
+    "trim_db": -1.128,
+    "steal_s": 0.01873,
+    "steal_floor": 0.08,
+    "duck_floor": 0.1,
+    "duck_tau": 0.2622,
+    "pump_delay_s": 0.45,
+    "mach": 2.477,
+    "supersonic_to_m": 600
+   },
+   "sim": {
+    "muzzle_energy_J": 1451.3,
+    "muzzle_velocity": 850,
+    "bore_mm": 5.56,
+    "barrel_mm": 368.3,
+    "bullet_diam_mm": 5.7,
+    "bullet_len_mm": 23,
+    "supersonic_to_m": 600,
+    "bare_peak_db_ear": 157.5,
+    "gas_energy_J": 4336,
+    "gas_mass_g": 1.656,
+    "cyclic_period_s": 0.07492
+   },
+   "dry_shot_before_bus": {
+    "peak_dbfs": -1,
+    "clipped_run": 0,
+    "share_0_2ms": 3.4,
+    "share_2_10ms": 37,
+    "share_10_50ms": 50.9,
+    "share_50_300ms": 8.7,
+    "share_after_300ms": 0,
+    "crest_db": 22.24,
+    "t_minus20_ms": 88,
+    "tail_minus40_ms": 192,
+    "band_40_120_db": -9.47,
+    "band_120_300_db": -12.39,
+    "band_300_2k_db": -4.28,
+    "band_2k_up_db": -4.44,
+    "centroid_hz": 3475,
+    "loudness_db": -22.94
+   }
+  },
+  "g44v": {
+   "design": {
+    "size": 0,
+    "energy_term": 0,
+    "bore_term": 0,
+    "g_crack": 1,
+    "f_crack": 5200,
+    "tau_crack": 0.004065,
+    "g_cracknoise": 0.42,
+    "f_body": 568.6,
+    "tau_body": 0.018,
+    "tau_roar": 0.04,
+    "g_body": 0.6,
+    "g_roar": 0.2,
+    "f_sub_end": 105,
+    "sub_ratio": 3.2,
+    "tau_sub": 0.038,
+    "g_sub": 0.42,
+    "sub_h2": 0.7,
+    "sub_h3": 0.45,
+    "sub_drive": 1.6,
+    "g_mech": 0.1778,
+    "tail_rt_scale": 0.75,
+    "tail_lp": 5500,
+    "tail_db": -20,
+    "trim_db": -2.5,
+    "steal_s": 0.03,
+    "steal_floor": 0.08,
+    "duck_floor": 0.1,
+    "duck_tau": 0.4,
+    "pump_delay_s": 0.45,
+    "mach": 0.7903,
+    "supersonic_to_m": 0
+   },
+   "sim": {
+    "bore_mm": 5.6,
+    "barrel_mm": 102,
+    "bullet_diam_mm": 5.7,
+    "bullet_len_mm": 11.6,
+    "cyclic_period_s": 0.13,
+    "muzzle_energy_J": 95.3,
+    "muzzle_velocity": 271.24,
+    "gas_mass_g": 0.085,
+    "gas_energy_J": 166.8,
+    "supersonic_to_m": 0
+   },
+   "dry_shot_before_bus": {
+    "peak_dbfs": -1,
+    "clipped_run": 0,
+    "share_0_2ms": 6.2,
+    "share_2_10ms": 44.5,
+    "share_10_50ms": 45,
+    "share_50_300ms": 4.3,
+    "share_after_300ms": 0,
+    "crest_db": 20.71,
+    "t_minus20_ms": 68,
+    "tail_minus40_ms": 152,
+    "band_40_120_db": -3.24,
+    "band_120_300_db": -10.71,
+    "band_300_2k_db": -7.15,
+    "band_2k_up_db": -7.55,
+    "centroid_hz": 1181,
+    "loudness_db": -20.95
+   }
+  }
+ },
+ "failed": 0
+}
