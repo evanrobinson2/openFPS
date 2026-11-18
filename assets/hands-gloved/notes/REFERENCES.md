@@ -27,6 +27,9 @@ of version 2 read that message itself. The approval covers these three reference
 `notes/NOTES.md`; it is not an approval of the result. If the owner later picks different references, the
 decomposition, studies, grips and comparisons must be redone from them (rule 7: a new version).
 
+CR-2 (2026-11-18, version 3) kept these three references as approved. It was a direction to continue the work, not an
+approval of version 2's result or of version 3's (`notes/NOTES.md`).
+
 ## Notes on use
 
 - The photographs are public domain, but they show identifiable people and makers' marks, so they are still kept out

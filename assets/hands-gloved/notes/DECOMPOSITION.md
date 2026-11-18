@@ -42,6 +42,12 @@ middle (843, 470), ring (852, 620), little (818, 790); middle of the back of the
 for R1 lie about 95 px to the left of these, as if read off a differently cut crop (an inference from the two sets
 of readings); that would explain why its camera fit failed.
 
+Version 3 reading (CR-2), from the same points: the line from the index knuckle to the little-finger knuckle runs 6.6
+degrees from the crop's vertical, leaning toward the muzzle at the bottom: the knuckle row stands nearly square to the
+bore, so the hand is level on the grip, not rising. R1-F10 again: the sleeve leaves the crop at the lower left and
+covers none of the hand; the wrist is bent to the little-finger side by more than the hand is pitched. R1-F05: about
+five ribs over 16 mm on the index knuckle (3.2 mm apart), standing proud of the knit. R1-F07 is built in version 3.
+
 ## R2 crop: x 880 to 1480, y 440 to 760 (shown 1600 x 853, cells 200 x 213 px)
 
 View: right profile, almost square to the rifle, camera at about rifle height. The shooter stands. Scale: top rail to

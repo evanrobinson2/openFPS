@@ -31,7 +31,12 @@
       "part": "version 2 (CR-1): folding palm, firing and support grips re-solved against the references, contact check (model/, grips/, clips/, checks/, notes/)",
       "model": "Claude Fable 5.2",
       "date": "2026-11-17"
+    },
+    {
+      "part": "version 3 (CR-2): compressible palm pads and their check, flexion of all four metacarpals and arching, firing grip re-solved, knuckles and sleeve, selector-reach and hand-against-hand checks (model/, grips/, clips/, checks/, notes/)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-18"
     }
   ],
-  "status": "Version 2 (CR-1). Structural checks pass (joint limits, interpenetration 0.57 mm against a 1.0 mm tolerance, runtime parity, finger proportions). The trigger, magazine release and bolt catch are touched; the thumb does not reach the selector. The matched comparison with the references still shows clear differences in the firing grip; the result awaits owner review (notes/NOTES.md)."
+  "status": "Version 3 (CR-2), not reviewed by the owner. Structural checks pass against the rifle (joint limits, interpenetration 0.60 mm against a 1.0 mm tolerance with pad compression inside sourced limits, runtime parity, finger proportions). The trigger, magazine release and bolt catch are touched; the thumb does not reach the selector (10.5 mm at best). The web of the firing hand is still 19 mm to the right of its seat. The new hand-against-hand check fails in the charge clip (10.3 mm). The matched comparison still shows clear differences (notes/NOTES.md)."
 }
