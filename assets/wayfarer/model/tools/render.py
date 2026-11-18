@@ -44,6 +44,15 @@ if '--no-interior-lights' not in argv:      # soft lamps down both decks so the 
             if s < 4 and z < 0: continue
             lt = bpy.data.objects.new('lamp', bpy.data.lights.new('lamp', 'POINT')); sc.collection.objects.link(lt)
             lt.data.energy = e * float(arg('--lamps', 1.0)); lt.data.shadow_soft_size = 0.35; lt.location = bl((s, 0.0, z if s > 4 else 1.35))
+figs = arg('--figures')       # "s,y,z;s,y,z" : 1.80 m scale figures standing at those points (not part of the model)
+if figs:
+    sys.path.insert(0, os.path.join(HERE, 'modules'))
+    import kit, figure
+    mb = kit.MB()
+    for item in figs.split(';'):
+        s, y, z = [float(v) for v in item.split(',')]
+        mb.merge(figure.figure_mb(s, y, z))
+    kit.finish('scale_figures', mb, None)
 cam = bpy.data.objects.new('cam', bpy.data.cameras.new('cam')); sc.collection.objects.link(cam); sc.camera = cam
 def set_shadows(on):
     for o in bpy.data.objects:

@@ -237,7 +237,9 @@ class MB:
         self.sphere(p0, r, m, n=n); self.sphere(p1, r, m, n=n)
 
     def bolt(self, p, nrm, r=0.020, h=0.012, m='fastener_steel', washer=True):
-        """Hex bolt head (with a washer) seated at p, standing along nrm."""
+        """Hex bolt head (with a washer) seated at p, standing along nrm. LOD 1 leaves fasteners out."""
+        if LOD >= 1:
+            return
         nrm = vnorm(nrm); u, v = basis(nrm)
         if washer:
             w0 = self.ring(p, u, v, r * 1.55, 8); w1 = self.ring(vadd(p, vmul(nrm, h * 0.25)), u, v, r * 1.55, 8)

@@ -1,0 +1,149 @@
+# F-27 Wayfarer: how to use this asset
+
+A boardable 30 m gunship (30.0 x 9.0 x 6.75 m) for first-person play, built by code down to the bolt. The player can
+walk up to it on its landing gear, ride the lift chassis into the hold, walk two decks, sit in the cockpit and drop
+from the lander bay. Credit: carpetshark.
+
+**Sample artifact:** [`sample/index.html`](sample/index.html) is a viewer for a build you make yourself: orbit, jump
+to places inside, hide modules, slide a cutaway through the hull and run every mechanism.
+
+![General arrangement](renders/sheet_structure.jpg)
+
+## Status
+
+This is the **structure stage**: the whole ship exists at true size with real walls, decks, doors and mechanisms, in
+a first pass of detail. It is not finished art.
+
+| Part | State |
+|---|---|
+| Geometry (`model/`) | A recipe in Blender Python. 138 named objects in eight modules, 1,514 armour plates, 409,000 triangles of which 178,000 are fasteners. It writes `out/wayfarer.glb`, a build output that is never committed. |
+| Mechanisms | 11 keyed clips: landing gear, lift chassis with its ramp, lander bay doors and cradle, crew hatch, seven sliding doors. Kinematic only: the linkages are solved by geometry, not by forces. |
+| Sockets | 14 named points for the game: eyes, thresholds, muzzles, exhausts, ground. |
+| Checks (`model/tools/checks.py`) | 29 checks pass: the envelope, standing headroom on both decks, door and hatch sizes, the lift and lander fitting their openings, clip lengths. |
+| Materials | Flat colours by role (30 named materials). No textures, wear or decals yet. |
+| Lander | A stub of the right size (5.6 x 2.2 x 1.7 m) hanging in the cradle. A real lander is a later asset. |
+| Simulation | **None yet.** No mass, thrust, flight, gear loads or sound. This is the main gap against the repository's simulation-grade rule and is the next layer after detail. |
+| Collision | Not made yet. The decks, bulkheads and lining are separate named objects, so a collision set can be cut from the recipe. |
+
+## Build it
+
+Needs a Python that `bpy` (Blender as a module) installs on, and `numpy`. Built here with bpy 5.3. A build takes a few seconds.
+
+```
+pip install bpy numpy
+cd assets/wayfarer/model
+python3 build.py --glb             # work/wayfarer.blend, out/wayfarer.glb (14 MB, every bolt)
+python3 build.py --glb --lod 1     # out/wayfarer_lod1.glb (7 MB, no fasteners)
+python3 build.py --only engines    # one module, for working on it
+python3 tools/checks.py            # sizes, clearances and clips
+python3 blockout.py                # the stage-3 blockout
+```
+
+Then serve the repository and open the sample:
+
+```
+cd openFPS && python3 -m http.server 8790
+# open http://127.0.0.1:8790/assets/wayfarer/sample/
+```
+
+Renders and the sheet:
+
+```
+python3 tools/render.py --blend work/wayfarer.blend --out work/final --shots three_quarter,cockpit --px 1600 --samples 48
+python3 tools/render.py --blend work/wayfarer.blend --out work/ortho --shots ortho
+python3 tools/sheet.py --in work/ortho --out ../renders/sheet_structure.jpg --stage STRUCTURE
+```
+
+## Frames and units
+
+Metres. The recipe works in a ship frame and converts once on export.
+
+| Frame | Forward | Right (starboard) | Up | Origin |
+|---|---|---|---|---|
+| Ship (in the code) | -s (s is metres aft of the nose, 0 to 30) | +y | +z | nose tip station, on the barrel axis |
+| Blender | -Y | -X | +Z | middle of the ship (s = 15), on the barrel axis |
+| glTF (`.glb`) | +Z | -X | +Y | same |
+
+So a ship point (s, y, z) is glTF (-y, z, 15 - s). The main deck is at z = +0.10, the lower deck at z = -2.30 and the
+ground, with the gear down, at z = -4.70.
+
+## Modules
+
+Each module is one file in `model/modules/` and one node under the root `wayfarer`. Hide or swap a module by its node.
+
+| Node | What is in it |
+|---|---|
+| `fuselage` | Armour plates, substructure shell, lining, ring frames and longerons, both decks, seven bulkheads, ceilings and light strips, opening coamings. |
+| `cockpit` | Canopy glazing and frame, instrument panel, pedestal, consoles, sticks, pedals, overhead panel, four seats, two rear stations. |
+| `engines` | Two main pods, two upper pods with cowls, the centre nozzle and thrust plate, pylons and plumbing. |
+| `landing_gear` | Four legs, each `gear_<pos>_leg` > `_piston` > `_pad`, with an actuator and two doors, in four wells. |
+| `lift_chassis` | `lift_cage` (belly plate, truss, deck, posts, rails, control pedestal), `lift_ramp`, four telescopic rams. |
+| `lander_bay` | Two belly doors, `lander_cradle` on four jack screws, `lander_stub`, guard rails. |
+| `gadgets` | Nose sensors, chin turret (`chin_turret_ring` > `chin_turret_yaw` > `chin_gun_cradle`), ventral gun pod, keel tanks, dorsal arrays, equipment bay fits, thrusters, nav lights. |
+| `interior` | Viewport glazing, crew hatch, sliding doors, ladder, bunks, lockers, galley, jump seats, racks, reactor, pump skids, switchboard, avionics racks. |
+
+Objects ending in `_bolts` hold the fasteners, one per module, so they can be hidden or dropped at distance.
+
+## Clips
+
+24 frames a second. The rest pose is parked on the ground: gear down, lift stowed, bay closed, doors shut.
+
+| Clip | Frames | What moves |
+|---|---|---|
+| `gear_retract` | 84 | Legs fold into their wells (front pair aft, rear pair forward), pistons extend to clear, doors close. Play it backwards to lower the gear. |
+| `lift_lower` | 138 | The cage descends 1.70 m on four rams until its belly plate is on the ground, then the ramp slides forward and tilts down. One 0.165 m step from the ramp to the deck. |
+| `lander_bay_open` | 132 | The belly doors swing 100 degrees, then the cradle lowers the lander 1.45 m, clear of the belly. |
+| `crew_hatch_open` | 54 | The port side hatch swings out and its step drops. |
+| `door_<bulkhead>_<deck>_open` | 24 | Seven sliding doors. Main deck doors are one leaf; lower deck doors part in the middle. |
+
+Each clip is one animation in the `.glb` that drives several nodes. In three.js, make one action per clip and scrub
+its `time`; `sample/viewer.js` shows how.
+
+## Sockets
+
+Empty nodes named `socket_*`, parented to the part they ride on, so they follow the clips.
+
+| Socket | Use |
+|---|---|
+| `socket_pilot_eye`, `socket_copilot_eye` | Seated camera positions. |
+| `socket_crew_hatch_threshold` | Where the player steps in at the side hatch. |
+| `socket_lift_deck`, `socket_lift_ramp_toe` | Centre of the lift deck; the foot of the ramp. Both move with `lift_lower`. |
+| `socket_lander_mount` | Where a lander attaches under the cradle. Moves with `lander_bay_open`. |
+| `socket_chin_muzzle_port`, `_stbd` | Chin gun muzzles. They follow the turret nodes. |
+| `socket_exhaust_main_port`, `_stbd`, `socket_exhaust_upper_port`, `_stbd`, `socket_exhaust_core` | Nozzle exits, for flame and heat effects. |
+| `socket_ground` | The ground plane under the middle of the ship with the gear down. |
+
+## Materials
+
+Material names are shading roles, so a game can replace them wholesale. The main ones: `armour_gunmetal_a` to `_d`,
+`armour_paint_red`, `armour_paint_red_dark`, `substructure_dark`, `structure_steel`, `structure_primer`,
+`lining_panel`, `lining_panel_dark`, `deck_plate`, `deck_grating`, `glass_canopy`, `glass_port`, `machinery_dark`,
+`machinery_bare`, `machinery_heat`, `hydraulic_chrome`, `fastener_steel`, `rubber_black`, `hazard_yellow`,
+`seat_fabric`, `copper_pipe`, `cable_black`, `placard_white`, `screen_glow`, `light_panel`, `light_red`,
+`engine_glow`. The colours are in `model/kit.py`.
+
+## Change it
+
+- Sizes, deck heights, stations and every opening are numbers in `model/spec.py`. Change them there and rebuild; run
+  `tools/checks.py` afterwards.
+- The plating pattern comes from a seed in `modules/fuselage.py`.
+- To replace the lander, build your own under `lander_cradle` at `socket_lander_mount` and leave out `lander_stub`.
+
+## Files
+
+| Path | What |
+|---|---|
+| `model/spec.py` | Master dimensions and the hull section. |
+| `model/kit.py` | Mesh builder, materials, clip keys. |
+| `model/hullgrid.py`, `structure.py`, `fittings.py` | Hull grid, decks and bulkheads, shared fittings. |
+| `model/modules/` | One recipe per module. |
+| `model/build.py`, `blockout.py` | Assemble and export; the blockout. |
+| `model/tools/` | Renders, the sheet, posing, checks. |
+| `notes/BRIEF.md` | The brief and the reading of the concept image. |
+| `notes/NOTES.md` | Decisions, limits and open questions. |
+| `notes/REFERENCES.md` | What was looked at. |
+| `renders/` | Pictures of a build. |
+
+## Licence
+
+Code: PolyForm Noncommercial 1.0.0. Documents and renders: CC BY-NC 4.0. See the repository root.
