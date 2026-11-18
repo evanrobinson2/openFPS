@@ -1,0 +1,893 @@
+{
+ "meta": {
+  "title": "G44 V exterior ballistics",
+  "credit": "carpetshark",
+  "generator": "sim.py",
+  "frame": "metres, seconds, +Y up, +Z downrange, +X left",
+  "drag": "G1 point mass, RK4 at 1 ms",
+  "atmosphere": {
+   "rho": 1.225,
+   "sound": 340.294,
+   "note": "ICAO standard sea level"
+  },
+  "sight_height_m": 0.0159,
+  "twist": "1 in 16 in (SAAMI standard for .22 LR; the G44 V figure is not in the maker's table)",
+  "default_zero_m": 25.0,
+  "default_zero_note": "inferred: the manual gives no zero distance; sights are user adjustable (manual p. 10: screwdriver for the adjustable rear sight)"
+ },
+ "ammo": {
+  "cci_standard_velocity": {
+   "label": "CCI Standard Velocity 40 gr LRN (part 35)",
+   "bc_g1": 0.12,
+   "mass_kg": 0.0025919563999999996,
+   "diameter_m": 0.00566,
+   "length_m": 0.0116,
+   "mv": 271.24,
+   "mv_test_barrel": 326.14,
+   "mv_source": "../action/action.json: simulated 102 mm barrel",
+   "supersonic_at_muzzle": false,
+   "sigma_moa": 3.0,
+   "sigma_note": "inferred standard deviation per axis for pistol and load together; not measured",
+   "sg_miller": 1.35,
+   "zero_25m_elevation_rad": 0.0023424250876723832,
+   "table_zero_25m": [
+    {
+     "range_m": 0,
+     "v_mps": 271.24,
+     "energy_J": 95.35,
+     "path_mm": -15.9,
+     "tof_s": 0.0,
+     "drift_10mph_mm": 0.0,
+     "mach": 0.797
+    },
+    {
+     "range_m": 5,
+     "v_mps": 269.3,
+     "energy_J": 93.99,
+     "path_mm": -5.86,
+     "tof_s": 0.0185,
+     "drift_10mph_mm": 0.3,
+     "mach": 0.791
+    },
+    {
+     "range_m": 10,
+     "v_mps": 267.4,
+     "energy_J": 92.66,
+     "path_mm": 0.79,
+     "tof_s": 0.03713,
+     "drift_10mph_mm": 1.19,
+     "mach": 0.786
+    },
+    {
+     "range_m": 15,
+     "v_mps": 265.53,
+     "energy_J": 91.37,
+     "path_mm": 4.02,
+     "tof_s": 0.0559,
+     "drift_10mph_mm": 2.66,
+     "mach": 0.78
+    },
+    {
+     "range_m": 20,
+     "v_mps": 263.7,
+     "energy_J": 90.12,
+     "path_mm": 3.77,
+     "tof_s": 0.07479,
+     "drift_10mph_mm": 4.73,
+     "mach": 0.775
+    },
+    {
+     "range_m": 25,
+     "v_mps": 261.89,
+     "energy_J": 88.89,
+     "path_mm": -0.0,
+     "tof_s": 0.09382,
+     "drift_10mph_mm": 7.38,
+     "mach": 0.77
+    },
+    {
+     "range_m": 30,
+     "v_mps": 260.12,
+     "energy_J": 87.69,
+     "path_mm": -7.35,
+     "tof_s": 0.11298,
+     "drift_10mph_mm": 10.61,
+     "mach": 0.764
+    },
+    {
+     "range_m": 35,
+     "v_mps": 258.38,
+     "energy_J": 86.52,
+     "path_mm": -18.32,
+     "tof_s": 0.13226,
+     "drift_10mph_mm": 14.43,
+     "mach": 0.759
+    },
+    {
+     "range_m": 40,
+     "v_mps": 256.66,
+     "energy_J": 85.37,
+     "path_mm": -32.97,
+     "tof_s": 0.15168,
+     "drift_10mph_mm": 18.82,
+     "mach": 0.754
+    },
+    {
+     "range_m": 45,
+     "v_mps": 254.97,
+     "energy_J": 84.25,
+     "path_mm": -51.33,
+     "tof_s": 0.17123,
+     "drift_10mph_mm": 23.79,
+     "mach": 0.749
+    },
+    {
+     "range_m": 50,
+     "v_mps": 253.3,
+     "energy_J": 83.15,
+     "path_mm": -73.47,
+     "tof_s": 0.1909,
+     "drift_10mph_mm": 29.34,
+     "mach": 0.744
+    },
+    {
+     "range_m": 55,
+     "v_mps": 251.65,
+     "energy_J": 82.07,
+     "path_mm": -99.43,
+     "tof_s": 0.21071,
+     "drift_10mph_mm": 35.47,
+     "mach": 0.74
+    },
+    {
+     "range_m": 60,
+     "v_mps": 250.03,
+     "energy_J": 81.02,
+     "path_mm": -129.26,
+     "tof_s": 0.23064,
+     "drift_10mph_mm": 42.18,
+     "mach": 0.735
+    },
+    {
+     "range_m": 65,
+     "v_mps": 248.43,
+     "energy_J": 79.99,
+     "path_mm": -163.01,
+     "tof_s": 0.2507,
+     "drift_10mph_mm": 49.46,
+     "mach": 0.73
+    },
+    {
+     "range_m": 70,
+     "v_mps": 246.85,
+     "energy_J": 78.97,
+     "path_mm": -200.74,
+     "tof_s": 0.27089,
+     "drift_10mph_mm": 57.32,
+     "mach": 0.725
+    },
+    {
+     "range_m": 75,
+     "v_mps": 245.29,
+     "energy_J": 77.98,
+     "path_mm": -242.49,
+     "tof_s": 0.29121,
+     "drift_10mph_mm": 65.75,
+     "mach": 0.721
+    },
+    {
+     "range_m": 80,
+     "v_mps": 243.75,
+     "energy_J": 77.0,
+     "path_mm": -288.31,
+     "tof_s": 0.31166,
+     "drift_10mph_mm": 74.77,
+     "mach": 0.716
+    },
+    {
+     "range_m": 85,
+     "v_mps": 242.23,
+     "energy_J": 76.04,
+     "path_mm": -338.26,
+     "tof_s": 0.33224,
+     "drift_10mph_mm": 84.35,
+     "mach": 0.712
+    },
+    {
+     "range_m": 90,
+     "v_mps": 240.72,
+     "energy_J": 75.1,
+     "path_mm": -392.39,
+     "tof_s": 0.35295,
+     "drift_10mph_mm": 94.52,
+     "mach": 0.707
+    },
+    {
+     "range_m": 95,
+     "v_mps": 239.23,
+     "energy_J": 74.17,
+     "path_mm": -450.75,
+     "tof_s": 0.37378,
+     "drift_10mph_mm": 105.27,
+     "mach": 0.703
+    },
+    {
+     "range_m": 100,
+     "v_mps": 237.76,
+     "energy_J": 73.26,
+     "path_mm": -513.4,
+     "tof_s": 0.39475,
+     "drift_10mph_mm": 116.59,
+     "mach": 0.699
+    }
+   ],
+   "max_range_m": 1331,
+   "max_range_elevation_deg": 32
+  },
+  "cci_mini_mag": {
+   "label": "CCI Mini-Mag 40 gr CPRN (part 30)",
+   "bc_g1": 0.13,
+   "mass_kg": 0.0025919563999999996,
+   "diameter_m": 0.00566,
+   "length_m": 0.0116,
+   "mv": 299.64,
+   "mv_test_barrel": 376.43,
+   "mv_source": "../action/action.json: simulated 102 mm barrel",
+   "supersonic_at_muzzle": false,
+   "sigma_moa": 3.5,
+   "sigma_note": "inferred standard deviation per axis for pistol and load together; not measured",
+   "sg_miller": 1.39,
+   "zero_25m_elevation_rad": 0.0020392961834932075,
+   "table_zero_25m": [
+    {
+     "range_m": 0,
+     "v_mps": 299.64,
+     "energy_J": 116.36,
+     "path_mm": -15.9,
+     "tof_s": 0.0,
+     "drift_10mph_mm": 0.0,
+     "mach": 0.881
+    },
+    {
+     "range_m": 5,
+     "v_mps": 297.16,
+     "energy_J": 114.44,
+     "path_mm": -7.08,
+     "tof_s": 0.01676,
+     "drift_10mph_mm": 0.31,
+     "mach": 0.873
+    },
+    {
+     "range_m": 10,
+     "v_mps": 294.76,
+     "energy_J": 112.6,
+     "path_mm": -1.03,
+     "tof_s": 0.03365,
+     "drift_10mph_mm": 1.24,
+     "mach": 0.866
+    },
+    {
+     "range_m": 15,
+     "v_mps": 292.42,
+     "energy_J": 110.82,
+     "path_mm": 2.19,
+     "tof_s": 0.05068,
+     "drift_10mph_mm": 2.78,
+     "mach": 0.859
+    },
+    {
+     "range_m": 20,
+     "v_mps": 290.16,
+     "energy_J": 109.11,
+     "path_mm": 2.55,
+     "tof_s": 0.06785,
+     "drift_10mph_mm": 4.92,
+     "mach": 0.853
+    },
+    {
+     "range_m": 25,
+     "v_mps": 287.95,
+     "energy_J": 107.46,
+     "path_mm": 0.0,
+     "tof_s": 0.08515,
+     "drift_10mph_mm": 7.66,
+     "mach": 0.846
+    },
+    {
+     "range_m": 30,
+     "v_mps": 285.8,
+     "energy_J": 105.86,
+     "path_mm": -5.51,
+     "tof_s": 0.10258,
+     "drift_10mph_mm": 10.98,
+     "mach": 0.84
+    },
+    {
+     "range_m": 35,
+     "v_mps": 283.71,
+     "energy_J": 104.31,
+     "path_mm": -14.02,
+     "tof_s": 0.12013,
+     "drift_10mph_mm": 14.88,
+     "mach": 0.834
+    },
+    {
+     "range_m": 40,
+     "v_mps": 281.66,
+     "energy_J": 102.81,
+     "path_mm": -25.58,
+     "tof_s": 0.13782,
+     "drift_10mph_mm": 19.36,
+     "mach": 0.828
+    },
+    {
+     "range_m": 45,
+     "v_mps": 279.66,
+     "energy_J": 101.36,
+     "path_mm": -40.23,
+     "tof_s": 0.15564,
+     "drift_10mph_mm": 24.41,
+     "mach": 0.822
+    },
+    {
+     "range_m": 50,
+     "v_mps": 277.71,
+     "energy_J": 99.95,
+     "path_mm": -58.01,
+     "tof_s": 0.17358,
+     "drift_10mph_mm": 30.02,
+     "mach": 0.816
+    },
+    {
+     "range_m": 55,
+     "v_mps": 275.79,
+     "energy_J": 98.57,
+     "path_mm": -78.97,
+     "tof_s": 0.19165,
+     "drift_10mph_mm": 36.19,
+     "mach": 0.81
+    },
+    {
+     "range_m": 60,
+     "v_mps": 273.92,
+     "energy_J": 97.24,
+     "path_mm": -103.16,
+     "tof_s": 0.20984,
+     "drift_10mph_mm": 42.92,
+     "mach": 0.805
+    },
+    {
+     "range_m": 65,
+     "v_mps": 272.08,
+     "energy_J": 95.94,
+     "path_mm": -130.61,
+     "tof_s": 0.22815,
+     "drift_10mph_mm": 50.21,
+     "mach": 0.8
+    },
+    {
+     "range_m": 70,
+     "v_mps": 270.27,
+     "energy_J": 94.67,
+     "path_mm": -161.38,
+     "tof_s": 0.24659,
+     "drift_10mph_mm": 58.05,
+     "mach": 0.794
+    },
+    {
+     "range_m": 75,
+     "v_mps": 268.5,
+     "energy_J": 93.43,
+     "path_mm": -195.5,
+     "tof_s": 0.26515,
+     "drift_10mph_mm": 66.43,
+     "mach": 0.789
+    },
+    {
+     "range_m": 80,
+     "v_mps": 266.76,
+     "energy_J": 92.22,
+     "path_mm": -233.02,
+     "tof_s": 0.28384,
+     "drift_10mph_mm": 75.36,
+     "mach": 0.784
+    },
+    {
+     "range_m": 85,
+     "v_mps": 265.05,
+     "energy_J": 91.04,
+     "path_mm": -273.99,
+     "tof_s": 0.30264,
+     "drift_10mph_mm": 84.83,
+     "mach": 0.779
+    },
+    {
+     "range_m": 90,
+     "v_mps": 263.36,
+     "energy_J": 89.89,
+     "path_mm": -318.45,
+     "tof_s": 0.32157,
+     "drift_10mph_mm": 94.84,
+     "mach": 0.774
+    },
+    {
+     "range_m": 95,
+     "v_mps": 261.7,
+     "energy_J": 88.76,
+     "path_mm": -366.44,
+     "tof_s": 0.34062,
+     "drift_10mph_mm": 105.39,
+     "mach": 0.769
+    },
+    {
+     "range_m": 100,
+     "v_mps": 260.07,
+     "energy_J": 87.65,
+     "path_mm": -418.01,
+     "tof_s": 0.35978,
+     "drift_10mph_mm": 116.48,
+     "mach": 0.764
+    }
+   ],
+   "max_range_m": 1478,
+   "max_range_elevation_deg": 32
+  },
+  "cci_quiet_22": {
+   "label": "CCI Quiet-22 40 gr LRN (part 960)",
+   "bc_g1": 0.12,
+   "mass_kg": 0.0025919563999999996,
+   "diameter_m": 0.00566,
+   "length_m": 0.0116,
+   "mv": 185.62,
+   "mv_test_barrel": 216.41,
+   "mv_source": "../action/action.json: simulated 102 mm barrel",
+   "supersonic_at_muzzle": false,
+   "sigma_moa": 4.0,
+   "sigma_note": "inferred standard deviation per axis for pistol and load together; not measured",
+   "sg_miller": 1.19,
+   "zero_25m_elevation_rad": 0.0042632439553472075,
+   "table_zero_25m": [
+    {
+     "range_m": 0,
+     "v_mps": 185.62,
+     "energy_J": 44.65,
+     "path_mm": -15.9,
+     "tof_s": 1e-05,
+     "drift_10mph_mm": 0.0,
+     "mach": 0.545
+    },
+    {
+     "range_m": 5,
+     "v_mps": 184.55,
+     "energy_J": 44.14,
+     "path_mm": 1.84,
+     "tof_s": 0.02701,
+     "drift_10mph_mm": 0.35,
+     "mach": 0.542
+    },
+    {
+     "range_m": 10,
+     "v_mps": 183.49,
+     "energy_J": 43.63,
+     "path_mm": 12.39,
+     "tof_s": 0.05419,
+     "drift_10mph_mm": 1.39,
+     "mach": 0.539
+    },
+    {
+     "range_m": 15,
+     "v_mps": 182.44,
+     "energy_J": 43.13,
+     "path_mm": 15.65,
+     "tof_s": 0.08151,
+     "drift_10mph_mm": 3.14,
+     "mach": 0.536
+    },
+    {
+     "range_m": 20,
+     "v_mps": 181.39,
+     "energy_J": 42.64,
+     "path_mm": 11.55,
+     "tof_s": 0.109,
+     "drift_10mph_mm": 5.6,
+     "mach": 0.533
+    },
+    {
+     "range_m": 25,
+     "v_mps": 180.34,
+     "energy_J": 42.15,
+     "path_mm": 0.0,
+     "tof_s": 0.13665,
+     "drift_10mph_mm": 8.77,
+     "mach": 0.53
+    },
+    {
+     "range_m": 30,
+     "v_mps": 179.31,
+     "energy_J": 41.67,
+     "path_mm": -19.09,
+     "tof_s": 0.16445,
+     "drift_10mph_mm": 12.65,
+     "mach": 0.527
+    },
+    {
+     "range_m": 35,
+     "v_mps": 178.27,
+     "energy_J": 41.19,
+     "path_mm": -45.81,
+     "tof_s": 0.19242,
+     "drift_10mph_mm": 17.25,
+     "mach": 0.524
+    },
+    {
+     "range_m": 40,
+     "v_mps": 177.25,
+     "energy_J": 40.72,
+     "path_mm": -80.24,
+     "tof_s": 0.22055,
+     "drift_10mph_mm": 22.58,
+     "mach": 0.521
+    },
+    {
+     "range_m": 45,
+     "v_mps": 176.23,
+     "energy_J": 40.25,
+     "path_mm": -122.48,
+     "tof_s": 0.24884,
+     "drift_10mph_mm": 28.63,
+     "mach": 0.518
+    },
+    {
+     "range_m": 50,
+     "v_mps": 175.22,
+     "energy_J": 39.79,
+     "path_mm": -172.61,
+     "tof_s": 0.27729,
+     "drift_10mph_mm": 35.42,
+     "mach": 0.515
+    },
+    {
+     "range_m": 55,
+     "v_mps": 174.21,
+     "energy_J": 39.33,
+     "path_mm": -230.72,
+     "tof_s": 0.30591,
+     "drift_10mph_mm": 42.95,
+     "mach": 0.512
+    },
+    {
+     "range_m": 60,
+     "v_mps": 173.21,
+     "energy_J": 38.88,
+     "path_mm": -296.92,
+     "tof_s": 0.3347,
+     "drift_10mph_mm": 51.22,
+     "mach": 0.509
+    },
+    {
+     "range_m": 65,
+     "v_mps": 172.21,
+     "energy_J": 38.44,
+     "path_mm": -371.29,
+     "tof_s": 0.36365,
+     "drift_10mph_mm": 60.24,
+     "mach": 0.506
+    },
+    {
+     "range_m": 70,
+     "v_mps": 171.22,
+     "energy_J": 37.99,
+     "path_mm": -453.93,
+     "tof_s": 0.39277,
+     "drift_10mph_mm": 70.01,
+     "mach": 0.503
+    },
+    {
+     "range_m": 75,
+     "v_mps": 170.24,
+     "energy_J": 37.56,
+     "path_mm": -544.93,
+     "tof_s": 0.42206,
+     "drift_10mph_mm": 80.53,
+     "mach": 0.5
+    },
+    {
+     "range_m": 80,
+     "v_mps": 169.26,
+     "energy_J": 37.13,
+     "path_mm": -644.4,
+     "tof_s": 0.45153,
+     "drift_10mph_mm": 91.82,
+     "mach": 0.497
+    },
+    {
+     "range_m": 85,
+     "v_mps": 168.29,
+     "energy_J": 36.7,
+     "path_mm": -752.43,
+     "tof_s": 0.48116,
+     "drift_10mph_mm": 103.87,
+     "mach": 0.495
+    },
+    {
+     "range_m": 90,
+     "v_mps": 167.32,
+     "energy_J": 36.28,
+     "path_mm": -869.12,
+     "tof_s": 0.51096,
+     "drift_10mph_mm": 116.7,
+     "mach": 0.492
+    },
+    {
+     "range_m": 95,
+     "v_mps": 166.36,
+     "energy_J": 35.87,
+     "path_mm": -994.57,
+     "tof_s": 0.54094,
+     "drift_10mph_mm": 130.3,
+     "mach": 0.489
+    },
+    {
+     "range_m": 100,
+     "v_mps": 165.4,
+     "energy_J": 35.46,
+     "path_mm": -1128.89,
+     "tof_s": 0.57109,
+     "drift_10mph_mm": 144.68,
+     "mach": 0.486
+    }
+   ],
+   "max_range_m": 1013,
+   "max_range_elevation_deg": 35
+  }
+ },
+ "validation": {
+  "cci_standard_velocity": {
+   "source": "CCI product page: muzzle 1070 fps, BC 0.120, 100 yd zero, sights 1.5 in above the bore",
+   "velocity": [
+    {
+     "range_yd": 50,
+     "model_fps": 974.3,
+     "published_fps": 977,
+     "diff_fps": -2.7
+    },
+    {
+     "range_yd": 75,
+     "model_fps": 937.5,
+     "published_fps": 940,
+     "diff_fps": -2.5
+    },
+    {
+     "range_yd": 100,
+     "model_fps": 904.9,
+     "published_fps": 908,
+     "diff_fps": -3.1
+    }
+   ],
+   "path": [
+    {
+     "range_yd": 25,
+     "model_in": 2.21,
+     "published_in": 2.2,
+     "diff_in": 0.01
+    },
+    {
+     "range_yd": 50,
+     "model_in": 3.82,
+     "published_in": 3.8,
+     "diff_in": 0.02
+    },
+    {
+     "range_yd": 75,
+     "model_in": 3.15,
+     "published_in": 3.1,
+     "diff_in": 0.05
+    }
+   ]
+  },
+  "cci_mini_mag": {
+   "source": "CCI product page: muzzle 1235 fps, BC 0.130, 100 yd zero, sights 1.5 in above the bore",
+   "velocity": [
+    {
+     "range_yd": 50,
+     "model_fps": 1089.1,
+     "published_fps": 1092,
+     "diff_fps": -2.9
+    },
+    {
+     "range_yd": 75,
+     "model_fps": 1036.6,
+     "published_fps": 1040,
+     "diff_fps": -3.4
+    },
+    {
+     "range_yd": 100,
+     "model_fps": 993.5,
+     "published_fps": 998,
+     "diff_fps": -4.5
+    }
+   ],
+   "path": [
+    {
+     "range_yd": 25,
+     "model_in": 1.52,
+     "published_in": 1.5,
+     "diff_in": 0.02
+    },
+    {
+     "range_yd": 50,
+     "model_in": 2.9,
+     "published_in": 2.9,
+     "diff_in": 0.0
+    },
+    {
+     "range_yd": 75,
+     "model_in": 2.46,
+     "published_in": 2.4,
+     "diff_in": 0.06
+    }
+   ]
+  },
+  "cci_quiet_22": {
+   "source": "CCI product page: muzzle 710 fps, BC 0.120, 100 yd zero, sights 1.5 in above the bore",
+   "velocity": [
+    {
+     "range_yd": 50,
+     "model_fps": 672.9,
+     "published_fps": 674,
+     "diff_fps": -1.1
+    },
+    {
+     "range_yd": 75,
+     "model_fps": 655.3,
+     "published_fps": 656,
+     "diff_fps": -0.7
+    },
+    {
+     "range_yd": 100,
+     "model_fps": 638.2,
+     "published_fps": 640,
+     "diff_fps": -1.8
+    }
+   ],
+   "path": [
+    {
+     "range_yd": 25,
+     "model_in": 5.95,
+     "published_in": 6.0,
+     "diff_in": -0.05
+    },
+    {
+     "range_yd": 50,
+     "model_in": 8.85,
+     "published_in": 8.9,
+     "diff_in": -0.05
+    },
+    {
+     "range_yd": 75,
+     "model_in": 6.96,
+     "published_in": 7.0,
+     "diff_in": -0.04
+    }
+   ]
+  },
+  "summary": {
+   "worst_velocity_diff_fps": 4.5,
+   "worst_path_diff_in": 0.06,
+   "note": "the model flown from CCI's test-barrel velocity with CCI's G1 coefficient, against CCI's downrange table. CCI gives path to 0.1 in and velocity to 1 fps"
+  },
+  "max_range": {
+   "model_m": {
+    "cci_standard_velocity": 1331,
+    "cci_mini_mag": 1478,
+    "cci_quiet_22": 1013
+   },
+   "reference": ".22 LR boxes warn of a range of 1.5 miles (about 2.4 km); manual p. 13 warns of up to about 3 km for GLOCK pistols in general",
+   "note": "from the 102 mm barrel, sea level, no wind; an upper bound check only"
+  }
+ },
+ "parity": {
+  "note": "poi() cases computed by sim.py; test.js must reproduce them with g44v-ballistics.js",
+  "cases": [
+   {
+    "ammo": "cci_standard_velocity",
+    "zero": 25.0,
+    "distance": 50.0,
+    "wind_x": 0.0,
+    "y": -0.07347038895266349,
+    "x": 0.0,
+    "v": 253.29881308330934,
+    "tof": 0.1909011157268481,
+    "elevation": 0.0023424250876723832
+   },
+   {
+    "ammo": "cci_standard_velocity",
+    "zero": 15.0,
+    "distance": 75.0,
+    "wind_x": 3.0,
+    "y": -0.2626083549354349,
+    "x": 0.04411824750817514,
+    "v": 245.2900128524632,
+    "tof": 0.2912145670051153,
+    "elevation": 0.002074197926986018
+   },
+   {
+    "ammo": "cci_standard_velocity",
+    "zero": 50.0,
+    "distance": 10.0,
+    "wind_x": -2.0,
+    "y": 0.01548907058717379,
+    "x": -0.0005305246274660779,
+    "v": 267.3971521996359,
+    "tof": 0.037133248788586384,
+    "elevation": 0.0038118499277970857
+   },
+   {
+    "ammo": "cci_mini_mag",
+    "zero": 25.0,
+    "distance": 50.0,
+    "wind_x": 0.0,
+    "y": -0.058012069173733964,
+    "x": 0.0,
+    "v": 277.70801144371137,
+    "tof": 0.17357981923606616,
+    "elevation": 0.0020392961834932075
+   },
+   {
+    "ammo": "cci_mini_mag",
+    "zero": 15.0,
+    "distance": 75.0,
+    "wind_x": 3.0,
+    "y": -0.2064770956028843,
+    "x": 0.04456956408781919,
+    "v": 268.4967422962288,
+    "tof": 0.2651573302477536,
+    "elevation": 0.0018929634244432246
+   },
+   {
+    "ammo": "cci_mini_mag",
+    "zero": 50.0,
+    "distance": 10.0,
+    "wind_x": -2.0,
+    "y": 0.010572144203571733,
+    "x": -0.0005557319449705276,
+    "v": 294.7558140505963,
+    "tof": 0.03365141818750896,
+    "elevation": 0.003199546572968758
+   },
+   {
+    "ammo": "cci_quiet_22",
+    "zero": 25.0,
+    "distance": 50.0,
+    "wind_x": 0.0,
+    "y": -0.1726071389403562,
+    "x": 0.0,
+    "v": 175.21693686674575,
+    "tof": 0.2772917367281193,
+    "elevation": 0.0042632439553472075
+   },
+   {
+    "ammo": "cci_quiet_22",
+    "zero": 15.0,
+    "distance": 75.0,
+    "wind_x": 3.0,
+    "y": -0.6232095428347578,
+    "x": 0.05403595773673961,
+    "v": 170.24163446274125,
+    "tof": 0.42206536765016867,
+    "elevation": 0.003219592165305586
+   },
+   {
+    "ammo": "cci_quiet_22",
+    "zero": 50.0,
+    "distance": 10.0,
+    "wind_x": -2.0,
+    "y": 0.046914431002891575,
+    "x": -0.0006234822733450798,
+    "v": 183.48894300607995,
+    "tof": 0.05418684973134536,
+    "elevation": 0.007715568158319003
+   }
+  ]
+ }
+}

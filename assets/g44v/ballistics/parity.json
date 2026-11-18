@@ -1,0 +1,6 @@
+{
+ "note": "node test.js: g44v-ballistics.js against sim.py",
+ "cases": 9,
+ "worst_difference": 0,
+ "failed": 0
+}
