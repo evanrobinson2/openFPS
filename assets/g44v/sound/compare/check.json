@@ -1,26 +1,245 @@
 {
- "note": "levels of the synthesised shots, and the two published figures used. One constant is calibrated (the rifle anchor); the pistol levels follow from the simulated muzzle conditions.",
- "calibration": {
-  "anchor": "about 140 dB peak for a .22 calibre rifle (cited in a firearm suppressor study, PMC8588962). Its measuring position is not stated; taken here as the shooter's ear",
-  "rifle_level_at_ear_db": 140.0
+ "peak_levels": {
+  "note": "one constant is calibrated (first row). Every other row is a prediction: the same interior ballistics run at the published barrel length, the same scaling and directivity. Published loads are replaced by the nearest simulated load.",
+  "rows": [
+   {
+    "what": "Meinke 2014: 4.5 in pistol, left ear",
+    "role": "calibration",
+    "published_db": 157.5,
+    "model_db": 157.5,
+    "error_db": 0.0,
+    "geometry": {
+     "r_m": 0.599,
+     "theta_deg": 172.32
+    },
+    "barrel_in": 4.5,
+    "stand_in_load": "cci_mini_mag",
+    "note": "muzzle taken 0.13 m ahead of the trigger (inferred)"
+   },
+   {
+    "what": "Murphy 2018: 10 in pistol, 0.6 m left of the muzzle",
+    "role": "check",
+    "published_db": 160,
+    "model_db": 159.0,
+    "error_db": -1.0,
+    "geometry": {
+     "r_m": 0.608,
+     "theta_deg": 90.0
+    },
+    "barrel_in": 10.0,
+    "stand_in_load": "cci_mini_mag",
+    "note": ""
+   },
+   {
+    "what": "Murphy 2018: 10 in pistol, at the ear",
+    "role": "check",
+    "published_db": 152,
+    "model_db": 151.2,
+    "error_db": -0.8,
+    "geometry": {
+     "r_m": 0.789,
+     "theta_deg": 152.53
+    },
+    "barrel_in": 10.0,
+    "stand_in_load": "cci_mini_mag",
+    "note": "ear taken 0.70 m behind the muzzle (inferred; the paper gives only the 0.35 m offset)"
+   },
+   {
+    "what": "Murphy 2018: 21 in rifle, 1280 ft/s, 0.6 m left of the muzzle",
+    "role": "check",
+    "published_db": 152,
+    "model_db": 155.3,
+    "error_db": 3.3,
+    "geometry": {
+     "r_m": 0.608,
+     "theta_deg": 90.0
+    },
+    "barrel_in": 20.75,
+    "stand_in_load": "cci_mini_mag",
+    "note": ""
+   },
+   {
+    "what": "Murphy 2018: 21 in rifle, 1050 ft/s, 0.6 m left of the muzzle",
+    "role": "check",
+    "published_db": 149,
+    "model_db": 153.4,
+    "error_db": 4.4,
+    "geometry": {
+     "r_m": 0.608,
+     "theta_deg": 90.0
+    },
+    "barrel_in": 20.75,
+    "stand_in_load": "cci_standard_velocity",
+    "note": ""
+   },
+   {
+    "what": "Murphy 2018: 21 in rifle, 1280 ft/s, at the ear",
+    "role": "check",
+    "published_db": 141,
+    "model_db": 145.8,
+    "error_db": 4.8,
+    "geometry": {
+     "r_m": 0.925,
+     "theta_deg": 156.82
+    },
+    "barrel_in": 20.75,
+    "stand_in_load": "cci_mini_mag",
+    "note": "ear taken 0.85 m behind the muzzle (inferred)"
+   },
+   {
+    "what": "Meinke 2014: 18 in rifles, left ear (143.0 to 143.8)",
+    "role": "check",
+    "published_db": 143.4,
+    "model_db": 147.9,
+    "error_db": 4.5,
+    "geometry": {
+     "r_m": 0.764,
+     "theta_deg": 173.99
+    },
+    "barrel_in": 18.0,
+    "stand_in_load": "cci_mini_mag",
+    "note": "ear taken 0.30 m behind the chamber (inferred)"
+   },
+   {
+    "what": "Meinke 2014: 24 in rifle, left ear",
+    "role": "check",
+    "published_db": 139.6,
+    "model_db": 144.8,
+    "error_db": 5.2,
+    "geometry": {
+     "r_m": 0.914,
+     "theta_deg": 174.98
+    },
+    "barrel_in": 24.0,
+    "stand_in_load": "cci_mini_mag",
+    "note": "ear taken 0.30 m behind the chamber (inferred)"
+   }
+  ],
+  "check_rms_error_db": 3.82,
+  "check_worst_error_db": 5.2
  },
- "prediction_1m_90deg_db": {
-  "cci_standard_velocity": 153.16,
-  "cci_mini_mag": 154.41,
-  "cci_quiet_22": 150.4
- },
- "bracket_check": {
-  "published": "Flamme et al.: instantaneous peak levels 1 m to the shooter's left ranged from 149 to 167 dB across 15 recreational firearms (as summarised in CDC stacks 211059)",
+ "pistol_1m_left": {
+  "published": "Flamme, Wong, Liebe, Lynd 2009, Noise Health 11:231: peak levels 1 m left of 15 recreational firearms ranged from 149 to 167 dB (as summarised in the 2018 paper)",
   "bracket_db": [
    149.0,
    167.0
   ],
+  "model_db": {
+   "cci_standard_velocity": 157.92,
+   "cci_mini_mag": 159.17,
+   "cci_quiet_22": 155.16
+  },
   "inside": {
    "cci_standard_velocity": true,
    "cci_mini_mag": true,
    "cci_quiet_22": true
+  }
+ },
+ "a_duration": {
+  "published": "same paper, note 1: all of the unsuppressed A-durations were less than 0.2 ms",
+  "limit_ms": 0.2,
+  "at": "0.6 m left of the muzzle, over ground",
+  "by_load": {
+   "cci_standard_velocity": {
+    "model_t_pos_ms": 0.14,
+    "a_duration_through_48k_ms": 0.167,
+    "negative_phase": {
+     "depth_re_peak": -0.243,
+     "length_ms": 0.375
+    },
+    "peak_minus_lae_db": 43.7,
+    "kinney_graham_free_burst_peak_db_1m": 163.3,
+    "model_peak_db_1m_90": 157.92,
+    "blowdown_time_ms": 0.159,
+    "jet_noise_energy_re_blast_db_in_band": -8.4
+   },
+   "cci_mini_mag": {
+    "model_t_pos_ms": 0.152,
+    "a_duration_through_48k_ms": 0.16,
+    "negative_phase": {
+     "depth_re_peak": -0.248,
+     "length_ms": 0.458
+    },
+    "peak_minus_lae_db": 43.4,
+    "kinney_graham_free_burst_peak_db_1m": 164.1,
+    "model_peak_db_1m_90": 159.17,
+    "blowdown_time_ms": 0.158,
+    "jet_noise_energy_re_blast_db_in_band": -9.2
+   },
+   "cci_quiet_22": {
+    "model_t_pos_ms": 0.116,
+    "a_duration_through_48k_ms": 0.102,
+    "negative_phase": {
+     "depth_re_peak": -0.199,
+     "length_ms": 0.333
+    },
+    "peak_minus_lae_db": 44.0,
+    "kinney_graham_free_burst_peak_db_1m": 161.6,
+    "model_peak_db_1m_90": 155.16,
+    "blowdown_time_ms": 0.157,
+    "jet_noise_energy_re_blast_db_in_band": -6.1
+   }
   },
-  "comment": "a .22 pistol should sit near the bottom of the bracket; CCI Quiet-22 falls just below or near its lower edge, as a reduced load should"
+  "passes": {
+   "cci_standard_velocity": true,
+   "cci_mini_mag": true,
+   "cci_quiet_22": true
+  },
+  "note": "model_t_pos is the positive phase of the model; the value seen through a 48 kHz system is longer because the shock is band-limited to 20 kHz. The Kinney-Graham peak of a free burst of all the exit gas energy must lie above the model peak (a muzzle puts only part of that energy into the blast): it does."
+ },
+ "exposure": {
+  "note": "peak minus A-weighted exposure level (LAE = LAeq8 + 44.6 dB). The two published studies differ by 10 dB; the model is compared with both and is not fitted to either.",
+  "murphy_10in_pistol": {
+   "published_muzzle_mic": 44.4,
+   "published_ear": 44.4,
+   "model_muzzle_mic": 44.0,
+   "model_ear": 43.9
+  },
+  "meinke_4p5in_pistol": {
+   "published_ear": 34.8,
+   "model_ear": 42.8
+  },
+  "sampled_peak_loss_db": 0.49
+ },
+ "sound_power": {
+  "published_db": 150,
+  "model_db": 139.9,
+  "radiated_energy_J": 1.767,
+  "note": "model: blast and jet energy at 1 m, 90 degrees x the mean of the directivity over the sphere x 0.75 (half of it meets soft ground), over 18 ms. The model does not reproduce the published figure. The published 150 dB is 18 J of sound in 18 ms; the same paper's 160 dB peak and LAeq8 71 dB at 0.6 m give about 1.6 J for a uniform source. The low-frequency and forward content of the real blast may be larger than modelled; not resolved."
+ },
+ "mechanical": {
+  "published": "same paper: the suppressed pistol at the left and right ear. Everything that is not muzzle blast (action, port) is inside this, so it bounds the mechanical sound from above",
+  "bound_peak_db": 133,
+  "bound_lae_db": 93.6,
+  "model_at_ear": {
+   "cci_standard_velocity": {
+    "peak_db": 120.2,
+    "lae_db": 86.7
+   },
+   "cci_mini_mag": {
+    "peak_db": 122.0,
+    "lae_db": 86.9
+   },
+   "cci_quiet_22": {
+    "peak_db": 116.1,
+    "lae_db": 82.6
+   }
+  },
+  "below_bound": {
+   "cci_standard_velocity": true,
+   "cci_mini_mag": true,
+   "cci_quiet_22": true
+  },
+  "clips_peak_db_at_ear": {
+   "trigger": 94.2,
+   "dry_fire": 106.2,
+   "slide_rack": 118.2,
+   "slide_lock_open": 103.7,
+   "slide_release": 121.3,
+   "magazine_out": 101.1,
+   "magazine_in": 105.5,
+   "case_ground": 89.8
+  }
  },
  "subsonic": {
   "note": "all three loads leave the 102 mm barrel below the speed of sound (ballistics.json), so there is no ballistic crack in any shot",
@@ -30,75 +249,65 @@
    "cci_quiet_22": false
   }
  },
- "mechanical_peak_db_at_ear": {
-  "trigger": 100.2,
-  "dry_fire": 113.8,
-  "slide_rack": 121.6,
-  "slide_lock_open": 111.4,
-  "slide_release": 123.5,
-  "magazine_out": 104.0,
-  "magazine_in": 110.1,
-  "case_ground": 94.8
- },
  "levels": {
   "cci_standard_velocity": {
    "shooter": {
-    "peak_pa": 733.237,
-    "peak_db": 151.28,
-    "peak_db_over_ground": 151.28,
-    "sel_db": 109.56
+    "model_peak_db": 156.44,
+    "sampled_48k_peak_db": 156.27,
+    "lae_db": 112.7,
+    "lae_over_ground_db": 112.93
    },
    "bystander": {
-    "peak_pa": 219.04,
-    "peak_db": 140.79,
-    "peak_db_over_ground": 140.79,
-    "sel_db": 99.67
+    "model_peak_db": 146.78,
+    "sampled_48k_peak_db": 146.38,
+    "lae_db": 102.97,
+    "lae_over_ground_db": 103.81
    },
    "downrange": {
-    "peak_pa": 45.348,
-    "peak_db": 127.11,
-    "peak_db_over_ground": 127.09,
-    "sel_db": 86.01
+    "model_peak_db": 133.12,
+    "sampled_48k_peak_db": 130.86,
+    "lae_db": 88.7,
+    "lae_over_ground_db": 90.04
    }
   },
   "cci_mini_mag": {
    "shooter": {
-    "peak_pa": 826.544,
-    "peak_db": 152.32,
-    "peak_db_over_ground": 152.32,
-    "sel_db": 111.11
+    "model_peak_db": 157.68,
+    "sampled_48k_peak_db": 156.38,
+    "lae_db": 114.23,
+    "lae_over_ground_db": 114.49
    },
    "bystander": {
-    "peak_pa": 251.473,
-    "peak_db": 141.99,
-    "peak_db_over_ground": 141.99,
-    "sel_db": 101.44
+    "model_peak_db": 148.02,
+    "sampled_48k_peak_db": 146.81,
+    "lae_db": 104.51,
+    "lae_over_ground_db": 105.63
    },
    "downrange": {
-    "peak_pa": 51.98,
-    "peak_db": 128.3,
-    "peak_db_over_ground": 128.3,
-    "sel_db": 87.62
+    "model_peak_db": 134.36,
+    "sampled_48k_peak_db": 131.6,
+    "lae_db": 90.33,
+    "lae_over_ground_db": 91.66
    }
   },
   "cci_quiet_22": {
    "shooter": {
-    "peak_pa": 488.472,
-    "peak_db": 147.76,
-    "peak_db_over_ground": 147.76,
-    "sel_db": 105.59
+    "model_peak_db": 153.67,
+    "sampled_48k_peak_db": 152.64,
+    "lae_db": 109.66,
+    "lae_over_ground_db": 109.94
    },
    "bystander": {
-    "peak_pa": 175.778,
-    "peak_db": 138.88,
-    "peak_db_over_ground": 138.88,
-    "sel_db": 96.23
+    "model_peak_db": 144.01,
+    "sampled_48k_peak_db": 143.07,
+    "lae_db": 99.87,
+    "lae_over_ground_db": 100.67
    },
    "downrange": {
-    "peak_pa": 31.355,
-    "peak_db": 123.91,
-    "peak_db_over_ground": 123.9,
-    "sel_db": 82.05
+    "model_peak_db": 130.35,
+    "sampled_48k_peak_db": 127.22,
+    "lae_db": 85.54,
+    "lae_over_ground_db": 86.93
    }
   }
  }

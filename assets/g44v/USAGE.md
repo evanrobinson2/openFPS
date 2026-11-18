@@ -14,7 +14,7 @@ ammunition, surroundings and earmuffs, the slide cycle and recoil in slow motion
 | Geometry (`model/`) | Ready as a recipe. `build.py` is Blender Python: 60 named objects covering all 38 items of the manual's component list (pp. 36-37), internals included; 13 sockets; 8 clips. It writes `build/g44v/g44v.glb` at the repository root, a build output that is never committed. Renders of a build are in `renders/` (v1's in `renders/v1/`). Silhouette against the reference: IoU 0.987. v2 is the detail pass that followed the owner's review of v1 (`notes/DETAIL_PASS_V2.md`); **v2 itself has not been reviewed**. |
 | Action and recoil (`action/`) | Ready. Three named CCI loads, calibrated to CCI's test-barrel velocities; slide mass and spring loads are inferred (not published). JS matches Python to 1e-15. |
 | Ballistics (`ballistics/`) | Ready. G1 point mass; reproduces CCI's downrange tables to 4.5 fps and 0.06 in. JS matches Python exactly. |
-| Sound (`sound/`) | Ready. Synthesised in the browser from `params.json`; JS matches Python to -311 dB. One level constant is anchored to a published .22 rifle figure. Not validated by listening or against a recording of this pistol. |
+| Sound (`sound/`) | Ready, version 2. Synthesised in the browser from `params.json`; JS matches Python to -297 dB. Level calibrated to a published .22 pistol at the ear and checked against seven other published figures (pistol within 1 dB, rifles 3 to 5 dB high). Not validated by listening; no recording of this pistol exists. |
 
 ## Run the sample
 
@@ -104,8 +104,9 @@ Order matters: model, action, ballistics, sound. Each build is deterministic.
 | Action JS against Python | 60 random samples, worst difference 2e-15; seeded brass within 0.006 mm | `action/parity.json` |
 | Ballistics against CCI's tables | worst 4.5 fps and 0.06 in over three loads | `ballistics/ballistics.json` (`validation`) |
 | Ballistics JS against Python | 9 cases, difference 0 | `ballistics/parity.json` |
-| Sound levels against published figures | pistol 150.4 to 154.4 dB peak at 1 m to the side, inside the published 149 to 167 dB bracket | `sound/compare/check.json` |
-| Sound JS against Python | 28 outputs, worst -311 dB re peak | `sound/compare/js_parity.json` |
+| Sound levels against published figures | calibrated on a 4.5 in .22 pistol at the ear (157.5 dB); 10 in pistol predicted within 1 dB at two positions; A-duration 0.12 to 0.15 ms against a published limit of 0.2 ms; pistol 155.2 to 159.2 dB at 1 m to the side, inside the published 149 to 167 dB | `sound/compare/check.json` |
+| Sound before and after the click fix | energy in the first 2 ms: 94.8 % before, 94.0 % after in pascals, 61.6 % as played; bands last 12 to 26 ms as played (were 7 to 11) | `sound/compare/before_after.json` |
+| Sound JS against Python | 28 outputs, worst -296.9 dB re peak | `sound/compare/js_parity.json` |
 
 ## Limits
 
@@ -119,7 +120,7 @@ Order matters: model, action, ballistics, sound. Each build is deterministic.
 - Trigger travel in the model is 7.5 degrees, set by the traced outlines; the real travel is not published.
 - Slide mass (105 g), recoil spring loads (24 to 65 N) and firing pin spring loads are not published. They were chosen so
   the makers' statements about ammunition hold; `action/README.md` gives the sensitivity.
-- Sound: one calibration constant, inferred directivity and modal tables; not checked by listening.
+- Sound: two calibration constants (blast level, mechanical radiation), inferred directivity, structure and ground scatter; not checked by listening. In an open field the shot is physically short (94 % of its energy in 2 ms); `chain({ ear: true })` is a playback mapping that keeps the echo and the action audible, and the range surroundings add the tail. See `sound/README.md`.
 - See `notes/NOTES.md` for every consequential inference, omission and correction.
 
 ## Sources
