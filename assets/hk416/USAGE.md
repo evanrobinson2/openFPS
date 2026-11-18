@@ -53,6 +53,37 @@ const hits = shot.trace(targets);                     // or shot.advance(dt, tar
 
 Full APIs: `sound/README.md`, `action/README.md`, `ballistics/README.md`.
 
+## Malfunctions
+
+`malfunctions/` adds stoppages to the operating cycle: failure to fire, hangfire, failure to feed, stovepipe, double
+feed, failure to extract, bolt over-ride and squib, with what the shooter sees and the safe clearing response. It is
+education about recognising a stoppage and making the rifle safe. State: ready; rates are calibrated to the HK416's
+counts in the Army's 2007 dust test and an assumed clean baseline, and the JavaScript equals the Python stoppage for
+stoppage. The clearing clips are keyframe data, not yet baked into the model.
+
+```html
+<script src="assets/hk416/malfunctions/hk416-malfunctions.js"></script>   <!-- window.HK416Malfunctions -->
+<script type="module">
+const M = HK416Malfunctions;
+await M.load('assets/hk416/malfunctions/malfunctions.json', 'assets/hk416/malfunctions/procedures.json');
+const gun = M.create({ seed: 7, dust: 0.5, ammo: 'm855', magType: 'hk_steel', mode: 'range' });   // seeded: the same run every time
+const r = gun.fire();                    // { outcome: 'fired' | 'stovepipe' | 'double_feed' | ..., variant, stoppage, travelMm }
+if (r.stoppage) {
+  gun.pose();                            // carrierMm, boltDeg and the brass to show, in the gun frame
+  gun.carrierAt(t);                      // carrier travel t seconds after the trigger break, stopping where the stoppage holds it
+  gun.observe(); gun.diagnose();         // what can be seen, and the procedure for it ('immediate_action', 'double_feed_clear', ...)
+  gun.step();                            // one clearing step at a time (tap, rack, reassess ...), or gun.clear() for all of it
+}
+</script>
+```
+
+Drive the normal cycle with `HK416Action.sample()` as before; when `r.stoppage` is true use `gun.carrierAt(t)` for the
+carrier instead (it is the same curve until the stop) and do not spawn ejected brass unless the case left the port.
+Rebuild with `python3 malfunctions/sim.py` (about 3 minutes; needs `action/action.json` and `model/inventory.json`),
+then `node malfunctions/test_malfunctions.js`. Rates, sources, the state machine, the clip data and the limits (rates
+are calibrated, not predicted; parts breakage and cook-off are not modelled) are in `malfunctions/README.md`. The
+sample page has a malfunction section at the bottom.
+
 ## Frame and units
 
 Metres and seconds. +Z towards the muzzle, +Y up, +X to the shooter's left; the origin is on the bore axis at the

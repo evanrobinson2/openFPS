@@ -1,0 +1,318 @@
+{
+ "meta": {
+  "title": "HK416 malfunction simulation: check results",
+  "generator": "assets/hk416/malfunctions/sim.py",
+  "quick": false
+ },
+ "checks": [
+  {
+   "check": "dust test, counts by type",
+   "pass": true,
+   "detail": "FFD 152.7 vs 150; FTC 7.7 vs 7; FFR 5.3 vs 5; FXT 2.5 vs 3; FEJ 48.9 vs 49; FBR 2.9 vs 3 per 60,000 rounds (40 repeats; calibration targets)"
+  },
+  {
+   "check": "dust test, total class 1 and 2",
+   "pass": true,
+   "detail": "simulated 219.9 per 60,000 rounds, published 219 less 2 \"other\" = 217; MRBS 273 against 274"
+  },
+  {
+   "check": "dust test, stoppages rise between wipes",
+   "pass": true,
+   "detail": "second half of each 600-round interval has 4.96 times the stoppages of the first (the briefing says only that cleaning appeared to help; it gives no number)"
+  },
+  {
+   "check": "dust test, aluminium magazines",
+   "pass": true,
+   "detail": "extra feed stoppages 197 per 60,000 rounds; the M4's magazine stoppages were 148 and 239 (calibrated to the midpoint 193.5)"
+  },
+  {
+   "check": "clean rifle, mean rounds between stoppages",
+   "pass": true,
+   "detail": "simulated 5099 over 1800000 rounds (analytic 4998); assumed target about 5,000 (Army laboratory figure for new M4s; no HK416 figure exists)"
+  },
+  {
+   "check": "M855 rates against lot acceptance",
+   "pass": true,
+   "detail": "chance a lot at the simulated rates passes the first sample: misfire 0.9998 (accept 1 in 800), bullet in bore 0.9996 (accept 0), failure to extract 0.9974 (accept 0)"
+  },
+  {
+   "check": "action time against the M855 specification",
+   "pass": true,
+   "detail": "primer to gas port 0.97 ms in the action simulation; the specification allows 3 ms at mean plus five standard deviations"
+  },
+  {
+   "check": "every stoppage is cleared",
+   "pass": true,
+   "detail": "16 forced stoppages x 400 trials x 2 modes end ready (squib: made safe, awaiting inspection)"
+  },
+  {
+   "check": "the wait covers a hangfire",
+   "pass": true,
+   "detail": "forced perceptible hangfires: range mode (30 s wait) 0 of 400 opened early; military immediate action 175 of 400 opened the action before the round fired"
+  },
+  {
+   "check": "Monte Carlo against the analytic probabilities",
+   "pass": true,
+   "detail": "largest deviation 1.56 standard errors over 7 outcomes in 1000000 shots (dust 0.6, degraded ammunition, aluminium magazine)"
+  },
+  {
+   "check": "seeded runs reproduce",
+   "pass": true,
+   "detail": "same seed gives the same 11 stoppages at the same rounds; another seed differs"
+  },
+  {
+   "check": "node and clip names exist",
+   "pass": true,
+   "detail": "10 model nodes and 8 existing clips referenced are in model/inventory.json and stats_lod0.json; 9 new motions; props: prop_case, prop_round, prop_round_2, prop_bullet, prop_rod"
+  }
+ ],
+ "dust_test": {
+  "protocol": "10 rifles x 6,000 rounds, dust 1, HK steel magazines, M855, one shot per 2 s in 120-round cycles with a 10 minute pause, wipe and lubricate every 600, clean every 1,200",
+  "repeats": 40,
+  "seeds": "1000 .. 1399",
+  "rows": [
+   {
+    "category": "FFD",
+    "published": 150,
+    "sim_mean_per_60000": 152.65,
+    "analytic_per_60000": 150.0,
+    "mc_standard_error": 1.95,
+    "z": 1.36,
+    "poisson95_of_published": [
+     126.95,
+     176.02
+    ],
+    "inside": true
+   },
+   {
+    "category": "FTC",
+    "published": 7,
+    "sim_mean_per_60000": 7.65,
+    "analytic_per_60000": 6.98,
+    "mc_standard_error": 0.44,
+    "z": 1.49,
+    "poisson95_of_published": [
+     2.8,
+     14.42
+    ],
+    "inside": true
+   },
+   {
+    "category": "FFR",
+    "published": 5,
+    "sim_mean_per_60000": 5.33,
+    "analytic_per_60000": 5.0,
+    "mc_standard_error": 0.36,
+    "z": 0.89,
+    "poisson95_of_published": [
+     1.61,
+     11.67
+    ],
+    "inside": true
+   },
+   {
+    "category": "FXT",
+    "published": 3,
+    "sim_mean_per_60000": 2.52,
+    "analytic_per_60000": 3.0,
+    "mc_standard_error": 0.25,
+    "z": -1.89,
+    "poisson95_of_published": [
+     0.6,
+     8.77
+    ],
+    "inside": true
+   },
+   {
+    "category": "FEJ",
+    "published": 49,
+    "sim_mean_per_60000": 48.88,
+    "analytic_per_60000": 49.0,
+    "mc_standard_error": 1.11,
+    "z": -0.11,
+    "poisson95_of_published": [
+     36.25,
+     64.78
+    ],
+    "inside": true
+   },
+   {
+    "category": "FBR",
+    "published": 3,
+    "sim_mean_per_60000": 2.85,
+    "analytic_per_60000": 2.94,
+    "mc_standard_error": 0.27,
+    "z": -0.56,
+    "poisson95_of_published": [
+     0.6,
+     8.77
+    ],
+    "inside": true
+   }
+  ],
+  "total_sim": 219.88,
+  "total_published_class12": 219,
+  "by_variant": {
+   "bolt_override:override": 38.875,
+   "double_feed:stuck_case_plus_round": 2.425,
+   "double_feed:two_live": 4.1,
+   "failure_to_extract:claw_slip": 0.1,
+   "failure_to_feed:bolt_over_empty_chamber": 13.775,
+   "failure_to_feed:failure_to_chamber": 7.65,
+   "failure_to_feed:nose_jam": 95.9,
+   "failure_to_fire:dud": 1.2,
+   "failure_to_fire:light_strike": 4.075,
+   "failure_to_lock_back:closed_on_empty": 2.85,
+   "squib:lodged": 0.05,
+   "stovepipe:case_in_receiver": 14.175,
+   "stovepipe:rechambered_case": 0.55,
+   "stovepipe:stovepipe": 34.15
+  },
+  "classes": {
+   "sim": {
+    "class1": 207.68,
+    "class2": 11.0,
+    "class3": 1.2
+   },
+   "published": {
+    "class12": 219,
+    "class3": 14
+   },
+   "note": "prediction, not calibrated. Simulated class 3 is only cases that need a rod and squibs; the briefing does not break its 14 down, and parts breakage is not modelled"
+  },
+  "rise_between_wipes": 4.959,
+  "first_seed_counts": {
+   "failure_to_feed:nose_jam": 12,
+   "bolt_override:override": 3,
+   "failure_to_feed:failure_to_chamber": 1,
+   "stovepipe:stovepipe": 4,
+   "stovepipe:case_in_receiver": 1
+  },
+  "first_seed_stoppages": 21,
+  "sum_stoppages": 8795
+ },
+ "aluminium": {
+  "repeats": 10,
+  "seeds": "5000 .. 5099",
+  "feed_sim": 350.0,
+  "extra_feed_vs_steel": 197.35,
+  "published_m4_magazine": {
+   "summer": 148,
+   "fall": 239
+  },
+  "sum_stoppages": 4165
+ },
+ "clean": {
+  "protocol": "as the dust test with dust 0",
+  "rifles": 300,
+  "seeds": "20000 .. 20299",
+  "rounds": 1800000,
+  "stoppages": 353,
+  "mrbs_sim": 5099.2,
+  "mrbs_analytic": 4997.5,
+  "target_mrbs": 5000.0,
+  "by_category": {
+   "FBR": 19,
+   "FEJ": 88,
+   "FFD": 154,
+   "FFR": 61,
+   "FTC": 10,
+   "FXT": 21
+  },
+  "by_variant": {
+   "bolt_override:override": 35,
+   "double_feed:stuck_case_plus_round": 21,
+   "double_feed:two_live": 5,
+   "failure_to_feed:bolt_over_empty_chamber": 9,
+   "failure_to_feed:failure_to_chamber": 10,
+   "failure_to_feed:nose_jam": 105,
+   "failure_to_fire:dud": 46,
+   "failure_to_fire:light_strike": 13,
+   "failure_to_lock_back:closed_on_empty": 19,
+   "squib:lodged": 2,
+   "stovepipe:case_in_receiver": 24,
+   "stovepipe:stovepipe": 64
+  },
+  "classes": {
+   "1": 332,
+   "2": 11,
+   "3": 10
+  },
+  "context": {
+   "m4_requirement_1990": 600,
+   "m4a1_m855a1_2013": 1691,
+   "individual_carbine_requirement": 3592,
+   "army_lab_2006_m4_m16": 5000,
+   "usmc_2002_m4": "186 failures in 69,000 rounds"
+  }
+ },
+ "m855_lot_acceptance": {
+  "per_round": {
+   "misfire": 2.8003670276762603e-05,
+   "bullet_in_bore": 5e-07,
+   "failure_to_extract": 3.2015368782235827e-06
+  },
+  "p_accept_first_sample": {
+   "misfire": 0.9997530707452094,
+   "bullet_in_bore": 0.9996000798894072,
+   "failure_to_extract": 0.9974420435577668
+  },
+  "action_time_ms": 0.968,
+  "action_time_limit_ms": 3.0
+ },
+ "monte_carlo_vs_analytic": {
+  "shots": 1000000,
+  "cfg": {
+   "dust": 0.6,
+   "ammo": "degraded",
+   "magType": "gi_aluminium"
+  },
+  "rows": [
+   {
+    "outcome": "bolt_override",
+    "expected": 9792.6,
+    "got": 9753,
+    "z": -0.4
+   },
+   {
+    "outcome": "double_feed",
+    "expected": 53.6,
+    "got": 65,
+    "z": 1.56
+   },
+   {
+    "outcome": "failure_to_feed",
+    "expected": 4992.4,
+    "got": 5029,
+    "z": 0.52
+   },
+   {
+    "outcome": "failure_to_fire",
+    "expected": 5023.4,
+    "got": 4948,
+    "z": -1.06
+   },
+   {
+    "outcome": "fired",
+    "expected": 979150.4,
+    "got": 979243,
+    "z": 0.09
+   },
+   {
+    "outcome": "squib",
+    "expected": 300.0,
+    "got": 289,
+    "z": -0.64
+   },
+   {
+    "outcome": "stovepipe",
+    "expected": 687.5,
+    "got": 673,
+    "z": -0.55
+   }
+  ],
+  "max_z": 1.56
+ },
+ "passed": 12,
+ "failed": 0
+}
