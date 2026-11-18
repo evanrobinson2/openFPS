@@ -12,10 +12,10 @@ built from how the part must work (each one is a stated guess). Positions are mm
 | 1 | `p01_slide_guide_rail_r` | measured | dimension image px x 222-1157, y 258-288 | 80.9, -12.8, -6.0 | 0.1 to 161.7 | -8.6 to -3.5 | SteelDark |
 | - | `placeholder_panel_slide_logo` | measured | dimension image px 493-560, 197-248: maker's mark replaced by a plain panel | 109.1, 12.8, 2.7 | 103.3 to 114.9 | -1.7 to 7.1 | Placeholder |
 | - | `placeholder_panel_slide_text` | measured | dimension image px 585-835, 205-240: model and calibre text replaced by a plain panel | 77.4, 12.8, 2.7 | 55.8 to 99.0 | -0.3 to 5.7 | Placeholder |
-| 16a | `p16a_front_sight` | traced | traced: outlines.json front_sight | 163.0, 0.0, 14.2 | 160.4 to 167.4 | 11.7 to 15.6 | Polymer |
+| 16a | `p16a_front_sight` | traced | traced: outlines.json front_sight | 163.0, 0.0, 14.1 | 160.4 to 167.4 | 11.2 to 15.6 | Polymer |
 | 16a | `p16a_front_sight_dot` | measured | white dot (manual p. 23 picture 27) | 160.3, 0.0, 14.0 | 160.2 to 160.5 | 13.0 to 15.0 | SightWhite |
 | 16b | `p16b_front_sight_screw` | inferred | exploded drawing: screw under the front sight | 163.8, -0.0, 10.1 | 162.0 to 165.6 | 8.2 to 11.7 | Steel |
-| 15 | `p15_rear_sight` | traced | traced: outlines.json rear_sight; width 17 mm from the top view | 10.0, 0.0, 14.4 | 2.7 to 15.6 | 11.7 to 16.2 | Polymer |
+| 15 | `p15_rear_sight` | traced | traced: outlines.json rear_sight; width 13 mm from the top view (p. 23 picture 27; v1 had 17); dovetail base and the two adjusting screws from the top view and p. 10 | 10.0, 0.0, 14.4 | 2.7 to 15.6 | 10.6 to 16.2 | Polymer |
 | 15 | `p15_rear_sight_outline` | measured | white notch outline (rear view) | 2.7, 0.0, 14.2 | 2.6 to 2.8 | 12.9 to 15.9 | SightWhite |
 | 14 | `p14_slide_cover_plate` | measured | rear view; exploded drawing | 0.8, 0.0, -1.1 | -0.0 to 1.7 | -9.2 to 6.9 | Polymer |
 | 4 | `p04_firing_pin` | measured | lug measured in the underside photo (L 19-23 in the fired position, p. 27); manual p. 30 picture 34; shaft and tip inferred | 19.0, 0.0, 2.6 | 11.5 to 66.3 | -11.6 to 4.5 | Steel |
@@ -24,48 +24,51 @@ built from how the part must work (each one is a stated guess). Positions are mm
 | 7 | `p07_spring_cups` | inferred | exploded drawing item 7 (two half cups) | 53.2, 0.0, 2.6 | 44.5 to 47.0 | -0.1 to 5.3 | Steel |
 | 8 | `p08_firing_pin_safety` | measured | underside photo: plunger at L 64-68.5, 4.4 mm right of centre | 66.0, -4.4, -9.6 | 63.6 to 68.4 | -9.6 to -3.6 | Steel |
 | 9 | `p09_firing_pin_safety_spring` | inferred | exploded drawing item 9 | 66.0, -4.4, 5.5 | 64.3 to 67.7 | -3.3 to 5.3 | Spring |
-| 10 | `p10_extractor` | inferred | exploded drawing item 10; claw named in manual p. 30 picture 34; shape inferred | 62.0, -11.0, 3.0 | 60.8 to 74.3 | -0.9 to 5.7 | Steel |
-| 11 | `p11_extractor_depressor_plunger` | inferred | exploded drawing item 11 | 40.0, -8.0, 5.5 | 20.5 to 59.8 | 4.0 to 7.0 | Steel |
+| 10 | `p10_extractor` | measured | right side photo p. 8 picture 1 (bar L 57-76, Z -0.2..4.3); claw named in manual p. 30 picture 34 | 62.0, -11.0, 3.0 | 57.5 to 74.3 | 0.0 to 4.4 | Steel |
+| 11 | `p11_extractor_depressor_plunger` | inferred | exploded drawing item 11 | 38.7, -8.0, 5.5 | 20.5 to 56.9 | 4.0 to 7.0 | Steel |
 | 12 | `p12_extractor_depressor_plunger_spring` | inferred | exploded drawing item 12 | 14.2, -8.0, 5.5 | 8.2 to 20.2 | 4.2 to 6.8 | Spring |
 | 13 | `p13_spring_loaded_bearing` | inferred | exploded drawing item 13 | 5.0, -8.0, 5.5 | 1.9 to 8.0 | 4.0 to 7.0 | Polymer |
-| 2 | `p02_barrel` | measured | length published; tube diameter and muzzle measured (p. 21 picture 18); hood measured in the top view; lugs inferred from the exploded drawing and p. 32 | 161.5, 0.0, 0.0 | 73.0 to 174.3 | -16.0 to 9.5 | SteelDark |
+| 2 | `p02_barrel` | measured | length published; tube diameter and muzzle measured (p. 21 picture 18); hood measured in the top view; lugs inferred from the exploded drawing and p. 32 | 161.5, 0.0, 0.0 | 73.0 to 174.3 | -15.2 to 9.5 | SteelDark |
 | - | `placeholder_panel_barrel_hood` | measured | hood markings (manual p. 8 pictures 2-3) replaced by a plain panel | 90.5, -0.8, 9.5 | 80.0 to 101.0 | 9.4 to 9.6 | Placeholder |
 | 3 | `p03_recoil_spring_assembly` | inferred | exploded drawing item 3; manual p. 23 pictures 24-25; a dual captive spring simplified to one rod and one spring | 96.5, 0.0, -11.3 | 96.7 to 165.5 | -15.1 to -7.5 | Steel |
-| 3 | `p03_recoil_spring` | inferred | as above; 24 coils of 0.8 mm wire are a modelling choice (solid length must fit the stroke) | 98.1, 0.0, -11.3 | 98.6 to 165.9 | -15.1 to -7.5 | Spring |
+| 3 | `p03_recoil_spring` | measured | exploded drawing item 3: a small-diameter section at the flange end and a larger one toward the muzzle (v2); coil counts are a modelling choice | 98.1, 0.0, -11.3 | 98.6 to 165.9 | -15.1 to -7.5 | Spring |
 | 17 | `p17_frame` | traced | traced: outlines.json frame and guard_hole; width from the rear view; cavities inferred | 0.0, 0.0, 0.0 | -9.9 to 172.9 | -106.0 to -9.6 | Polymer |
 | - | `placeholder_panel_grip_l` | measured | dimension image px 1030-1095, 660-715: maker's mark on the grip replaced by a plain panel | 16.4, 14.6, -77.7 | 10.8 to 22.0 | -82.5 to -73.0 | Placeholder |
+| - | `placeholder_panel_grip_r` | measured | right side photo p. 8 picture 1: two-line text plate low on the grip replaced by a plain panel (v2) | 21.8, -14.6, -79.4 | 10.9 to 32.6 | -83.9 to -74.9 | Placeholder |
+| - | `placeholder_panel_frame_mark_l` | measured | dimension image px 483-508, 317-342: model mark on the dust cover replaced by a plain panel (v2) | 114.4, 13.7, -15.8 | 112.3 to 116.6 | -18.0 to -13.7 | Placeholder |
 | 17 | `p17_frame_guide_rear_l` | inferred | manual p. 6 (steel guides in the polymer frame); position inferred | 36.0, 9.8, -8.5 | 30.0 to 42.0 | -10.6 to -6.6 | SteelDark |
 | 17 | `p17_frame_guide_front_l` | inferred | manual p. 6 (steel guides in the polymer frame); position inferred | 113.0, 9.8, -8.5 | 108.0 to 118.0 | -10.6 to -6.6 | SteelDark |
-| - | `placeholder_panel_grip_r` | measured | dimension image px 1030-1095, 660-715: maker's mark on the grip replaced by a plain panel | 16.4, -14.6, -77.7 | 10.8 to 22.0 | -82.5 to -73.0 | Placeholder |
 | 17 | `p17_frame_guide_rear_r` | inferred | manual p. 6 (steel guides in the polymer frame); position inferred | 36.0, -9.8, -8.5 | 30.0 to 42.0 | -10.6 to -6.6 | SteelDark |
 | 17 | `p17_frame_guide_front_r` | inferred | manual p. 6 (steel guides in the polymer frame); position inferred | 113.0, -9.8, -8.5 | 108.0 to 118.0 | -10.6 to -6.6 | SteelDark |
 | 28 | `p28_trigger_pin` | measured | dimension image px (682, 350) | 82.2, 0.0, -19.4 | 80.2 to 84.2 | -21.4 to -17.4 | SteelDark |
 | 29 | `p29_trigger_housing_pin` | measured | dimension image px (1047, 440); manual p. 38 | 19.1, 0.0, -34.9 | 17.6 to 20.6 | -36.4 to -33.4 | Polymer |
-| 22 | `p22_locking_block` | inferred | exploded drawing item 22; position from the trigger pin and slide lock in the dimension image | 92.1, 0.0, -17.8 | 76.0 to 98.6 | -23.5 to -10.2 | Steel |
-| 21 | `p21_slide_lock` | measured | dimension image px 602-640, 310-355; manual p. 22 picture 23 | 93.1, 0.0, -17.0 | 89.5 to 96.0 | -21.0 to -12.4 | SteelDark |
-| 20 | `p20_slide_lock_spring` | inferred | exploded drawing item 20 | 93.1, 0.0, -24.9 | 92.0 to 94.2 | -24.7 to -21.3 | Spring |
-| 23 | `p23_trigger_mechanism_housing` | inferred | exploded drawing item 23; ejector named in manual p. 31 picture 35; shape inferred | 21.4, 0.0, -26.0 | 11.0 to 58.0 | -38.5 to -0.8 | Polymer |
+| 22 | `p22_locking_block` | inferred | exploded drawing item 22; position from the trigger pin and slide lock in the dimension image | 92.5, 0.0, -17.8 | 76.0 to 98.6 | -23.5 to -10.2 | SteelDark |
+| 21 | `p21_slide_lock` | measured | dimension image px 600-632, 310-360: a thin bar leaning 29 deg, top toward the muzzle, in a recess (v2; v1 drew a square pad); manual p. 22 picture 23. The necks that join the two finger tabs to the plate through the frame walls are not modelled, so the walls need no see-through slot | 93.4, 0.0, -17.0 | 90.6 to 96.3 | -21.1 to -13.1 | SteelDark |
+| 20 | `p20_slide_lock_spring` | inferred | exploded drawing item 20 | 95.9, 0.0, -23.8 | 95.2 to 96.6 | -23.6 to -16.5 | Spring |
+| 23 | `p23_trigger_mechanism_housing` | inferred | exploded drawing item 23; ejector named in manual p. 31 picture 35; shape inferred | 20.4, 0.0, -26.0 | 11.0 to 58.0 | -38.5 to -0.8 | Polymer |
 | 24 | `p24_connector` | inferred | exploded drawing item 24; manual p. 28 picture 32 (right rear corner of the frame); simplified to a strip | 18.5, -10.9, -17.2 | 14.0 to 23.0 | -18.3 to -16.2 | Steel |
 | 26 | `p26_trigger` | traced | traced: outlines.json trigger; hub to the pin inferred | 82.2, 0.0, -19.4 | 70.3 to 91.2 | -48.4 to -16.2 | Polymer |
 | 26 | `p26_trigger_safety` | inferred | manual p. 7 and p. 9 (trigger safety lever in the trigger); the traced outline is the blade, 2 mm proud of the trigger face | 81.6, 0.0, -34.0 | 80.6 to 91.5 | -45.0 to -34.0 | Polymer |
 | 26 | `p26_trigger_bar` | inferred | manual p. 7 (trigger bar: holds the firing pin, lifts the firing pin safety, drops on the ramp); exploded drawing item 26; routing inferred | 79.5, -5.0, -28.2 | 9.0 to 81.0 | -29.8 to -9.9 | Steel |
 | 27 | `p27_slide_stop_lever` | measured | dimension image px 815-870, 290-325 (pad); rear view shows a pad on each side; arms inferred | 82.2, 0.0, -19.4 | 49.7 to 85.6 | -22.8 to -9.9 | SteelDark |
-| 19 | `p19_magazine_catch` | measured | dimension image px 800-880, 455-515 (pad); manual p. 40; bar and nib inferred | 62.0, 0.0, -42.5 | 48.0 to 64.4 | -47.9 to -37.5 | Polymer |
-| 18 | `p18_magazine_catch_spring` | inferred | manual p. 40 pictures 53-54: a straight wire in the front strap | 54.6, 0.0, -63.8 | 47.3 to 61.8 | -81.2 to -46.5 | Spring |
-| 17 | `p17_frame_grip_texture_l` | measured | dimension image: studded grip panel, patch outline px (880,500)...(850,540), maker's mark window left clear | 0.0, 0.0, 0.0 | -2.0 to 53.1 | -97.8 to -40.5 | Polymer |
-| 17 | `p17_frame_grip_texture_r` | measured | dimension image: studded grip panel, patch outline px (880,500)...(850,540), maker's mark window left clear | 0.0, 0.0, 0.0 | -2.0 to 53.1 | -97.8 to -40.5 | Polymer |
+| 19 | `p19_magazine_catch` | measured | dimension image px 800-880, 455-515 (pad); manual p. 40; bar and nib inferred | 60.0, 0.0, -42.5 | 48.0 to 61.8 | -47.9 to -37.5 | Polymer |
+| 18 | `p18_magazine_catch_spring` | inferred | manual p. 40 pictures 53-54: a straight wire in the front strap | 51.6, 0.0, -63.8 | 44.3 to 58.8 | -81.2 to -46.5 | Spring |
+| 17 | `p17_frame_grip_texture_l` | measured | dimension image and right side photo (p. 8 picture 1): studded grip side, marking panel and magazine catch left clear | 0.0, 0.0, 0.0 | -3.8 to 58.0 | -93.8 to -49.0 | Polymer |
+| 17 | `p17_frame_grip_texture_r` | measured | dimension image and right side photo (p. 8 picture 1): studded grip side, marking panel and magazine catch left clear | 0.0, 0.0, 0.0 | -3.8 to 58.0 | -93.8 to -49.0 | Polymer |
+| 17 | `p17_frame_grip_texture_front` | measured | dimension image and rear view: studs on the front strap, nine across (v2) | 0.0, 0.0, 0.0 | 44.7 to 61.1 | -92.7 to -52.6 | Polymer |
+| 17 | `p17_frame_grip_texture_back` | measured | dimension image and rear view: studs on the back strap, nine across (v2) | 0.0, 0.0, 0.0 | -10.4 to 12.2 | -92.7 to -42.3 | Polymer |
 | 17c | `p17c_beavertail_backstrap_m` | inferred | constructed: the traced rear strap grown by 2 / 4 mm (manual p. 38) with the beavertail of p. 9; not traced | -26.0, 0.0, 0.0 | -39.2 to -5.8 | -97.7 to -9.5 | Polymer |
 | 17d | `p17d_beavertail_backstrap_l` | inferred | constructed: the traced rear strap grown by 2 / 4 mm (manual p. 38) with the beavertail of p. 9; not traced | -44.0, 0.0, 0.0 | -59.3 to -23.8 | -97.7 to -9.5 | Polymer |
-| 31 | `p31_magazine_tube` | inferred | exploded drawing item 31; rake from the traced front strap; depth and width inferred | 37.6, 0.0, -60.0 | 5.6 to 69.9 | -105.3 to -12.0 | Polymer |
-| - | `placeholder_panel_magazine` | measured | maker's mark on the tube in the exploded drawing replaced by a plain panel | 23.6, -9.6, -94.0 | 17.6 to 29.6 | -98.0 to -90.0 | Placeholder |
+| 31 | `p31_magazine_tube` | inferred | exploded drawing item 31 (slots, count windows); rake from the traced front strap; 22 mm wide below a 19.2 mm neck, depth 31 mm: inferred | 34.6, 0.0, -60.0 | 2.7 to 66.9 | -104.9 to -12.0 | Polymer |
+| - | `placeholder_panel_magazine` | measured | maker's mark on the tube in the exploded drawing replaced by a plain panel | 23.6, -11.0, -95.0 | 18.6 to 28.6 | -99.0 to -91.0 | Placeholder |
 | 35 | `p35_magazine_floor_plate` | traced | traced: outlines.json floor_plate; width 31.5 mm from the rear view | 17.2, 0.0, -106.1 | -0.7 to 42.5 | -109.4 to -101.0 | Polymer |
-| 34 | `p34_magazine_insert` | inferred | exploded drawing item 34 | 20.4, 0.0, -101.2 | 7.5 to 33.3 | -103.6 to -98.8 | Polymer |
-| 32 | `p32_follower` | measured | manual p. 11 picture 4 (orange) and p. 31 picture 36; the shelf that lifts the slide stop lever is inferred | 53.6, 0.0, -20.0 | 37.6 to 67.5 | -28.4 to -14.1 | FollowerOrange |
-| 48 | `p48_loading_assist_right` | measured | exploded drawing items 48 / 49; manual p. 11 pictures 4-5 | 50.6, -10.0, -27.5 | 45.7 to 54.3 | -33.3 to -24.7 | Polymer |
-| 49 | `p49_loading_assist_left` | measured | exploded drawing items 48 / 49; manual p. 11 pictures 4-5 | 50.6, 10.0, -27.5 | 45.7 to 54.3 | -33.3 to -24.7 | Polymer |
-| 33 | `p33_magazine_spring` | measured | exploded drawing item 33: about ten zig-zags | 22.2, 0.0, -98.5 | 14.2 to 58.2 | -99.3 to -28.6 | Spring |
+| 34 | `p34_magazine_insert` | inferred | exploded drawing item 34 | 17.9, 0.0, -104.5 | 4.6 to 30.4 | -109.4 to -98.4 | Polymer |
+| 32 | `p32_follower` | measured | manual p. 11 picture 4 (orange) and p. 31 picture 36; the shelf that lifts the slide stop lever is inferred | 50.6, 0.0, -20.0 | 34.6 to 64.5 | -28.4 to -14.1 | FollowerOrange |
+| 48 | `p48_loading_assist_right` | measured | exploded drawing items 48 / 49; manual p. 11 pictures 4-5 | 47.6, -11.0, -27.5 | 42.7 to 51.3 | -33.3 to -24.7 | Polymer |
+| 49 | `p49_loading_assist_left` | measured | exploded drawing items 48 / 49; manual p. 11 pictures 4-5 | 47.6, 11.0, -27.5 | 42.7 to 51.3 | -33.3 to -24.7 | Polymer |
+| 33 | `p33_magazine_spring` | measured | exploded drawing item 33: about ten zig-zags | 19.2, 0.0, -98.5 | 11.2 to 55.2 | -99.3 to -28.6 | Spring |
 
-Objects by status: inferred 26, measured 25, traced 6. Manual items modelled: 38 of 38 (items 25 and 30 are blank in the manual).
+Objects by status: inferred 24, measured 30, traced 6. Manual items modelled: 38 of 38 (items 25 and 30 are blank in the manual).
 
 ## Numbers
 
@@ -90,7 +93,7 @@ Objects by status: inferred 26, measured 25, traced 6. Manual items modelled: 38
 | `lock_open_travel` | 42 | measured | lock-open photo p. 21 picture 18: slide face 110 px behind the frame face at 2.78 px/mm + 2.6 mm; rear check 42.4 |
 | `full_travel` | 45 | inferred | lock-open + 3 mm over-travel so the stop can rise into its notch; not measurable from the photos |
 | `takedown_retract` | 3 | published | manual p. 22 step 8: about 1/8 in / 3 mm |
-| `slide_lock_pull` | 3.5 | inferred | enough for the plate to clear the barrel lug in this model |
+| `slide_lock_pull` | 2.6 | inferred | enough for the plate to clear the barrel lug in this model |
 | `trigger_pin` | [82.1953327571305, -19.360414866032844] | measured | dimension image: pin centre px (682, 350) |
 | `housing_pin` | [19.101123595505616, -34.91789109766638] | measured | dimension image: pin centre px (1047, 440) |
 | `trigger_break_deg` | 7.5 | inferred | the traced blade can swing 7.75 deg before it meets the traced guard opening (inventory.json kinematics.trigger_max_deg); real travel is not published |
@@ -122,7 +125,7 @@ Objects by status: inferred 26, measured 25, traced 6. Manual items modelled: 38
 | `socket_hand_right` | `frame_group` | 16.0, 0.0, -52.0 | firing hand: middle of the grip, web of the hand under the tang |
 | `socket_hand_left` | `frame_group` | 40.0, 0.0, -62.0 | support hand: wrapped over the firing hand on the front strap |
 | `socket_trigger_finger` | `frame_group` | 83.9, 0.0, -30.6 | trigger face where the spec table measures the trigger distance (px 672, 415) |
-| `socket_magazine` | `frame_group` | 19.2, 0.0, -106.0 | mouth of the magazine well; +Y of the magazine axis is tilted 21.8 deg |
+| `socket_magazine` | `frame_group` | 16.2, 0.0, -106.0 | mouth of the magazine well; +Y of the magazine axis is tilted 21.8 deg |
 | `socket_rail` | `frame_group` | 141.3, 0.0, -23.2 | accessory rail under the dust cover (manual p. 9: mounting rail) |
 
 ## Clips (30 fps)
@@ -142,6 +145,9 @@ Objects by status: inferred 26, measured 25, traced 6. Manual items modelled: 38
 
 - `p17_frame_grip_texture_l` on `p17_frame`: moulded texture
 - `p17_frame_grip_texture_r` on `p17_frame`: moulded texture
+- `p17_frame_grip_texture_front` on `p17_frame`: moulded texture
+- `p17_frame_grip_texture_back` on `p17_frame`: moulded texture
+- `placeholder_panel_frame_mark_l` on `p17_frame`: placeholder panel set into the surface
 - `placeholder_panel_slide_logo` on `p01_slide`: placeholder panel set into the surface
 - `placeholder_panel_slide_text` on `p01_slide`: placeholder panel set into the surface
 - `placeholder_panel_barrel_hood` on `p02_barrel`: placeholder panel set into the surface

@@ -31,7 +31,7 @@ position (the rest pose of the model is part-cocked, 7.5 mm). Tracks are sampled
    start and bore friction as pressures, then isentropic emptying of the bore through a sonic muzzle. For each load the
    burn coefficient and a loss factor are fitted so that a 24 in test barrel gives the load's published velocity at a
    stated peak pressure; the 102 mm barrel is then a prediction.
-3. **Blowback.** The gas force on the case head, less 10 % for case friction, drives the slide (101 g) against the
+3. **Blowback.** The gas force on the case head, less 10 % for case friction, drives the slide (105 g) against the
    recoil spring (24 N in battery, 65 N at 45 mm) and rail drag. The slide ejects at 15 mm, meets the frame at 45 mm
    (restitution 0.3) or stops short, returns, picks up a round at 31 mm, compresses the firing pin spring over the last
    8.6 mm as the trigger bar catches the pin, and closes on the barrel (restitution 0.15).
@@ -45,9 +45,9 @@ position (the rest pose of the model is part-cocked, 7.5 mm). Tracks are sampled
 
 | Load | Published, 24 in | Model, 102 mm barrel | Peak pressure | Slide peak | Travel | Outcome | Back in battery | Muzzle rise, two hands |
 |---|---|---|---|---|---|---|---|---|
-| CCI Standard Velocity 40 gr | 326 m/s (1070 fps) | 271 m/s (890 fps) | 140 MPa | 7.7 m/s | 45.0 mm | cycles | 20.9 ms | 1.7 deg |
-| CCI Mini-Mag 40 gr | 376 m/s (1235 fps) | 300 m/s (983 fps) | 165.5 MPa | 8.7 m/s | 45.0 mm | cycles | 19.2 ms | 1.8 deg |
-| CCI Quiet-22 40 gr | 216 m/s (710 fps) | 186 m/s (609 fps) | 60 MPa | 5.2 m/s | 35.0 mm | cycles, will not lock open | 26.9 ms | 1.2 deg |
+| CCI Standard Velocity 40 gr | 326 m/s (1070 fps) | 271 m/s (890 fps) | 140 MPa | 7.5 m/s | 45.0 mm | cycles | 21.5 ms | 1.7 deg |
+| CCI Mini-Mag 40 gr | 376 m/s (1235 fps) | 300 m/s (983 fps) | 165.5 MPa | 8.4 m/s | 45.0 mm | cycles | 19.7 ms | 1.9 deg |
+| CCI Quiet-22 40 gr | 216 m/s (710 fps) | 186 m/s (609 fps) | 60 MPa | 5.1 m/s | 34.0 mm | cycles, will not lock open | 27.2 ms | 1.2 deg |
 
 ## Checks
 
@@ -57,13 +57,12 @@ position (the rest pose of the model is part-cocked, 7.5 mm). Tracks are sampled
 - **Function against the makers' statements.** The manual (p. 12) says the pistol is designed for quality SAAMI or CIP
   ammunition and that some loads may lack the energy to cycle the slide fully; CCI says its Quiet-22 may need manual
   cycling in semi-automatics. The model makes the full stroke with the standard and high velocity loads and stops at
-  35.0 mm with Quiet-22. This is a qualitative check, and the unpublished slide mass and spring loads were chosen inside
+  34.0 mm with Quiet-22. This is a qualitative check, and the unpublished slide mass and spring loads were chosen inside
   the window where it holds.
 - **Sensitivity** (`action.json`, `sensitivity`): with the slide 30 % heavier, the spring 30 % stiffer or 10 % more case
-  friction, Quiet-22 short-strokes before the feed point (28 to 31 mm); with the slide 30 % lighter it makes the full
-  stroke. The two full-power loads make the full stroke in every case.
+  friction, Quiet-22 short-strokes before the feed point (28 to 30 mm); with the slide 30 % lighter it reaches 44.3 mm. The two full-power loads make the full stroke in every case.
 - **Momentum:** the breech impulse equals bullet momentum plus bore friction and gas momentum (gas share 29 to 31 %).
-- **JS against Python:** 60 random samples of `sample()` agree to 9e-16; seeded brass rest positions to 0.006 mm.
+- **JS against Python:** 60 random samples of `sample()` agree to 2e-15; seeded brass rest positions to 0.006 mm.
 
 ## Published and inferred
 

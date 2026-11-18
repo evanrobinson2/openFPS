@@ -40,22 +40,23 @@ Read with `DECOMPOSITION.md` (every object, number and socket with its source), 
 2. **Rear sight** is taken to be the adjustable polymer one: the dimension line measures 157.6 mm against 158 published for that sight, and the set includes its screwdriver (p. 10).
 3. **Bore axis** 11.75 mm below the slide top, from the muzzle's position in the dimension image. Not published.
 4. **Slide travel** 45 mm: 42 mm to lock-open is measured; the 3 mm over-travel is a guess.
-5. **Internals.** 26 of 57 objects are marked inferred (shape, and partly position), and several marked measured have only their position measured: firing pin body, spacer sleeve, springs, cups, extractor, depressor plunger and bearing, locking block, trigger mechanism housing and ejector, connector, trigger bar, the arms of the slide stop lever, magazine catch bar, magazine tube walls, insert. The exploded drawing is too small to measure; these parts are built from where they must sit and what they must do, with clearances.
+5. **Internals.** 24 of 60 objects are marked inferred (shape, and partly position), and several marked measured have only their position measured: firing pin body, spacer sleeve, springs, cups, extractor, depressor plunger and bearing, locking block, trigger mechanism housing and ejector, connector, trigger bar, the arms of the slide stop lever, magazine catch bar, magazine tube walls, insert. The exploded drawing is too small to measure; these parts are built from where they must sit and what they must do, with clearances.
 6. **Firing pin strikes the rim at 12 o'clock**, axis 2.6 mm above the bore. Not visible in any picture.
-7. **Recoil spring assembly** is drawn as a two-diameter captive assembly in the exploded drawing; here it is one rod and one spring of 24 coils so that its solid length fits the stroke.
-8. **Magazine tube** is 19.2 mm wide and 31 mm deep so that the trigger bar and slide stop arms fit beside it in this layout; the real tube is probably wider. Follower travel 78 mm from the count windows in the exploded drawing.
+7. **Recoil spring assembly** is drawn as a two-diameter captive assembly in the exploded drawing; here (v2) it is one rod and one spring with a small-diameter and a large-diameter section, 24 coils in all so that its solid length fits the stroke.
+8. **Magazine tube** (v2) is 22 mm wide with a 19.2 mm neck above Z -24 so that the trigger bar and slide stop arms pass beside it, 31 mm deep, and sits 7.5 mm behind the front strap so the catch bar is hidden under its pad as the photograph shows. Width, neck and depth are inferred. Follower travel 78 mm from the count windows in the exploded drawing.
 9. **Frame walls** 2.7 mm, hollow backstrap, cavity shapes: inferred.
 10. **Trigger travel** 7.5 degrees (blade tip 3.9 mm), the most the traced outlines allow. Real travel is not published and is probably longer.
 11. **Muzzle hole** has 0.8 mm radial clearance so the barrel can tilt out; the real fit is not known.
-12. **Masses.** Volumes times nominal densities give 449 g against the published 358 g; scaled to 358 g the split is slide 101 g, barrel and spring 116 g, frame group 141 g. The model magazine is 31 g against 57 g published. The action simulation uses the scaled slide mass and the published totals.
+12. **Masses.** Volumes times nominal densities give 429 g against the published 358 g; scaled to 358 g the split is slide 105 g, barrel and spring 121 g, frame group 133 g (v2; 449 g raw became 429 g). The model magazine is 32 g against 57 g published. The action simulation uses the scaled slide mass and the published totals.
 13. **Eye socket** 450 mm behind the rear sight (arm's length).
 
 ## Omissions and simplifications
 
 - No maker's names, logos, model text, proof marks or serial numbers: plain panels on the slide (two), barrel hood, grip (both sides) and magazine. The small model mark on the frame above the trigger is left out.
-- Frame: a flat-sided extrusion with 3.2 mm rounded edges. Missing: thumb rests, the relief behind the trigger guard, the flared magazine well, strap texture (the studs are on the side panels only, their patch outline approximate), the rail's exact slot profile, the small nose that latches the backstraps.
-- Slide: nose rounding in plan view, the detail of the underside (a moulded block and rib seen on p. 27), the sight dovetails and the rear sight's adjusting screws.
+- Frame: an extrusion of the traced outline with 3.2 mm rounded edges, to which v2 adds the narrow trigger guard, stepped dust cover, thumb rests, seam, strap texture and counterbored pins (`DETAIL_PASS_V2.md`). Still missing: the grip's slight swell and the flared magazine well, the rail's exact slot profile, the small nose that latches the backstraps, the recess low in the back strap.
+- Slide: the detail of the underside (a moulded block and rib seen on p. 27). The rear sight's dovetail and screws were added in v2.
 - Loaded chamber indicator: a plain notch in the hood.
+- The slide lock's finger tabs are not joined to its plate through the walls (v2), and the plate stands up to 1.6 mm ahead of the barrel lug it blocks.
 - The right-hand slide stop pad is 1.9 mm deeper than the left so its arm clears the trigger bar in this layout.
 - No cartridges; the magazine is always empty. No trigger spring (the manual's list has no separate item for one).
 - The firing pin safety does not geometrically block the firing pin; it is animated to the manual's description.
@@ -72,4 +73,5 @@ Read with `DECOMPOSITION.md` (every object, number and socket with its source), 
 
 | Version | Date | Change |
 |---|---|---|
+| v2 | 2026-11-17 | Change request (owner review of v1: "g44 is missing some details"). Detail pass: 23 features added or corrected, 13 merged or left out with reasons, all listed in `DETAIL_PASS_V2.md`. Magazine widened to 22 mm with a neck and moved 3 mm rearward; slide lock redrawn; close-up matched comparisons added. Slide mass share moved from 101 to 105 g, so the action tables were regenerated. v1 renders kept in `renders/v1/`. |
 | v1 | 2026-11-17 | First build in openFPS: recipe, clips, sockets, checks; action, ballistics and sound simulations with their JS runtimes; sample page. Carries over the outlines and tracing tools of the paused private build. |

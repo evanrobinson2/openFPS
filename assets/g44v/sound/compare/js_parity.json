@@ -28,16 +28,16 @@
    "js_ms": 1
   },
   "dry_cci_mini_mag_shooter_free": {
-   "max_error_db_re_peak": -341.3,
+   "max_error_db_re_peak": -347.3,
    "js_ms": 0
   },
   "dry_cci_mini_mag_shooter_field": {
-   "max_error_db_re_peak": -335.3,
+   "max_error_db_re_peak": -347.3,
    "js_ms": 1
   },
   "dry_cci_mini_mag_bystander_free": {
    "max_error_db_re_peak": -331.0,
-   "js_ms": 0
+   "js_ms": 1
   },
   "dry_cci_mini_mag_bystander_field": {
    "max_error_db_re_peak": -325.0,
@@ -84,15 +84,15 @@
    "js_ms": 0
   },
   "mech_slide_rack": {
-   "max_error_db_re_peak": -315.9,
+   "max_error_db_re_peak": -316.6,
    "js_ms": 0
   },
   "mech_slide_lock_open": {
-   "max_error_db_re_peak": -318.3,
+   "max_error_db_re_peak": -312.4,
    "js_ms": 0
   },
   "mech_slide_release": {
-   "max_error_db_re_peak": -317.7,
+   "max_error_db_re_peak": -318.5,
    "js_ms": 0
   },
   "mech_magazine_out": {

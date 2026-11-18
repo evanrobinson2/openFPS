@@ -13,4 +13,7 @@ for i, j in ov:
         c = sum((vs[q] for q in ps[k]), vs[0] * 0) / len(ps[k]); pts.append((-c.y * 1e3, c.x * 1e3, c.z * 1e3))
 if pts:
     for ax, nm in enumerate('LSZ'): print('WHERE', nm, round(min(q[ax] for q in pts), 2), round(max(q[ax] for q in pts), 2))
+for nm, vs, ps, idx in ((a, va, pa, {i for i, j in ov}), (b, vb, pb, {j for i, j in ov})):
+    q = [(-vs[k].y * 1e3, vs[k].x * 1e3, vs[k].z * 1e3) for f in idx for k in ps[f]]
+    print('WHERE', nm, 'verts', [(round(min(c[x] for c in q), 2), round(max(c[x] for c in q), 2)) for x in range(3)])
 print('WHERE pairs', len(ov))

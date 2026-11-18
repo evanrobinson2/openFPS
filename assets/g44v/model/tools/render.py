@@ -16,6 +16,9 @@ def light(loc, energy, size=0.5):
     d = bpy.data.lights.new('l', 'AREA'); d.energy = energy; d.size = size; o = bpy.data.objects.new('l', d); sc.collection.objects.link(o); o.location = loc
     o.rotation_euler = (Vector((0, -0.08, -0.04)) - Vector(loc)).to_track_quat('-Z', 'Y').to_euler()
 for loc, e in (((0.5, -0.3, 0.5), 14), ((-0.5, -0.2, 0.4), 9), ((0.0, 0.5, 0.3), 6), ((0.2, -0.6, -0.2), 4)): light(loc, e)
+EEVEE = sc.render.engine
+sun_d = bpy.data.lights.new('sun', 'SUN'); sun_d.angle = math.radians(2.0); sun = bpy.data.objects.new('sun', sun_d); sc.collection.objects.link(sun)
+sun.rotation_euler = Vector((-0.45, 0.10, -0.89)).to_track_quat('-Z', 'Y').to_euler()      # from above and a little toward the camera, as in the maker's photographs
 cam_d = bpy.data.cameras.new('c'); cam = bpy.data.objects.new('c', cam_d); sc.collection.objects.link(cam); sc.camera = cam
 def look(loc, target, ortho=None, lens=85):
     cam.location = loc; cam.rotation_euler = (Vector(target) - Vector(loc)).to_track_quat('-Z', 'Y').to_euler()
@@ -36,6 +39,25 @@ for v in views:
         sc.render.resolution_x, sc.render.resolution_y = 1654, 1042; sc.render.film_transparent = True
         sc.render.image_settings.file_format = 'PNG'; sc.render.image_settings.color_mode = 'RGBA'; out = os.path.join(HERE, 'work', 'match_left.png')
         look((1.0, -(XR - 827) / K * 1e-3, (YB - 521) / K * 1e-3), (0.0, -(XR - 827) / K * 1e-3, (YB - 521) / K * 1e-3), ortho=1654 / K * 1e-3)
+    elif v == 'match_top':       # the camera of manual p. 23 picture 27 (slide from above, muzzle right): 664 x 156 px at 3.494 px/mm, slide rear face at x = 30, centre line at y = 85
+        from mathutils import Matrix
+        sc.render.resolution_x, sc.render.resolution_y = 664, 156; sc.render.film_transparent = True
+        sc.render.image_settings.file_format = 'PNG'; sc.render.image_settings.color_mode = 'RGBA'; out = os.path.join(HERE, 'work', 'match_top.png')
+        for o in bpy.data.objects:
+            p = o; keep = False
+            while p:
+                if p.name == 'slide_group' or p.name.startswith('p02_barrel') or p.name == 'placeholder_panel_barrel_hood': keep = True
+                p = p.parent
+            if o.type == 'MESH': o.hide_render = not keep
+        cam.matrix_world = Matrix(((0, 1, 0, 0.002), (-1, 0, 0, -(332 - 30) / 3.494e3), (0, 0, 1, 1.0), (0, 0, 0, 1)))
+        cam_d.type = 'ORTHO'; cam_d.ortho_scale = 664 / 3.494e3; cam_d.clip_start = 0.01; cam_d.clip_end = 10
+    elif v == 'closeup_slide': look((0.35, -0.42, 0.18), (0, -0.11, 0.0), lens=110)
+    elif v == 'closeup_grip': look((0.30, 0.22, -0.02), (0, -0.03, -0.06), lens=85)
+    elif v == 'closeup_controls': look((0.36, -0.20, 0.03), (0, -0.075, -0.025), lens=135)
+    elif v == 'closeup_port': look((-0.30, -0.26, 0.20), (0, -0.085, 0.0), lens=135)
+    elif v == 'right_three_quarter': look((-0.42, -0.50, 0.16), (0, -0.09, -0.04), lens=85)
+    elif v == 'rear_three_quarter': look((0.30, 0.45, 0.10), (0, -0.05, -0.05), lens=85)
+    elif v == 'magazine': clip('magazine_out', 30); look((-0.55, -0.10, -0.12), (0, -0.03, -0.14), lens=85)
     elif v == 'left': look((1.0, C[1], C[2]), C, ortho=0.26)
     elif v == 'right': look((-1.0, C[1], C[2]), C, ortho=0.26)
     elif v == 'top': look((0, -0.085, 1.0), (0, -0.0851, 0), ortho=0.22)
@@ -50,4 +72,9 @@ for v in views:
     elif v == 'accessories':
         for o in acc: o.hide_render = False
         look((1.0, C[1] + 0.03, C[2]), (0, C[1] + 0.03, C[2]), ortho=0.33)
+    ray = v.startswith('match') or v.startswith('closeup')          # ray-traced with a hard sun so 0.5 mm relief casts shadows; the rest are quick EEVEE renders
+    sc.render.engine = 'CYCLES' if ray else EEVEE; sun_d.energy = 4.0 if ray else 0.0
+    if ray: sc.cycles.samples = 24; sc.cycles.use_denoising = True
+    if v == 'match_top': sun.rotation_euler = Vector((0.35, 0.10, -0.93)).to_track_quat('-Z', 'Y').to_euler()
+    sc.view_settings.exposure = 1.2 if v.startswith('match') else (0.6 if ray else -0.3)        # matched renders are exposed up so surface detail has contrast for the edge comparison
     sc.render.filepath = out; bpy.ops.render.render(write_still=True); print('rendered', v, out)

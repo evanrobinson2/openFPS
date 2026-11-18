@@ -49,7 +49,47 @@ LAND = [('trigger pin centre', cen('p28_trigger_pin'), [682, 350]), ('trigger ho
         ('muzzle', px(parts['p02_barrel']['bbox_mm']['L'][1], 0), [150, 236])]
 res['landmarks_px'] = [dict(name=n, model=m, reference=r, max_abs_diff_px=round(float(max(abs(a - b) for a, b in zip(m, r))), 1),
                             max_abs_diff_mm=round(float(max(abs(a - b) for a, b in zip(m, r)) / K), 2)) for n, m, r in LAND]
+# ---- close-up matched regions and interior detail (v2).  Edges: Canny on a 1.5 px Gaussian blur of the luminance, inside the silhouette only.
+# Both images are contrast-equalised (CLAHE) first.
+# coverage = share of the reference's interior edge pixels that have a model edge within 0.6 mm; precision = the reverse.
+def edges(gray, mask):
+    g = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8, 8)).apply(gray); g = cv2.GaussianBlur(g, (0, 0), 1.5); e = cv2.Canny(g, 30, 70) > 0      # CLAHE first: the comparison should not depend on exposure
+    return e & (cv2.erode(mask.astype(np.uint8), np.ones((9, 9), np.uint8)) > 0)
+def detail(ref_gray, ref_mask, mod_gray, mod_mask, box, k):
+    x0, y0, x1, y1 = box; er = edges(ref_gray, ref_mask)[y0:y1, x0:x1]; em_ = edges(mod_gray, mod_mask)[y0:y1, x0:x1]; tol = 0.6 * k
+    dm_ = cv2.distanceTransform((~em_).astype(np.uint8), cv2.DIST_L2, 5); dr_ = cv2.distanceTransform((~er).astype(np.uint8), cv2.DIST_L2, 5)
+    m, r = mod_mask[y0:y1, x0:x1], ref_mask[y0:y1, x0:x1]
+    return dict(box_px=list(box), iou=round(float((m & r).sum() / max((m | r).sum(), 1)), 4), reference_edge_px=int(er.sum()), model_edge_px=int(em_.sum()),
+                edge_coverage=round(float((dm_[er] <= tol).mean()) if er.any() else 0.0, 3), edge_precision=round(float((dr_[em_] <= tol).mean()) if em_.any() else 0.0, 3))
+def gray_of(path):
+    a = np.asarray(Image.open(path).convert('RGBA')).astype(float); al = a[..., 3:4] / 255
+    return ((a[..., :3] * al + 128 * (1 - al)).mean(-1)).astype(np.uint8), a[..., 3] > 127
+ph = os.path.join(HERE, '..', 'refs-local', 'glock-web', '18162-Glock-44-V.jpg')
+REG = dict(slide=(140, 130, 1170, 300), grip=(840, 430, 1240, 890), controls=(560, 280, 900, 530))
+if os.path.exists(ph):
+    rg = np.asarray(Image.open(ph).convert('L'))[:H, :W]; res['closeups'] = {}
+    for tag, f in (('v2', 'work/match_left.png'), ('v1', 'work/match_left_v1.png')):
+        if not os.path.exists(os.path.join(HERE, f)): continue
+        mg, mm_ = gray_of(os.path.join(HERE, f)); mg, mm_ = mg[:H, :W], mm_[:H, :W]
+        res['closeups'][tag] = {n: detail(rg, ref, mg, mm_, b, K) for n, b in REG.items()}
+        for n, b in REG.items():
+            if tag == 'v2':
+                x0, y0, x1, y1 = b; pair = np.concatenate([np.stack([rg[y0:y1, x0:x1]] * 3, -1), np.stack([mg[y0:y1, x0:x1]] * 3, -1)], 0)
+                Image.fromarray(pair.astype(np.uint8)).save(os.path.join(HERE, 'work', 'closeup_%s.png' % n))      # reference over model: local only
+    res['closeups']['note'] = 'regions of the dimension image, same camera. iou: silhouette; edge_coverage: share of the photograph\'s interior edges matched by a model edge within 0.6 mm; edge_precision: the reverse. Photographic grain and lighting put edges in the reference that no model has, so coverage well below 1 is expected; the before/after change is what the number is for.'
+# ---- the slide from above against manual p. 23 picture 27 (v2)
+tr_ = os.path.join(HERE, '..', 'refs-local', 'img', 'p23_4.png'); res['slide_top_view'] = {}
+for tag, tp in (('v2', os.path.join(HERE, 'work', 'match_top.png')), ('v1', os.path.join(HERE, 'work', 'match_top_v1.png'))):
+  if os.path.exists(tp) and os.path.exists(tr_):
+      KT = 3.494; rgt = np.asarray(Image.open(tr_).convert('L')); rmask = cv2.morphologyEx((rgt > 6).astype(np.uint8), cv2.MORPH_CLOSE, np.ones((9, 9), np.uint8)); ff = rmask.copy(); cv2.floodFill(ff, None, (0, 0), 2); rmask = (ff != 2)      # the dark slide on a black ground: close, then fill
+      mg, mm_ = gray_of(tp); hh, ww = min(rgt.shape[0], mg.shape[0]), min(rgt.shape[1], mg.shape[1]); rgt, rmask, mg, mm_ = rgt[:hh, :ww], rmask[:hh, :ww], mg[:hh, :ww], mm_[:hh, :ww]
+      d = detail(rgt, rmask, mg, mm_, (0, 0, ww, hh), KT); em2, er2 = edge(mm_), edge(rmask)
+      dd = cv2.distanceTransform((~em2).astype(np.uint8), cv2.DIST_L2, 5)[er2] / KT
+      d.update(px_per_mm=KT, reference='manual p. 23 picture 27 (slide from above)', outline_reference_to_model_mm=dict(mean=round(float(dd.mean()), 2), p95=round(float(np.percentile(dd, 95)), 2)))
+      res['slide_top_view'][tag] = d
+      Image.fromarray(np.concatenate([np.stack([rgt] * 3, -1), np.stack([mg] * 3, -1)], 0).astype(np.uint8)).save(os.path.join(HERE, 'work', 'closeup_top_%s.png' % tag))
 json.dump(res, open(os.path.join(HERE, 'compare.json'), 'w'), indent=1)
+print('closeups', json.dumps(res.get('closeups', {}).get('v1')), '\n      v2', json.dumps(res.get('closeups', {}).get('v2')), '\n top', json.dumps(res.get('slide_top_view')))
 print('IoU', res['iou'], '| outline mm', res['outline_distance_mm']); print('grid', grid)
 for q in res['landmarks_px']: print(' ', q['name'], q['model'], q['reference'], q['max_abs_diff_mm'], 'mm')
 # figure without reference pixels: the render with the traced outlines over it

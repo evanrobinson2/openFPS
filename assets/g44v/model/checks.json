@@ -67,7 +67,9 @@
     "p17_frame_guide_rear_r",
     "p17_frame_guide_front_r",
     "p17_frame_grip_texture_l",
-    "p17_frame_grip_texture_r"
+    "p17_frame_grip_texture_r",
+    "p17_frame_grip_texture_front",
+    "p17_frame_grip_texture_back"
    ],
    "17c": [
     "p17c_beavertail_backstrap_m"
@@ -138,10 +140,10 @@
  "dimensions": [
   {
    "dim": "1 length overall",
-   "model_mm": 184.23,
+   "model_mm": 184.71,
    "published_mm": 185.0,
-   "diff_mm": -0.77,
-   "diff_pct": -0.42
+   "diff_mm": -0.29,
+   "diff_pct": -0.16
   },
   {
    "dim": "2 slide length",
@@ -196,19 +198,19 @@
  "dimensions_note": "published = the maker's specification table for this model (the table manual p. 9 points to; values in notes/MANUAL_NOTES.md). \"Technical data are rounded and do not reflect tolerances\" (maker's note).",
  "mass": {
   "raw_model_g": {
-   "slide": 126.6,
-   "barrel_and_spring": 146.0,
-   "frame": 176.3,
-   "magazine": 30.6
+   "slide": 125.6,
+   "barrel_and_spring": 144.7,
+   "frame": 159.1,
+   "magazine": 31.6
   },
-  "raw_without_magazine_g": 448.9,
+  "raw_without_magazine_g": 429.4,
   "published_without_magazine_g": 358.0,
   "published_empty_magazine_g": 57.0,
-  "scale_to_published": 0.798,
+  "scale_to_published": 0.834,
   "normalised_g": {
-   "slide": 101.0,
-   "barrel_and_spring": 116.4,
-   "frame": 140.6
+   "slide": 104.7,
+   "barrel_and_spring": 120.7,
+   "frame": 132.7
   },
   "note": "volumes of the modelled solids x nominal densities (steel 7.85, glass-filled polymer 1.38, slide body 2.6 as a steel-reinforced polymer guess). Internal cavities of the real parts are not known, so the raw total is not expected to match; the split between slide, barrel and frame after scaling to 358 g is what the action simulation uses."
  },

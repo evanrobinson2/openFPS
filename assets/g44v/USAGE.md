@@ -11,7 +11,7 @@ ammunition, surroundings and earmuffs, the slide cycle and recoil in slow motion
 
 | Part | State |
 |---|---|
-| Geometry (`model/`) | Ready as a recipe. `build.py` is Blender Python: 57 named objects covering all 38 items of the manual's component list (pp. 36-37), internals included; 13 sockets; 8 clips. It writes `build/g44v/g44v.glb` at the repository root, a build output that is never committed. Renders of a build are in `renders/`. Silhouette against the reference: IoU 0.988. **Owner review of the visual match is still to do** (`notes/NOTES.md`). |
+| Geometry (`model/`) | Ready as a recipe. `build.py` is Blender Python: 60 named objects covering all 38 items of the manual's component list (pp. 36-37), internals included; 13 sockets; 8 clips. It writes `build/g44v/g44v.glb` at the repository root, a build output that is never committed. Renders of a build are in `renders/` (v1's in `renders/v1/`). Silhouette against the reference: IoU 0.987. v2 is the detail pass that followed the owner's review of v1 (`notes/DETAIL_PASS_V2.md`); **v2 itself has not been reviewed**. |
 | Action and recoil (`action/`) | Ready. Three named CCI loads, calibrated to CCI's test-barrel velocities; slide mass and spring loads are inferred (not published). JS matches Python to 1e-15. |
 | Ballistics (`ballistics/`) | Ready. G1 point mass; reproduces CCI's downrange tables to 4.5 fps and 0.06 in. JS matches Python exactly. |
 | Sound (`sound/`) | Ready. Synthesised in the browser from `params.json`; JS matches Python to -311 dB. One level constant is anchored to a published .22 rifle figure. Not validated by listening or against a recording of this pistol. |
@@ -98,10 +98,10 @@ Order matters: model, action, ballistics, sound. Each build is deterministic.
 |---|---|---|
 | Manual component list covered | 38 of 38 items are named objects (items 25 and 30 are blank in the manual) | `model/checks.json` |
 | Dimensions against the maker's specification table | length 184.2 / 185, slide 173.6 / 174, width 32.3 / 32, slide width 25.7 / 25.5, height 125.7 / 128, sight radius 157.7 / 158, trigger distance 68.7 / 70, barrel 101.3 / 102 mm; worst -1.9 % | `model/checks.json` |
-| Matched visual comparison (reference camera) | silhouette IoU 0.988; reference outline to model outline mean 0.15 mm, 95th percentile 0.35 mm, worst 1.4 mm; per-region table | `model/compare.json`, `renders/compare_outline.png` |
+| Matched visual comparison (reference cameras) | silhouette IoU 0.987; reference outline to model outline mean 0.17 mm, 95th percentile 0.38 mm, worst 1.4 mm. Close-ups of slide, grip and controls and the slide from above, with interior edge coverage, v1 against v2 | `model/compare.json`, `notes/DETAIL_PASS_V2.md`, `renders/compare_outline.png` |
 | Clip interpenetration | 0 intersecting pairs in the rest pose and in all 8 clips, every frame | `model/checks.json` |
-| Action: calibration and function | test-barrel velocities reproduced; peak pressures at or under the SAAMI limit; standard and high velocity make the full stroke, CCI Quiet-22 stops at 35.0 of 45 mm, as the manual and CCI say it may | `action/action.json` (`validation`) |
-| Action JS against Python | 60 random samples, worst difference 9e-16; seeded brass within 0.006 mm | `action/parity.json` |
+| Action: calibration and function | test-barrel velocities reproduced; peak pressures at or under the SAAMI limit; standard and high velocity make the full stroke, CCI Quiet-22 stops at 34.0 of 45 mm, as the manual and CCI say it may | `action/action.json` (`validation`) |
+| Action JS against Python | 60 random samples, worst difference 2e-15; seeded brass within 0.006 mm | `action/parity.json` |
 | Ballistics against CCI's tables | worst 4.5 fps and 0.06 in over three loads | `ballistics/ballistics.json` (`validation`) |
 | Ballistics JS against Python | 9 cases, difference 0 | `ballistics/parity.json` |
 | Sound levels against published figures | pistol 150.4 to 154.4 dB peak at 1 m to the side, inside the published 149 to 167 dB bracket | `sound/compare/check.json` |
@@ -109,16 +109,15 @@ Order matters: model, action, ballistics, sound. Each build is deterministic.
 
 ## Limits
 
-- **The visual match has not had owner review.** The silhouette is traced from the reference, so its agreement is close by
-  construction; surfaces inside the outline (grip texture on the straps, finger and thumb reliefs, the frame's moulded
-  contours, the rounded slide nose in plan) are simplified or missing. The list is in `notes/NOTES.md`.
+- **v2 has not had owner review.** The silhouette is traced from the reference, so its agreement is close by
+  construction. `notes/DETAIL_PASS_V2.md` lists every feature added in v2 and every one merged or left out, with the reason.
 - **Internals are functional reconstructions, not measured parts.** The manual shows them only in a small exploded
-  drawing and a few photographs; 26 of 57 objects are marked inferred, and several marked measured have only their position measured. They sit on the right axes, move the right way and
+  drawing and a few photographs; 24 of 60 objects are marked inferred, and several marked measured have only their position measured. They sit on the right axes, move the right way and
   do not collide, but their shapes are not the maker's.
 - No maker's names or logos: plain placeholder panels on the slide, barrel hood, grip and magazine. No cartridges are
   modelled; the magazine is shown empty.
 - Trigger travel in the model is 7.5 degrees, set by the traced outlines; the real travel is not published.
-- Slide mass (101 g), recoil spring loads (24 to 65 N) and firing pin spring loads are not published. They were chosen so
+- Slide mass (105 g), recoil spring loads (24 to 65 N) and firing pin spring loads are not published. They were chosen so
   the makers' statements about ammunition hold; `action/README.md` gives the sensitivity.
 - Sound: one calibration constant, inferred directivity and modal tables; not checked by listening.
 - See `notes/NOTES.md` for every consequential inference, omission and correction.

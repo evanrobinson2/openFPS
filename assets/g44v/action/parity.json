@@ -1,7 +1,7 @@
 {
  "note": "node test_action.js: g44v-action.js against sim.py",
  "samples": 60,
- "worst_sample_difference": 8.881784197001252e-16,
- "worst_brass_rest_m": 0.000006273682235836219,
+ "worst_sample_difference": 1.7763568394002505e-15,
+ "worst_brass_rest_m": 0.000006403583143960572,
  "failed": 0
 }

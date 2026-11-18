@@ -47,7 +47,7 @@ P = dict(
     lock_open_travel=(42.0, 'measured', 'lock-open photo p. 21 picture 18: slide face 110 px behind the frame face at 2.78 px/mm + 2.6 mm; rear check 42.4'),
     full_travel=(45.0, 'inferred', 'lock-open + 3 mm over-travel so the stop can rise into its notch; not measurable from the photos'),
     takedown_retract=(3.0, 'published', 'manual p. 22 step 8: about 1/8 in / 3 mm'),
-    slide_lock_pull=(3.5, 'inferred', 'enough for the plate to clear the barrel lug in this model'),
+    slide_lock_pull=(2.6, 'inferred', 'enough for the plate to clear the barrel lug in this model'),
     trigger_pin=((LX(682.0), ZY(350.0)), 'measured', 'dimension image: pin centre px (682, 350)'),
     housing_pin=((LX(1047.0), ZY(440.0)), 'measured', 'dimension image: pin centre px (1047, 440)'),
     trigger_break_deg=(7.5, 'inferred', 'the traced blade can swing 7.75 deg before it meets the traced guard opening (inventory.json kinematics.trigger_max_deg); real travel is not published'),
@@ -71,9 +71,38 @@ FP_Z = 2.6                               # firing pin axis: strikes the rim at 1
 FOL_D = 1.6                              # an empty magazine's follower is held this far down by the slide stop lever while the slide is forward (inferred)
 CAV = 11.9                               # frame cavity half width (inferred: 2.7 mm walls)
 MAGW = 9.6                               # magazine tube half width (inferred: must sit between trigger bar and slide stop arm)
-def mag_front(z): return 53.1 + 0.4 * (z + 60.0)     # traced front strap at Z = -60 is L = 57.6; 4.5 mm wall (inferred)
+def mag_front(z): return 50.1 + 0.4 * (z + 60.0)     # traced front strap at Z = -60 is L = 57.6; 7.5 mm in front of the tube for the catch bar, which the photograph shows hidden under its pad (v2; v1 had 4.5)
 def mag_rear(z): return mag_front(z) - 31.0          # tube depth 31 mm horizontally (inferred from the floor plate length, 43 mm)
 
+MAGWW = 11.0                             # magazine tube half width below its neck (22 mm, the size of the maker's double-stack tubes; inferred, v2)
+NECK_Z = -24.0                           # above this the tube is necked to MAGW so the trigger bar and slide stop arms pass beside it (inferred)
+def clipz(poly, zmax):
+    """the part of a side-view polygon below zmax"""
+    out = []
+    for (l0, z0), (l1, z1) in zip(poly, poly[1:] + poly[:1]):
+        if z0 <= zmax: out.append((l0, z0))
+        if (z0 - zmax) * (z1 - zmax) < 0: out.append((l0 + (l1 - l0) * (zmax - z0) / (z1 - z0), zmax))
+    return out
+def shrink(poly, d):
+    cl = sum(q[0] for q in poly) / len(poly); cz = sum(q[1] for q in poly) / len(poly)
+    return [(l + math.copysign(d, cl - l), z + math.copysign(d, cz - z)) for l, z in poly]
+def hull(pts):
+    pts = sorted(set(pts))
+    def half(ps):
+        h = []
+        for q in ps:
+            while len(h) >= 2 and (h[-1][0] - h[-2][0]) * (q[1] - h[-2][1]) - (h[-1][1] - h[-2][1]) * (q[0] - h[-2][0]) <= 0: h.pop()
+            h.append(q)
+        return h
+    lo, up = half(pts), half(pts[::-1]); return lo[:-1] + up[:-1]
+def sphere(c, R):
+    bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=64, v_segments=32, radius=R)
+    for v_ in bm.verts: v_.co = v_.co + Vector(c)
+    return bm
+def strap(z, rear):
+    """L of the traced frame outline's back strap (rear) or front strap at height z, grip only"""
+    fr = O['frame']; xs = [l0 + (l1 - l0) * (z - z0) / (z1 - z0) for (l0, z0), (l1, z1) in zip(fr, fr[1:] + fr[:1]) if (z0 - z) * (z1 - z) <= 0 and z0 != z1]
+    return min(xs) if rear else max(x for x in xs if x < 66.0)
 # ------------------------------------------------------------------ registries
 OBJ, W, META, CLIPS, MATS = {}, {}, {}, {}, {}
 ATTACH = []      # pairs fixed to each other that touch or embed by design: [a, b, why]; tools/checks.py skips them
@@ -228,13 +257,16 @@ def build_slide():
             cylL(0, FP_Z, 1.7, 56.0, 3.0, n=24), cylL(0, FP_Z, 55.9, BF + 0.1, 2.2, n=20),                # firing pin channel
             box(3.0, 26.0, -2.2, 2.2, ZB - 0.5, FP_Z),                                     # slot for the firing pin lug (measured 3-25 mm, p. 27)
             cylZ(66.0, -4.4, ZB - 0.5, 6.0, 2.55, n=20),                                   # firing pin safety bore (measured L 64-68.5, 4.4 mm right of centre)
-            cylL(-8.0, 5.5, 1.7, 60.0, 1.7, n=16),                                         # extractor depressor plunger channel (inferred position)
-            box(60.5, BF + 0.7, -SW - 1, -9.2, 0.5, 6.0), box(69.7, BF + 0.7, -SW - 1, -9.2, -1.5, 0.6),   # extractor pocket
+            cylL(-8.0, 5.5, 1.7, 57.1, 1.7, n=16),                                         # extractor depressor plunger channel (inferred position)
+            box(57.2, BF + 0.7, -SW - 1, -9.2, -0.3, 4.7),   # extractor pocket
             box(-1.0, BF + 0.5, 2.8, 5.8, ZB - 0.5, 0.2),                                  # ejector slot, open to the rear so the slide can run forward off the frame
             box(-0.1, 1.8, -7.8, 7.8, ZB - 0.5, 7.0),                                      # slide cover plate seat
-            prism([(25.0, ZT - 0.4), (50.0, ZT - 0.4), (50.0, ZT + 1), (25.0, ZT + 1)], -6.5, 6.5)]      # recessed top panel (measured, top view 118-205 px)
+            prism([(25.0, ZT - 0.4), (50.0, ZT - 0.4), (50.0, ZT + 1), (25.0, ZT + 1)], -6.5, 6.5),      # recessed top panel
+            box(3.0, 15.0, -SW - 1, SW + 1, ZT - 1.2, ZT + 1),                                # rear sight dovetail across the slide (v2)
+            box(159.6, 168.0, -2.3, 2.3, ZT - 0.6, ZT + 1),                                    # front sight seat (v2)
+            xsec([(-SW - 0.01, -2.8), (-SW + 1.8, -1.0), (-SW - 0.01, -1.0)], 74.0, 104.0)]              # relief along the port's lower edge (v2) (measured, top view 118-205 px)
     for sgn in (1, -1):
-        s0, s1 = (SW - 0.6, SW + 1) if sgn > 0 else (-SW - 1, -SW + 0.6)
+        s0, s1 = (SW - 0.8, SW + 1) if sgn > 0 else (-SW - 1, -SW + 0.8)
         for i in range(6):                                   # front serrations: 6 grooves, 6.05 mm pitch (measured px 258 + 35 i, 18 px wide)
             cuts.append(box(LX(276 + 35 * i), LX(258 + 35 * i), s0, s1, ZY(256), ZY(182)))
         for i in range(7):                                   # rear serrations: 7 grooves (px 878 + 35 i)
@@ -255,12 +287,13 @@ def build_slide():
     part('placeholder_panel_slide_text', box(LX(835), LX(585), SW - 0.05, SW + 0.1, ZY(240), ZY(205)), 'Placeholder', 'p01_slide', bevel=0.05, seg=1,
          src='dimension image px 585-835, 205-240: model and calibre text replaced by a plain panel', status='measured')
     # 16a front sight, 16b its screw, 15 rear sight
-    part('p16a_front_sight', prism([(l, z if z > 12.4 else ZT - 0.05) for l, z in O['front_sight']], -1.9, 1.9), 'Polymer', 'p01_slide', no='16a', src='traced: outlines.json front_sight', status='traced', bevel=0.15)
+    part('p16a_front_sight', prism([(l, z if z > 12.4 else ZT - 0.55) for l, z in O['front_sight']], -1.9, 1.9), 'Polymer', 'p01_slide', no='16a', src='traced: outlines.json front_sight', status='traced', bevel=0.15)
     part('p16a_front_sight_dot', cylL(0, 14.0, 160.2, 160.5, 1.0, n=16), 'SightWhite', 'p16a_front_sight', no='16a', bevel=0, src='white dot (manual p. 23 picture 27)', status='measured')
     part('p16b_front_sight_screw', union(cylZ(163.8, 0, 8.2, 9.65, 2.1, n=6), cylZ(163.8, 0, 9.6, ZT - 0.05, 1.2, n=12)), 'Steel', 'p01_slide', no='16b',
          src='exploded drawing: screw under the front sight', status='inferred', bevel=0.1, seg=1)
-    rs = part('p15_rear_sight', prism([(l, z if z > 12.4 else ZT - 0.05) for l, z in O['rear_sight']], -8.4, 8.4), 'Polymer', 'p01_slide', no='15', src='traced: outlines.json rear_sight; width 17 mm from the top view', status='traced',
-              cuts=[box(0, 20, -1.9, 1.9, 13.6, 17.5)], bevel=0.15)
+    rs = part('p15_rear_sight', prism([(l, z if z > 12.4 else ZT - 0.05) for l, z in O['rear_sight']], -6.5, 6.5), 'Polymer', 'p01_slide', no='15', src='traced: outlines.json rear_sight; width 13 mm from the top view (p. 23 picture 27; v1 had 17); dovetail base and the two adjusting screws from the top view and p. 10', status='traced',
+              adds=[box(3.2, 14.8, -SW + 0.25, SW - 0.25, ZT - 1.15, ZT + 0.02), cylS(9.0, 13.2, -7.1, -6.4, 1.3, n=12), cylZ(11.5, 0.0, 14.0, 14.4 + 0.0, 1.6, n=12)],
+              cuts=[box(0, 20, -1.9, 1.9, 13.6, 17.5), box(8.0, 10.0, -7.3, -6.8, 13.0, 13.4), box(10.5, 12.5, -0.25, 0.25, 14.2, 15.0)], bevel=0.15)
     part('p15_rear_sight_outline', join(box(2.6, 2.75, -3.0, -1.95, 13.4, 15.9), box(2.6, 2.75, 1.95, 3.0, 13.4, 15.9), box(2.6, 2.75, -3.0, 3.0, 12.9, 13.55)), 'SightWhite', 'p15_rear_sight',
          no='15', bevel=0, src='white notch outline (rear view)', status='measured')
     # 14 slide cover plate
@@ -284,10 +317,10 @@ def build_slide():
     part('p09_firing_pin_safety_spring', helix((66.0, -4.4, -3.5), (0, 0, 1), 9.0, 1.5, 0.4, 6), 'Spring', 'p01_slide', pivot=(66.0, -4.4, 5.5), no='9', bevel=0,
          src='exploded drawing item 9', status='inferred')
     # 10 extractor, 11 depressor plunger, 12 its spring, 13 spring-loaded bearing
-    ex = union(box(60.8, BF + 0.4, -SW + 0.2, -9.45, 0.8, 5.7), box(BF + 0.05, BF + 1.3, -9.46, -3.3, -0.9, 1.8), box(70.0, BF + 0.4, -SW + 0.2, -9.45, -0.9, 0.81))
+    ex = union(box(57.5, BF + 0.4, -SW - 0.05, -9.45, 0.0, 4.4), box(BF + 0.05, BF + 1.3, -9.46, -3.3, 0.0, 1.8))        # the bar seen behind the port on the right side (p. 8 picture 1: L 57-76, Z -0.2..4.3)
     part('p10_extractor', ex, 'Steel', 'p01_slide', pivot=(62.0, -11.0, 3.0), no='10', bevel=0.12, seg=1,
-         src='exploded drawing item 10; claw named in manual p. 30 picture 34; shape inferred', status='inferred')
-    part('p11_extractor_depressor_plunger', union(cylL(-8.0, 5.5, 22.0, 58.0, 1.0, n=12), cylL(-8.0, 5.5, 57.9, 59.8, 1.45, n=12), cylL(-8.0, 5.5, 20.5, 22.1, 1.45, n=12)), 'Steel', 'p01_slide',
+         src='right side photo p. 8 picture 1 (bar L 57-76, Z -0.2..4.3); claw named in manual p. 30 picture 34', status='measured')
+    part('p11_extractor_depressor_plunger', union(cylL(-8.0, 5.5, 22.0, 55.5, 1.0, n=12), cylL(-8.0, 5.5, 55.3, 56.9, 1.45, n=12), cylL(-8.0, 5.5, 20.5, 22.1, 1.45, n=12)), 'Steel', 'p01_slide',
          no='11', bevel=0, src='exploded drawing item 11', status='inferred')
     part('p12_extractor_depressor_plunger_spring', helix((8.0, -8.0, 5.5), (1, 0, 0), 12.4, 1.15, 0.35, 10), 'Spring', 'p01_slide', no='12', bevel=0, src='exploded drawing item 12', status='inferred')
     part('p13_spring_loaded_bearing', join(cylL(-8.0, 5.5, 1.9, 8.0, 1.45, n=12)), 'Polymer', 'p01_slide', no='13', bevel=0, src='exploded drawing item 13', status='inferred')
@@ -296,12 +329,13 @@ def build_slide():
 def build_barrel():
     m = p('muzzle'); r = p('barrel_od') / 2; top = p('chamber_block_top')
     b = cylL(0, 0, p('port_front') - 0.5, m, r, n=40)
-    lugs = union(box(BF + 0.05, p('port_front'), -9.3, 9.3, -6.5, top), box(78.0, 92.0, -5.0, 5.0, -16.0, -6.4), box(91.9, 96.5, -4.5, 4.5, -12.6, -6.4))
+    lugs = union(box(BF + 0.05, p('port_front'), -9.3, 9.3, -6.5, top), box(78.0, 92.0, -5.0, 5.0, -15.2, -6.4), box(91.9, 96.5, -4.5, 4.5, -12.6, -6.4))
     cuts = [cylL(0, 0, BF - 1, m + 1, p('bore_groove_d') / 2, n=24),                 # bore
             cylL(0, 0, BF, BF + 1.15, 3.65, n=24),                                   # rim seat
             box(BF, 76.5, -2.2, 2.2, 5.5, top + 1),                                  # loaded chamber indicator notch (manual p. 8)
             box(BF, 75.0, -9.4, -3.0, -2.0, 2.5),                                    # extractor cut
-            prism([(BF, -6.6), (BF + 7.0, -6.6), (BF, -1.6)], -2.6, 2.6)]            # feed ramp
+            prism([(BF, -6.6), (BF + 7.0, -6.6), (BF, -1.6)], -2.6, 2.6),            # feed ramp
+            cyl((m - 1.0, 0, 0), (m + 0.5, 0, 0), 3.6, n=32, r1=5.2)]                 # recessed muzzle crown (v2; visible in p. 21 picture 18)
     part('p02_barrel', b, 'SteelDark', 'frame_group', pivot=(161.5, 0, 0),      # pivot: where the tube sits in the nose hole once pushed 10 mm forward for removal
          no='2', adds=[lugs], cuts=cuts, bevel=0.3,
          src='length published; tube diameter and muzzle measured (p. 21 picture 18); hood measured in the top view; lugs inferred from the exploded drawing and p. 32', status='measured')
@@ -310,11 +344,15 @@ def build_barrel():
     rod = union(cylL(0, RSA_Z, 96.65, 98.0, 3.8, n=24), cylL(0, RSA_Z, 97.9, 165.5, 1.9, n=16))
     part('p03_recoil_spring_assembly', rod, 'Steel', 'frame_group', pivot=(96.5, 0, RSA_Z), no='3', bevel=0.15, seg=1,
          src='exploded drawing item 3; manual p. 23 pictures 24-25; a dual captive spring simplified to one rod and one spring', status='inferred')
-    part('p03_recoil_spring', helix((98.1, 0, RSA_Z), (1, 0, 0), 68.3, 3.55, 0.8, 24), 'Spring', 'p03_recoil_spring_assembly', pivot=(98.1, 0, RSA_Z), no='3', bevel=0,
-         src='as above; 24 coils of 0.8 mm wire are a modelling choice (solid length must fit the stroke)', status='inferred')
+    part('p03_recoil_spring', join(helix((98.1, 0, RSA_Z), (1, 0, 0), 20.0, 2.75, 0.8, 8), helix((118.1, 0, RSA_Z), (1, 0, 0), 48.3, 3.55, 0.8, 16)), 'Spring', 'p03_recoil_spring_assembly', pivot=(98.1, 0, RSA_Z), no='3', bevel=0,
+         src='exploded drawing item 3: a small-diameter section at the flange end and a larger one toward the muzzle (v2); coil counts are a modelling choice', status='measured')
 
 # ================================================================== frame (17) and what lives in it
 TRIGGER_MAX = [None]
+def _sl_poly():
+    top, bot = Vector((95.35, -13.6)), Vector((91.5, -20.6)); d = (bot - top).normalized(); n = Vector((-d.y, d.x)) * 1.1      # centre line read off the dimension image, 2.2 mm thick
+    return [tuple(top - n), tuple(top + n), tuple(bot + n), tuple(bot - n)]
+SL_POLY = _sl_poly()
 def build_frame():
     fr = [(l, min(z, FT)) for l, z in O['frame']]
     # cavities
@@ -325,28 +363,44 @@ def build_frame():
     tpl, tpz = TP; hpl, hpz = HP
     cuts = [cavA,
             box(98.9, 174.0, -7.6, 7.6, -21.0, FT + 2),                                # dust cover channel: recoil spring, slide nose lug
-            prism(well, -10.0, 10.0), prism(groove, -CAV, CAV),                        # magazine well, with side grooves for the loading assists
+            prism(well, -10.0, 10.0), prism(groove, -12.4, 12.4),                        # magazine well, with side grooves for the loading assists
             prism([(mag_front(-36.0) + 1.9, -36.0), (mag_front(-23.9) + 1.9, -23.9), (95.0, -23.9), (95.0, -31.0), (80.0, -31.0), (72.0, -36.0)], -5.8, 5.8),   # trigger slot, its rear wall parallel to the magazine well
             prism(O['guard_hole'], -FW - 1, FW + 1),                                   # trigger guard opening (traced)
             box(-12.0, 4.6, -2.4, 2.4, -12.2, FT + 2),                                 # notch for the firing pin lug in the rear wall (rear view)
             box(48.5, 60.5, CAV - 0.1, FW + 1, -21.5, FT + 2), box(48.5, 60.5, -FW - 1, -CAV + 0.1, -21.5, FT + 2),   # slide stop lever windows
-            box(91.9, 94.3, -FW - 1, FW + 1, -25.0, -12.0),                            # slide lock slot
-            box(59.2, 64.7, -FW - 1, FW + 1, -46.0, -39.0),                            # magazine catch hole
+            box(56.2, 61.7, -FW - 1, FW + 1, -46.0, -39.0),                            # magazine catch hole
+            prism(shrink(clipz(well, NECK_Z + 0.6), 0.03), -MAGWW - 0.4, MAGWW + 0.4),                # the well widens below the magazine's neck (v2)
             prism([(LX(883), ZY(508)), (LX(797), ZY(519)), (LX(797), ZY(466)), (LX(878), ZY(451))], FW - 2.5, FW + 1),      # recess the magazine catch pad sinks into
             cylS(tpl, tpz, -FW - 1, FW + 1, 2.15, n=20), cylS(hpl, hpz, -FW - 1, FW + 1, 1.65, n=16),
             cyl((mag_front(-46.5) + 3.0, 0, -46.5), (mag_front(-82.0) + 3.0, 0, -82.0), 0.75, n=10)]     # channel for the magazine catch spring
     cuts.append(prism([(mag_rear(-44) - 2.6, -44.0), (mag_rear(-112) - 2.6, -112.0), (-30.0, -112.0), (-4.3, -90.0), (-2.5, -80.0), (5.0, -65.0), (11.1, -55.0), (15.9, -45.0)], -CAV, CAV))   # hollow backstrap (manual p. 39: modular backstrap frame), 3 mm walls inferred
     for sgn in (1, -1):                                                                # accessory rail groove (px x 200-480, y 350-372) and one cross slot
-        s0, s1 = (FW - 1.8, FW + 1) if sgn > 0 else (-FW - 1, -FW + 1.8)
+        s0, s1 = (FW - 2.6, FW + 1) if sgn > 0 else (-FW - 1, -FW + 2.6)
         cuts.append(box(LX(480), LX(200), s0, s1, ZY(372), ZY(350)))
-    cuts.append(box(158.5, 162.0, -FW - 1, FW + 1, -40.0, ZY(398)))
+    cuts.append(box(LX(214), LX(196), -FW - 1, FW + 1, -40.0, ZY(395)))                   # rail cross slot (px 196-214)
+    seam = [(strap(z, True) + 5.0, z) for z in range(-94, -31, 2)]
+    for sgn in (1, -1):
+        s0, s1 = (FW - 0.45, FW + 1) if sgn > 0 else (-FW - 1, -FW + 0.45)
+        t0, t1 = (8.0, FW + 1) if sgn > 0 else (-FW - 1, -8.0); u0, u1 = (11.0, FW + 1) if sgn > 0 else (-FW - 1, -11.0); d0, d1 = (FW - 0.9, FW + 1) if sgn > 0 else (-FW - 1, -FW + 0.9)
+        cuts += [prism(seam + [(l + 0.6, z) for l, z in seam[::-1]], s0, s1),                                   # backstrap seam (v2)
+                 prism([(67.5, -29.5), (125.0, -29.5), (125.0, -53.0), (66.0, -53.0), (66.0, -44.0), (67.5, -40.0)], t0, t1),      # the trigger guard is 16 mm wide, the frame 29 (v2)
+                 prism([(67.5, -27.5), (125.0, -27.5), (125.0, -29.6), (67.5, -29.6)], u0, u1),
+                 prism([(LX(500), -9.0), (175.0, -9.0), (175.0, -24.6), (LX(480), -24.6)], d0, d1),             # dust cover stepped in 0.9 mm ahead of px 480-500 (v2)
+                 sphere((62.0, sgn * (FW + 40.0 - 0.8), -30.0), 40.0),                                         # thumb rest: a shallow spherical dish, 16 mm across, 0.8 mm deep (v2; size inferred from p. 8 picture 1)
+                 prism(hull([(l + a_, z + b_) for l, z in SL_POLY for a_ in (-0.7, 0.7) for b_ in (0.7, -3.1)]), (FW - 0.86) if sgn > 0 else (-FW - 1), (FW + 1) if sgn > 0 else (-FW + 0.86)),            # recess the slide lock's finger tab moves in (v2)
+                 cylS(tpl, tpz, (FW - 0.35) if sgn > 0 else (-FW - 1), (FW + 1) if sgn > 0 else (-FW + 0.35), 2.8, n=20),               # pin heads sit in shallow counterbores (v2)
+                 cylS(hpl, hpz, (FW - 0.35) if sgn > 0 else (-FW - 1), (FW + 1) if sgn > 0 else (-FW + 0.35), 2.2, n=16)]
+    # the round recess low in the back strap (rear view) is not cut: every cutter tried there left the frame mesh open (v2, omitted)
     nose = prism([(169.0, FT), (172.9, FT), (172.9, -16.5), (172.5, -18.5), (171.0, -21.0), (169.0, -22.9)], -FW, FW)     # front of the dust cover (outlines.json outer_smooth; the frame polygon was cropped at px 168)
     part('p17_frame', prism(fr, -FW, FW), 'Polymer', 'frame_group', pivot=(0, 0, 0), no='17', adds=[nose], cuts=cuts, pre_bevel=(3.2, 4), bevel=0.3,
          src='traced: outlines.json frame and guard_hole; width from the rear view; cavities inferred', status='traced')
+    part('placeholder_panel_grip_l', box(LX(1095), LX(1030), FW - 0.05, FW + 0.1, ZY(715), ZY(660)), 'Placeholder', 'p17_frame', bevel=0.05, seg=1,
+         src='dimension image px 1030-1095, 660-715: maker\'s mark on the grip replaced by a plain panel', status='measured')
+    part('placeholder_panel_grip_r', box(10.9, 32.6, -FW - 0.1, -FW + 0.05, -83.9, -74.9), 'Placeholder', 'p17_frame', bevel=0.05, seg=1,
+         src='right side photo p. 8 picture 1: two-line text plate low on the grip replaced by a plain panel (v2)', status='measured')
+    part('placeholder_panel_frame_mark_l', box(LX(508), LX(483), FW - 0.95, FW - 0.8, ZY(342), ZY(317)), 'Placeholder', 'p17_frame', bevel=0.05, seg=1,
+         src='dimension image px 483-508, 317-342: model mark on the dust cover replaced by a plain panel (v2)', status='measured')
     for sgn, nm in ((1, 'l'), (-1, 'r')):
-        part('placeholder_panel_grip_' + nm, box(LX(1095), LX(1030), sgn * (FW - 0.05), sgn * (FW + 0.1), ZY(715), ZY(660)) if sgn > 0 else
-             box(LX(1095), LX(1030), -FW - 0.1, -FW + 0.05, ZY(715), ZY(660)), 'Placeholder', 'p17_frame', bevel=0.05, seg=1,
-             src='dimension image px 1030-1095, 660-715: maker\'s mark on the grip replaced by a plain panel', status='measured')
         # hardened steel guides (manual p. 6), four tabs that run in the slide's rail cuts
         for l0, l1, tag in ((30.0, 42.0, 'rear'), (108.0, 118.0, 'front')):
             g = union(box(l0, l1, sgn * 9.0, sgn * 12.6, FT - 1.0, FT), box(l0, l1, sgn * 8.55, sgn * 9.35, FT - 0.01, -6.6), box(l0, l1, sgn * 9.34, sgn * 10.9, -7.9, -6.7)) if sgn > 0 else \
@@ -356,19 +410,18 @@ def build_frame():
     part('p28_trigger_pin', cylS(tpl, tpz, -FW + 0.2, FW - 0.2, 2.0, n=20), 'SteelDark', 'p17_frame', no='28', bevel=0.15, seg=1, src='dimension image px (682, 350)', status='measured')
     part('p29_trigger_housing_pin', cylS(hpl, hpz, -FW + 0.3, FW - 0.3, 1.5, n=16), 'Polymer', 'p17_frame', no='29', bevel=0.15, seg=1, src='dimension image px (1047, 440); manual p. 38', status='measured')
     # 22 locking block
-    ck = [(76.0, -10.2), (98.6, -10.2), (98.6, -23.5), (95.0, -23.5), (95.0, -12.7), (91.8, -12.7), (91.8, -23.5), (76.0, -23.5)]
-    lb = union(prism(ck, 6.0, 9.9), prism(ck, -9.9, -6.0), box(95.0, 98.6, -6.01, 6.01, -23.5, -16.5))
-    part('p22_locking_block', lb, 'Steel', 'p17_frame', no='22', cuts=[cylS(tpl, tpz, -12, 12, 2.15, n=20)], bevel=0.2, seg=1,
+    ck = [(76.0, -10.2), (98.6, -10.2), (98.6, -23.5), (97.4, -23.5), (97.4, -12.2), (89.6, -12.2), (89.6, -23.5), (76.0, -23.5)]
+    lb = union(prism(ck, 6.0, 9.9), prism(ck, -9.9, -6.0), box(97.4, 98.6, -6.01, 6.01, -23.5, -16.5))
+    part('p22_locking_block', lb, 'SteelDark', 'p17_frame', no='22', cuts=[cylS(tpl, tpz, -12, 12, 2.15, n=20)], bevel=0.2, seg=1,
          src='exploded drawing item 22; position from the trigger pin and slide lock in the dimension image', status='inferred')
     # 21 slide lock (pulled down to strip), 20 its spring
-    sl = union(box(92.3, 93.9, -FW - 0.7, FW + 0.7, -21.0, -13.0),
-              *[box(LX(640), LX(602), s0, s1, ZY(355), ZY(310)) for s0, s1 in ((FW + 0.02, FW + 0.7), (-FW - 0.7, -FW - 0.02))])
-    part('p21_slide_lock', sl, 'SteelDark', 'p17_frame', pivot=(93.1, 0, -17.0), no='21', bevel=0.15, seg=1, src='dimension image px 602-640, 310-355; manual p. 22 picture 23', status='measured')
-    part('p20_slide_lock_spring', helix((93.1, 0, -24.9), (0, 0, 1), 3.8, 1.0, 0.35, 3.5), 'Spring', 'p17_frame', pivot=(93.1, 0, -24.9), no='20', bevel=0,
+    part('p21_slide_lock', join(prism(SL_POLY, -11.6, 11.6), prism(SL_POLY, FW - 0.85, FW + 0.25), prism(SL_POLY, -FW - 0.25, -FW + 0.85)), 'SteelDark', 'p17_frame', pivot=(93.4, 0, -17.0), no='21', bevel=0.12, seg=1,
+         src='dimension image px 600-632, 310-360: a thin bar leaning 29 deg, top toward the muzzle, in a recess (v2; v1 drew a square pad); manual p. 22 picture 23. The necks that join the two finger tabs to the plate through the frame walls are not modelled, so the walls need no see-through slot', status='measured')
+    part('p20_slide_lock_spring', helix((95.9, 0, -23.8), (0, 0, 1), 7.5, 0.6, 0.3, 5.0), 'Spring', 'p17_frame', pivot=(95.9, 0, -23.8), no='20', bevel=0,
          src='exploded drawing item 20', status='inferred', )
     # 23 trigger mechanism housing with ejector
-    hs = prism([(11.0, -18.5), (37.0, -18.5), (35.3, -24.0), (30.1, -38.5), (18.7, -38.5), (18.7, -30.0), (17.2, -25.5), (13.8, -21.3), (11.0, -19.0)], -11.4, 11.4)
-    ej = prism([(20.0, -18.6), (31.0, -18.6), (38.0, -11.2), (58.0, -3.5), (58.0, -0.8), (55.5, -0.8), (34.0, -9.9), (26.0, -12.2), (20.0, -12.2)], 3.4, 5.2)
+    hs = prism([(11.0, -18.5), (34.0, -18.5), (32.3, -24.0), (27.1, -38.5), (18.7, -38.5), (18.7, -30.0), (17.2, -25.5), (13.8, -21.3), (11.0, -19.0)], -11.4, 11.4)
+    ej = prism([(20.0, -18.6), (29.0, -18.6), (36.0, -11.2), (58.0, -3.5), (58.0, -0.8), (55.5, -0.8), (34.0, -9.9), (26.0, -12.2), (20.0, -12.2)], 3.4, 5.2)
     part('p23_trigger_mechanism_housing', hs, 'Polymer', 'p17_frame', no='23', adds=[ej], cuts=[cylS(hpl, hpz, -12, 12, 1.65, n=16)], bevel=0.2, seg=1,
          src='exploded drawing item 23; ejector named in manual p. 31 picture 35; shape inferred', status='inferred')
     # 24 connector
@@ -405,42 +458,57 @@ def build_frame():
                  box(50.0, 59.2, w0, w1, -20.5, -15.0 if sgn > 0 else -16.8),                                       # through the window (lower on the right, under the trigger bar)
                  box(LX(870), LX(815), sgn * (FW + 0.05) if sgn > 0 else -FW - 1.5, FW + 1.5 if sgn > 0 else -FW - 0.05, ZY(325) if sgn > 0 else -16.9, FT - 0.3)]   # thumb pad (px 815-870, 290-325)
     arms += [box(51.0, 54.0, 11.0, 12.5, -15.1, FT - 0.3), box(56.0, 59.0, 10.4, 11.6, -18.4, -13.8), box(56.0, 59.0, 7.5, 10.41, -14.8, -13.8)]     # nose under the slide notch; nub over the follower
-    part('p27_slide_stop_lever', union(*arms), 'SteelDark', 'p17_frame', pivot=(tpl, 0, tpz), no='27', bevel=0.12, seg=1, cuts=[cylS(tpl, tpz, -17, 17, 2.15, n=20)],
+    part('p27_slide_stop_lever', union(*arms), 'SteelDark', 'p17_frame', pivot=(tpl, 0, tpz), no='27', bevel=0.12, seg=1,
+         cuts=[cylS(tpl, tpz, -17, 17, 2.15, n=20)] + [box(LX(872), LX(813), a, b, z, z + 0.6) for z in (-11.6, -13.3) for a, b in ((FW + 1.0, FW + 2), (-FW - 2, -FW - 1.0))],    # three ribs on each pad
+        
          src='dimension image px 815-870, 290-325 (pad); rear view shows a pad on each side; arms inferred', status='measured')
     # 19 magazine catch (reversible, button on the left), 18 its spring
-    mc = union(box(61.8, 64.4, -FW + 0.3, FW + 0.1, -45.5, -39.5), box(59.6, 61.81, -9.4, -7.6, -44.8, -40.6),
+    mc = union(box(58.8, 61.4, -FW + 0.3, FW + 0.1, -45.5, -39.5), box(56.6, 58.81, -10.8, -9.0, -44.8, -40.6),
               prism([(LX(880), ZY(505)), (LX(800), ZY(515)), (LX(800), ZY(470)), (LX(875), ZY(455))], FW + 0.05, FW + 1.6))
-    part('p19_magazine_catch', mc, 'Polymer', 'p17_frame', pivot=(62.0, 0, -42.5), no='19', bevel=0.2, seg=1,
+    part('p19_magazine_catch', mc, 'Polymer', 'p17_frame', pivot=(60.0, 0, -42.5), no='19', bevel=0.12, seg=1,
+         cuts=[box(l, l + 0.7, FW + 1.05, FW + 2, -52.0, -36.0) for l in (49.5, 51.4, 53.3, 55.2, 57.1, 59.0, 60.9)],          # vertical ribs on the pad
+        
          src='dimension image px 800-880, 455-515 (pad); manual p. 40; bar and nib inferred', status='measured')
     part('p18_magazine_catch_spring', cyl((mag_front(-46.6) + 3.0, 0, -46.6), (mag_front(-81.0) + 3.0, 0, -81.0), 0.4, n=8), 'Spring', 'p17_frame', no='18', bevel=0,
          src='manual p. 40 pictures 53-54: a straight wire in the front strap', status='inferred')
 
 def build_grip_texture():
-    # raised square studs on the grip sides (dimension image: about 14 px = 2.4 mm pitch, rows along the grip axis).  The patch outline is read
-    # off the dimension image in pixels; front and back strap texture is not modelled.
-    reg = [(LX(x), ZY(y)) for x, y in ((880, 500), (1030, 470), (1075, 480), (1100, 560), (1165, 715), (1170, 770), (1000, 800), (935, 800), (905, 720), (860, 600), (850, 540))]
-    logo = (LX(1100), LX(1025), ZY(720), ZY(655))
-    def inside(q):
-        x, y = q; ins = False
-        for (x0, y0), (x1, y1) in zip(reg, reg[1:] + reg[:1]):
-            if (y0 > y) != (y1 > y) and x < x0 + (y - y0) * (x1 - x0) / (y1 - y0): ins = not ins
-        return ins and not (logo[0] < x < logo[1] and logo[2] < y < logo[3]) and not (LX(890) < x < LX(790) and ZY(525) < y < ZY(445))
-    pts = []
-    for i in range(-40, 60):
-        for j in range(-70, 10):
-            l = 30.0 + i * 2.4 * UZ + j * 2.4 * UX; z = -60.0 - i * 2.4 * UX + j * 2.4 * UZ
-            if inside((l, z)): pts.append((l, z))
+    # raised square studs over the whole grip (v2): side panels, front strap and back strap.  Pitch 2.4 mm (14 px in the dimension image), rows
+    # along the grip axis.  Side panels run from 3.5 mm inside the front strap to 6 mm inside the back strap (the seam), from Z -93 up to a top edge
+    # that falls toward the front (dimension image px (1030, 470) to (880, 500)); the marking panels and the magazine catch are left clear.
+    def side_ok(l, z, sgn):
+        if not (-93.0 < z < -40.0 - max(l - 22.0, 0.0) * 0.2): return False
+        if not (strap(z, True) + 6.2 < l < strap(z, False) - 3.5): return False
+        if sgn > 0 and LX(1100) < l < LX(1025) and ZY(720) < z < ZY(655): return False
+        if sgn < 0 and 9.9 < l < 33.6 and -84.9 < z < -73.9: return False
+        if sgn > 0 and LX(890) < l < LX(790) and ZY(525) < z < ZY(445): return False
+        if sgn < 0 and 54.0 < l < 63.5 and -47.5 < z < -37.5: return False
+        return True
+    grid = [(30.0 + i * 2.4 * UZ + j * 2.4 * UX, -60.0 - i * 2.4 * UX + j * 2.4 * UZ) for i in range(-40, 60) for j in range(-70, 10)]
+    def add(bm, t):
+        me = bpy.data.meshes.new('t'); t.to_mesh(me); t.free(); bm.from_mesh(me); bpy.data.meshes.remove(me)
     for sgn, nm in ((1, 'l'), (-1, 'r')):
-        bm = bmesh.new()
-        for l, z in pts:
-            s0, s1 = (FW - 0.1, FW + 0.45) if sgn > 0 else (-FW - 0.45, -FW + 0.1)
-            d = 0.6; c = [(l + a * d * UZ + b * d * UX, z - a * d * UX + b * d * UZ) for a, b in ((-1, -1), (1, -1), (1, 1), (-1, 1))]
-            t = prism(c, s0, s1); me = bpy.data.meshes.new('t'); t.to_mesh(me); t.free(); bm.from_mesh(me); bpy.data.meshes.remove(me)
+        bm = bmesh.new(); s0, s1 = (FW - 0.1, FW + 0.45) if sgn > 0 else (-FW - 0.45, -FW + 0.1); d = 0.6
+        for l, z in grid:
+            if side_ok(l, z, sgn): add(bm, prism([(l + a * d * UZ + b * d * UX, z - a * d * UX + b * d * UZ) for a, b in ((-1, -1), (1, -1), (1, 1), (-1, 1))], s0, s1))
         part('p17_frame_grip_texture_' + nm, bm, 'Polymer', 'p17_frame', pivot=(0, 0, 0), no='17', bevel=0,
-             src='dimension image: studded grip panel, patch outline px (880,500)...(850,540), maker\'s mark window left clear', status='measured')
+             src='dimension image and right side photo (p. 8 picture 1): studded grip side, marking panel and magazine catch left clear', status='measured')
+        attach('p17_frame_grip_texture_' + nm, 'p17_frame', 'moulded texture')
+    for rear, nm, zr in ((False, 'front', (-92, -53)), (True, 'back', (-92, -42))):
+        bm = bmesh.new(); z = float(zr[0])
+        while z < zr[1]:
+            p0 = (strap(z - 1.0, rear), z - 1.0); p1 = (strap(z + 1.0, rear), z + 1.0); c = (strap(z, rear), z)
+            tl, tz = p1[0] - p0[0], p1[1] - p0[1]; n = math.hypot(tl, tz); tl, tz = tl / n, tz / n
+            nl, nz = (-tz, tl) if rear else (tz, -tl)                    # outward normal: rearward on the back strap, forward on the front strap
+            quad = [(c[0] + tl * a * 0.6 + nl * b, c[1] + tz * a * 0.6 + nz * b) for a, b in ((-1, -0.25), (1, -0.25), (1, 0.45), (-1, 0.45))]
+            for k in range(-4, 5): add(bm, prism(quad, k * 2.4 - 0.6, k * 2.4 + 0.6))
+            z += 2.4 / max(abs(tz), 0.5)
+        part('p17_frame_grip_texture_' + nm, bm, 'Polymer', 'p17_frame', pivot=(0, 0, 0), no='17', bevel=0,
+             src='dimension image and rear view: studs on the %s strap, nine across (v2)' % nm, status='measured')
         attach('p17_frame_grip_texture_' + nm, 'p17_frame', 'moulded texture')
 
 def declare_attached():
+    attach('placeholder_panel_frame_mark_l', 'p17_frame', 'placeholder panel set into the surface')
     for a, b in (('placeholder_panel_slide_logo', 'p01_slide'), ('placeholder_panel_slide_text', 'p01_slide'), ('placeholder_panel_barrel_hood', 'p02_barrel'),
                  ('placeholder_panel_grip_l', 'p17_frame'), ('placeholder_panel_grip_r', 'p17_frame'), ('placeholder_panel_magazine', 'p31_magazine_tube')):
         attach(a, b, 'placeholder panel set into the surface')
@@ -470,24 +538,29 @@ def build_backstraps():
 # ================================================================== magazine (31-35, 48, 49)
 def build_magazine():
     ax = (UX, 0, UZ)
-    tube_poly = [(5.55, -101.4), (34.98, -105.3), (mag_front(-18.0), -18.0), (mag_rear(-12.0), -12.0)]
+    tube_poly = [(2.70, -101.01), (32.13, -104.92), (mag_front(-18.0), -18.0), (mag_rear(-12.0), -12.0)]      # bottom corners: where the tube's faces meet the traced floor plate's top
     ins = 1.2
-    inner = [(5.55 + ins + 0.5, -101.4 + ins), (34.98 - ins + 0.2, -105.3 + ins + 0.15), (mag_front(-10.0) - ins, -10.0), (mag_rear(-10.0) + ins, -10.0)]
+    inner = [(2.70 + ins + 0.5, -101.01 + ins), (32.13 - ins + 0.2, -104.92 + ins + 0.15), (mag_front(-10.0) - ins, -10.0), (mag_rear(-10.0) + ins, -10.0)]
     gm = lambda z: (mag_front(z) + mag_rear(z)) / 2
     slot = [(gm(-92) - 2.1, -92.0), (gm(-92) + 2.1, -92.0), (gm(-22) + 2.1, -22.0), (gm(-22) - 2.1, -22.0)]
-    cuts = [prism(inner, -MAGW + ins, MAGW - ins), prism(slot, -MAGW - 1, MAGW + 1)]
+    cuts = [prism(inner, -MAGW + ins, MAGW - ins), prism(shrink(clipz(inner, NECK_Z - ins), 0.03), -MAGWW + ins, MAGWW - ins), prism(slot, -MAGWW - 1, MAGWW + 1),
+            box(0.0, 80.0, MAGW, MAGWW + 1, NECK_Z, 0.0), box(0.0, 80.0, -MAGWW - 1, -MAGW, NECK_Z, 0.0)]                    # the neck (v2)
     for sgn in (1, -1):                                       # catch notches at both front corners (reversible catch)
-        cuts.append(box(mag_front(-45.5) - 1.6, mag_front(-40.0) + 1, sgn * 5.5 if sgn > 0 else -MAGW - 1, MAGW + 1 if sgn > 0 else -5.5, -45.5, -40.0))
-    part('p31_magazine_tube', prism(tube_poly, -MAGW, MAGW), 'Polymer', 'magazine_group', pivot=(gm(-60), 0, -60.0), no='31', cuts=cuts, bevel=0.3,
-         src='exploded drawing item 31; rake from the traced front strap; depth and width inferred', status='inferred')
-    part('placeholder_panel_magazine', box(gm(-95) - 6, gm(-95) + 6, -MAGW - 0.1, -MAGW + 0.05, -98.0, -90.0), 'Placeholder', 'p31_magazine_tube', bevel=0,
+        cuts.append(box(mag_front(-45.5) - 1.6, mag_front(-40.0) + 1, sgn * 5.5 if sgn > 0 else -MAGWW - 1, MAGWW + 1 if sgn > 0 else -5.5, -45.5, -40.0))
+    for zc in (-46.0, -68.0, -90.0):                          # count windows 5 / 10 / 15 on the right rear (exploded drawing) (v2)
+        c = Vector((mag_rear(zc) + 4.5, 0, zc)); A_ = Vector(ax); N_ = Vector((UZ, 0, -UX))
+        cuts.append(prism([((c + A_ * a * 2.5 + N_ * b * 1.4).x, (c + A_ * a * 2.5 + N_ * b * 1.4).z) for a, b in ((-1, -1), (1, -1), (1, 1), (-1, 1))], -MAGWW - 1, -MAGWW + 2.0))
+    part('p31_magazine_tube', prism(tube_poly, -MAGWW, MAGWW), 'Polymer', 'magazine_group', pivot=(gm(-60), 0, -60.0), no='31', cuts=cuts, bevel=0.3,
+         src='exploded drawing item 31 (slots, count windows); rake from the traced front strap; 22 mm wide below a 19.2 mm neck, depth 31 mm: inferred', status='inferred')
+    part('placeholder_panel_magazine', box(gm(-95) - 2, gm(-95) + 8, -MAGWW - 0.1, -MAGWW + 0.05, -99.0, -91.0), 'Placeholder', 'p31_magazine_tube', bevel=0,
          src='maker\'s mark on the tube in the exploded drawing replaced by a plain panel', status='measured')
     # 35 floor plate (traced), 34 insert
     part('p35_magazine_floor_plate', prism(O['floor_plate'], -15.75, 15.75), 'Polymer', 'p31_magazine_tube', no='35', pre_bevel=(1.2, 3), bevel=0.2,
          src='traced: outlines.json floor_plate; width 31.5 mm from the rear view', status='traced')
-    b0 = Vector((6.6, 0, -100.3)); b1 = Vector((33.9, 0, -103.9)); up = Vector((0.131, 0, 0.991))
+    b0 = Vector((3.75, 0, -99.9)); b1 = Vector((31.05, 0, -103.5)); up = Vector((0.131, 0, 0.991))
     q = lambda a, h: tuple((b0 + (b1 - b0) * a + up * h)[i] for i in (0, 2))
-    part('p34_magazine_insert', prism([q(0.03, 0.15), q(0.97, 0.15), q(0.97, 1.6), q(0.03, 1.6)], -8.1, 8.1),
+    part('p34_magazine_insert', union(prism([q(0.03, 0.15), q(0.97, 0.15), q(0.97, 1.6), q(0.03, 1.6)], -9.5, 9.5), cyl((18.0, 0, -109.4), (18.0, 0, -100.9), 1.6, n=14)),      # its button shows through the floor plate (v2)
+        
          'Polymer', 'p31_magazine_tube', no='34', bevel=0.1, seg=1, src='exploded drawing item 34', status='inferred')
     # 32 follower (empty magazine: at the top, held 2 mm down by the slide stop lever while the slide is forward)
     d = FOL_D                                                # mm down the axis from its free top position
@@ -501,8 +574,10 @@ def build_magazine():
     # 48 / 49 loading assists: buttons through the tube's side slots, fixed to the follower
     c = Vector((gm(-27.5), 0, -27.5))
     for sgn, nm, no in ((-1, 'p48_loading_assist_right', '48'), (1, 'p49_loading_assist_left', '49')):
-        bt = union(cylS(c.x, c.z, sgn * (MAGW + 0.25), sgn * 11.4, 4.3, n=20), cylS(c.x, c.z, sgn * 8.0, sgn * (MAGW + 0.26), 1.7, n=12))
-        part(nm, bt, 'Polymer', 'p32_follower', no=no, bevel=0.15, seg=1, src='exploded drawing items 48 / 49; manual p. 11 pictures 4-5', status='measured')
+        bt = union(cylS(c.x, c.z, sgn * (MAGWW + 0.25), sgn * 12.1, 4.3, n=24), cylS(c.x, c.z, sgn * 8.0, sgn * (MAGWW + 0.26), 1.7, n=12))
+        o0, o1 = (11.85, 13.0) if sgn > 0 else (-13.0, -11.85)
+        part(nm, bt, 'Polymer', 'p32_follower', no=no, bevel=0.1, seg=1, cuts=[box(c.x - 5, c.x + 5, o0, o1, c.z - 0.4, c.z + 0.4), box(c.x - 0.4, c.x + 0.4, o0, o1, c.z - 5, c.z + 5)],     # cross grip (drawing)
+             src='exploded drawing items 48 / 49; manual p. 11 pictures 4-5', status='measured')
     # 33 magazine spring: a flat zig-zag wire from the insert to the follower; scaled along the axis as the follower moves
     base = Vector((gm(-98.5), 0, -98.5)); top = Vector((gm(-30.0), 0, -30.0)) - A * d; n = 10
     N = Vector((UZ, 0, -UX)); pts = []
@@ -590,7 +665,7 @@ def define_clips():
     sl_keys = [(1, 0), (20, 0), (28, -rt), (40, -rt), (46, 0), (70, OFF), (150, OFF)]                 # + = forward here
     key(c, 'p01_slide', ('loc', 'L'), sl_keys)
     key(c, 'p21_slide_lock', ('loc', 'Z'), [(1, 0), (30, 0), (38, -sp), (62, -sp), (68, 0), (150, 0)])
-    key(c, 'p20_slide_lock_spring', ('scale', 'Z'), [(1, 1), (30, 1), (38, (3.8 - sp) / 3.8), (62, (3.8 - sp) / 3.8), (68, 1), (150, 1)])
+    key(c, 'p20_slide_lock_spring', ('scale', 'Z'), [(1, 1), (30, 1), (38, 0.64), (62, 0.64), (68, 1), (150, 1)])
     fwd = [(1, 0), (46, 0), (70, OFF), (150, OFF)]
     key(c, 'p03_recoil_spring', ('scale', 'L'), [(1, 1), (20, 1), (28, (spring_free - rt) / spring_free), (40, (spring_free - rt) / spring_free), (46, 1), (150, 1)])
     key(c, 'p03_recoil_spring_assembly', ('loc', 'L'), fwd + []); key(c, 'p03_recoil_spring_assembly', ('loc', 'Z'), [(1, 0), (80, 0), (100, -45.0), (150, -45.0)])

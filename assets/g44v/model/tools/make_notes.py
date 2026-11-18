@@ -1,4 +1,4 @@
-"""python3 tools/make_notes.py : writes ../notes/DECOMPOSITION.md from inventory.json (the source-indexed part list) so the notes cannot drift from the recipe."""
+"""python3 tools/make_notes.py : writes ../notes/DECOMPOSITION.md from inventory.json (the source-indexed part list) so the notes cannot drift from the recipe.  See also notes/DETAIL_PASS_V2.md (hand written)."""
 import json, os
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 inv = json.load(open(os.path.join(HERE, 'inventory.json'))); chk = json.load(open(os.path.join(HERE, 'checks.json')))

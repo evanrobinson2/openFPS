@@ -33,9 +33,9 @@
  "mechanical_peak_db_at_ear": {
   "trigger": 100.2,
   "dry_fire": 113.8,
-  "slide_rack": 120.9,
-  "slide_lock_open": 111.2,
-  "slide_release": 122.7,
+  "slide_rack": 121.6,
+  "slide_lock_open": 111.4,
+  "slide_release": 123.5,
   "magazine_out": 104.0,
   "magazine_in": 110.1,
   "case_ground": 94.8
@@ -66,7 +66,7 @@
     "peak_pa": 826.544,
     "peak_db": 152.32,
     "peak_db_over_ground": 152.32,
-    "sel_db": 111.12
+    "sel_db": 111.11
    },
    "bystander": {
     "peak_pa": 251.473,
@@ -86,7 +86,7 @@
     "peak_pa": 488.472,
     "peak_db": 147.76,
     "peak_db_over_ground": 147.76,
-    "sel_db": 105.6
+    "sel_db": 105.59
    },
    "bystander": {
     "peak_pa": 175.778,

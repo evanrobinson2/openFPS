@@ -104,7 +104,7 @@
    "source": "manual p. 22 step 8: about 1/8 in / 3 mm"
   },
   "slide_lock_pull": {
-   "value": 3.5,
+   "value": 2.6,
    "status": "inferred",
    "source": "enough for the plate to clear the barrel lug in this model"
   },
@@ -224,10 +224,10 @@
      11.75
     ]
    },
-   "volume_mm3": 43421.8,
+   "volume_mm3": 42906.3,
    "closed": true,
-   "mass_g": 112.9,
-   "triangles": 8814
+   "mass_g": 111.56,
+   "triangles": 9024
   },
   {
    "name": "p01_slide_guide_rail_l",
@@ -367,12 +367,12 @@
    "pivot_mm": [
     162.964,
     0.0,
-    14.224
+    14.141
    ],
    "density_g_cm3": 1.38,
    "bbox_mm": {
     "L": [
-     160.38,
+     160.37,
      167.37
     ],
     "S": [
@@ -380,13 +380,13 @@
      1.9
     ],
     "Z": [
-     11.7,
+     11.2,
      15.56
     ]
    },
-   "volume_mm3": 72.0,
+   "volume_mm3": 83.4,
    "closed": true,
-   "mass_g": 0.1,
+   "mass_g": 0.12,
    "triangles": 252
   },
   {
@@ -458,7 +458,7 @@
    "part_no": "15",
    "material": "Polymer",
    "parent": "p01_slide",
-   "source": "traced: outlines.json rear_sight; width 17 mm from the top view",
+   "source": "traced: outlines.json rear_sight; width 13 mm from the top view (p. 23 picture 27; v1 had 17); dovetail base and the two adjusting screws from the top view and p. 10",
    "status": "traced",
    "pivot_mm": [
     10.017,
@@ -472,18 +472,18 @@
      15.63
     ],
     "S": [
-     -8.4,
-     8.4
+     -12.5,
+     12.5
     ],
     "Z": [
-     11.7,
+     10.6,
      16.25
     ]
    },
-   "volume_mm3": 735.3,
+   "volume_mm3": 877.6,
    "closed": true,
-   "mass_g": 1.01,
-   "triangles": 800
+   "mass_g": 1.21,
+   "triangles": 1280
   },
   {
    "name": "p15_rear_sight_outline",
@@ -746,8 +746,8 @@
    "part_no": "10",
    "material": "Steel",
    "parent": "p01_slide",
-   "source": "exploded drawing item 10; claw named in manual p. 30 picture 34; shape inferred",
-   "status": "inferred",
+   "source": "right side photo p. 8 picture 1 (bar L 57-76, Z -0.2..4.3); claw named in manual p. 30 picture 34",
+   "status": "measured",
    "pivot_mm": [
     62.0,
     -11.0,
@@ -756,22 +756,22 @@
    "density_g_cm3": 7.85,
    "bbox_mm": {
     "L": [
-     60.8,
+     57.5,
      74.3
     ],
     "S": [
-     -12.55,
+     -12.8,
      -3.3
     ],
     "Z": [
-     -0.9,
-     5.7
+     0.0,
+     4.4
     ]
    },
-   "volume_mm3": 230.1,
+   "volume_mm3": 248.2,
    "closed": true,
-   "mass_g": 1.81,
-   "triangles": 160
+   "mass_g": 1.95,
+   "triangles": 108
   },
   {
    "name": "p11_extractor_depressor_plunger",
@@ -781,7 +781,7 @@
    "source": "exploded drawing item 11",
    "status": "inferred",
    "pivot_mm": [
-    40.05,
+    38.7,
     -8.0,
     5.5
    ],
@@ -789,7 +789,7 @@
    "bbox_mm": {
     "L": [
      20.5,
-     59.8
+     56.9
     ],
     "S": [
      -9.45,
@@ -800,9 +800,9 @@
      6.95
     ]
    },
-   "volume_mm3": 129.5,
+   "volume_mm3": 119.8,
    "closed": true,
-   "mass_g": 1.02,
+   "mass_g": 0.94,
    "triangles": 140
   },
   {
@@ -892,14 +892,14 @@
      9.3
     ],
     "Z": [
-     -16.0,
+     -15.2,
      9.5
     ]
    },
-   "volume_mm3": 17567.9,
+   "volume_mm3": 17426.7,
    "closed": true,
-   "mass_g": 137.91,
-   "triangles": 1784
+   "mass_g": 136.8,
+   "triangles": 2192
   },
   {
    "name": "placeholder_panel_barrel_hood",
@@ -970,8 +970,8 @@
    "part_no": "3",
    "material": "Spring",
    "parent": "p03_recoil_spring_assembly",
-   "source": "as above; 24 coils of 0.8 mm wire are a modelling choice (solid length must fit the stroke)",
-   "status": "inferred",
+   "source": "exploded drawing item 3: a small-diameter section at the flange end and a larger one toward the muzzle (v2); coil counts are a modelling choice",
+   "status": "measured",
    "pivot_mm": [
     98.1,
     0.0,
@@ -992,10 +992,10 @@
      -7.5
     ]
    },
-   "volume_mm3": 212.5,
+   "volume_mm3": 196.9,
    "closed": true,
-   "mass_g": 1.67,
-   "triangles": 4040
+   "mass_g": 1.55,
+   "triangles": 4048
   },
   {
    "name": "p17_frame",
@@ -1024,10 +1024,10 @@
      -9.6
     ]
    },
-   "volume_mm3": 89549.1,
+   "volume_mm3": 81858.3,
    "closed": true,
-   "mass_g": 123.58,
-   "triangles": 9126
+   "mass_g": 112.96,
+   "triangles": 13096
   },
   {
    "name": "placeholder_panel_grip_l",
@@ -1059,6 +1059,70 @@
    "volume_mm3": 15.9,
    "closed": true,
    "mass_g": 0.02,
+   "triangles": 44
+  },
+  {
+   "name": "placeholder_panel_grip_r",
+   "part_no": null,
+   "material": "Placeholder",
+   "parent": "p17_frame",
+   "source": "right side photo p. 8 picture 1: two-line text plate low on the grip replaced by a plain panel (v2)",
+   "status": "measured",
+   "pivot_mm": [
+    21.75,
+    -14.625,
+    -79.4
+   ],
+   "density_g_cm3": 1.38,
+   "bbox_mm": {
+    "L": [
+     10.9,
+     32.6
+    ],
+    "S": [
+     -14.7,
+     -14.55
+    ],
+    "Z": [
+     -83.9,
+     -74.9
+    ]
+   },
+   "volume_mm3": 29.1,
+   "closed": true,
+   "mass_g": 0.04,
+   "triangles": 44
+  },
+  {
+   "name": "placeholder_panel_frame_mark_l",
+   "part_no": null,
+   "material": "Placeholder",
+   "parent": "p17_frame",
+   "source": "dimension image px 483-508, 317-342: model mark on the dust cover replaced by a plain panel (v2)",
+   "status": "measured",
+   "pivot_mm": [
+    114.434,
+    13.725,
+    -15.817
+   ],
+   "density_g_cm3": 1.38,
+   "bbox_mm": {
+    "L": [
+     112.27,
+     116.59
+    ],
+    "S": [
+     13.65,
+     13.8
+    ],
+    "Z": [
+     -17.98,
+     -13.66
+    ]
+   },
+   "volume_mm3": 2.8,
+   "closed": true,
+   "mass_g": 0.0,
    "triangles": 44
   },
   {
@@ -1124,38 +1188,6 @@
    "closed": true,
    "mass_g": 0.62,
    "triangles": 156
-  },
-  {
-   "name": "placeholder_panel_grip_r",
-   "part_no": null,
-   "material": "Placeholder",
-   "parent": "p17_frame",
-   "source": "dimension image px 1030-1095, 660-715: maker's mark on the grip replaced by a plain panel",
-   "status": "measured",
-   "pivot_mm": [
-    16.422,
-    -14.625,
-    -77.701
-   ],
-   "density_g_cm3": 1.38,
-   "bbox_mm": {
-    "L": [
-     10.8,
-     22.04
-    ],
-    "S": [
-     -14.7,
-     -14.55
-    ],
-    "Z": [
-     -82.45,
-     -72.95
-    ]
-   },
-   "volume_mm3": 15.9,
-   "closed": true,
-   "mass_g": 0.02,
-   "triangles": 44
   },
   {
    "name": "p17_frame_guide_rear_r",
@@ -1288,14 +1320,14 @@
   {
    "name": "p22_locking_block",
    "part_no": "22",
-   "material": "Steel",
+   "material": "SteelDark",
    "parent": "p17_frame",
    "source": "exploded drawing item 22; position from the trigger pin and slide lock in the dimension image",
    "status": "inferred",
    "pivot_mm": [
-    92.109,
+    92.473,
     0.0,
-    -17.845
+    -17.755
    ],
    "density_g_cm3": 7.85,
    "bbox_mm": {
@@ -1312,9 +1344,9 @@
      -10.2
     ]
    },
-   "volume_mm3": 2265.9,
+   "volume_mm3": 1646.4,
    "closed": true,
-   "mass_g": 17.79,
+   "mass_g": 12.92,
    "triangles": 556
   },
   {
@@ -1322,32 +1354,32 @@
    "part_no": "21",
    "material": "SteelDark",
    "parent": "p17_frame",
-   "source": "dimension image px 602-640, 310-355; manual p. 22 picture 23",
+   "source": "dimension image px 600-632, 310-360: a thin bar leaning 29 deg, top toward the muzzle, in a recess (v2; v1 drew a square pad); manual p. 22 picture 23. The necks that join the two finger tabs to the plate through the frame walls are not modelled, so the walls need no see-through slot",
    "status": "measured",
    "pivot_mm": [
-    93.1,
+    93.4,
     0.0,
     -17.0
    ],
    "density_g_cm3": 7.85,
    "bbox_mm": {
     "L": [
-     89.46,
-     96.02
+     90.59,
+     96.26
     ],
     "S": [
-     -15.3,
-     15.3
+     -14.85,
+     14.85
     ],
     "Z": [
-     -21.0,
-     -12.45
+     -21.07,
+     -13.13
     ]
    },
-   "volume_mm3": 443.2,
+   "volume_mm3": 444.8,
    "closed": true,
-   "mass_g": 3.48,
-   "triangles": 204
+   "mass_g": 3.49,
+   "triangles": 132
   },
   {
    "name": "p20_slide_lock_spring",
@@ -1357,29 +1389,29 @@
    "source": "exploded drawing item 20",
    "status": "inferred",
    "pivot_mm": [
-    93.1,
+    95.9,
     0.0,
-    -24.9
+    -23.8
    ],
    "density_g_cm3": 7.85,
    "bbox_mm": {
     "L": [
-     91.95,
-     94.25
+     95.17,
+     96.63
     ],
     "S": [
-     -1.17,
-     1.17
+     -0.75,
+     0.75
     ],
     "Z": [
-     -24.7,
-     -21.3
+     -23.62,
+     -16.48
     ]
    },
-   "volume_mm3": 1.7,
+   "volume_mm3": 1.2,
    "closed": true,
    "mass_g": 0.01,
-   "triangles": 596
+   "triangles": 848
   },
   {
    "name": "p23_trigger_mechanism_housing",
@@ -1389,7 +1421,7 @@
    "source": "exploded drawing item 23; ejector named in manual p. 31 picture 35; shape inferred",
    "status": "inferred",
    "pivot_mm": [
-    21.422,
+    20.422,
     0.0,
     -25.978
    ],
@@ -1408,9 +1440,9 @@
      -0.8
     ]
    },
-   "volume_mm3": 7801.7,
+   "volume_mm3": 6393.7,
    "closed": true,
-   "mass_g": 10.77,
+   "mass_g": 8.82,
    "triangles": 276
   },
   {
@@ -1568,10 +1600,10 @@
      -9.9
     ]
    },
-   "volume_mm3": 839.3,
+   "volume_mm3": 827.9,
    "closed": true,
-   "mass_g": 6.59,
-   "triangles": 1226
+   "mass_g": 6.5,
+   "triangles": 1418
   },
   {
    "name": "p19_magazine_catch",
@@ -1581,29 +1613,29 @@
    "source": "dimension image px 800-880, 455-515 (pad); manual p. 40; bar and nib inferred",
    "status": "measured",
    "pivot_mm": [
-    62.0,
+    60.0,
     0.0,
     -42.5
    ],
    "density_g_cm3": 1.38,
    "bbox_mm": {
     "L": [
-     47.99,
-     64.4
+     47.97,
+     61.8
     ],
     "S": [
      -14.3,
      16.2
     ],
     "Z": [
-     -47.86,
-     -37.55
+     -47.88,
+     -37.51
     ]
    },
-   "volume_mm3": 636.8,
+   "volume_mm3": 618.0,
    "closed": true,
-   "mass_g": 0.88,
-   "triangles": 136
+   "mass_g": 0.85,
+   "triangles": 500
   },
   {
    "name": "p18_magazine_catch_spring",
@@ -1613,15 +1645,15 @@
    "source": "manual p. 40 pictures 53-54: a straight wire in the front strap",
    "status": "inferred",
    "pivot_mm": [
-    54.58,
+    51.58,
     0.0,
     -63.8
    ],
    "density_g_cm3": 7.85,
    "bbox_mm": {
     "L": [
-     47.33,
-     61.83
+     44.33,
+     58.83
     ],
     "S": [
      -0.4,
@@ -1642,7 +1674,7 @@
    "part_no": "17",
    "material": "Polymer",
    "parent": "p17_frame",
-   "source": "dimension image: studded grip panel, patch outline px (880,500)...(850,540), maker's mark window left clear",
+   "source": "dimension image and right side photo (p. 8 picture 1): studded grip side, marking panel and magazine catch left clear",
    "status": "measured",
    "pivot_mm": [
     0.0,
@@ -1652,29 +1684,29 @@
    "density_g_cm3": 1.38,
    "bbox_mm": {
     "L": [
-     -1.98,
-     53.06
+     -3.76,
+     57.97
     ],
     "S": [
      14.5,
      15.05
     ],
     "Z": [
-     -97.77,
-     -40.5
+     -93.76,
+     -48.97
     ]
    },
-   "volume_mm3": 284.3,
+   "volume_mm3": 257.4,
    "closed": true,
-   "mass_g": 0.39,
-   "triangles": 4308
+   "mass_g": 0.36,
+   "triangles": 3900
   },
   {
    "name": "p17_frame_grip_texture_r",
    "part_no": "17",
    "material": "Polymer",
    "parent": "p17_frame",
-   "source": "dimension image: studded grip panel, patch outline px (880,500)...(850,540), maker's mark window left clear",
+   "source": "dimension image and right side photo (p. 8 picture 1): studded grip side, marking panel and magazine catch left clear",
    "status": "measured",
    "pivot_mm": [
     0.0,
@@ -1684,22 +1716,86 @@
    "density_g_cm3": 1.38,
    "bbox_mm": {
     "L": [
-     -1.98,
-     53.06
+     -3.76,
+     57.97
     ],
     "S": [
      -15.05,
      -14.5
     ],
     "Z": [
-     -97.77,
-     -40.5
+     -93.76,
+     -48.97
     ]
    },
-   "volume_mm3": 284.3,
+   "volume_mm3": 242.4,
    "closed": true,
-   "mass_g": 0.39,
-   "triangles": 4308
+   "mass_g": 0.33,
+   "triangles": 3672
+  },
+  {
+   "name": "p17_frame_grip_texture_front",
+   "part_no": "17",
+   "material": "Polymer",
+   "parent": "p17_frame",
+   "source": "dimension image and rear view: studs on the front strap, nine across (v2)",
+   "status": "measured",
+   "pivot_mm": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "density_g_cm3": 1.38,
+   "bbox_mm": {
+    "L": [
+     44.7,
+     61.06
+    ],
+    "S": [
+     -10.2,
+     10.2
+    ],
+    "Z": [
+     -92.7,
+     -52.64
+    ]
+   },
+   "volume_mm3": 145.2,
+   "closed": true,
+   "mass_g": 0.2,
+   "triangles": 1728
+  },
+  {
+   "name": "p17_frame_grip_texture_back",
+   "part_no": "17",
+   "material": "Polymer",
+   "parent": "p17_frame",
+   "source": "dimension image and rear view: studs on the back strap, nine across (v2)",
+   "status": "measured",
+   "pivot_mm": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "density_g_cm3": 1.38,
+   "bbox_mm": {
+    "L": [
+     -10.41,
+     12.18
+    ],
+    "S": [
+     -10.2,
+     10.2
+    ],
+    "Z": [
+     -92.73,
+     -42.26
+    ]
+   },
+   "volume_mm3": 172.4,
+   "closed": true,
+   "mass_g": 0.24,
+   "triangles": 2052
   },
   {
    "name": "p17c_beavertail_backstrap_m",
@@ -1770,32 +1866,32 @@
    "part_no": "31",
    "material": "Polymer",
    "parent": "magazine_group",
-   "source": "exploded drawing item 31; rake from the traced front strap; depth and width inferred",
+   "source": "exploded drawing item 31 (slots, count windows); rake from the traced front strap; 22 mm wide below a 19.2 mm neck, depth 31 mm: inferred",
    "status": "inferred",
    "pivot_mm": [
-    37.6,
+    34.6,
     0.0,
     -60.0
    ],
    "density_g_cm3": 1.38,
    "bbox_mm": {
     "L": [
-     5.59,
-     69.86
+     2.7,
+     66.9
     ],
     "S": [
-     -9.6,
-     9.6
+     -11.0,
+     11.0
     ],
     "Z": [
-     -105.29,
-     -12.02
+     -104.92,
+     -12.0
     ]
    },
-   "volume_mm3": 10232.3,
+   "volume_mm3": 10871.6,
    "closed": true,
-   "mass_g": 14.12,
-   "triangles": 796
+   "mass_g": 15.0,
+   "triangles": 1858
   },
   {
    "name": "placeholder_panel_magazine",
@@ -1806,25 +1902,25 @@
    "status": "measured",
    "pivot_mm": [
     23.6,
-    -9.625,
-    -94.0
+    -11.025,
+    -95.0
    ],
    "density_g_cm3": 1.38,
    "bbox_mm": {
     "L": [
-     17.6,
-     29.6
+     18.6,
+     28.6
     ],
     "S": [
-     -9.7,
-     -9.55
+     -11.1,
+     -10.95
     ],
     "Z": [
-     -98.0,
-     -90.0
+     -99.0,
+     -91.0
     ]
    },
-   "volume_mm3": 14.4,
+   "volume_mm3": 12.0,
    "closed": true,
    "mass_g": 0.02,
    "triangles": 12
@@ -1869,29 +1965,29 @@
    "source": "exploded drawing item 34",
    "status": "inferred",
    "pivot_mm": [
-    20.365,
+    17.892,
     0.0,
-    -101.233
+    -104.474
    ],
    "density_g_cm3": 1.38,
    "bbox_mm": {
     "L": [
-     7.45,
-     33.28
+     4.6,
+     30.43
     ],
     "S": [
-     -8.1,
-     8.1
+     -9.5,
+     9.5
     ],
     "Z": [
-     -103.63,
-     -98.84
+     -109.4,
+     -98.44
     ]
    },
-   "volume_mm3": 606.9,
+   "volume_mm3": 772.4,
    "closed": true,
-   "mass_g": 0.84,
-   "triangles": 44
+   "mass_g": 1.07,
+   "triangles": 156
   },
   {
    "name": "p32_follower",
@@ -1901,15 +1997,15 @@
    "source": "manual p. 11 picture 4 (orange) and p. 31 picture 36; the shelf that lifts the slide stop lever is inferred",
    "status": "measured",
    "pivot_mm": [
-    53.6,
+    50.6,
     0.0,
     -20.0
    ],
    "density_g_cm3": 1.38,
    "bbox_mm": {
     "L": [
-     37.56,
-     67.51
+     34.56,
+     64.51
     ],
     "S": [
      -8.1,
@@ -1920,7 +2016,7 @@
      -14.09
     ]
    },
-   "volume_mm3": 4409.6,
+   "volume_mm3": 4410.5,
    "closed": true,
    "mass_g": 6.09,
    "triangles": 116
@@ -1933,18 +2029,18 @@
    "source": "exploded drawing items 48 / 49; manual p. 11 pictures 4-5",
    "status": "measured",
    "pivot_mm": [
-    50.6,
-    -9.988,
+    47.6,
+    -10.992,
     -27.5
    ],
    "density_g_cm3": 1.38,
    "bbox_mm": {
     "L": [
-     45.71,
-     54.31
+     42.71,
+     51.31
     ],
     "S": [
-     -11.4,
+     -12.1,
      -8.0
     ],
     "Z": [
@@ -1952,10 +2048,10 @@
      -24.69
     ]
    },
-   "volume_mm3": 104.0,
+   "volume_mm3": 73.5,
    "closed": true,
-   "mass_g": 0.14,
-   "triangles": 252
+   "mass_g": 0.1,
+   "triangles": 440
   },
   {
    "name": "p49_loading_assist_left",
@@ -1965,29 +2061,29 @@
    "source": "exploded drawing items 48 / 49; manual p. 11 pictures 4-5",
    "status": "measured",
    "pivot_mm": [
-    50.6,
-    9.988,
+    47.6,
+    10.992,
     -27.5
    ],
    "density_g_cm3": 1.38,
    "bbox_mm": {
     "L": [
-     45.71,
-     54.31
+     42.71,
+     51.31
     ],
     "S": [
      8.0,
-     11.4
+     12.1
     ],
     "Z": [
      -33.29,
      -24.69
     ]
    },
-   "volume_mm3": 104.0,
+   "volume_mm3": 73.5,
    "closed": true,
-   "mass_g": 0.14,
-   "triangles": 252
+   "mass_g": 0.1,
+   "triangles": 440
   },
   {
    "name": "p33_magazine_spring",
@@ -1997,7 +2093,7 @@
    "source": "exploded drawing item 33: about ten zig-zags",
    "status": "measured",
    "pivot_mm": [
-    22.2,
+    19.2,
     0.0,
     -98.5
    ],
@@ -2010,8 +2106,8 @@
    "free_len_mm": 73.78,
    "bbox_mm": {
     "L": [
-     14.23,
-     58.16
+     11.23,
+     55.16
     ],
     "S": [
      -0.55,
@@ -2198,14 +2294,14 @@
    "name": "socket_magazine",
    "parent": "frame_group",
    "pos_mm": {
-    "L": 19.2,
+    "L": 16.2,
     "S": 0.0,
     "Z": -106.0
    },
    "pos_m_export": [
     0.0,
     -0.106,
-    0.0192
+    0.0162
    ],
    "note": "mouth of the magazine well; +Y of the magazine axis is tilted 21.8 deg"
   },
@@ -2321,6 +2417,21 @@
    "p17_frame_grip_texture_r",
    "p17_frame",
    "moulded texture"
+  ],
+  [
+   "p17_frame_grip_texture_front",
+   "p17_frame",
+   "moulded texture"
+  ],
+  [
+   "p17_frame_grip_texture_back",
+   "p17_frame",
+   "moulded texture"
+  ],
+  [
+   "placeholder_panel_frame_mark_l",
+   "p17_frame",
+   "placeholder panel set into the surface"
   ],
   [
    "placeholder_panel_slide_logo",
@@ -2486,9 +2597,10 @@
   "p03_recoil_spring": "p03_recoil_spring_assembly",
   "p17_frame": "frame_group",
   "placeholder_panel_grip_l": "p17_frame",
+  "placeholder_panel_grip_r": "p17_frame",
+  "placeholder_panel_frame_mark_l": "p17_frame",
   "p17_frame_guide_rear_l": "p17_frame",
   "p17_frame_guide_front_l": "p17_frame",
-  "placeholder_panel_grip_r": "p17_frame",
   "p17_frame_guide_rear_r": "p17_frame",
   "p17_frame_guide_front_r": "p17_frame",
   "p28_trigger_pin": "p17_frame",
@@ -2506,6 +2618,8 @@
   "p18_magazine_catch_spring": "p17_frame",
   "p17_frame_grip_texture_l": "p17_frame",
   "p17_frame_grip_texture_r": "p17_frame",
+  "p17_frame_grip_texture_front": "p17_frame",
+  "p17_frame_grip_texture_back": "p17_frame",
   "p17c_beavertail_backstrap_m": "accessories",
   "socket_beavertail_backstrap_m": "frame_group",
   "p17d_beavertail_backstrap_l": "accessories",

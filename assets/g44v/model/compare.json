@@ -1,55 +1,55 @@
 {
  "view": "left side, orthographic, the reference camera",
  "px_per_mm": 5.785,
- "iou": 0.9877,
- "model_area_mm2": 11442.6,
+ "iou": 0.9867,
+ "model_area_mm2": 11472.0,
  "reference_area_mm2": 11533.4,
- "model_only_mm2": 25.6,
- "reference_only_mm2": 116.4,
+ "model_only_mm2": 46.4,
+ "reference_only_mm2": 107.8,
  "outline_distance_mm": {
   "model_to_reference": {
-   "mean": 0.69,
+   "mean": 0.71,
    "p95": 0.69,
    "max": 22.99
   },
   "reference_to_model": {
-   "mean": 0.15,
-   "p95": 0.35,
+   "mean": 0.17,
+   "p95": 0.38,
    "max": 1.38
   }
  },
  "grid_iou_rows_top_to_bottom_cols_muzzle_to_rear": [
   [
-   0.983,
+   0.982,
    0.993,
    0.994,
    0.989,
    0.986,
-   0.987
+   0.986
   ],
   [
    0.976,
    0.988,
-   0.972,
-   0.993,
+   0.976,
+   0.992,
    1.0,
    0.974
   ],
   [
    null,
-   0.952,
-   0.946,
-   0.972,
-   1.0,
-   0.992
+   0.953,
+   0.947,
+   0.957,
+   0.999,
+   0.988
   ],
   [
    null,
    null,
    null,
    null,
-   0.991,
-   0.985
+   0.988,
+   0.982
   ]
  ],
  "landmarks_px": [
@@ -84,8 +84,8 @@
    "model": [
     189.3,
     148.0,
-    229.7,
-    170.3
+    229.8,
+    173.2
    ],
    "reference": [
     189,
@@ -93,8 +93,8 @@
     230,
     170
    ],
-   "max_abs_diff_px": 0.3,
-   "max_abs_diff_mm": 0.05
+   "max_abs_diff_px": 3.2,
+   "max_abs_diff_mm": 0.55
   },
   {
    "name": "rear sight box",
@@ -102,7 +102,7 @@
     1067.1,
     144.0,
     1141.9,
-    170.3
+    176.7
    ],
    "reference": [
     1067,
@@ -110,8 +110,8 @@
     1142,
     170
    ],
-   "max_abs_diff_px": 1.0,
-   "max_abs_diff_mm": 0.17
+   "max_abs_diff_px": 6.7,
+   "max_abs_diff_mm": 1.16
   },
   {
    "name": "slide box",
@@ -160,5 +160,130 @@
    "max_abs_diff_px": 2.0,
    "max_abs_diff_mm": 0.35
   }
- ]
+ ],
+ "closeups": {
+  "v2": {
+   "slide": {
+    "box_px": [
+     140,
+     130,
+     1170,
+     300
+    ],
+    "iou": 0.9756,
+    "reference_edge_px": 14694,
+    "model_edge_px": 5697,
+    "edge_coverage": 0.393,
+    "edge_precision": 0.812
+   },
+   "grip": {
+    "box_px": [
+     840,
+     430,
+     1240,
+     890
+    ],
+    "iou": 0.9898,
+    "reference_edge_px": 17422,
+    "model_edge_px": 15858,
+    "edge_coverage": 0.669,
+    "edge_precision": 0.796
+   },
+   "controls": {
+    "box_px": [
+     560,
+     280,
+     900,
+     530
+    ],
+    "iou": 0.9711,
+    "reference_edge_px": 9480,
+    "model_edge_px": 2704,
+    "edge_coverage": 0.316,
+    "edge_precision": 0.857
+   }
+  },
+  "v1": {
+   "slide": {
+    "box_px": [
+     140,
+     130,
+     1170,
+     300
+    ],
+    "iou": 0.9759,
+    "reference_edge_px": 14694,
+    "model_edge_px": 5496,
+    "edge_coverage": 0.383,
+    "edge_precision": 0.804
+   },
+   "grip": {
+    "box_px": [
+     840,
+     430,
+     1240,
+     890
+    ],
+    "iou": 0.9923,
+    "reference_edge_px": 17422,
+    "model_edge_px": 16505,
+    "edge_coverage": 0.682,
+    "edge_precision": 0.802
+   },
+   "controls": {
+    "box_px": [
+     560,
+     280,
+     900,
+     530
+    ],
+    "iou": 0.967,
+    "reference_edge_px": 9480,
+    "model_edge_px": 1617,
+    "edge_coverage": 0.183,
+    "edge_precision": 0.826
+   }
+  },
+  "note": "regions of the dimension image, same camera. iou: silhouette; edge_coverage: share of the photograph's interior edges matched by a model edge within 0.6 mm; edge_precision: the reverse. Photographic grain and lighting put edges in the reference that no model has, so coverage well below 1 is expected; the before/after change is what the number is for."
+ },
+ "slide_top_view": {
+  "v2": {
+   "box_px": [
+    0,
+    0,
+    664,
+    156
+   ],
+   "iou": 0.9206,
+   "reference_edge_px": 5389,
+   "model_edge_px": 2341,
+   "edge_coverage": 0.307,
+   "edge_precision": 0.646,
+   "px_per_mm": 3.494,
+   "reference": "manual p. 23 picture 27 (slide from above)",
+   "outline_reference_to_model_mm": {
+    "mean": 0.93,
+    "p95": 2.0
+   }
+  },
+  "v1": {
+   "box_px": [
+    0,
+    0,
+    664,
+    156
+   ],
+   "iou": 0.9206,
+   "reference_edge_px": 5389,
+   "model_edge_px": 2257,
+   "edge_coverage": 0.298,
+   "edge_precision": 0.649,
+   "px_per_mm": 3.494,
+   "reference": "manual p. 23 picture 27 (slide from above)",
+   "outline_reference_to_model_mm": {
+    "mean": 0.93,
+    "p95": 2.0
+   }
+  }
+ }
 }
