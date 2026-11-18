@@ -1,0 +1,2412 @@
+{
+ "meta": {
+  "title": "HK416 clearing procedures: actions, clips and state machines",
+  "credit": "carpetshark",
+  "generator": "assets/hk416/malfunctions/sim.py",
+  "clip_format": "as model/build.py key(): 24 fps; loc in mm from rest (L + muzzle, S + shooter's left, Z up), rot in degrees about the Blender axis through the part pivot",
+  "note": "existing_clips are in the model; motions are new keyframe data for the model recipe to bake; props are not in the model"
+ },
+ "rifle_state": {
+  "chamber": [
+   "live",
+   "empty",
+   "dud",
+   "fired",
+   "stuck",
+   "stuck_torn"
+  ],
+  "feedway": [
+   "clear",
+   "nose_jam",
+   "stovepipe",
+   "case_loose",
+   "round_behind_case",
+   "two_rounds",
+   "round_over_bolt"
+  ],
+  "bolt": [
+   "closed",
+   "out_of_battery",
+   "blocked",
+   "held_open"
+  ],
+  "hammer": [
+   "cocked",
+   "down"
+  ],
+  "bore": [
+   "clear",
+   "obstructed"
+  ],
+  "selector": [
+   "fire",
+   "safe"
+  ],
+  "status": [
+   "ok",
+   "needs_inspection",
+   "out_of_service"
+  ],
+  "ready": "status ok, chamber live, bolt closed, feedway clear, bore clear, hammer cocked, selector fire, no hangfire pending"
+ },
+ "actions": {
+  "tap": {
+   "label": "Tap",
+   "time_s": 0.4,
+   "hand": "Support-hand palm strikes the magazine floorplate upward, then tugs down to prove it is latched.",
+   "anim": [
+    "mag_tap"
+   ],
+   "sound": [
+    "mag_tap"
+   ]
+  },
+  "rack": {
+   "label": "Rack",
+   "time_s": 0.9,
+   "hand": "Support hand pulls the charging handle fully to the rear and lets it go; do not ride it forward (manual p. 8). Port towards the ground, watch what comes out (manual p. 3, step 4).",
+   "anim": [
+    "rack_full"
+   ],
+   "sound": [
+    "mech_charge"
+   ]
+  },
+  "reassess": {
+   "label": "Reassess",
+   "time_s": 0.5,
+   "hand": "Both hands back on the rifle, eyes to the ejection port, then to the target. Fire only if the target still warrants it.",
+   "anim": [],
+   "sound": []
+  },
+  "lock_back": {
+   "label": "Lock the bolt back",
+   "time_s": 1.2,
+   "hand": "Hold the charging handle to the rear and press the bolt catch in (manual p. 3, step 5); ease the handle forward.",
+   "anim": [
+    "lock_back"
+   ],
+   "sound": [
+    "mech_bolt_lock_back"
+   ]
+  },
+  "strip_mag": {
+   "label": "Remove the magazine",
+   "time_s": 0.9,
+   "hand": "Press the magazine release and pull the magazine out (manual p. 3, step 3). In a double feed it is pinned and needs a firm pull.",
+   "anim": [
+    "mag_release",
+    "mag_out"
+   ],
+   "sound": [
+    "mag_out"
+   ]
+  },
+  "insert_mag": {
+   "label": "Insert a loaded magazine",
+   "time_s": 1.2,
+   "hand": "Seat a loaded magazine until the catch engages its recess (manual p. 8), then tug it.",
+   "anim": [
+    "mag_in"
+   ],
+   "sound": [
+    "mag_in"
+   ]
+  },
+  "release_bolt": {
+   "label": "Release the bolt",
+   "time_s": 0.3,
+   "hand": "Press the bolt catch. The carrier runs forward from 82 mm and chambers a round (manual p. 26, step 2).",
+   "anim": [
+    "bolt_catch",
+    "release_bolt"
+   ],
+   "sound": [
+    "mech_bolt_release"
+   ]
+  },
+  "sweep_case": {
+   "label": "Remove the case from the port",
+   "time_s": 0.8,
+   "hand": "Support hand grasps the trapped case and pulls it out of the port; the bolt goes forward.",
+   "anim": [
+    "sweep_case"
+   ],
+   "sound": []
+  },
+  "handle_strike": {
+   "label": "Charging handle: pull, then strike forward",
+   "time_s": 1.5,
+   "hand": "Magazine out. Pull the charging handle as far back as it will go, then strike it forward with the palm so the bolt is driven back off the round.",
+   "anim": [
+    "rack_bound",
+    "handle_strike"
+   ],
+   "sound": []
+  },
+  "hold_bolt_strike": {
+   "label": "Hold the bolt back and strike the handle",
+   "time_s": 3.0,
+   "hand": "Pull the handle to the rear again, hold the bolt back through the port with a tool or a finger, and send the handle forward sharply.",
+   "anim": [
+    "handle_strike"
+   ],
+   "sound": []
+  },
+  "forward_assist": {
+   "label": "Forward assist",
+   "time_s": 0.3,
+   "hand": "One light tap. The manual treats a bolt that moves under the forward assist as a symptom: dirty chamber, damaged round or weak buffer spring (p. 26, step 3). If it does not close, rack instead.",
+   "anim": [
+    "forward_assist"
+   ],
+   "sound": []
+  },
+  "wait": {
+   "label": "Wait, muzzle on the backstop",
+   "time_s": 30.0,
+   "hand": "Nothing moves. Rifle shouldered and pointed at the backstop, finger off the trigger.",
+   "anim": [],
+   "sound": []
+  },
+  "safe": {
+   "label": "Selector to safe",
+   "time_s": 0.3,
+   "hand": "Thumb rotates the selector to safe. It only turns with the hammer cocked (manual p. 3, step 2).",
+   "anim": [
+    "safety_to_safe"
+   ],
+   "sound": []
+  },
+  "selector_fire": {
+   "label": "Selector to fire",
+   "time_s": 0.3,
+   "hand": "Thumb rotates the selector to semi.",
+   "anim": [
+    "safety_to_fire"
+   ],
+   "sound": []
+  },
+  "inspect_chamber": {
+   "label": "Inspect the chamber",
+   "time_s": 1.5,
+   "hand": "Bolt locked back; look through the ejection port into the chamber and the magazine well (manual p. 3, step 6).",
+   "anim": [],
+   "sound": []
+  },
+  "check_bore": {
+   "label": "Check the bore with a rod",
+   "time_s": 8.0,
+   "hand": "Rifle unloaded and locked open. Pass a cleaning rod through the bore (manual p. 3, step 6, the physical check). If it stops short, the bore is blocked.",
+   "anim": [
+    "rod_probe"
+   ],
+   "sound": []
+  },
+  "rod": {
+   "label": "Clear with a rod (armourer)",
+   "time_s": 60.0,
+   "hand": "Rifle unloaded, bolt locked back. A cleaning rod from the muzzle pushes the stuck case out, or drives a lodged bullet back out through the chamber. After a squib the barrel is inspected before the rifle is used again.",
+   "anim": [
+    "rod_probe"
+   ],
+   "sound": []
+  }
+ },
+ "existing_clips": [
+  "charge",
+  "dust_cover_open",
+  "mag_release",
+  "mag_out",
+  "mag_in",
+  "bolt_catch",
+  "safety_to_fire",
+  "safety_to_safe",
+  "trigger_pull"
+ ],
+ "motions": {
+  "mag_tap": {
+   "fps": 24,
+   "note": "an unlatched magazine starts 6 mm low (z0 = -6), a latched one at z0 = 0",
+   "tracks": [
+    {
+     "node": "mag_body",
+     "chan": [
+      "loc",
+      "Z"
+     ],
+     "keys": [
+      [
+       1,
+       "z0"
+      ],
+      [
+       3,
+       0.6
+      ],
+      [
+       5,
+       0.0
+      ],
+      [
+       7,
+       -0.8
+      ],
+      [
+       9,
+       0.0
+      ]
+     ]
+    }
+   ]
+  },
+  "rack_full": {
+   "fps": 24,
+   "note": "the charge clip extended to the 95 mm stroke of the action simulation, from any starting position; released, the carrier closes in two frames",
+   "tracks": [
+    {
+     "node": "charging_handle",
+     "chan": [
+      "loc",
+      "L"
+     ],
+     "keys": [
+      [
+       1,
+       0
+      ],
+      [
+       9,
+       -95.0
+      ],
+      [
+       12,
+       -95.0
+      ],
+      [
+       14,
+       0
+      ]
+     ]
+    },
+    {
+     "node": "bolt_carrier",
+     "chan": [
+      "loc",
+      "L"
+     ],
+     "keys": [
+      [
+       1,
+       "-x0"
+      ],
+      [
+       9,
+       -95.0
+      ],
+      [
+       12,
+       -95.0
+      ],
+      [
+       14,
+       "-x1"
+      ]
+     ]
+    },
+    {
+     "node": "dust_cover",
+     "chan": [
+      "rot",
+      "Y"
+     ],
+     "keys": [
+      [
+       1,
+       -175
+      ],
+      [
+       14,
+       -175
+      ]
+     ]
+    }
+   ]
+  },
+  "lock_back": {
+   "fps": 24,
+   "note": "handle to the buffer stop, carrier caught at 82 mm on the way forward; the handle returns alone",
+   "tracks": [
+    {
+     "node": "charging_handle",
+     "chan": [
+      "loc",
+      "L"
+     ],
+     "keys": [
+      [
+       1,
+       0
+      ],
+      [
+       8,
+       -95.0
+      ],
+      [
+       14,
+       -95.0
+      ],
+      [
+       20,
+       0
+      ]
+     ]
+    },
+    {
+     "node": "bolt_carrier",
+     "chan": [
+      "loc",
+      "L"
+     ],
+     "keys": [
+      [
+       1,
+       "-x0"
+      ],
+      [
+       8,
+       -95.0
+      ],
+      [
+       14,
+       -95.0
+      ],
+      [
+       16,
+       -82.0
+      ],
+      [
+       20,
+       -82.0
+      ]
+     ]
+    },
+    {
+     "node": "bolt_catch",
+     "chan": [
+      "rot",
+      "Y"
+     ],
+     "keys": [
+      [
+       10,
+       0
+      ],
+      [
+       13,
+       5.5
+      ],
+      [
+       20,
+       5.5
+      ]
+     ]
+    },
+    {
+     "node": "dust_cover",
+     "chan": [
+      "rot",
+      "Y"
+     ],
+     "keys": [
+      [
+       1,
+       -175
+      ],
+      [
+       20,
+       -175
+      ]
+     ]
+    }
+   ]
+  },
+  "release_bolt": {
+   "fps": 24,
+   "note": "the carrier closes from 82 mm in about 43 ms (one frame); for exact timing follow action.json from where carrier_mm falls through 82",
+   "tracks": [
+    {
+     "node": "bolt_catch",
+     "chan": [
+      "rot",
+      "Y"
+     ],
+     "keys": [
+      [
+       1,
+       5.5
+      ],
+      [
+       3,
+       0
+      ]
+     ]
+    },
+    {
+     "node": "bolt_carrier",
+     "chan": [
+      "loc",
+      "L"
+     ],
+     "keys": [
+      [
+       1,
+       -82.0
+      ],
+      [
+       2,
+       -82.0
+      ],
+      [
+       3,
+       "-x1"
+      ],
+      [
+       6,
+       "-x1"
+      ]
+     ]
+    }
+   ]
+  },
+  "rack_bound": {
+   "fps": 24,
+   "note": "bolt over-ride: the handle moves 8 mm and stops against the round",
+   "tracks": [
+    {
+     "node": "charging_handle",
+     "chan": [
+      "loc",
+      "L"
+     ],
+     "keys": [
+      [
+       1,
+       0
+      ],
+      [
+       4,
+       -8.0
+      ],
+      [
+       7,
+       -8.0
+      ],
+      [
+       10,
+       0
+      ]
+     ]
+    }
+   ]
+  },
+  "handle_strike": {
+   "fps": 24,
+   "note": "handle drawn to where the round stops it, then struck forward; the carrier jumps back off the round and closes",
+   "tracks": [
+    {
+     "node": "charging_handle",
+     "chan": [
+      "loc",
+      "L"
+     ],
+     "keys": [
+      [
+       1,
+       0
+      ],
+      [
+       8,
+       "-x0"
+      ],
+      [
+       12,
+       "-x0"
+      ],
+      [
+       14,
+       0
+      ]
+     ]
+    },
+    {
+     "node": "bolt_carrier",
+     "chan": [
+      "loc",
+      "L"
+     ],
+     "keys": [
+      [
+       1,
+       "-x0"
+      ],
+      [
+       12,
+       "-x0"
+      ],
+      [
+       14,
+       -95.0
+      ],
+      [
+       17,
+       -95.0
+      ],
+      [
+       19,
+       "-x1"
+      ]
+     ]
+    }
+   ]
+  },
+  "sweep_case": {
+   "fps": 24,
+   "note": "prop_case leaves the port to the right and down; the carrier then closes",
+   "tracks": [
+    {
+     "node": "prop_case",
+     "chan": [
+      "loc",
+      "S"
+     ],
+     "keys": [
+      [
+       1,
+       0
+      ],
+      [
+       8,
+       -60.0
+      ]
+     ]
+    },
+    {
+     "node": "prop_case",
+     "chan": [
+      "loc",
+      "Z"
+     ],
+     "keys": [
+      [
+       1,
+       0
+      ],
+      [
+       8,
+       -25.0
+      ]
+     ]
+    },
+    {
+     "node": "bolt_carrier",
+     "chan": [
+      "loc",
+      "L"
+     ],
+     "keys": [
+      [
+       1,
+       "-x0"
+      ],
+      [
+       8,
+       "-x0"
+      ],
+      [
+       10,
+       "-x1"
+      ]
+     ]
+    }
+   ]
+  },
+  "forward_assist": {
+   "fps": 24,
+   "note": "the button travels 6 mm inwards; in build.py its axis is 4 degrees off L, (L, S, Z) = (0.997, 0.073, 0), keyed here along L only",
+   "tracks": [
+    {
+     "node": "forward_assist_button",
+     "chan": [
+      "loc",
+      "L"
+     ],
+     "keys": [
+      [
+       1,
+       0
+      ],
+      [
+       3,
+       6.0
+      ],
+      [
+       6,
+       0
+      ]
+     ]
+    },
+    {
+     "node": "bolt_carrier",
+     "chan": [
+      "loc",
+      "L"
+     ],
+     "keys": [
+      [
+       1,
+       "-x0"
+      ],
+      [
+       3,
+       "-x1"
+      ],
+      [
+       6,
+       "-x1"
+      ]
+     ]
+    }
+   ]
+  },
+  "rod_probe": {
+   "fps": 24,
+   "note": "prop_rod enters at socket_muzzle and travels down the bore; on a squib it stops at the bullet (depth = 368 - 34 - lodgedMm), otherwise at the bolt face (382 mm)",
+   "tracks": [
+    {
+     "node": "prop_rod",
+     "chan": [
+      "loc",
+      "L"
+     ],
+     "keys": [
+      [
+       1,
+       0
+      ],
+      [
+       48,
+       "-depth"
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "props": [
+  "prop_case",
+  "prop_round",
+  "prop_round_2",
+  "prop_bullet",
+  "prop_rod"
+ ],
+ "procedures": {
+  "immediate_action": {
+   "name": "Immediate action: tap, rack, reassess",
+   "source": "TC 3-22.9 (2016) para 8-35, as summarised; the motions are those of the manual's loading note (p. 8) and clearing step 4 (p. 3)",
+   "when": "The hammer fell with a click and nothing happened, and the cause is not known. Not for a pop or weak shot.",
+   "end": "ready",
+   "fallback": "remedial_clear",
+   "attempts": 2,
+   "steps": [
+    {
+     "action": "tap",
+     "expect": "the magazine is latched"
+    },
+    {
+     "action": "rack",
+     "expect": "whatever was in the chamber is thrown out; a fresh round is chambered and the bolt locks"
+    },
+    {
+     "action": "reassess",
+     "expect": "bolt fully forward, port clear: ready"
+    }
+   ]
+  },
+  "misfire_range": {
+   "name": "Misfire on a range: wait, then tap, rack, reassess",
+   "source": "standard range practice for a possible hangfire, then TC 3-22.9 para 8-35",
+   "when": "Click, no bang, no recoil, on a range where nothing is gained by hurrying.",
+   "end": "ready",
+   "fallback": "remedial_clear",
+   "attempts": 1,
+   "steps": [
+    {
+     "action": "wait",
+     "expect": "if it was a hangfire the shot goes into the backstop and the rifle cycles; otherwise nothing happens",
+     "args": {
+      "seconds": 30
+     }
+    },
+    {
+     "action": "tap",
+     "expect": "the magazine is latched"
+    },
+    {
+     "action": "rack",
+     "expect": "the dud is ejected, port towards the ground; a fresh round is chambered"
+    },
+    {
+     "action": "reassess",
+     "expect": "ready. The dud is set aside as the range directs"
+    }
+   ]
+  },
+  "stovepipe_clear": {
+   "name": "Stove pipe",
+   "source": "TC 3-22.9 (2016) para 8-36 remedial action, stove pipe, as summarised",
+   "when": "A case is standing in, or lying in, the ejection port and the trigger is dead.",
+   "end": "ready",
+   "fallback": "remedial_clear",
+   "attempts": 1,
+   "steps": [
+    {
+     "action": "sweep_case",
+     "expect": "the case is out and the bolt goes forward"
+    },
+    {
+     "action": "rack",
+     "expect": "the rifle is cycled: a fresh round is chambered"
+    },
+    {
+     "action": "reassess",
+     "expect": "ready"
+    }
+   ]
+  },
+  "double_feed_clear": {
+   "name": "Double feed",
+   "source": "TC 3-22.9 (2016) para 8-36 remedial action, double feed, as summarised: magazine out, clear, confirm, fresh magazine, chamber. Many instructors lock the bolt back first to take the spring off the wedged rounds",
+   "when": "Brass and a second round are both at the chamber, or immediate action has failed twice.",
+   "end": "ready",
+   "fallback": "stuck_case_rod",
+   "attempts": 1,
+   "steps": [
+    {
+     "action": "strip_mag",
+     "expect": "the magazine comes out; loose rounds may fall with it"
+    },
+    {
+     "action": "rack",
+     "expect": "whatever is loose drops through the magazine well; the extractor tries the chamber"
+    },
+    {
+     "action": "rack",
+     "expect": "second pull"
+    },
+    {
+     "action": "lock_back",
+     "expect": "bolt held open"
+    },
+    {
+     "action": "inspect_chamber",
+     "expect": "chamber and feedway empty",
+     "branch": {
+      "chamber_not_clear": "stuck_case_rod"
+     }
+    },
+    {
+     "action": "insert_mag",
+     "expect": "a fresh loaded magazine is latched"
+    },
+    {
+     "action": "release_bolt",
+     "expect": "a round is chambered and the bolt locks"
+    },
+    {
+     "action": "reassess",
+     "expect": "ready to fire"
+    }
+   ]
+  },
+  "remedial_clear": {
+   "name": "Remedial action",
+   "source": "TC 3-22.9 (2016) para 8-36, as summarised: look, remove the magazine, clear, inspect, then act on what is found",
+   "when": "Immediate action has failed twice, or the trigger will not press, or it feels soft.",
+   "end": "ready",
+   "fallback": "stuck_case_rod",
+   "attempts": 1,
+   "steps": [
+    {
+     "action": "strip_mag",
+     "expect": "the magazine comes out; loose rounds may fall with it"
+    },
+    {
+     "action": "rack",
+     "expect": "whatever is loose drops through the magazine well; the extractor tries the chamber"
+    },
+    {
+     "action": "rack",
+     "expect": "second pull"
+    },
+    {
+     "action": "lock_back",
+     "expect": "bolt held open"
+    },
+    {
+     "action": "inspect_chamber",
+     "expect": "chamber and feedway empty",
+     "branch": {
+      "chamber_not_clear": "stuck_case_rod"
+     }
+    },
+    {
+     "action": "insert_mag",
+     "expect": "a fresh loaded magazine is latched"
+    },
+    {
+     "action": "release_bolt",
+     "expect": "a round is chambered and the bolt locks"
+    },
+    {
+     "action": "reassess",
+     "expect": "ready to fire"
+    }
+   ]
+  },
+  "bolt_override_clear": {
+   "name": "Bolt over-ride",
+   "source": "TC 3-22.9 (2016) para 8-36 remedial action, bolt override, as summarised",
+   "when": "A round is wedged above the bolt and the charging handle is bound.",
+   "end": "ready",
+   "fallback": "remedial_clear",
+   "attempts": 1,
+   "steps": [
+    {
+     "action": "strip_mag",
+     "expect": "pressure from below is removed"
+    },
+    {
+     "action": "handle_strike",
+     "expect": "the bolt is driven back off the round, which drops through the magazine well"
+    },
+    {
+     "action": "hold_bolt_strike",
+     "expect": "second method, only if the first did not free it",
+     "if": "handle_bound"
+    },
+    {
+     "action": "lock_back",
+     "expect": "bolt held open"
+    },
+    {
+     "action": "inspect_chamber",
+     "expect": "chamber and feedway empty",
+     "branch": {
+      "chamber_not_clear": "stuck_case_rod"
+     }
+    },
+    {
+     "action": "insert_mag",
+     "expect": "a fresh loaded magazine is latched"
+    },
+    {
+     "action": "release_bolt",
+     "expect": "a round is chambered and the bolt locks"
+    },
+    {
+     "action": "reassess",
+     "expect": "ready"
+    }
+   ]
+  },
+  "squib_stop": {
+   "name": "Pop or weak shot: stop, unload, prove the bore",
+   "source": "standard range practice; the unloading and the rod check are the manual's clearing steps 2 to 6 (p. 3), and a clear bore is one of its conditions for handling (p. 4, rule 3)",
+   "when": "A pop or weak report, little recoil, the action did not cycle. Any one of these is enough to stop.",
+   "end": "made_safe",
+   "fallback": null,
+   "attempts": 1,
+   "steps": [
+    {
+     "action": "strip_mag",
+     "expect": "no round can feed"
+    },
+    {
+     "action": "lock_back",
+     "expect": "the fired case is drawn out and the bolt held open; the hammer is now cocked"
+    },
+    {
+     "action": "safe",
+     "expect": "selector on safe"
+    },
+    {
+     "action": "inspect_chamber",
+     "expect": "chamber empty"
+    },
+    {
+     "action": "check_bore",
+     "expect": "the rod stops short: a bullet is in the bore"
+    },
+    {
+     "action": "rod",
+     "expect": "the bullet is driven out by an armourer and the barrel inspected; the rifle is out of use until then"
+    }
+   ]
+  },
+  "stuck_case_rod": {
+   "name": "Case stuck in the chamber",
+   "source": "the manual's clearing steps (p. 3) and its tool list, which includes a 5.56 mm broken shell extractor (p. 17)",
+   "when": "A fired case is still in the chamber and racking does not bring it out.",
+   "end": "ready",
+   "fallback": null,
+   "attempts": 1,
+   "steps": [
+    {
+     "action": "strip_mag",
+     "expect": "no round can feed onto the case",
+     "if": "mag_in"
+    },
+    {
+     "action": "lock_back",
+     "expect": "bolt held open"
+    },
+    {
+     "action": "safe",
+     "expect": "selector on safe"
+    },
+    {
+     "action": "rod",
+     "expect": "the case is pushed out from the muzzle end and falls through the magazine well"
+    },
+    {
+     "action": "inspect_chamber",
+     "expect": "chamber empty"
+    },
+    {
+     "action": "selector_fire",
+     "expect": "selector back to semi"
+    },
+    {
+     "action": "insert_mag",
+     "expect": "a loaded magazine is latched"
+    },
+    {
+     "action": "release_bolt",
+     "expect": "a round is chambered and the bolt locks"
+    },
+    {
+     "action": "reassess",
+     "expect": "ready. Have the extractor gauged (1.28 / 1.59 mm, manual pp. 23 and 24)"
+    }
+   ]
+  },
+  "reload": {
+   "name": "Reload",
+   "source": "manual p. 8 (loading) and p. 26 (bolt catch)",
+   "when": "The magazine is empty: bolt locked open, or a rack shows the follower.",
+   "end": "ready",
+   "fallback": "remedial_clear",
+   "attempts": 1,
+   "steps": [
+    {
+     "action": "strip_mag",
+     "expect": "the empty magazine is out",
+     "if": "mag_in"
+    },
+    {
+     "action": "insert_mag",
+     "expect": "a loaded magazine is latched"
+    },
+    {
+     "action": "release_bolt",
+     "expect": "a round is chambered and the bolt locks",
+     "if": "bolt_open"
+    },
+    {
+     "action": "rack",
+     "expect": "a round is chambered and the bolt locks",
+     "if": "bolt_closed"
+    },
+    {
+     "action": "reassess",
+     "expect": "ready"
+    }
+   ]
+  }
+ },
+ "diagnosis": [
+  {
+   "see": {
+    "report": "pop"
+   },
+   "procedure": "squib_stop",
+   "why": "a pop or weak shot is never cleared by racking and firing"
+  },
+  {
+   "see": {
+    "port": "case_in_port"
+   },
+   "procedure": "stovepipe_clear",
+   "why": "brass in the port"
+  },
+  {
+   "see": {
+    "port": "case_loose_in_port"
+   },
+   "procedure": "stovepipe_clear",
+   "why": "brass in the port"
+  },
+  {
+   "see": {
+    "port": "brass_and_round"
+   },
+   "procedure": "double_feed_clear",
+   "why": "two things at the chamber"
+  },
+  {
+   "see": {
+    "port": "two_rounds"
+   },
+   "procedure": "double_feed_clear",
+   "why": "two things at the chamber"
+  },
+  {
+   "see": {
+    "port": "round_above_bolt"
+   },
+   "procedure": "bolt_override_clear",
+   "why": "round above the bolt, handle bound"
+  },
+  {
+   "see": {
+    "port": "round_nose_up"
+   },
+   "procedure": "remedial_clear",
+   "why": "trigger dead, bolt held open by a round"
+  },
+  {
+   "see": {
+    "port": "out_of_battery"
+   },
+   "procedure": "remedial_clear",
+   "why": "trigger soft, bolt not closed"
+  },
+  {
+   "see": {
+    "port": "bolt_held_open",
+    "mag": "in"
+   },
+   "procedure": "reload",
+   "why": "bolt locked open on the follower"
+  },
+  {
+   "see": {
+    "port": "bolt_held_open",
+    "mag": "out"
+   },
+   "procedure": "reload",
+   "why": "bolt locked open, no magazine"
+  },
+  {
+   "see": {
+    "port": "closed",
+    "trigger": "click"
+   },
+   "procedure": "immediate_action",
+   "why": "click with the bolt closed (on a range: misfire_range, to cover a hangfire)"
+  },
+  {
+   "see": {
+    "port": "closed"
+   },
+   "procedure": "immediate_action",
+   "why": "bolt closed, rifle not ready"
+  }
+ ],
+ "transitions": [
+  {
+   "stoppage": "failure_to_fire",
+   "state": {
+    "chamber": "dud",
+    "feedway": "clear",
+    "bolt": "closed",
+    "hammer": "down",
+    "bore": "clear"
+   },
+   "shooter_sees": "closed",
+   "procedure": "immediate_action",
+   "actions": {
+    "tap": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "dud",
+      "feedway": "clear",
+      "bolt": "closed",
+      "hammer": "down"
+     },
+     "ready": false
+    },
+    "rack": {
+     "ok": true,
+     "events": [
+      "dud_ejected",
+      "round_chambered"
+     ],
+     "to": {
+      "chamber": "live",
+      "feedway": "clear",
+      "bolt": "closed",
+      "hammer": "cocked"
+     },
+     "ready": true
+    },
+    "lock_back": {
+     "ok": true,
+     "events": [
+      "dud_ejected"
+     ],
+     "to": {
+      "chamber": "empty",
+      "feedway": "clear",
+      "bolt": "held_open",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "strip_mag": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "dud",
+      "feedway": "clear",
+      "bolt": "closed",
+      "hammer": "down"
+     },
+     "ready": false
+    },
+    "safe": {
+     "ok": false,
+     "events": [
+      "selector_will_not_turn_hammer_not_cocked"
+     ],
+     "to": {
+      "chamber": "dud",
+      "feedway": "clear",
+      "bolt": "closed",
+      "hammer": "down"
+     },
+     "ready": false
+    }
+   }
+  },
+  {
+   "stoppage": "squib",
+   "state": {
+    "chamber": "fired",
+    "feedway": "clear",
+    "bolt": "closed",
+    "hammer": "down",
+    "bore": "obstructed"
+   },
+   "shooter_sees": "closed",
+   "procedure": "squib_stop",
+   "actions": {
+    "tap": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "fired",
+      "feedway": "clear",
+      "bolt": "closed",
+      "hammer": "down"
+     },
+     "ready": false
+    },
+    "rack": {
+     "ok": true,
+     "events": [
+      "case_ejected",
+      "round_chambered"
+     ],
+     "to": {
+      "chamber": "live",
+      "feedway": "clear",
+      "bolt": "closed",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "lock_back": {
+     "ok": true,
+     "events": [
+      "case_ejected"
+     ],
+     "to": {
+      "chamber": "empty",
+      "feedway": "clear",
+      "bolt": "held_open",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "strip_mag": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "fired",
+      "feedway": "clear",
+      "bolt": "closed",
+      "hammer": "down"
+     },
+     "ready": false
+    },
+    "safe": {
+     "ok": false,
+     "events": [
+      "selector_will_not_turn_hammer_not_cocked"
+     ],
+     "to": {
+      "chamber": "fired",
+      "feedway": "clear",
+      "bolt": "closed",
+      "hammer": "down"
+     },
+     "ready": false
+    }
+   }
+  },
+  {
+   "stoppage": "failure_to_feed:nose_jam",
+   "state": {
+    "chamber": "empty",
+    "feedway": "nose_jam",
+    "bolt": "blocked",
+    "hammer": "cocked",
+    "bore": "clear"
+   },
+   "shooter_sees": "round_nose_up",
+   "procedure": "remedial_clear",
+   "actions": {
+    "tap": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "empty",
+      "feedway": "nose_jam",
+      "bolt": "blocked",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "rack": {
+     "ok": true,
+     "events": [
+      "round_out",
+      "round_chambered"
+     ],
+     "to": {
+      "chamber": "live",
+      "feedway": "clear",
+      "bolt": "closed",
+      "hammer": "cocked"
+     },
+     "ready": true
+    },
+    "lock_back": {
+     "ok": true,
+     "events": [
+      "round_out"
+     ],
+     "to": {
+      "chamber": "empty",
+      "feedway": "clear",
+      "bolt": "held_open",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "strip_mag": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "empty",
+      "feedway": "nose_jam",
+      "bolt": "blocked",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "safe": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "empty",
+      "feedway": "nose_jam",
+      "bolt": "blocked",
+      "hammer": "cocked"
+     },
+     "ready": false
+    }
+   }
+  },
+  {
+   "stoppage": "failure_to_feed:bolt_over_empty_chamber",
+   "state": {
+    "chamber": "empty",
+    "feedway": "clear",
+    "bolt": "closed",
+    "hammer": "cocked",
+    "bore": "clear"
+   },
+   "shooter_sees": "closed",
+   "procedure": "immediate_action",
+   "actions": {
+    "tap": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "empty",
+      "feedway": "clear",
+      "bolt": "closed",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "rack": {
+     "ok": true,
+     "events": [
+      "round_chambered"
+     ],
+     "to": {
+      "chamber": "live",
+      "feedway": "clear",
+      "bolt": "closed",
+      "hammer": "cocked"
+     },
+     "ready": true
+    },
+    "lock_back": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "empty",
+      "feedway": "clear",
+      "bolt": "held_open",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "strip_mag": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "empty",
+      "feedway": "clear",
+      "bolt": "closed",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "safe": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "empty",
+      "feedway": "clear",
+      "bolt": "closed",
+      "hammer": "cocked"
+     },
+     "ready": false
+    }
+   }
+  },
+  {
+   "stoppage": "failure_to_feed:failure_to_chamber",
+   "state": {
+    "chamber": "live",
+    "feedway": "clear",
+    "bolt": "out_of_battery",
+    "hammer": "cocked",
+    "bore": "clear"
+   },
+   "shooter_sees": "out_of_battery",
+   "procedure": "remedial_clear",
+   "actions": {
+    "tap": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "live",
+      "feedway": "clear",
+      "bolt": "out_of_battery",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "rack": {
+     "ok": true,
+     "events": [
+      "live_round_ejected",
+      "round_chambered"
+     ],
+     "to": {
+      "chamber": "live",
+      "feedway": "clear",
+      "bolt": "closed",
+      "hammer": "cocked"
+     },
+     "ready": true
+    },
+    "lock_back": {
+     "ok": true,
+     "events": [
+      "live_round_ejected"
+     ],
+     "to": {
+      "chamber": "empty",
+      "feedway": "clear",
+      "bolt": "held_open",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "strip_mag": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "live",
+      "feedway": "clear",
+      "bolt": "out_of_battery",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "forward_assist": {
+     "ok": true,
+     "events": [
+      "bolt_closed"
+     ],
+     "to": {
+      "chamber": "live",
+      "feedway": "clear",
+      "bolt": "closed",
+      "hammer": "cocked"
+     },
+     "ready": true
+    },
+    "safe": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "live",
+      "feedway": "clear",
+      "bolt": "out_of_battery",
+      "hammer": "cocked"
+     },
+     "ready": false
+    }
+   }
+  },
+  {
+   "stoppage": "stovepipe:stovepipe",
+   "state": {
+    "chamber": "empty",
+    "feedway": "stovepipe",
+    "bolt": "blocked",
+    "hammer": "cocked",
+    "bore": "clear"
+   },
+   "shooter_sees": "case_in_port",
+   "procedure": "stovepipe_clear",
+   "actions": {
+    "tap": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "empty",
+      "feedway": "stovepipe",
+      "bolt": "blocked",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "rack": {
+     "ok": true,
+     "events": [
+      "case_out",
+      "round_chambered"
+     ],
+     "to": {
+      "chamber": "live",
+      "feedway": "clear",
+      "bolt": "closed",
+      "hammer": "cocked"
+     },
+     "ready": true
+    },
+    "lock_back": {
+     "ok": true,
+     "events": [
+      "case_out"
+     ],
+     "to": {
+      "chamber": "empty",
+      "feedway": "clear",
+      "bolt": "held_open",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "strip_mag": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "empty",
+      "feedway": "stovepipe",
+      "bolt": "blocked",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "sweep_case": {
+     "ok": true,
+     "events": [
+      "case_out",
+      "round_chambered"
+     ],
+     "to": {
+      "chamber": "live",
+      "feedway": "clear",
+      "bolt": "closed",
+      "hammer": "cocked"
+     },
+     "ready": true
+    },
+    "safe": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "empty",
+      "feedway": "stovepipe",
+      "bolt": "blocked",
+      "hammer": "cocked"
+     },
+     "ready": false
+    }
+   }
+  },
+  {
+   "stoppage": "stovepipe:rechambered_case",
+   "state": {
+    "chamber": "fired",
+    "feedway": "clear",
+    "bolt": "closed",
+    "hammer": "cocked",
+    "bore": "clear"
+   },
+   "shooter_sees": "closed",
+   "procedure": "immediate_action",
+   "actions": {
+    "tap": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "fired",
+      "feedway": "clear",
+      "bolt": "closed",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "rack": {
+     "ok": true,
+     "events": [
+      "case_ejected",
+      "round_chambered"
+     ],
+     "to": {
+      "chamber": "live",
+      "feedway": "clear",
+      "bolt": "closed",
+      "hammer": "cocked"
+     },
+     "ready": true
+    },
+    "lock_back": {
+     "ok": true,
+     "events": [
+      "case_ejected"
+     ],
+     "to": {
+      "chamber": "empty",
+      "feedway": "clear",
+      "bolt": "held_open",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "strip_mag": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "fired",
+      "feedway": "clear",
+      "bolt": "closed",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "safe": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "fired",
+      "feedway": "clear",
+      "bolt": "closed",
+      "hammer": "cocked"
+     },
+     "ready": false
+    }
+   }
+  },
+  {
+   "stoppage": "double_feed:stuck_case_plus_round",
+   "state": {
+    "chamber": "stuck",
+    "feedway": "round_behind_case",
+    "bolt": "blocked",
+    "hammer": "cocked",
+    "bore": "clear"
+   },
+   "shooter_sees": "brass_and_round",
+   "procedure": "double_feed_clear",
+   "actions": {
+    "tap": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "stuck",
+      "feedway": "round_behind_case",
+      "bolt": "blocked",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "rack": {
+     "ok": true,
+     "events": [
+      "rounds_pinned_magazine_must_come_out",
+      "bolt_stopped"
+     ],
+     "to": {
+      "chamber": "stuck",
+      "feedway": "round_behind_case",
+      "bolt": "blocked",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "lock_back": {
+     "ok": true,
+     "events": [
+      "rounds_pinned_magazine_must_come_out"
+     ],
+     "to": {
+      "chamber": "stuck",
+      "feedway": "round_behind_case",
+      "bolt": "held_open",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "strip_mag": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "stuck",
+      "feedway": "round_behind_case",
+      "bolt": "blocked",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "safe": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "stuck",
+      "feedway": "round_behind_case",
+      "bolt": "blocked",
+      "hammer": "cocked"
+     },
+     "ready": false
+    }
+   }
+  },
+  {
+   "stoppage": "double_feed:two_live",
+   "state": {
+    "chamber": "empty",
+    "feedway": "two_rounds",
+    "bolt": "blocked",
+    "hammer": "cocked",
+    "bore": "clear"
+   },
+   "shooter_sees": "two_rounds",
+   "procedure": "double_feed_clear",
+   "actions": {
+    "tap": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "empty",
+      "feedway": "two_rounds",
+      "bolt": "blocked",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "rack": {
+     "ok": true,
+     "events": [
+      "rounds_pinned_magazine_must_come_out",
+      "bolt_stopped"
+     ],
+     "to": {
+      "chamber": "empty",
+      "feedway": "two_rounds",
+      "bolt": "blocked",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "lock_back": {
+     "ok": true,
+     "events": [
+      "rounds_pinned_magazine_must_come_out"
+     ],
+     "to": {
+      "chamber": "empty",
+      "feedway": "two_rounds",
+      "bolt": "held_open",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "strip_mag": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "empty",
+      "feedway": "two_rounds",
+      "bolt": "blocked",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "safe": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "empty",
+      "feedway": "two_rounds",
+      "bolt": "blocked",
+      "hammer": "cocked"
+     },
+     "ready": false
+    }
+   }
+  },
+  {
+   "stoppage": "failure_to_extract (magazine empty)",
+   "state": {
+    "chamber": "stuck",
+    "feedway": "clear",
+    "bolt": "held_open",
+    "hammer": "cocked",
+    "bore": "clear"
+   },
+   "shooter_sees": "bolt_held_open",
+   "procedure": "reload",
+   "actions": {
+    "tap": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "stuck",
+      "feedway": "clear",
+      "bolt": "held_open",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "rack": {
+     "ok": true,
+     "events": [
+      "stuck_case_extracted",
+      "bolt_locked_open"
+     ],
+     "to": {
+      "chamber": "empty",
+      "feedway": "clear",
+      "bolt": "held_open",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "lock_back": {
+     "ok": true,
+     "events": [
+      "stuck_case_extracted"
+     ],
+     "to": {
+      "chamber": "empty",
+      "feedway": "clear",
+      "bolt": "held_open",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "strip_mag": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "stuck",
+      "feedway": "clear",
+      "bolt": "held_open",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "safe": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "stuck",
+      "feedway": "clear",
+      "bolt": "held_open",
+      "hammer": "cocked"
+     },
+     "ready": false
+    }
+   }
+  },
+  {
+   "stoppage": "bolt_override",
+   "state": {
+    "chamber": "empty",
+    "feedway": "round_over_bolt",
+    "bolt": "blocked",
+    "hammer": "cocked",
+    "bore": "clear"
+   },
+   "shooter_sees": "round_above_bolt",
+   "procedure": "bolt_override_clear",
+   "actions": {
+    "tap": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "empty",
+      "feedway": "round_over_bolt",
+      "bolt": "blocked",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "rack": {
+     "ok": false,
+     "events": [
+      "charging_handle_bound"
+     ],
+     "to": {
+      "chamber": "empty",
+      "feedway": "round_over_bolt",
+      "bolt": "blocked",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "lock_back": {
+     "ok": false,
+     "events": [
+      "charging_handle_bound"
+     ],
+     "to": {
+      "chamber": "empty",
+      "feedway": "round_over_bolt",
+      "bolt": "blocked",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "strip_mag": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "empty",
+      "feedway": "round_over_bolt",
+      "bolt": "blocked",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "handle_strike": {
+     "ok": true,
+     "events": [
+      "round_freed",
+      "round_chambered"
+     ],
+     "to": {
+      "chamber": "live",
+      "feedway": "clear",
+      "bolt": "closed",
+      "hammer": "cocked"
+     },
+     "ready": true
+    },
+    "safe": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "empty",
+      "feedway": "round_over_bolt",
+      "bolt": "blocked",
+      "hammer": "cocked"
+     },
+     "ready": false
+    }
+   }
+  },
+  {
+   "stoppage": "failure_to_lock_back",
+   "state": {
+    "chamber": "empty",
+    "feedway": "clear",
+    "bolt": "closed",
+    "hammer": "cocked",
+    "bore": "clear"
+   },
+   "shooter_sees": "closed",
+   "procedure": "immediate_action",
+   "actions": {
+    "tap": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "empty",
+      "feedway": "clear",
+      "bolt": "closed",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "rack": {
+     "ok": true,
+     "events": [
+      "bolt_locked_open"
+     ],
+     "to": {
+      "chamber": "empty",
+      "feedway": "clear",
+      "bolt": "held_open",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "lock_back": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "empty",
+      "feedway": "clear",
+      "bolt": "held_open",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "strip_mag": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "empty",
+      "feedway": "clear",
+      "bolt": "closed",
+      "hammer": "cocked"
+     },
+     "ready": false
+    },
+    "safe": {
+     "ok": true,
+     "events": [],
+     "to": {
+      "chamber": "empty",
+      "feedway": "clear",
+      "bolt": "closed",
+      "hammer": "cocked"
+     },
+     "ready": false
+    }
+   }
+  }
+ ],
+ "clearing": {
+  "military / failure_to_fire:dud": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 1.8,
+   "p90_s": 1.8,
+   "first_procedure": {
+    "immediate_action": 400
+   },
+   "ok": true
+  },
+  "military / failure_to_fire:light_strike": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 1.8,
+   "p90_s": 1.8,
+   "first_procedure": {
+    "immediate_action": 400
+   },
+   "ok": true
+  },
+  "military / hangfire": {
+   "ends": {
+    "out_of_service": 175,
+    "ready": 225
+   },
+   "median_s": 1.8,
+   "p90_s": 1.8,
+   "first_procedure": {
+    "immediate_action": 378,
+    "-": 22
+   },
+   "ok": true
+  },
+  "military / failure_to_feed:nose_jam": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 7.4,
+   "p90_s": 7.4,
+   "first_procedure": {
+    "remedial_clear": 400
+   },
+   "ok": true
+  },
+  "military / failure_to_feed:bolt_over_empty_chamber": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 1.8,
+   "p90_s": 1.8,
+   "first_procedure": {
+    "immediate_action": 400
+   },
+   "ok": true
+  },
+  "military / failure_to_feed:failure_to_chamber": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 7.4,
+   "p90_s": 7.4,
+   "first_procedure": {
+    "remedial_clear": 400
+   },
+   "ok": true
+  },
+  "military / stovepipe:stovepipe": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 2.2,
+   "p90_s": 2.2,
+   "first_procedure": {
+    "stovepipe_clear": 400
+   },
+   "ok": true
+  },
+  "military / stovepipe:case_in_receiver": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 2.2,
+   "p90_s": 2.2,
+   "first_procedure": {
+    "stovepipe_clear": 400
+   },
+   "ok": true
+  },
+  "military / stovepipe:rechambered_case": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 1.8,
+   "p90_s": 1.8,
+   "first_procedure": {
+    "immediate_action": 400
+   },
+   "ok": true
+  },
+  "military / double_feed:stuck_case_plus_round": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 7.4,
+   "p90_s": 70.7,
+   "first_procedure": {
+    "double_feed_clear": 400
+   },
+   "ok": true
+  },
+  "military / double_feed:two_live": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 7.4,
+   "p90_s": 7.4,
+   "first_procedure": {
+    "double_feed_clear": 400
+   },
+   "ok": true
+  },
+  "military / failure_to_extract:claw_slip": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 11.2,
+   "p90_s": 11.2,
+   "first_procedure": {
+    "reload": 400
+   },
+   "ok": true
+  },
+  "military / failure_to_extract:torn_rim": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 74.5,
+   "p90_s": 74.5,
+   "first_procedure": {
+    "reload": 400
+   },
+   "ok": true
+  },
+  "military / bolt_override": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 7.1,
+   "p90_s": 10.1,
+   "first_procedure": {
+    "bolt_override_clear": 400
+   },
+   "ok": true
+  },
+  "military / squib": {
+   "ends": {
+    "needs_inspection": 400
+   },
+   "median_s": 71.9,
+   "p90_s": 71.9,
+   "first_procedure": {
+    "squib_stop": 400
+   },
+   "ok": true
+  },
+  "military / failure_to_lock_back": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 5.6,
+   "p90_s": 5.6,
+   "first_procedure": {
+    "immediate_action": 400
+   },
+   "ok": true
+  },
+  "range / failure_to_fire:dud": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 31.8,
+   "p90_s": 31.8,
+   "first_procedure": {
+    "misfire_range": 400
+   },
+   "ok": true
+  },
+  "range / failure_to_fire:light_strike": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 31.8,
+   "p90_s": 31.8,
+   "first_procedure": {
+    "misfire_range": 400
+   },
+   "ok": true
+  },
+  "range / hangfire": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 31.8,
+   "p90_s": 31.8,
+   "first_procedure": {
+    "misfire_range": 378,
+    "-": 22
+   },
+   "ok": true
+  },
+  "range / failure_to_feed:nose_jam": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 7.4,
+   "p90_s": 7.4,
+   "first_procedure": {
+    "remedial_clear": 400
+   },
+   "ok": true
+  },
+  "range / failure_to_feed:bolt_over_empty_chamber": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 1.8,
+   "p90_s": 1.8,
+   "first_procedure": {
+    "immediate_action": 400
+   },
+   "ok": true
+  },
+  "range / failure_to_feed:failure_to_chamber": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 7.4,
+   "p90_s": 7.4,
+   "first_procedure": {
+    "remedial_clear": 400
+   },
+   "ok": true
+  },
+  "range / stovepipe:stovepipe": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 2.2,
+   "p90_s": 2.2,
+   "first_procedure": {
+    "stovepipe_clear": 400
+   },
+   "ok": true
+  },
+  "range / stovepipe:case_in_receiver": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 2.2,
+   "p90_s": 2.2,
+   "first_procedure": {
+    "stovepipe_clear": 400
+   },
+   "ok": true
+  },
+  "range / stovepipe:rechambered_case": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 1.8,
+   "p90_s": 1.8,
+   "first_procedure": {
+    "immediate_action": 400
+   },
+   "ok": true
+  },
+  "range / double_feed:stuck_case_plus_round": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 7.4,
+   "p90_s": 70.7,
+   "first_procedure": {
+    "double_feed_clear": 400
+   },
+   "ok": true
+  },
+  "range / double_feed:two_live": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 7.4,
+   "p90_s": 7.4,
+   "first_procedure": {
+    "double_feed_clear": 400
+   },
+   "ok": true
+  },
+  "range / failure_to_extract:claw_slip": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 11.2,
+   "p90_s": 11.2,
+   "first_procedure": {
+    "reload": 400
+   },
+   "ok": true
+  },
+  "range / failure_to_extract:torn_rim": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 74.5,
+   "p90_s": 74.5,
+   "first_procedure": {
+    "reload": 400
+   },
+   "ok": true
+  },
+  "range / bolt_override": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 7.1,
+   "p90_s": 10.1,
+   "first_procedure": {
+    "bolt_override_clear": 400
+   },
+   "ok": true
+  },
+  "range / squib": {
+   "ends": {
+    "needs_inspection": 400
+   },
+   "median_s": 71.9,
+   "p90_s": 71.9,
+   "first_procedure": {
+    "squib_stop": 400
+   },
+   "ok": true
+  },
+  "range / failure_to_lock_back": {
+   "ends": {
+    "ready": 400
+   },
+   "median_s": 5.6,
+   "p90_s": 5.6,
+   "first_procedure": {
+    "immediate_action": 400
+   },
+   "ok": true
+  }
+ }
+}

@@ -1,0 +1,2277 @@
+{
+ "meta": {
+  "title": "HK416 D14.5RS malfunction simulation",
+  "credit": "carpetshark",
+  "generator": "assets/hk416/malfunctions/sim.py",
+  "model": "physical margins from the action simulation with logistic scatter, calibrated at a clean baseline and the 2007 dust test; see README.md",
+  "frame": "metres, +Z muzzle, +Y up, +X shooter's left, origin on the bore axis at the upper receiver front face (as hk416.glb)",
+  "time_zero": "sear release (trigger break), as in action.json",
+  "units": "seconds, mm, J, N as each key says; probabilities are per round"
+ },
+ "sources": [
+  {
+   "id": "hk_manual",
+   "kind": "manual",
+   "title": "Heckler & Koch USA, Maintenance Manual for HK416 Enhanced Carbine & Rifle System, 5.56 mm NATO (54 pages). Not in this repository; facts summarised with page numbers",
+   "used_for": "clearing steps (p. 3); bore free of obstructions, factory-loaded undamaged cartridges only, cooling after 250 rounds in under 3 minutes (p. 4); HK steel magazines against aluminium ones (pp. 5, 6); no propellant gas in the receiver, longer interval between stoppages (p. 6); what the extractor, ejector and firing pin do, and that the pin reaches the primer only with the bolt fully locked (p. 7); do not ride the charging handle (p. 8); cycle of operation (pp. 8 to 12); firing pin protrusion 0.90 to 1.10 mm and extractor claw gauges 1.28 / 1.59 mm (pp. 17, 21, 23, 24); function check, forward assist as a symptom check, last-round hold-open, no reloads (p. 26); ejector and piston rings (p. 27); magazine catch tension (p. 37). The manual has no stoppage drill"
+  },
+  {
+   "id": "edt3",
+   "kind": "published",
+   "title": "US Army PEO Soldier, \"M4 Carbine Extreme Dust Test\" briefing, v3.5 (Aberdeen Test Center, fall 2007 test, briefed December 2007), slides 2 to 12",
+   "url": "https://www.slideshare.net/slideshow/m4-carbine-extreme-dust-test-brief-v350/15832677",
+   "used_for": "the only published HK416 stoppage counts by type: 10 rifles x 6,000 rounds, 25 h of dusting per rifle, 120-round cycles, wipe and lubricate every 600 rounds, full clean every 1,200. HK416 class 1 and 2 weapon stoppages 210 (failure to feed 141, to chamber 7, to fire 5, to extract 3, to eject 49, bolt locked to the rear 0, bolt failed to lock to the rear 3, other 2), magazine stoppages 9, class 3 stoppages 14. M4 magazine stoppages 148 (summer) and 239 (fall). Read through a text rendering of the slides, not the original file"
+  },
+  {
+   "id": "army_edt_article",
+   "kind": "published",
+   "title": "US Army, \"M-4 Carbine Has High Soldier Confidence Despite Test\" (army.mil, 18 December 2007)",
+   "url": "https://www.army.mil/article/6649/m_4_carbine_has_high_soldier_confidence_despite_test",
+   "used_for": "the dust test protocol and the stoppage classes: class 1 cleared by the shooter within 10 s, class 2 cleared by the shooter in more than 10 s, class 3 needs an armourer"
+  },
+  {
+   "id": "crs_rs22888",
+   "kind": "published",
+   "title": "Congressional Research Service RS22888, \"The Army's M-4 Carbine: Background and Issues for Congress\" (2008)",
+   "url": "https://www.everycrsreport.com/files/20080530_RS22888_03edaa907691c2e89542641b3279702c8bd8e5d3.html",
+   "used_for": "dust test totals (XM8 127, SCAR 226, HK416 233, M4 882); Army laboratory test October 2005 to April 2006: 10 new M16s and 10 new M4s averaged about 5,000 rounds between stoppages; USMC 2002: M4 186 failures in 69,000 rounds"
+  },
+  {
+   "id": "mrbs_figures",
+   "kind": "published",
+   "title": "M4 mean rounds between stoppage figures as reported by Military.com (14 June 2013) and summarised in Wikipedia, \"Individual Carbine\" and \"M4 carbine\"",
+   "url": "https://en.wikipedia.org/wiki/Individual_Carbine",
+   "used_for": "600 MRBS required of the M4 in 1990 (M855); 1,691 MRBS for the M4A1 with M855A1 (2013); 3,592 required by the Individual Carbine competition. Context for the clean baseline; read from the secondary summary, not the Army documents"
+  },
+  {
+   "id": "mil_c_63989c",
+   "kind": "published",
+   "title": "MIL-C-63989C(AR), Military Specification: Cartridge, 5.56 mm, Ball, M855 (superseded revision, public on everyspec.com)",
+   "url": "https://everyspec.com/MIL-SPECS/MIL-SPECS-MIL-C/MIL-C-63989C_37913/",
+   "used_for": "lot acceptance, Table III and Table IV: 800 rounds per weapon type in the function and casualty test; first sample accepted with at most 1 misfire, rejected at 3; a bullet remaining in the bore rejects the lot; failure to extract and weapon stoppage accepted at 0, rejected at 2. Action time (primer ignition to the bullet passing the gas port): mean plus five standard deviations at most 3 ms (3.15). Port pressure mean minus three standard deviations at least 12,700 psi (3.8), within 2,000 psi of that at -65 and +125 F (3.10.3). Velocity 3,000 +/- 40 ft/s, standard deviation at most 40 ft/s (3.6)"
+  },
+  {
+   "id": "tc_3_22_9",
+   "kind": "doctrine",
+   "title": "US Army TC 3-22.9, Rifle and Carbine (May 2016), chapter 8: immediate action (para 8-35) and remedial action (para 8-36)",
+   "url": "https://irp.fas.org/doddir/army/tc3-22-9.pdf",
+   "used_for": "the clearing sequences: tap, rack, reassess; remedial action when immediate action has failed twice or the trigger will not press or feels soft; the stove pipe, double feed and bolt override procedures. Step order and paragraph numbers were read from a secondary summary (highgroundshooter.com, 14 February 2022) because the publication itself could not be opened in this session; check them against the TC before quoting"
+  },
+  {
+   "id": "range_practice",
+   "kind": "doctrine",
+   "title": "Standard range practice for a misfire and for a weak shot (hunter-education courses and firearm manuals)",
+   "url": "https://www.hunter-ed.com/iowa/studyGuide/Beware-of-Hang-Fires/202013_12894",
+   "used_for": "keep the muzzle on the backstop and wait before opening the action after a misfire (30 s is used here; some ranges say 60); after a pop or weak shot, stop, unload and prove the bore clear before firing again. Recalled, not quoted"
+  },
+  {
+   "id": "action_sim",
+   "kind": "action",
+   "title": "HK416 action simulation, ../action/action.json (built by ../action/sim.py)",
+   "used_for": "carrier kinetic energy against travel, the times the carrier passes each position, 95 mm stroke, eject / feed pick-up / hold-open positions, hammer energy 0.48 J, the primer cup model, chamber pressure when extraction starts, ejection speed, masses"
+  },
+  {
+   "id": "primer_sensitivity",
+   "kind": "guess",
+   "title": "US military small rifle primer sensitivity (No. 41): 3.94 oz ball, all-fire 12 in",
+   "used_for": "the all-fire energy 0.334 J. Recalled from the commonly quoted figure; not confirmed against the primer specification in this session"
+  }
+ ],
+ "edt_categories": {
+  "FFD": [
+   "failure_to_feed:nose_jam",
+   "failure_to_feed:bolt_over_empty_chamber",
+   "bolt_override",
+   "double_feed:two_live"
+  ],
+  "FTC": [
+   "failure_to_feed:failure_to_chamber"
+  ],
+  "FFR": [
+   "failure_to_fire",
+   "hangfire (a perceived one)",
+   "squib"
+  ],
+  "FXT": [
+   "failure_to_extract",
+   "double_feed:stuck_case_plus_round"
+  ],
+  "FEJ": [
+   "stovepipe"
+  ],
+  "FBR": [
+   "failure_to_lock_back"
+  ]
+ },
+ "inferences": [
+  "Clean-rifle baseline. No HK416 laboratory stoppage rate was found. The clean rifle is set near the Army laboratory figure for new M4s and M16s (about 5,000 rounds between stoppages), which is an assumption that a clean HK416 is no worse than a clean M4.",
+  "The split of that clean baseline between types (feed 60 percent, eject 25, fire 15, the rest small) follows the proportions of the 2007 dust test loosely, with a larger share for ammunition. It is a judgement.",
+  "The dust test counts are matched by solving one dust coefficient per type. They are calibration targets, not predictions.",
+  "The briefing's \"failure to feed\" is not split further. Here it is split into rounds jammed on the feed ramp, the bolt closing on an empty chamber after a short stroke (from the energy model), bolt over-rides (from the timing model) and two-round feeds. The nine magazine-attributed stoppages are counted as feed stoppages.",
+  "The rifles in the dust test are assumed to have used HK steel magazines. The briefing describes a basic load in aluminium magazines but does not say which magazine each rifle used.",
+  "The aluminium magazine penalty in dust is taken from the M4's magazine-attributed stoppages in the same test series (148 and 239 per 60,000 rounds, midpoint 194). That is a different rifle; it is the only published number.",
+  "Hangfire and squib rates, and every ammunition class other than in-specification M855, are guesses. No usable published rate exists for modern factory 5.56 mm. The M855 values are only checked to be consistent with the lot acceptance plan.",
+  "The hangfire delay distribution (lognormal, median 80 ms) is a guess shaped by the general description of hangfires as mostly short.",
+  "Shot-to-shot scatter of the carrier energy (logistic, scale 0.30 J) is inferred from the port pressure scatter the M855 specification allows; every scatter in the model is logistic (heavier tails than a normal).",
+  "Every multiplier for dry running, cold, heat, carbon fouling, spring wear, feed-lip damage, extractor gap, weak ejector and worn piston rings. Directions follow the manual and common armourer practice; sizes are judgement.",
+  "Dust carried in the rifle between wipes: 30 percent of the full load straight after a wipe and lubrication, rising linearly to the full load at 600 rounds.",
+  "The chance that a rack extracts a slipped case (0.5), clears a case from the port (0.9) or a round from the feed ramp (0.85), that striking the charging handle frees an over-ridden round (0.7, then 0.95), or that the forward assist seats a round (0.6).",
+  "Carrier stop positions and the poses of the case and round in each stoppage: worked out from the model's port, bolt face and magazine geometry by contact, not measured from photographs of real stoppages.",
+  "Action durations (tap 0.4 s, rack 0.9 s and so on), which decide whether a stoppage counts as class 1 or class 2.",
+  "Barrel heating of 2 K per shot with a 10 minute cooling time constant, scaled so the manual's limit (250 rounds in 3 minutes) is heat index 1."
+ ],
+ "limits": [
+  "Rates are per-round probabilities, calibrated at two points: an assumed clean baseline and one published dust test. Between and beyond those points the model interpolates with inferred physics. It does not predict the reliability of any real rifle.",
+  "The dust test is one test with a protocol the Army itself found not repeatable for the M4 (296 stoppages in one run, 863 in the next). The HK416 was run once.",
+  "The energy and timing margins come from the action simulation, whose carrier, spring and gas parameters are themselves inferred. The margins are consistent with that model, not measured on a rifle.",
+  "Parts breakage is not modelled: no broken extractors, bolts, firing pins or springs, and none of the 14 class 3 stoppages or the 3 headspace and case rupture events the dust test recorded for the HK416. Wear inputs are static settings.",
+  "Not modelled: cook-off, slam-fire, doubling, out-of-battery firing other than a hangfire opened too early, case-head separation, pierced or blown primers, bolt locked to the rear early, and any trigger group fault.",
+  "A squib is always a bullet lodged in the bore with the action not cycled. Firing a second round behind it is reported as a destroyed barrel and the simulation stops there; no damage is simulated.",
+  "Hand-cycled feeding during clearing is assumed never to misfeed. Ejected live rounds are counted, not recovered.",
+  "One stoppage per shot. Compound stoppages only arise through the state machine (a stuck case becomes a double feed when a round is fed behind it).",
+  "The shooter always diagnoses correctly from what can be seen and follows the procedure. No fumbles, no stress, no darkness.",
+  "Carrier travel after a short stroke is a scaled copy of the full-stroke curve, not a solved cycle.",
+  "The clips are keyframe data in build.py's format. They have not been baked into the model or checked for clearance. Cases, loose rounds and the cleaning rod are props the model does not contain.",
+  "The model has no extractor, ejector, hammer or firing pin nodes, so the parts that fail are never seen; only the carrier, the bolt head and the brass show the stoppage."
+ ],
+ "params": {
+  "dust_residual": {
+   "value": 0.3,
+   "unit": "-",
+   "source": "guess",
+   "note": "share of the dust load still in the rifle straight after a wipe and lubrication"
+  },
+  "lube_interval": {
+   "value": 600,
+   "unit": "rounds",
+   "source": "published",
+   "note": "dust test: wipe and lubricate every 600 rounds (edt3)"
+  },
+  "clean_interval": {
+   "value": 1200,
+   "unit": "rounds",
+   "source": "published",
+   "note": "dust test: full clean every 1,200 rounds (edt3)"
+  },
+  "heat_per_shot": {
+   "value": 2.0,
+   "unit": "K",
+   "source": "inferred",
+   "note": "mean barrel temperature rise per shot: about 1.1 kJ of the 6.5 kJ charge into 1.1 kg of steel"
+  },
+  "heat_tau": {
+   "value": 600.0,
+   "unit": "s",
+   "source": "guess",
+   "note": "barrel cooling time constant in still air"
+  },
+  "heat_ref": {
+   "value": 432.0,
+   "unit": "K",
+   "source": "manual",
+   "note": "rise after 250 rounds in 180 s with the two values above: the manual's cooling limit (p. 4) is heat index 1"
+  },
+  "cold_ref": {
+   "value": -54.0,
+   "unit": "C",
+   "source": "published",
+   "note": "-65 F, the cold extreme of MIL-C-63989C 3.10: cold index 1"
+  },
+  "hot_ref": {
+   "value": 52.0,
+   "unit": "C",
+   "source": "published",
+   "note": "+125 F, the hot extreme of MIL-C-63989C 3.10: hot index 1"
+  },
+  "hammer_energy": {
+   "value": 0.4807,
+   "unit": "J",
+   "source": "action",
+   "note": "hammer energy at the firing pin (action validation.hammer_energy)"
+  },
+  "primer_allfire": {
+   "value": 0.334,
+   "unit": "J",
+   "source": "guess",
+   "note": "No. 41 primer all-fire: 3.94 oz ball from 12 in (commonly quoted, unconfirmed)"
+  },
+  "indent_nominal": {
+   "value": 0.5302,
+   "unit": "mm",
+   "source": "action",
+   "note": "primer indent of a normal strike (action validation.primer_indent)"
+  },
+  "primer_f0": {
+   "value": 400.0,
+   "unit": "N",
+   "source": "action",
+   "note": "primer cup yield force"
+  },
+  "primer_k": {
+   "value": 1000000.0,
+   "unit": "N/m",
+   "source": "action",
+   "note": "primer cup hardening slope"
+  },
+  "fp_protrusion_go": {
+   "value": 0.9,
+   "unit": "mm",
+   "source": "manual",
+   "note": "firing pin protrusion GO (pp. 17, 21)"
+  },
+  "fp_protrusion_nogo": {
+   "value": 1.1,
+   "unit": "mm",
+   "source": "manual",
+   "note": "firing pin protrusion NO-GO (pp. 17, 21)"
+  },
+  "clean_scale": {
+   "value": 0.800378,
+   "unit": "-",
+   "source": "calibrated",
+   "note": "common factor on the seven clean targets (p_*_clean) so that the clean rifle run through the test protocol gives about 5,000 rounds between stoppages"
+  },
+  "p_light_clean": {
+   "value": 1e-05,
+   "unit": "/round",
+   "source": "inferred",
+   "note": "light strikes in a clean rifle with M855: target for k_fire"
+  },
+  "k_fire": {
+   "value": 32.2316,
+   "unit": "-",
+   "source": "calibrated",
+   "note": "steepness of the light-strike curve p = 1 / (1 + ratio^k), ratio = delivered energy / all-fire energy"
+  },
+  "eta_dust": {
+   "value": 0.078171,
+   "unit": "-",
+   "source": "calibrated",
+   "note": "share of hammer energy lost at full dust load; solved for the dust test failure-to-fire count"
+  },
+  "eta_cold": {
+   "value": 0.1,
+   "unit": "-",
+   "source": "guess",
+   "note": "share of hammer energy lost to congealed lubricant at cold index 1"
+  },
+  "eta_foul": {
+   "value": 0.01,
+   "unit": "-",
+   "source": "guess",
+   "note": "share lost per unit of carbon fouling (small: no gas enters the receiver, manual p. 6)"
+  },
+  "energy_scatter": {
+   "value": 0.3,
+   "unit": "J",
+   "source": "inferred",
+   "note": "logistic scale of shot-to-shot carrier energy (sd 0.54 J, 6 percent of 9.06 J), from the port pressure scatter MIL-C-63989C 3.8 allows"
+  },
+  "drag_dust": {
+   "value": 20.7561,
+   "unit": "N",
+   "source": "calibrated",
+   "note": "extra carrier friction at full dust load; solved for the dust test failure-to-lock-back count"
+  },
+  "drag_foul": {
+   "value": 1.0,
+   "unit": "N",
+   "source": "guess",
+   "note": "extra carrier friction per unit of carbon fouling"
+  },
+  "drag_dry": {
+   "value": 4.0,
+   "unit": "N",
+   "source": "guess",
+   "note": "extra carrier friction when run dry (the action simulation's lubricated rail friction is 5 N)"
+  },
+  "drag_cold": {
+   "value": 6.0,
+   "unit": "N",
+   "source": "guess",
+   "note": "extra carrier friction at cold index 1"
+  },
+  "drive_cold": {
+   "value": 0.1,
+   "unit": "-",
+   "source": "inferred",
+   "note": "carrier drive energy lost at cold index 1; the specification lets port pressure fall 2,000 psi (about 14 percent) at -65 F"
+  },
+  "drive_hot": {
+   "value": 0.04,
+   "unit": "-",
+   "source": "inferred",
+   "note": "carrier drive energy gained at hot index 1"
+  },
+  "drive_rings": {
+   "value": 0.25,
+   "unit": "-",
+   "source": "guess",
+   "note": "carrier drive energy lost with worn piston rings (manual p. 27: not enough gas)"
+  },
+  "p_catch": {
+   "value": 0.0002,
+   "unit": "/last round",
+   "source": "guess",
+   "note": "bolt catch or follower fails to hold the bolt although the carrier passed it"
+  },
+  "rim_strength": {
+   "value": 1700.0,
+   "unit": "N",
+   "source": "inferred",
+   "note": "force that shears the rim: 250 MPa brass in shear over 6 mm of claw by 1.14 mm of rim"
+  },
+  "p_fxt_clean": {
+   "value": 4e-06,
+   "unit": "/round",
+   "source": "inferred",
+   "note": "failures to extract in a clean rifle with M855: target for k_extract"
+  },
+  "k_extract": {
+   "value": 17.2071,
+   "unit": "-",
+   "source": "calibrated",
+   "note": "steepness of the extraction curve p = 1 / (1 + ratio^k), ratio = extractor capacity / case drag"
+  },
+  "stick_dust": {
+   "value": 0.11338,
+   "unit": "-",
+   "source": "calibrated",
+   "note": "rise in case drag at full dust load; solved for the dust test failure-to-extract count"
+  },
+  "stick_foul": {
+   "value": 0.05,
+   "unit": "-",
+   "source": "guess",
+   "note": "rise in case drag per unit of carbon fouling"
+  },
+  "stick_heat": {
+   "value": 0.15,
+   "unit": "-",
+   "source": "guess",
+   "note": "rise in case drag at heat index 1"
+  },
+  "extractor_go": {
+   "value": 1.28,
+   "unit": "mm",
+   "source": "manual",
+   "note": "extractor claw GO gauge (pp. 17, 23)"
+  },
+  "extractor_nogo": {
+   "value": 1.59,
+   "unit": "mm",
+   "source": "manual",
+   "note": "extractor claw NO-GO gauge (pp. 17, 24)"
+  },
+  "p_torn": {
+   "value": 0.2,
+   "unit": "-",
+   "source": "guess",
+   "note": "share of failures to extract that tear the rim when the claw is in gauge"
+  },
+  "eject_clear_mm": {
+   "value": 12.0,
+   "unit": "mm",
+   "source": "guess",
+   "note": "sideways travel that takes the case out of the bolt's path"
+  },
+  "p_fej_clean": {
+   "value": 5e-05,
+   "unit": "/round",
+   "source": "inferred",
+   "note": "failures to eject in a clean rifle: target for k_eject"
+  },
+  "k_eject": {
+   "value": 5.97798,
+   "unit": "-",
+   "source": "calibrated",
+   "note": "steepness of the ejection curve p = 1 / (1 + ratio^k), ratio = time window / time the case needs"
+  },
+  "slow_dust": {
+   "value": 0.488841,
+   "unit": "-",
+   "source": "calibrated",
+   "note": "share of ejection speed lost at full dust load; solved for the dust test failure-to-eject count"
+  },
+  "slow_foul": {
+   "value": 0.03,
+   "unit": "-",
+   "source": "guess",
+   "note": "share of ejection speed lost per unit of carbon fouling"
+  },
+  "slow_ejector": {
+   "value": 0.5,
+   "unit": "-",
+   "source": "guess",
+   "note": "share of ejection speed lost with a weak ejector spring"
+  },
+  "slow_extractor": {
+   "value": 0.3,
+   "unit": "-",
+   "source": "guess",
+   "note": "share of ejection speed lost with a weak extractor spring (the case pivots on the claw)"
+  },
+  "p_stove": {
+   "value": 0.7,
+   "unit": "-",
+   "source": "guess",
+   "note": "share of failures to eject that leave the case standing in the port; the rest lie loose in the receiver"
+  },
+  "rise_mm": {
+   "value": 6.0,
+   "unit": "mm",
+   "source": "guess",
+   "note": "how far the magazine must lift the stack to present the next round"
+  },
+  "follower_mass": {
+   "value": 0.015,
+   "unit": "kg",
+   "source": "guess",
+   "note": "follower plus a third of the magazine spring"
+  },
+  "mag_spring_f0": {
+   "value": 15.0,
+   "unit": "N",
+   "source": "guess",
+   "note": "magazine spring force on the last round"
+  },
+  "mag_spring_per_round": {
+   "value": 1.1,
+   "unit": "N",
+   "source": "guess",
+   "note": "added spring force per round in the magazine (48 N full)"
+  },
+  "p_override_clean": {
+   "value": 1.2e-05,
+   "unit": "/round",
+   "source": "inferred",
+   "note": "bolt over-rides in a clean rifle, mean over a 30-round magazine: target for k_feed_time"
+  },
+  "k_feed_time": {
+   "value": 15.4983,
+   "unit": "-",
+   "source": "calibrated",
+   "note": "steepness of the over-ride curve p = 1 / (1 + ratio^k), ratio = time the bolt is behind the magazine / time the stack needs to rise"
+  },
+  "p_nose_clean": {
+   "value": 8.5e-05,
+   "unit": "/round",
+   "source": "inferred",
+   "note": "feed ramp jams in a clean rifle with an HK steel magazine"
+  },
+  "p_two_clean": {
+   "value": 4e-06,
+   "unit": "/round",
+   "source": "inferred",
+   "note": "two-round feeds in a clean rifle with an HK steel magazine"
+  },
+  "feed_dust": {
+   "value": 4.36484,
+   "unit": "-",
+   "source": "calibrated",
+   "note": "exponent of the feed-jam rise with dust, p ~ exp(b c); solved for the dust test failure-to-feed count (150 with the magazine stoppages)"
+  },
+  "lip_nose": {
+   "value": 30.0,
+   "unit": "-",
+   "source": "guess",
+   "note": "feed ramp jam multiplier at feed-lip damage 1"
+  },
+  "lip_two": {
+   "value": 200.0,
+   "unit": "-",
+   "source": "guess",
+   "note": "two-round feed multiplier at feed-lip damage 1"
+  },
+  "chamber_work": {
+   "value": 0.75,
+   "unit": "J",
+   "source": "inferred",
+   "note": "work to strip, seat and lock a round: the action simulation's 15 N feed drag over 30 mm, plus the extractor snapping over the rim and the bolt turning"
+  },
+  "p_ftc_clean": {
+   "value": 6e-06,
+   "unit": "/round",
+   "source": "inferred",
+   "note": "failures to chamber in a clean rifle: target for k_chamber"
+  },
+  "k_chamber": {
+   "value": 8.88064,
+   "unit": "-",
+   "source": "calibrated",
+   "note": "steepness of the chambering curve p = 1 / (1 + ratio^k), ratio = carrier energy on closing / work needed"
+  },
+  "chamber_dust": {
+   "value": 0.525873,
+   "unit": "-",
+   "source": "calibrated",
+   "note": "rise in chambering work at full dust load; solved for the dust test failure-to-chamber count"
+  },
+  "chamber_foul": {
+   "value": 0.1,
+   "unit": "-",
+   "source": "guess",
+   "note": "rise in chambering work per unit of carbon fouling"
+  },
+  "buffer_weak": {
+   "value": 0.3,
+   "unit": "-",
+   "source": "guess",
+   "note": "share of closing energy lost with a weak buffer spring (manual p. 26, step 3)"
+  },
+  "hang_median": {
+   "value": 0.08,
+   "unit": "s",
+   "source": "guess",
+   "note": "median hangfire delay (lognormal)"
+  },
+  "hang_sigma": {
+   "value": 1.2,
+   "unit": "-",
+   "source": "guess",
+   "note": "log standard deviation of the hangfire delay: 95 percent under 0.58 s"
+  },
+  "hang_perceptible": {
+   "value": 0.25,
+   "unit": "s",
+   "source": "guess",
+   "note": "delay above which the shooter notices a click before the shot"
+  },
+  "squib_min_mm": {
+   "value": 20.0,
+   "unit": "mm",
+   "source": "guess",
+   "note": "least bullet travel of a squib"
+  },
+  "squib_max_mm": {
+   "value": 200.0,
+   "unit": "mm",
+   "source": "inferred",
+   "note": "most bullet travel of a squib: short of the gas port, 208 mm of travel in the action simulation, or the action would have cycled"
+  },
+  "rack_extracts": {
+   "value": 0.5,
+   "unit": "-",
+   "source": "guess",
+   "note": "chance one rack pulls out a case the claw slipped off"
+  },
+  "rack_clears_port": {
+   "value": 0.9,
+   "unit": "-",
+   "source": "guess",
+   "note": "chance one rack, port down, drops a trapped case"
+  },
+  "rack_clears_nose": {
+   "value": 0.85,
+   "unit": "-",
+   "source": "guess",
+   "note": "chance one rack clears a round from the feed ramp with the magazine in"
+  },
+  "strike_frees": {
+   "value": 0.7,
+   "unit": "-",
+   "source": "guess",
+   "note": "chance striking the charging handle forward frees an over-ridden round, magazine out"
+  },
+  "strike_frees_mag_in": {
+   "value": 0.2,
+   "unit": "-",
+   "source": "guess",
+   "note": "the same with the magazine still in"
+  },
+  "hold_strike_frees": {
+   "value": 0.95,
+   "unit": "-",
+   "source": "guess",
+   "note": "chance the second method (bolt held back) frees it"
+  },
+  "assist_seats": {
+   "value": 0.6,
+   "unit": "-",
+   "source": "guess",
+   "note": "chance a tap on the forward assist closes a bolt that stopped short"
+  }
+ },
+ "ammo": {
+  "m855": {
+   "name": "M855 ball, in specification",
+   "drive": 1.0,
+   "p_dud": 2e-05,
+   "p_hang": 2e-06,
+   "p_squib": 5e-07,
+   "primer": 1.0,
+   "stick": 1.0,
+   "feed": 1.0,
+   "source": "guess",
+   "note": "rates are guesses, checked only to pass MIL-C-63989C lot acceptance comfortably; drive 1 is the action simulation"
+  },
+  "commercial_223": {
+   "name": "Commercial .223 ball",
+   "drive": 0.92,
+   "p_dud": 3e-05,
+   "p_hang": 3e-06,
+   "p_squib": 1e-06,
+   "primer": 0.9,
+   "stick": 1.0,
+   "feed": 1.0,
+   "source": "guess",
+   "note": "lower port pressure, softer primers"
+  },
+  "steel_case": {
+   "name": "Steel-cased import",
+   "drive": 0.9,
+   "p_dud": 0.0001,
+   "p_hang": 1e-05,
+   "p_squib": 2e-06,
+   "primer": 1.1,
+   "stick": 1.2,
+   "feed": 1.2,
+   "source": "guess",
+   "note": "harder primers, cases that seal and release less well"
+  },
+  "degraded": {
+   "name": "Old, damp or reloaded (the manual forbids reloads, p. 26)",
+   "drive": 0.85,
+   "p_dud": 0.005,
+   "p_hang": 0.001,
+   "p_squib": 0.0003,
+   "primer": 1.0,
+   "stick": 1.05,
+   "feed": 1.5,
+   "source": "guess",
+   "note": "for showing misfires, hangfires and squibs at a rate a player will meet"
+  }
+ },
+ "magazines": {
+  "hk_steel": {
+   "name": "HK steel 30-round (manual pp. 5, 6)",
+   "capacity": 30,
+   "nose": 1.0,
+   "two": 1.0,
+   "friction": 6.0,
+   "feed_dust_extra": 0.0,
+   "source": "manual / calibrated",
+   "note": "the reference magazine; assumed to be what the dust test used"
+  },
+  "gi_aluminium": {
+   "name": "US issue aluminium 30-round",
+   "capacity": 30,
+   "nose": 1.5,
+   "two": 1.5,
+   "friction": 12.0,
+   "feed_dust_extra": 0.75125,
+   "source": "published / calibrated",
+   "note": "clean factors are guesses (the manual says reliability is improved with the steel magazine); the dust exponent is solved for the M4's magazine stoppages"
+  }
+ },
+ "defaults": {
+  "ammo": "m855",
+  "dust": 0.0,
+  "dry": false,
+  "ambientC": 20.0,
+  "firingPinProtrusionMm": 1.0,
+  "extractorGapMm": 1.45,
+  "extractorSpringWeak": 0.0,
+  "ejectorWeak": 0.0,
+  "bufferSpringWeak": 0.0,
+  "pistonRingsWorn": 0.0,
+  "magType": "hk_steel",
+  "magSpringWear": 0.0,
+  "magLipDamage": 0.0,
+  "magRounds": 30,
+  "magSeated": true,
+  "mode": "military"
+ },
+ "action": {
+  "source": "../action/action.json (cycle.carrier_mm, cycle.carrier_mps, mechanics, events, validation)",
+  "moving_mass_kg": 0.518,
+  "x_peak_mm": 6.951,
+  "ke_peak_J": 9.0617,
+  "x_full_mm": 95.01,
+  "x_unlock_mm": 10.5,
+  "x_cock_mm": 32.0,
+  "x_eject_mm": 62.2,
+  "x_pick_mm": 75.5,
+  "x_hold_mm": 82.0,
+  "x_mm": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15,
+   16,
+   17,
+   18,
+   19,
+   20,
+   21,
+   22,
+   23,
+   24,
+   25,
+   26,
+   27,
+   28,
+   29,
+   30,
+   31,
+   32,
+   33,
+   34,
+   35,
+   36,
+   37,
+   38,
+   39,
+   40,
+   41,
+   42,
+   43,
+   44,
+   45,
+   46,
+   47,
+   48,
+   49,
+   50,
+   51,
+   52,
+   53,
+   54,
+   55,
+   56,
+   57,
+   58,
+   59,
+   60,
+   61,
+   62,
+   63,
+   64,
+   65,
+   66,
+   67,
+   68,
+   69,
+   70,
+   71,
+   72,
+   73,
+   74,
+   75,
+   76,
+   77,
+   78,
+   79,
+   80,
+   81,
+   82,
+   83,
+   84,
+   85,
+   86,
+   87,
+   88,
+   89,
+   90,
+   91,
+   92,
+   93,
+   94
+  ],
+  "ke_out_J": [
+   9.0617,
+   9.0617,
+   9.0617,
+   9.0617,
+   9.0617,
+   9.0617,
+   9.0617,
+   9.0594,
+   9.0117,
+   8.9616,
+   8.7417,
+   7.146,
+   6.6216,
+   6.5027,
+   6.4401,
+   6.3759,
+   6.3075,
+   6.2453,
+   6.1841,
+   6.122,
+   6.06,
+   5.9999,
+   5.9379,
+   5.8786,
+   5.8206,
+   5.7632,
+   5.7075,
+   5.6536,
+   5.6036,
+   5.5571,
+   5.5142,
+   5.4747,
+   5.4387,
+   5.4056,
+   5.3724,
+   5.3371,
+   5.3019,
+   5.2666,
+   5.2314,
+   5.1962,
+   5.1601,
+   5.1228,
+   5.0855,
+   5.0482,
+   5.0109,
+   4.9716,
+   4.9323,
+   4.8929,
+   4.8521,
+   4.8119,
+   4.7714,
+   4.7299,
+   4.6877,
+   4.6449,
+   4.6028,
+   4.5593,
+   4.5158,
+   4.472,
+   4.4264,
+   4.3809,
+   4.3353,
+   4.2897,
+   4.2441,
+   4.1964,
+   4.1488,
+   4.099,
+   4.0493,
+   4.0016,
+   3.9498,
+   3.8999,
+   3.8484,
+   3.7983,
+   3.7462,
+   3.6927,
+   3.6403,
+   3.5864,
+   3.5325,
+   3.4786,
+   3.4235,
+   3.369,
+   3.3135,
+   3.2558,
+   3.1995,
+   3.142,
+   3.0853,
+   3.0262,
+   2.9674,
+   2.9094,
+   2.8494,
+   2.7892,
+   2.7282,
+   2.6674,
+   2.6055,
+   2.5432,
+   2.0467
+  ],
+  "t_out_s": [
+   0.0095,
+   0.010119,
+   0.01037,
+   0.01057,
+   0.010749,
+   0.01092,
+   0.011089,
+   0.011258,
+   0.011428,
+   0.011597,
+   0.011769,
+   0.011951,
+   0.012145,
+   0.012344,
+   0.012544,
+   0.012745,
+   0.012948,
+   0.013151,
+   0.013355,
+   0.01356,
+   0.013766,
+   0.013974,
+   0.014182,
+   0.014391,
+   0.014602,
+   0.014813,
+   0.015026,
+   0.015239,
+   0.015454,
+   0.01567,
+   0.015886,
+   0.016103,
+   0.016321,
+   0.016539,
+   0.016759,
+   0.016979,
+   0.017199,
+   0.017421,
+   0.017643,
+   0.017866,
+   0.018089,
+   0.018314,
+   0.018539,
+   0.018765,
+   0.018992,
+   0.01922,
+   0.019449,
+   0.019679,
+   0.019909,
+   0.020141,
+   0.020373,
+   0.020607,
+   0.020841,
+   0.021077,
+   0.021314,
+   0.021552,
+   0.021791,
+   0.022031,
+   0.022272,
+   0.022514,
+   0.022758,
+   0.023003,
+   0.02325,
+   0.023498,
+   0.023747,
+   0.023997,
+   0.02425,
+   0.024503,
+   0.024759,
+   0.025016,
+   0.025274,
+   0.025535,
+   0.025797,
+   0.026061,
+   0.026327,
+   0.026594,
+   0.026864,
+   0.027136,
+   0.02741,
+   0.027686,
+   0.027965,
+   0.028246,
+   0.028529,
+   0.028815,
+   0.029104,
+   0.029395,
+   0.029689,
+   0.029986,
+   0.030286,
+   0.030589,
+   0.030896,
+   0.031206,
+   0.031519,
+   0.031837,
+   0.032162
+  ],
+  "t_back_s": [
+   0.0735,
+   0.073037,
+   0.072755,
+   0.072471,
+   0.072185,
+   0.071899,
+   0.071611,
+   0.071321,
+   0.07103,
+   0.070737,
+   0.070443,
+   0.070147,
+   0.069849,
+   0.06955,
+   0.06925,
+   0.068948,
+   0.068644,
+   0.068338,
+   0.068031,
+   0.067722,
+   0.067412,
+   0.067099,
+   0.066785,
+   0.066468,
+   0.06615,
+   0.065829,
+   0.065506,
+   0.065181,
+   0.064854,
+   0.064525,
+   0.064193,
+   0.063858,
+   0.063522,
+   0.063182,
+   0.062839,
+   0.062494,
+   0.062146,
+   0.061795,
+   0.061441,
+   0.061083,
+   0.060723,
+   0.060358,
+   0.059991,
+   0.059619,
+   0.059244,
+   0.058864,
+   0.058482,
+   0.058097,
+   0.05771,
+   0.057319,
+   0.056926,
+   0.056531,
+   0.056132,
+   0.055731,
+   0.055326,
+   0.054919,
+   0.054508,
+   0.054094,
+   0.053677,
+   0.053256,
+   0.052831,
+   0.052403,
+   0.051971,
+   0.051535,
+   0.051095,
+   0.050651,
+   0.050203,
+   0.04975,
+   0.049294,
+   0.048832,
+   0.048365,
+   0.047893,
+   0.047416,
+   0.046934,
+   0.046446,
+   0.045953,
+   0.04546,
+   0.044963,
+   0.044455,
+   0.043936,
+   0.043406,
+   0.042863,
+   0.042307,
+   0.041737,
+   0.04115,
+   0.040547,
+   0.039925,
+   0.039284,
+   0.03862,
+   0.037932,
+   0.037216,
+   0.036469,
+   0.035687,
+   0.034865,
+   0.033997
+  ],
+  "t_max_travel_s": 0.03285,
+  "t_in_battery_s": 0.073304,
+  "t_ignition_s": 0.008511,
+  "t_primer_s": 0.008295,
+  "period_s": 0.07492,
+  "ke_eject_J": 4.2345,
+  "ke_pick_J": 3.5595,
+  "ke_hold_J": 3.1995,
+  "eject_window_s": 0.028585,
+  "feed_dwell_s": 0.018976,
+  "ke_close_J": 2.9782,
+  "eject_speed_mps": 2.284,
+  "unlock_pressure_MPa": 3.7043,
+  "case_drag_N": 814.94,
+  "round_mass_kg": 0.0123,
+  "action_time_s": 0.000968
+ },
+ "stops": {
+  "positions": {
+   "nose_jam": {
+    "carrier_mm": 45.5,
+    "bolt_deg": 22.5
+   },
+   "stovepipe": {
+    "carrier_mm": 27.5,
+    "bolt_deg": 22.5
+   },
+   "case_loose": {
+    "carrier_mm": 45.5,
+    "bolt_deg": 22.5
+   },
+   "round_behind_case": {
+    "carrier_mm": 68.0,
+    "bolt_deg": 22.5
+   },
+   "two_rounds": {
+    "carrier_mm": 50.0,
+    "bolt_deg": 22.5
+   },
+   "round_over_bolt": {
+    "carrier_mm": 50.0,
+    "bolt_deg": 22.5
+   }
+  },
+  "out_of_battery": {
+   "carrier_mm": 6.0,
+   "bolt_deg": 9.0
+  },
+  "port": {
+   "nose_jam": "round_nose_up",
+   "stovepipe": "case_in_port",
+   "case_loose": "case_loose_in_port",
+   "round_behind_case": "brass_and_round",
+   "two_rounds": "two_rounds",
+   "round_over_bolt": "round_above_bolt"
+  }
+ },
+ "calibration": {
+  "dust_test": {
+   "rifles": 10,
+   "rounds": 6000,
+   "cycle": 120,
+   "hk416": {
+    "FFD": 141,
+    "FTC": 7,
+    "FFR": 5,
+    "FXT": 3,
+    "FEJ": 49,
+    "BLR": 0,
+    "FBR": 3,
+    "OTH": 2,
+    "magazine": 9,
+    "class12": 219,
+    "class3": 14
+   },
+   "m4_magazine": {
+    "summer": 148,
+    "fall": 239
+   }
+  },
+  "targets": {
+   "FFD": 150.0,
+   "FTC": 7.0,
+   "FFR": 5.0,
+   "FXT": 3.0,
+   "FEJ": 49.0,
+   "FBR": 3.0,
+   "aluminium_extra_feed": 193.5
+  },
+  "clean_target_mrbs": 5000.0,
+  "clean_targets": {
+   "p_light_clean": 1e-05,
+   "p_fxt_clean": 4e-06,
+   "p_fej_clean": 5e-05,
+   "p_override_clean": 1.2e-05,
+   "p_nose_clean": 8.5e-05,
+   "p_two_clean": 4e-06,
+   "p_ftc_clean": 6e-06
+  },
+  "solved": {
+   "clean_scale": 0.800378,
+   "k_fire": 32.2316,
+   "eta_dust": 0.078171,
+   "drag_dust": 20.7561,
+   "k_extract": 17.2071,
+   "stick_dust": 0.11338,
+   "k_eject": 5.97798,
+   "slow_dust": 0.488841,
+   "k_feed_time": 15.4983,
+   "feed_dust": 4.36484,
+   "k_chamber": 8.88064,
+   "chamber_dust": 0.525873
+  },
+  "aluminium_feed_dust_extra": 0.75125
+ },
+ "malfunctions": {
+  "failure_to_fire": {
+   "n": 1,
+   "name": "Failure to fire (misfire)",
+   "cycle_step": "4 firing",
+   "cause": "The hammer falls and the round does not fire. Either the blow was too light to set off the primer, or the round is a dud.",
+   "state": "Sear release to primer contact runs as normal (8.3 ms). The hammer delivers 0.48 J to the firing pin against a primer all-fire energy of 0.334 J: a ratio of 1.44. Dust, congealed oil or carbon in the firing pin channel lowers the delivered energy; a pin protruding less than the 0.53 mm indent cuts the indent short. The carrier never moves: travel 0 mm, bolt locked, hammer down.",
+   "conditions": [
+    "firing pin protrusion below the indent depth (the gauge limits are 0.90 and 1.10 mm, manual pp. 17 and 21)",
+    "grit or congealed oil in the firing pin channel (dust, cold)",
+    "hard primers or deteriorated ammunition"
+   ],
+   "hazard": "At the click it cannot be told from a hangfire. Keep the muzzle on the backstop.",
+   "variants": {
+    "light_strike": "the primer shows a shallow dent",
+    "dud": "the primer shows a full dent and did nothing"
+   },
+   "cues": {
+    "report": "none",
+    "recoil": "none",
+    "trigger": "normal break, a click, then no reset",
+    "sees": [
+     "bolt fully forward, port closed by the carrier",
+     "nothing ejected"
+    ],
+    "hears": [
+     "a dry click: hammer on firing pin"
+    ],
+    "sound": [
+     "mech_trigger"
+    ]
+   },
+   "shows": {
+    "carrier_mm": 0,
+    "bolt_deg": 0,
+    "nodes": [
+     "trigger"
+    ],
+    "clips": [
+     "trigger_pull"
+    ],
+    "props": [],
+    "note": "nothing moves but the trigger; the hammer is not a node"
+   },
+   "procedure": "immediate_action",
+   "procedure_range": "misfire_range"
+  },
+  "hangfire": {
+   "n": 2,
+   "name": "Hangfire (delayed ignition)",
+   "cycle_step": "4 firing",
+   "cause": "The primer is struck and the charge takes time to light. The round fires after a delay.",
+   "state": "The firing train is normal up to the primer. Ignition, which follows primer contact by about 0.2 ms in the action simulation, is delayed by tens of milliseconds up to seconds. The M855 specification holds the whole action time (primer to gas port) to 3 ms at mean plus five standard deviations, so a hangfire is far outside normal ammunition. When it fires, the cycle runs as normal from that moment.",
+   "conditions": [
+    "old, damp, oil-soaked or badly stored ammunition",
+    "reloads (the manual allows factory-loaded cartridges only, pp. 4 and 26)"
+   ],
+   "hazard": "If the action is opened during the delay the round can fire unlocked or outside the chamber, at the shooter's hand and face. This is the reason for the wait.",
+   "variants": {
+    "delayed": "click, a pause, then a normal shot"
+   },
+   "cues": {
+    "report": "click, pause, then the normal report",
+    "recoil": "normal, late",
+    "trigger": "normal break",
+    "sees": [
+     "exactly what a misfire shows, until it fires",
+     "then a normal ejection"
+    ],
+    "hears": [
+     "click ... bang; a gap under a quarter of a second is not noticed"
+    ],
+    "sound": [
+     "mech_trigger",
+     "shot delayed by delayS",
+     "mech_cycle"
+    ]
+   },
+   "shows": {
+    "carrier_mm": 0,
+    "bolt_deg": 0,
+    "nodes": [
+     "trigger",
+     "bolt_carrier",
+     "bolt_head"
+    ],
+    "clips": [
+     "trigger_pull"
+    ],
+    "props": [],
+    "note": "hold the rest pose for delayS, then play HK416Action.sample() from its t = 8.5 ms (ignition)"
+   },
+   "procedure": "immediate_action",
+   "procedure_range": "misfire_range"
+  },
+  "failure_to_feed": {
+   "n": 3,
+   "name": "Failure to feed",
+   "cycle_step": "1 feeding, 2 chambering, 3 locking",
+   "cause": "The bolt comes forward and the next round does not reach the chamber, or does not seat.",
+   "state": "Three mechanisms. Short stroke: the carrier has 3.56 J left as it passes the pick-up point at 75.5 mm; if dust, cold or a weak round take more than that, it turns round short of the next round and closes on an empty chamber. Feed ramp jam: the round leaves the lips at the wrong angle and its nose stops below the chamber mouth, with the carrier held at about 45 mm on its way forward. Failure to chamber: the carrier arrives with 2.98 J and needs about 0.75 J to seat the round and turn the bolt; a dirty chamber raises that and the carrier stops about 6 mm short, bolt not turned.",
+   "conditions": [
+    "magazine: weak spring, damaged feed lips, dirt inside; aluminium magazines more than HK steel (manual pp. 5 and 6)",
+    "magazine not latched",
+    "short stroke: worn piston rings (manual p. 27), weak ammunition, dust, cold, a dry carrier",
+    "dirty chamber, damaged round, weak buffer spring (manual p. 26, step 3)"
+   ],
+   "hazard": "None by itself. Do not hammer the forward assist on a round that will not seat.",
+   "variants": {
+    "nose_jam": "round part stripped, nose stopped below the chamber, bolt holding it there",
+    "bolt_over_empty_chamber": "bolt closed, chamber empty: short stroke or an unlatched magazine",
+    "failure_to_chamber": "round almost home, bolt not turned, carrier a few millimetres short"
+   },
+   "cues": {
+    "report": "the previous shot was normal",
+    "recoil": "normal, then the rifle feels dead",
+    "trigger": "jam or out of battery: dead or soft; empty chamber: a click",
+    "sees": [
+     "feed ramp jam: bolt held about half way, brass and bullet nose-up in the port",
+     "empty chamber: bolt forward, everything looks normal",
+     "out of battery: carrier a few millimetres short of closed"
+    ],
+    "hears": [
+     "shot, then a muffled stop; or a click on the next pull"
+    ],
+    "sound": [
+     "mech_cycle cut at stopTimeS",
+     "mech_trigger"
+    ]
+   },
+   "shows": {
+    "carrier_mm": {
+     "nose_jam": 45.5,
+     "bolt_over_empty_chamber": 0,
+     "failure_to_chamber": 6.0
+    },
+    "bolt_deg": {
+     "nose_jam": 22.5,
+     "bolt_over_empty_chamber": 0,
+     "failure_to_chamber": 9.0
+    },
+    "nodes": [
+     "bolt_carrier",
+     "bolt_head",
+     "dust_cover",
+     "mag_round_1_case",
+     "mag_round_1_bullet"
+    ],
+    "clips": [
+     "dust_cover_open"
+    ],
+    "props": [
+     {
+      "variant": "nose_jam",
+      "prop": "prop_round",
+      "pos": [
+       0.0024,
+       -0.015,
+       -0.049
+      ],
+      "axis": [
+       0.0,
+       0.21,
+       0.978
+      ],
+      "note": "base still under the lips, nose on the feed ramp"
+     }
+    ],
+    "note": "nose jam: hide mag_round_1 and show prop_round in its place, moved 25 mm forward and tipped 12 degrees nose-up"
+   },
+   "procedure": "immediate_action"
+  },
+  "stovepipe": {
+   "n": 4,
+   "name": "Failure to eject (stovepipe)",
+   "cycle_step": "7 ejecting",
+   "cause": "The fired case is pulled from the chamber and does not leave the port before the bolt returns. The bolt traps it.",
+   "state": "The case mouth clears the port when the carrier passes 62.2 mm, 23.5 ms after the trigger break; the bolt comes back past that point at 52.0 ms. The case has that 28.5 ms window to get out and normally needs about 5 ms (12 mm sideways at 2.3 m/s). A fouled or weak ejector slows it; a short stroke shortens the window. Caught, the case is pinched by its head between the bolt face and the front edge of the port with the carrier held at about 27.5 mm. If the carrier never reaches 62.2 mm the case stays on the bolt face and is pushed back into the chamber.",
+   "conditions": [
+    "weak or fouled ejector, brass shavings under it (manual p. 27)",
+    "worn extractor or weak extractor spring: the case drops off the bolt face",
+    "short stroke",
+    "dust and dry running"
+   ],
+   "hazard": "None by itself. Keep fingers clear of the port; the bolt is under spring load.",
+   "variants": {
+    "stovepipe": "case caught by its head, standing out of the port",
+    "case_in_receiver": "case loose in the port over the next round, bolt stopped on both",
+    "rechambered_case": "short stroke: the fired case went back into the chamber; a click on the next pull"
+   },
+   "cues": {
+    "report": "the shot was normal",
+    "recoil": "normal",
+    "trigger": "dead: the bolt is out of battery (rechambered case: a click)",
+    "sees": [
+     "an empty case sticking out of the ejection port, bolt a few centimetres open",
+     "or brass lying lengthwise in the port"
+    ],
+    "hears": [
+     "shot, then a soft brassy stop; no case lands"
+    ],
+    "sound": [
+     "mech_cycle cut at stopTimeS"
+    ]
+   },
+   "shows": {
+    "carrier_mm": {
+     "stovepipe": 27.5,
+     "case_in_receiver": 45.5,
+     "rechambered_case": 0
+    },
+    "bolt_deg": {
+     "stovepipe": 22.5,
+     "case_in_receiver": 22.5,
+     "rechambered_case": 0
+    },
+    "nodes": [
+     "bolt_carrier",
+     "bolt_head",
+     "dust_cover"
+    ],
+    "clips": [
+     "dust_cover_open"
+    ],
+    "props": [
+     {
+      "variant": "stovepipe",
+      "prop": "prop_case",
+      "pos": [
+       -0.004,
+       0.002,
+       -0.026
+      ],
+      "axis": [
+       -0.94,
+       0.26,
+       0.21
+      ],
+      "note": "head pinched between bolt face and port front edge, mouth outside"
+     },
+     {
+      "variant": "case_in_receiver",
+      "prop": "prop_case",
+      "pos": [
+       -0.006,
+       -0.004,
+       -0.072
+      ],
+      "axis": [
+       0.0,
+       0.1,
+       0.995
+      ],
+      "note": "lying in the port over the next round"
+     }
+    ],
+    "note": "do not spawn the HK416Action.ejectCase() brass for this shot"
+   },
+   "procedure": "stovepipe_clear"
+  },
+  "double_feed": {
+   "n": 5,
+   "name": "Double feed",
+   "cycle_step": "6 extracting, then 1 feeding",
+   "cause": "Two things want the chamber at once. Usually a fired case was left in the chamber and the bolt drove the next round into it. Less often the magazine lets go of two rounds.",
+   "state": "The cycle is normal to full stroke. On the way forward the bolt strips a round whose nose meets the head of the case still in the chamber: the round is 57.4 mm long, so the bolt face stops that far behind the chamber and the carrier is held at about 68 mm. With two live rounds the carrier stops near 50 mm.",
+   "conditions": [
+    "everything that causes a failure to extract",
+    "damaged or spread feed lips (two live rounds)"
+   ],
+   "hazard": "Tap and rack does not clear it: the magazine has to come out first.",
+   "variants": {
+    "stuck_case_plus_round": "fired case in the chamber, live round wedged behind it",
+    "two_live": "two rounds released together, both wedged at the chamber mouth"
+   },
+   "cues": {
+    "report": "the shot was normal",
+    "recoil": "normal",
+    "trigger": "dead",
+    "sees": [
+     "bolt held most of the way back",
+     "brass in the chamber and a second round behind or beside it"
+    ],
+    "hears": [
+     "shot, then a hard stop with no closing"
+    ],
+    "sound": [
+     "mech_cycle cut at stopTimeS"
+    ]
+   },
+   "shows": {
+    "carrier_mm": {
+     "stuck_case_plus_round": 68.0,
+     "two_live": 50.0
+    },
+    "bolt_deg": 22.5,
+    "nodes": [
+     "bolt_carrier",
+     "bolt_head",
+     "dust_cover",
+     "mag_round_1_case",
+     "mag_round_1_bullet"
+    ],
+    "clips": [
+     "dust_cover_open"
+    ],
+    "props": [
+     {
+      "variant": "stuck_case_plus_round",
+      "prop": "prop_case",
+      "pos": [
+       0.0,
+       0.0,
+       -0.014
+      ],
+      "axis": [
+       0.0,
+       0.0,
+       1.0
+      ],
+      "note": "fired case fully in the chamber"
+     },
+     {
+      "variant": "stuck_case_plus_round",
+      "prop": "prop_round",
+      "pos": [
+       0.0,
+       -0.012,
+       -0.0714
+      ],
+      "axis": [
+       0.0,
+       0.2,
+       0.98
+      ],
+      "note": "nose against the case head"
+     },
+     {
+      "variant": "two_live",
+      "prop": "prop_round",
+      "pos": [
+       0.002,
+       -0.006,
+       -0.0535
+      ],
+      "axis": [
+       0.0,
+       0.1,
+       0.995
+      ],
+      "note": "upper round"
+     },
+     {
+      "variant": "two_live",
+      "prop": "prop_round_2",
+      "pos": [
+       -0.002,
+       -0.016,
+       -0.0535
+      ],
+      "axis": [
+       0.0,
+       0.26,
+       0.966
+      ],
+      "note": "lower round"
+     }
+    ]
+   },
+   "procedure": "double_feed_clear"
+  },
+  "failure_to_extract": {
+   "n": 6,
+   "name": "Failure to extract",
+   "cycle_step": "6 extracting",
+   "cause": "The fired case stays in the chamber. The claw slipped off the rim, or it held and tore through the rim.",
+   "state": "Extraction starts as the bolt finishes turning, 3.3 ms after ignition, with 3.7 MPa still in the bore pressing the case wall on the chamber: about 0.8 kN of drag against a rim that shears at roughly 1.7 kN. Dust, a hot chamber or a sticky case raise the drag; a worn claw lowers what the extractor can hold. The carrier itself cycles normally.",
+   "conditions": [
+    "extractor claw outside its gauges (1.28 mm GO, 1.59 mm NO-GO, manual pp. 17, 23, 24) or a weak extractor spring",
+    "dirty or hot chamber, steel or lacquered cases"
+   ],
+   "hazard": "With rounds in the magazine it becomes a double feed. A torn rim cannot be racked out; it needs a rod from the muzzle.",
+   "variants": {
+    "claw_slip": "rim intact; racking may catch it",
+    "torn_rim": "part of the rim is gone; the extractor has nothing to hold"
+   },
+   "cues": {
+    "report": "the shot was normal",
+    "recoil": "normal",
+    "trigger": "a click on the next pull, or the bolt is locked back on the empty magazine",
+    "sees": [
+     "last round: bolt locked back with a fired case still in the chamber",
+     "no case left the port"
+    ],
+    "hears": [
+     "shot with no brass landing"
+    ],
+    "sound": [
+     "mech_cycle",
+     "mech_trigger"
+    ]
+   },
+   "shows": {
+    "carrier_mm": {
+     "empty_magazine": 82.0,
+     "closed": 0
+    },
+    "bolt_deg": {
+     "empty_magazine": 22.5,
+     "closed": 0
+    },
+    "nodes": [
+     "bolt_carrier",
+     "bolt_head",
+     "dust_cover",
+     "bolt_catch"
+    ],
+    "clips": [
+     "dust_cover_open"
+    ],
+    "props": [
+     {
+      "prop": "prop_case",
+      "pos": [
+       0.0,
+       0.0,
+       -0.014
+      ],
+      "axis": [
+       0.0,
+       0.0,
+       1.0
+      ],
+      "note": "fired case in the chamber, seen only with the bolt back"
+     }
+    ],
+    "note": "do not spawn ejected brass for this shot"
+   },
+   "procedure": "immediate_action"
+  },
+  "bolt_override": {
+   "n": 7,
+   "name": "Bolt over-ride",
+   "cycle_step": "1 feeding",
+   "cause": "The next round is not in place when the bolt comes forward, and the bolt rides over it. The round ends up wedged above the bolt.",
+   "state": "A timing race. The bolt is behind the magazine (carrier beyond 75.5 mm) for 19.0 ms. In that time the magazine spring has to lift the stack about 6 mm; with 29 rounds still in the magazine that takes about 10 ms. A weak spring, dust in the magazine or a short stroke narrows the gap. The carrier is held at about 50 mm.",
+   "conditions": [
+    "weak magazine spring or a sticking follower",
+    "dust in the magazine",
+    "a full magazine (the heaviest stack)"
+   ],
+   "hazard": "The charging handle is pinned by the round. Forcing it bends the handle.",
+   "variants": {
+    "override": "live round wedged over the bolt head; bolt held part open"
+   },
+   "cues": {
+    "report": "the shot was normal",
+    "recoil": "normal",
+    "trigger": "dead",
+    "sees": [
+     "bolt held about half open",
+     "a live round high in the port, above the bolt"
+    ],
+    "feels": [
+     "the charging handle moves a few millimetres and stops hard"
+    ],
+    "hears": [
+     "shot, then a hard stop"
+    ],
+    "sound": [
+     "mech_cycle cut at stopTimeS"
+    ]
+   },
+   "shows": {
+    "carrier_mm": 50.0,
+    "bolt_deg": 22.5,
+    "nodes": [
+     "bolt_carrier",
+     "bolt_head",
+     "dust_cover",
+     "charging_handle"
+    ],
+    "clips": [
+     "dust_cover_open",
+     "rack_bound"
+    ],
+    "props": [
+     {
+      "prop": "prop_round",
+      "pos": [
+       0.0,
+       0.01,
+       -0.085
+      ],
+      "axis": [
+       0.0,
+       -0.17,
+       0.985
+      ],
+      "note": "between the top of the bolt and the receiver roof, nose down towards the chamber"
+     }
+    ]
+   },
+   "procedure": "bolt_override_clear"
+  },
+  "squib": {
+   "n": 8,
+   "name": "Squib (bullet lodged in the bore)",
+   "cycle_step": "4 firing",
+   "cause": "A round with little or no powder. The primer, or a fraction of a charge, pushes the bullet into the barrel and leaves it there.",
+   "state": "No pressure curve to speak of: the bullet stops before the gas port (242.6 mm from the bolt face), no gas reaches the piston and the carrier stays at 0 mm with the fired case still chambered.",
+   "conditions": [
+    "reloads with a missed or light charge",
+    "contaminated powder",
+    "very rare in factory military ammunition: one bullet left in the bore rejects a whole lot (MIL-C-63989C)"
+   ],
+   "hazard": "The bore is blocked. Stop on a pop instead of a bang, less recoil than normal, an action that did not cycle. Do not fire again until a rod has passed through the bore.",
+   "variants": {
+    "lodged": "bullet stopped in the bore; fired case still chambered"
+   },
+   "cues": {
+    "report": "a pop or a weak, hollow report",
+    "recoil": "little or none",
+    "trigger": "normal break",
+    "sees": [
+     "bolt forward, nothing ejected",
+     "no strike downrange"
+    ],
+    "hears": [
+     "a pop, far quieter than a shot"
+    ],
+    "sound": [
+     "mech_trigger",
+     "squib_pop (not in the sound model yet)"
+    ]
+   },
+   "shows": {
+    "carrier_mm": 0,
+    "bolt_deg": 0,
+    "nodes": [
+     "trigger"
+    ],
+    "clips": [
+     "trigger_pull"
+    ],
+    "props": [
+     {
+      "prop": "prop_bullet",
+      "pos": [
+       0.0,
+       0.0,
+       0.0203
+      ],
+      "axis": [
+       0.0,
+       0.0,
+       1.0
+      ],
+      "note": "add lodgedMm to z: bullet base position in the bore; not visible from outside"
+     }
+    ]
+   },
+   "procedure": "squib_stop"
+  },
+  "failure_to_lock_back": {
+   "n": 9,
+   "name": "Failure to lock back on the last round",
+   "cycle_step": "after 8 cocking",
+   "cause": "The magazine is empty but the bolt closes instead of locking open.",
+   "state": "The follower lifts the bolt catch, which holds the carrier at 82 mm on its way forward (manual p. 26, step 10). A carrier that turns round short of 82 mm, with 3.15 J to spare when clean, never passes the catch.",
+   "conditions": [
+    "short stroke",
+    "weak magazine spring, worn follower or bolt catch"
+   ],
+   "hazard": "None. A click on an empty rifle.",
+   "variants": {
+    "closed_on_empty": "last round fired and ejected; bolt forward, chamber and magazine empty"
+   },
+   "cues": {
+    "report": "the last shot was normal",
+    "recoil": "normal",
+    "trigger": "a click on the next pull",
+    "sees": [
+     "bolt forward where it should be locked open"
+    ],
+    "hears": [
+     "click"
+    ],
+    "sound": [
+     "mech_cycle",
+     "mech_trigger"
+    ]
+   },
+   "shows": {
+    "carrier_mm": 0,
+    "bolt_deg": 0,
+    "nodes": [
+     "bolt_carrier"
+    ],
+    "clips": [],
+    "props": []
+   },
+   "procedure": "immediate_action"
+  }
+ },
+ "conditions_table": [
+  {
+   "condition": "clean, lubricated, M855, HK steel magazine, 20 C",
+   "cfg": {},
+   "state": {},
+   "per_round": {
+    "any": 0.0001786,
+    "bolt_override": 1.709e-05,
+    "double_feed": 6.189e-06,
+    "failure_to_extract": 1.067e-07,
+    "failure_to_feed": 7.635e-05,
+    "failure_to_fire": 2.8e-05,
+    "failure_to_lock_back": 7.415e-06,
+    "hangfire": 2e-06,
+    "squib": 5e-07,
+    "stovepipe": 4.091e-05
+   },
+   "mrbs": 5600.1
+  },
+  {
+   "condition": "600 rounds since lubrication, 1,200 since cleaning",
+   "cfg": {},
+   "state": {
+    "nLube": 600,
+    "nClean": 1200
+   },
+   "per_round": {
+    "any": 0.0002042,
+    "bolt_override": 1.927e-05,
+    "double_feed": 1.026e-05,
+    "failure_to_extract": 2.471e-07,
+    "failure_to_feed": 8.408e-05,
+    "failure_to_fire": 3.107e-05,
+    "failure_to_lock_back": 7.629e-06,
+    "hangfire": 2e-06,
+    "squib": 5e-07,
+    "stovepipe": 4.912e-05
+   },
+   "mrbs": 4898.0
+  },
+  {
+   "condition": "run dry",
+   "cfg": {
+    "dry": true
+   },
+   "state": {},
+   "per_round": {
+    "any": 0.0002034,
+    "bolt_override": 3.037e-05,
+    "double_feed": 6.189e-06,
+    "failure_to_extract": 1.068e-07,
+    "failure_to_feed": 8.558e-05,
+    "failure_to_fire": 2.8e-05,
+    "failure_to_lock_back": 8.721e-06,
+    "hangfire": 2e-06,
+    "squib": 5e-07,
+    "stovepipe": 4.19e-05
+   },
+   "mrbs": 4917.1
+  },
+  {
+   "condition": "dust 0.25, just wiped",
+   "cfg": {
+    "dust": 0.25
+   },
+   "state": {},
+   "per_round": {
+    "any": 0.0002274,
+    "bolt_override": 2.185e-05,
+    "double_feed": 7.873e-06,
+    "failure_to_extract": 1.235e-07,
+    "failure_to_feed": 0.0001063,
+    "failure_to_fire": 2.967e-05,
+    "failure_to_lock_back": 7.774e-06,
+    "hangfire": 2e-06,
+    "squib": 5e-07,
+    "stovepipe": 5.127e-05
+   },
+   "mrbs": 4398.2
+  },
+  {
+   "condition": "dust 0.5, 300 rounds since the wipe",
+   "cfg": {
+    "dust": 0.5
+   },
+   "state": {
+    "nLube": 300,
+    "nClean": 300
+   },
+   "per_round": {
+    "any": 0.0005835,
+    "bolt_override": 6.277e-05,
+    "double_feed": 1.987e-05,
+    "failure_to_extract": 2.447e-07,
+    "failure_to_feed": 0.0003243,
+    "failure_to_fire": 3.993e-05,
+    "failure_to_lock_back": 1.101e-05,
+    "hangfire": 2e-06,
+    "squib": 5e-07,
+    "stovepipe": 0.0001229
+   },
+   "mrbs": 1713.8
+  },
+  {
+   "condition": "dust 1 (Aberdeen), just wiped",
+   "cfg": {
+    "dust": 1.0
+   },
+   "state": {},
+   "per_round": {
+    "any": 0.0005129,
+    "bolt_override": 5.344e-05,
+    "double_feed": 1.696e-05,
+    "failure_to_extract": 1.899e-07,
+    "failure_to_feed": 0.0002857,
+    "failure_to_fire": 3.72e-05,
+    "failure_to_lock_back": 1.025e-05,
+    "hangfire": 2e-06,
+    "squib": 5e-07,
+    "stovepipe": 0.0001067
+   },
+   "mrbs": 1949.6
+  },
+  {
+   "condition": "dust 1 (Aberdeen), 600 rounds since the wipe",
+   "cfg": {
+    "dust": 1.0
+   },
+   "state": {
+    "nLube": 600,
+    "nClean": 600
+   },
+   "per_round": {
+    "any": 0.01206,
+    "bolt_override": 0.002238,
+    "double_feed": 0.0002693,
+    "failure_to_extract": 1.018e-06,
+    "failure_to_feed": 0.00613,
+    "failure_to_fire": 0.0001514,
+    "failure_to_lock_back": 0.0001564,
+    "hangfire": 2e-06,
+    "squib": 5e-07,
+    "stovepipe": 0.003113
+   },
+   "mrbs": 82.9
+  },
+  {
+   "condition": "dust 1, aluminium magazine, 600 since the wipe",
+   "cfg": {
+    "dust": 1.0,
+    "magType": "gi_aluminium"
+   },
+   "state": {
+    "nLube": 600,
+    "nClean": 600
+   },
+   "per_round": {
+    "any": 0.02525,
+    "bolt_override": 0.003738,
+    "double_feed": 0.0007834,
+    "failure_to_extract": 1.018e-06,
+    "failure_to_feed": 0.0173,
+    "failure_to_fire": 0.0001514,
+    "failure_to_lock_back": 0.0001564,
+    "hangfire": 2e-06,
+    "squib": 5e-07,
+    "stovepipe": 0.003113
+   },
+   "mrbs": 39.6
+  },
+  {
+   "condition": "-54 C",
+   "cfg": {
+    "ambientC": -54.0
+   },
+   "state": {},
+   "per_round": {
+    "any": 0.001723,
+    "bolt_override": 0.0007165,
+    "double_feed": 6.182e-06,
+    "failure_to_extract": 1.084e-07,
+    "failure_to_feed": 0.0005663,
+    "failure_to_fire": 0.0002588,
+    "failure_to_lock_back": 7.623e-05,
+    "hangfire": 2e-06,
+    "squib": 5e-07,
+    "stovepipe": 9.608e-05
+   },
+   "mrbs": 580.5
+  },
+  {
+   "condition": "+52 C",
+   "cfg": {
+    "ambientC": 52.0
+   },
+   "state": {},
+   "per_round": {
+    "any": 0.000168,
+    "bolt_override": 1.184e-05,
+    "double_feed": 6.189e-06,
+    "failure_to_extract": 1.067e-07,
+    "failure_to_feed": 7.218e-05,
+    "failure_to_fire": 2.8e-05,
+    "failure_to_lock_back": 6.89e-06,
+    "hangfire": 2e-06,
+    "squib": 5e-07,
+    "stovepipe": 4.028e-05
+   },
+   "mrbs": 5952.6
+  },
+  {
+   "condition": "barrel at the manual's heat limit (250 rounds in 3 minutes)",
+   "cfg": {},
+   "state": {
+    "heatK": 432.0
+   },
+   "per_round": {
+    "any": 0.0002108,
+    "bolt_override": 1.709e-05,
+    "double_feed": 3.738e-05,
+    "failure_to_extract": 1.182e-06,
+    "failure_to_feed": 7.634e-05,
+    "failure_to_fire": 2.8e-05,
+    "failure_to_lock_back": 7.414e-06,
+    "hangfire": 2e-06,
+    "squib": 5e-07,
+    "stovepipe": 4.091e-05
+   },
+   "mrbs": 4743.3
+  },
+  {
+   "condition": "commercial .223",
+   "cfg": {
+    "ammo": "commercial_223"
+   },
+   "state": {},
+   "per_round": {
+    "any": 0.0003362,
+    "bolt_override": 9.352e-05,
+    "double_feed": 6.188e-06,
+    "failure_to_extract": 1.07e-07,
+    "failure_to_feed": 0.000137,
+    "failure_to_fire": 3.027e-05,
+    "failure_to_lock_back": 1.505e-05,
+    "hangfire": 3e-06,
+    "squib": 1e-06,
+    "stovepipe": 5.005e-05
+   },
+   "mrbs": 2974.2
+  },
+  {
+   "condition": "steel-cased import",
+   "cfg": {
+    "ammo": "steel_case"
+   },
+   "state": {},
+   "per_round": {
+    "any": 0.0008104,
+    "bolt_override": 0.0001631,
+    "double_feed": 7.436e-05,
+    "failure_to_extract": 2.468e-06,
+    "failure_to_feed": 0.0002054,
+    "failure_to_fire": 0.0002727,
+    "failure_to_lock_back": 2.2e-05,
+    "hangfire": 1e-05,
+    "squib": 2e-06,
+    "stovepipe": 5.836e-05
+   },
+   "mrbs": 1234.0
+  },
+  {
+   "condition": "old, damp or reloaded ammunition",
+   "cfg": {
+    "ammo": "degraded"
+   },
+   "state": {},
+   "per_round": {
+    "any": 0.007868,
+    "bolt_override": 0.0007002,
+    "double_feed": 1.02e-05,
+    "failure_to_extract": 2.504e-07,
+    "failure_to_feed": 0.0006514,
+    "failure_to_fire": 0.005008,
+    "failure_to_lock_back": 7.56e-05,
+    "hangfire": 0.001,
+    "squib": 0.0003,
+    "stovepipe": 0.0001225
+   },
+   "mrbs": 127.1
+  },
+  {
+   "condition": "aluminium magazine, clean",
+   "cfg": {
+    "magType": "gi_aluminium"
+   },
+   "state": {},
+   "per_round": {
+    "any": 0.000213,
+    "bolt_override": 1.709e-05,
+    "double_feed": 7.736e-06,
+    "failure_to_extract": 1.067e-07,
+    "failure_to_feed": 0.0001092,
+    "failure_to_fire": 2.8e-05,
+    "failure_to_lock_back": 7.415e-06,
+    "hangfire": 2e-06,
+    "squib": 5e-07,
+    "stovepipe": 4.091e-05
+   },
+   "mrbs": 4695.0
+  },
+  {
+   "condition": "magazine spring worn (1.0)",
+   "cfg": {
+    "magSpringWear": 1.0
+   },
+   "state": {},
+   "per_round": {
+    "any": 0.002242,
+    "bolt_override": 0.002081,
+    "double_feed": 6.182e-06,
+    "failure_to_extract": 1.067e-07,
+    "failure_to_feed": 7.62e-05,
+    "failure_to_fire": 2.8e-05,
+    "failure_to_lock_back": 7.415e-06,
+    "hangfire": 2e-06,
+    "squib": 5e-07,
+    "stovepipe": 4.091e-05
+   },
+   "mrbs": 445.9
+  },
+  {
+   "condition": "feed lips damaged (0.5)",
+   "cfg": {
+    "magLipDamage": 0.5
+   },
+   "state": {},
+   "per_round": {
+    "any": 0.001474,
+    "bolt_override": 1.709e-05,
+    "double_feed": 0.0003153,
+    "failure_to_extract": 1.067e-07,
+    "failure_to_feed": 0.001063,
+    "failure_to_fire": 2.8e-05,
+    "failure_to_lock_back": 7.415e-06,
+    "hangfire": 2e-06,
+    "squib": 5e-07,
+    "stovepipe": 4.091e-05
+   },
+   "mrbs": 678.4
+  },
+  {
+   "condition": "extractor claw gap 1.80 mm (NO-GO is 1.59)",
+   "cfg": {
+    "extractorGapMm": 1.8
+   },
+   "state": {},
+   "per_round": {
+    "any": 0.006789,
+    "bolt_override": 1.698e-05,
+    "double_feed": 0.006397,
+    "failure_to_extract": 0.0002205,
+    "failure_to_feed": 7.584e-05,
+    "failure_to_fire": 2.8e-05,
+    "failure_to_lock_back": 7.366e-06,
+    "hangfire": 2e-06,
+    "squib": 5e-07,
+    "stovepipe": 4.064e-05
+   },
+   "mrbs": 147.3
+  },
+  {
+   "condition": "weak ejector spring (1.0)",
+   "cfg": {
+    "ejectorWeak": 1.0
+   },
+   "state": {},
+   "per_round": {
+    "any": 0.002655,
+    "bolt_override": 1.691e-05,
+    "double_feed": 6.181e-06,
+    "failure_to_extract": 1.067e-07,
+    "failure_to_feed": 7.51e-05,
+    "failure_to_fire": 2.8e-05,
+    "failure_to_lock_back": 7.352e-06,
+    "hangfire": 2e-06,
+    "squib": 5e-07,
+    "stovepipe": 0.002519
+   },
+   "mrbs": 376.6
+  },
+  {
+   "condition": "piston rings worn (1.0)",
+   "cfg": {
+    "pistonRingsWorn": 1.0
+   },
+   "state": {},
+   "per_round": {
+    "any": 0.02814,
+    "bolt_override": 0.01379,
+    "double_feed": 6.063e-06,
+    "failure_to_extract": 1.476e-07,
+    "failure_to_feed": 0.01122,
+    "failure_to_fire": 2.8e-05,
+    "failure_to_lock_back": 0.001369,
+    "hangfire": 2e-06,
+    "squib": 5e-07,
+    "stovepipe": 0.001735
+   },
+   "mrbs": 35.5
+  },
+  {
+   "condition": "piston rings worn, commercial .223, -20 C",
+   "cfg": {
+    "pistonRingsWorn": 1.0,
+    "ammo": "commercial_223",
+    "ambientC": -20.0
+   },
+   "state": {},
+   "per_round": {
+    "any": 0.5338,
+    "bolt_override": 0.1766,
+    "double_feed": 3.478e-06,
+    "failure_to_extract": 1.18e-06,
+    "failure_to_feed": 0.2802,
+    "failure_to_fire": 3.161e-05,
+    "failure_to_lock_back": 0.0199,
+    "hangfire": 3e-06,
+    "squib": 1e-06,
+    "stovepipe": 0.05705
+   },
+   "mrbs": 1.9
+  },
+  {
+   "condition": "weak buffer spring (1.0)",
+   "cfg": {
+    "bufferSpringWeak": 1.0
+   },
+   "state": {},
+   "per_round": {
+    "any": 0.0002842,
+    "bolt_override": 1.709e-05,
+    "double_feed": 6.189e-06,
+    "failure_to_extract": 1.067e-07,
+    "failure_to_feed": 0.0001819,
+    "failure_to_fire": 2.8e-05,
+    "failure_to_lock_back": 7.415e-06,
+    "hangfire": 2e-06,
+    "squib": 5e-07,
+    "stovepipe": 4.091e-05
+   },
+   "mrbs": 3519.0
+  },
+  {
+   "condition": "firing pin protrusion 0.45 mm (GO is 0.90)",
+   "cfg": {
+    "firingPinProtrusionMm": 0.45
+   },
+   "state": {},
+   "per_round": {
+    "any": 0.01177,
+    "bolt_override": 1.69e-05,
+    "double_feed": 6.117e-06,
+    "failure_to_extract": 1.055e-07,
+    "failure_to_feed": 7.546e-05,
+    "failure_to_fire": 0.01162,
+    "failure_to_lock_back": 7.329e-06,
+    "hangfire": 2e-06,
+    "squib": 5e-07,
+    "stovepipe": 4.044e-05
+   },
+   "mrbs": 85.0
+  }
+ ]
+}
