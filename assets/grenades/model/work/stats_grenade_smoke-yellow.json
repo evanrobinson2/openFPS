@@ -1,0 +1,186 @@
+{
+ "variant": "smoke-yellow",
+ "lod": 0,
+ "parts": 16,
+ "triangles": 8470,
+ "by_part": {
+  "body": 2816,
+  "top_cover": 384,
+  "emission_hole_1": 60,
+  "emission_hole_2": 60,
+  "emission_hole_3": 60,
+  "emission_hole_4": 60,
+  "band_tape": 252,
+  "marking_bar_designation": 28,
+  "marking_word_1": 292,
+  "marking_word_2": 288,
+  "marking_bar_lot": 48,
+  "fuze_body": 490,
+  "hinge_lug": 296,
+  "lever": 1660,
+  "safety_pin": 268,
+  "pull_ring": 1408
+ },
+ "bbox_mm": {
+  "x": [
+   -32.25,
+   35.89
+  ],
+  "y_front_back": [
+   -34.85,
+   32.25
+  ],
+  "z_up": [
+   -58.75,
+   83.75
+  ]
+ },
+ "overall_length_mm": 142.5,
+ "info": {
+  "length": 142.5,
+  "width": 63.5,
+  "base_z": -58.75,
+  "top_z": 83.75,
+  "livery": "table"
+ },
+ "hierarchy": {
+  "grenade_smoke_yellow": null,
+  "body_group": "grenade_smoke_yellow",
+  "fuze": "grenade_smoke_yellow",
+  "body": "body_group",
+  "top_cover": "body",
+  "emission_hole_1": "top_cover",
+  "socket_emit_1": "body_group",
+  "emission_hole_2": "top_cover",
+  "socket_emit_2": "body_group",
+  "emission_hole_3": "top_cover",
+  "socket_emit_3": "body_group",
+  "emission_hole_4": "top_cover",
+  "socket_emit_4": "body_group",
+  "band_tape": "body",
+  "marking_bar_designation": "body",
+  "marking_word_1": "body",
+  "marking_word_2": "body",
+  "marking_bar_lot": "body",
+  "fuze_body": "fuze",
+  "hinge_lug": "fuze",
+  "lever": "fuze",
+  "socket_lever_hinge": "fuze",
+  "socket_thumb": "lever",
+  "safety_pin": "fuze",
+  "pull_ring": "safety_pin",
+  "socket_pin_ring": "pull_ring",
+  "socket_grip": "body_group",
+  "socket_effect": "body_group"
+ },
+ "sockets_mm_model_frame": {
+  "socket_emit_1": [
+   14.142,
+   14.142,
+   60.135
+  ],
+  "socket_emit_2": [
+   -14.142,
+   14.142,
+   60.135
+  ],
+  "socket_emit_3": [
+   -14.142,
+   -14.142,
+   60.135
+  ],
+  "socket_emit_4": [
+   14.142,
+   -14.142,
+   60.135
+  ],
+  "socket_lever_hinge": [
+   -12.0,
+   0,
+   77.55
+  ],
+  "socket_thumb": [
+   34.25,
+   0,
+   23.75
+  ],
+  "socket_pin_ring": [
+   14.873,
+   -23.53,
+   62.715
+  ],
+  "socket_grip": [
+   0,
+   0,
+   0
+  ],
+  "socket_effect": [
+   0,
+   0,
+   58.75
+  ]
+ },
+ "sockets_m_export_frame": {
+  "socket_emit_1": [
+   0.01414,
+   0.06014,
+   -0.01414
+  ],
+  "socket_emit_2": [
+   -0.01414,
+   0.06014,
+   -0.01414
+  ],
+  "socket_emit_3": [
+   -0.01414,
+   0.06014,
+   0.01414
+  ],
+  "socket_emit_4": [
+   0.01414,
+   0.06014,
+   0.01414
+  ],
+  "socket_lever_hinge": [
+   -0.012,
+   0.07755,
+   0.0
+  ],
+  "socket_thumb": [
+   0.03425,
+   0.02375,
+   0.0
+  ],
+  "socket_pin_ring": [
+   0.01487,
+   0.06272,
+   0.02353
+  ],
+  "socket_grip": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "socket_effect": [
+   0.0,
+   0.05875,
+   0.0
+  ]
+ },
+ "clips": {
+  "lever_squeeze": [
+   "lever"
+  ],
+  "pin_pull": [
+   "pull_ring",
+   "safety_pin"
+  ],
+  "lever_release": [
+   "lever"
+  ]
+ },
+ "options": {
+  "m18_livery": "table",
+  "flash_holes": 18
+ }
+}

@@ -1,0 +1,154 @@
+{
+ "_doc": "Matched cameras for the comparison renders. ref: figure crop in refs-local/ (not in git). crop: box in that file. anchor_px: where the model origin (body centre) sits in the crop. px_per_mm: the figure's ruler at the body. az: camera azimuth in degrees (0 = looking at the pull-ring side, 90 = looking at the lever side). el: camera elevation. roll: lean of the grenade in the picture. dist_mm: camera distance (inferred; the figures carry no camera data).",
+ "frag_figA2": {
+  "stem": "grenade_frag",
+  "ref": "figA2-M67.png",
+  "crop": [
+   0,
+   0,
+   738,
+   928
+  ],
+  "anchor_px": [
+   395,
+   550
+  ],
+  "px_per_mm": 8.976,
+  "az": 180,
+  "el": 20,
+  "roll": -8,
+  "dist_mm": 350,
+  "bg": "light",
+  "thr": 110
+ },
+ "flash_figA12": {
+  "stem": "grenade_flash",
+  "ref": "figA12-M84.png",
+  "crop": [
+   0,
+   0,
+   370,
+   624
+  ],
+  "anchor_px": [
+   157.5,
+   371
+  ],
+  "px_per_mm": 4.386,
+  "az": 0,
+  "el": 5,
+  "roll": 0,
+  "dist_mm": 400,
+  "bg": "light",
+  "thr": 100
+ },
+ "smoke_violet_figB3": {
+  "stem": "grenade_smoke-violet_figurelivery",
+  "ref": "figB3-M18.png",
+  "crop": [
+   30,
+   0,
+   350,
+   706
+  ],
+  "anchor_px": [
+   147.5,
+   396
+  ],
+  "px_per_mm": 3.858,
+  "az": 0,
+  "el": 9,
+  "roll": 0,
+  "dist_mm": 500,
+  "bg": "light",
+  "thr": 150,
+  "close_v": 70
+ },
+ "smoke_yellow_figB3": {
+  "stem": "grenade_smoke-yellow_figurelivery",
+  "ref": "figB3-M18.png",
+  "crop": [
+   470,
+   0,
+   790,
+   706
+  ],
+  "anchor_px": [
+   157.5,
+   405
+  ],
+  "px_per_mm": 4.016,
+  "az": 25,
+  "el": 9,
+  "roll": 0,
+  "dist_mm": 500,
+  "bg": "light",
+  "thr": 150,
+  "close_v": 70
+ },
+ "smoke_green_figB3": {
+  "stem": "grenade_smoke-green_figurelivery",
+  "ref": "figB3-M18.png",
+  "crop": [
+   905,
+   0,
+   1300,
+   706
+  ],
+  "anchor_px": [
+   185,
+   396.5
+  ],
+  "px_per_mm": 4.252,
+  "az": -40,
+  "el": 9,
+  "roll": 0,
+  "dist_mm": 500,
+  "bg": "light",
+  "thr": 150,
+  "close_v": 70
+ },
+ "smoke_red_figB3": {
+  "stem": "grenade_smoke-red_figurelivery",
+  "ref": "figB3-M18.png",
+  "crop": [
+   1390,
+   0,
+   1700,
+   706
+  ],
+  "anchor_px": [
+   140,
+   399
+  ],
+  "px_per_mm": 3.78,
+  "az": -30,
+  "el": 9,
+  "roll": 0,
+  "dist_mm": 500,
+  "bg": "light",
+  "thr": 150,
+  "close_v": 70
+ },
+ "smoke_white_figB5": {
+  "stem": "grenade_smoke-white",
+  "ref": "figB5-ANM8.png",
+  "crop": [
+   0,
+   0,
+   470,
+   865
+  ],
+  "anchor_px": [
+   265,
+   502
+  ],
+  "px_per_mm": 5.197,
+  "az": 143,
+  "el": 6,
+  "roll": 0,
+  "dist_mm": 500,
+  "bg": "dark",
+  "thr": 90
+ }
+}

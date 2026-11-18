@@ -1,0 +1,136 @@
+{
+ "variant": "impact",
+ "lod": 1,
+ "parts": 12,
+ "triangles": 4594,
+ "by_part": {
+  "body": 1920,
+  "neck_collar": 196,
+  "fuze_body": 118,
+  "hinge_lug": 40,
+  "lever": 436,
+  "safety_pin": 164,
+  "pull_ring": 704,
+  "safety_clip": 380,
+  "marking_word": 132,
+  "marking_bar_designation": 20,
+  "marking_bar_lot": 40,
+  "band_impact": 444
+ },
+ "bbox_mm": {
+  "x": [
+   -31.75,
+   36.89
+  ],
+  "y_front_back": [
+   -31.75,
+   32.1
+  ],
+  "z_up": [
+   -29.78,
+   54.72
+  ]
+ },
+ "overall_length_mm": 84.5,
+ "info": {
+  "length": 84.5,
+  "width": 63.5,
+  "base_z": -29.78359447749717,
+  "top_z": 54.716405522502825
+ },
+ "hierarchy": {
+  "grenade_impact": null,
+  "body_group": "grenade_impact",
+  "fuze": "grenade_impact",
+  "body": "body_group",
+  "neck_collar": "fuze",
+  "fuze_body": "fuze",
+  "hinge_lug": "fuze",
+  "lever": "fuze",
+  "socket_lever_hinge": "fuze",
+  "socket_thumb": "lever",
+  "safety_pin": "fuze",
+  "pull_ring": "safety_pin",
+  "socket_pin_ring": "pull_ring",
+  "safety_clip": "fuze",
+  "marking_word": "body",
+  "marking_bar_designation": "body",
+  "marking_bar_lot": "body",
+  "band_impact": "body",
+  "socket_grip": "body_group",
+  "socket_effect": "body_group"
+ },
+ "sockets_mm_model_frame": {
+  "socket_lever_hinge": [
+   -13.1,
+   0,
+   49.016
+  ],
+  "socket_thumb": [
+   35.05,
+   0,
+   6.0
+  ],
+  "socket_pin_ring": [
+   13.0,
+   -22.198,
+   29.831
+  ],
+  "socket_grip": [
+   0,
+   0,
+   0
+  ],
+  "socket_effect": [
+   0,
+   0,
+   0
+  ]
+ },
+ "sockets_m_export_frame": {
+  "socket_lever_hinge": [
+   -0.0131,
+   0.04902,
+   0.0
+  ],
+  "socket_thumb": [
+   0.03505,
+   0.006,
+   0.0
+  ],
+  "socket_pin_ring": [
+   0.013,
+   0.02983,
+   0.0222
+  ],
+  "socket_grip": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "socket_effect": [
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ "clips": {
+  "lever_squeeze": [
+   "lever"
+  ],
+  "pin_pull": [
+   "pull_ring",
+   "safety_pin"
+  ],
+  "lever_release": [
+   "lever"
+  ],
+  "safety_clip_off": [
+   "safety_clip"
+  ]
+ },
+ "options": {
+  "m18_livery": "table",
+  "flash_holes": 18
+ }
+}

@@ -1,0 +1,40 @@
+{
+ "_doc": "Published figures for each variant, with their source. FM = US Army FM 3-23.30, Grenades and Pyrotechnic Signals, 15 Oct 2009 (table, PDF page). Only exterior and effect figures are used; the tables' filler and fuze rows are deliberately not recorded here. 'impact' is game-only: every one of its numbers is game tuning.",
+ "oz_to_kg": 0.028349523,
+ "variants": {
+  "frag": {
+   "title": "Fragmentation (M67 exterior)", "source": "FM Table A-1, Fig. A-2 (p114)",
+   "weight_oz": 14, "delay_s": [4.0, 5.5], "throw_m": 35, "casualty_radius_m": 15, "killing_radius_m": 5, "hazard_note_m": 230,
+   "shape": {"kind": "sphere", "diameter_mm": 63.5, "diameter_source": "public figure (2.5 in, widely published for the M67; not in Table A-1); the limb in Fig. A-2 fits a circle"},
+   "effect": "frag"
+  },
+  "impact": {
+   "title": "Impact (game-only)", "source": "GAME: no real reference. Body and weight copied from frag; it does not imitate any real impact fuze",
+   "weight_oz": 14, "throw_m": 35, "casualty_radius_m": 15, "killing_radius_m": 5,
+   "shape": {"kind": "sphere", "diameter_mm": 63.5},
+   "game": {"arm_time_s": 0.35, "min_contact_speed_mps": 2.0, "self_timeout_s": 6.0},
+   "effect": "frag"
+  },
+  "flash": {
+   "title": "Stun / flash (M84 exterior)", "source": "FM Table A-5, Fig. A-12 (p123)",
+   "weight_oz": 13.3, "delay_s": [1.0, 2.3], "throw_m": 35, "throw_source": "INFERRED: Table A-5 gives no throwing distance; the frag's 35 m is used because the weights differ by 5 %",
+   "flash_candlepower_min": 1000000, "bang_db_at_5ft": [170, 180], "effect_radius_m": 9,
+   "shape": {"kind": "cylinder", "diameter_mm": 35.0, "length_mm": 133.35, "note": "5.25 in long, 1.73 in across the hexagon corners (Table A-5); drag uses a 35 mm cylinder of the same length"},
+   "effect": "flash"
+  },
+  "smoke": {
+   "title": "Coloured smoke (M18 exterior): red, yellow, green, violet", "source": "FM Table B-2 (p130), Fig. B-3 (p129)",
+   "weight_oz": 19, "delay_s": [0.7, 2.0], "throw_m": 35, "burn_s": [50, 90], "burn_mean_s": 60,
+   "colours": {"red": [0.78, 0.10, 0.10], "yellow": [0.90, 0.78, 0.15], "green": [0.20, 0.62, 0.25], "violet": [0.55, 0.25, 0.70]},
+   "shape": {"kind": "cylinder", "diameter_mm": 63.5, "length_mm": 142.5, "note": "can 2.5 in (Table B-3, same can family) x 117.5 mm measured in Fig. B-3, plus the fuze"},
+   "effect": "smoke"
+  },
+  "smoke-white": {
+   "title": "White smoke (AN-M8 exterior)", "source": "FM Table B-4 (p132), Fig. B-5 (p131)",
+   "weight_oz": 24, "delay_s": [0.7, 2.0], "throw_m": 30, "burn_s": [105, 150],
+   "colours": {"white": [0.93, 0.93, 0.91]},
+   "shape": {"kind": "cylinder", "diameter_mm": 63.5, "length_mm": 142.5},
+   "effect": "smoke"
+  }
+ }
+}

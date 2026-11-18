@@ -1,0 +1,4 @@
+model/r/
+model/work/*.blend*
+model/work/*.glb
+__pycache__/
