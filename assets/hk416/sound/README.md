@@ -6,6 +6,25 @@ Credit: carpetshark. Simulation by Claude Fable 5.2.
 
 **Version 2 (2026-11-17).** The owner heard version 1 as "clicks" that did not sound like the recordings. This version (a) establishes what the two reference recordings can be trusted for, (b) drives the muzzle source and the action noise from the action simulation (`../action/action.json`), (c) adds rough-ground scattering and an outdoor range with far-field listeners, and (d) replaces the playback "ear" stage, which let the shock through untouched. The change request is recorded in `../notes/NOTES.md`. Sections marked **v2** are new.
 
+## Cinematic mode (the default since 2026-11-17)
+
+The owner heard version 2 as well as "a click on a keyboard or a crackle" and decided that a game needs designed
+sound. `HK416Sound.build(ctx)` now defaults to `mode: 'cinematic'`: the shared synthesis in
+[`shared/cinematic-sound/`](../../../shared/cinematic-sound/README.md), sized by this rifle's simulation (muzzle energy
+1451 J, gas enthalpy 4336 J, 1.656 g of gas, 5.56 mm bore, 368 mm barrel, 74.9 ms cyclic period, the physical blast
+waveform as the crack, the simulated cycle as the action layer, each overlay's own decay and echo delays as the tail).
+Everything below this section describes the physical simulation, which is unchanged and is `mode: 'realistic'`
+(`S.realShot`, `S.realMech`, `S.realChain`; `S.shot`, `S.mech` and `S.chain` follow `S.mode`).
+
+- `build(ctx, { mode })`, `S.setMode(mode)`, `S.chain({ mode, overlay, hpd, distance, bearing, perspective, suppressor })`,
+  `chain.fire()`, `chain.auto()`, `chain.mech()`, `chain.set()`: see the shared README for the API and a copy-paste example.
+- `S.suppressed(patchedParams)` is a realistic build of suppressor-patched tables; a cinematic chain takes them as `suppressor`.
+- Measured on the page's chain (outdoors, `range_berm`): 1.3 % of the energy in the first 2 ms, crest 12.2 dB, audible tail
+  939 ms, peak -3.6 dBFS. A 14-round burst: peak -2.9 dBFS, at least 7.3 dB of dip between rounds. Suppressed: 9.9 dB quieter.
+- Realistic is identical to the merged commit sample for sample (the shared README, "Realistic is unchanged").
+- `CINE_SIM` in `hk416-sound.js` holds the four values copied from `action/` and `ballistics/`; `node
+  shared/cinematic-sound/check.mjs` fails if they drift.
+
 ## What is here
 
 | File | What it is |

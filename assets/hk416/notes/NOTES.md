@@ -263,3 +263,14 @@ Rule 7: each change request and what changed. Nothing is replaced silently; earl
 **Not changed.** No parameter was tuned to any recording. Steel plates, hearing protection and the room recipes are as version 1 apart from the band directivity.
 
 **Open.** The owner has not listened to version 2. Far-field decay depends on the surroundings of a real range, which are assumed here. Scoring against independent recordings is done by the main session, not by this build.
+
+### 2026-11-17, cinematic sound becomes the default
+
+**Request (owner, through the coordinating session).** The physical shots still sound "like a click on a keyboard or a crackle". Decision: an FPS needs designed sound, because the sound at a shooter's ear cannot be reproduced on speakers; "don't copy the mp3, we're simulating". Cinematic is to be the default for every gun, the physical simulation stays as `realistic` with its numbers unchanged, and nothing may be taken from a recording or a video.
+
+**Changed.**
+- New shared synthesis `shared/cinematic-sound/` (outside `assets/`, because `tools/check_assets.py` treats every folder there as an asset). `sound/hk416-sound.js` gains `mode: 'cinematic' | 'realistic'` (default cinematic), `chain.fire()`, `chain.auto()`, `chain.mech()`, and the chain options `distance`, `bearing`, `suppressor`. The old functions are kept as `realShot`, `realMech`, `realChain`.
+- `sample/index.html` has a mode switch; `sound/index.html` is pinned to `realistic`.
+- `params.json` and `sim.py` are untouched. Realistic output is identical to commit aa037ac, sample for sample (`shared/cinematic-sound/compare/results.json`, `check.json`).
+
+**Inferences and limits.** Every cinematic constant is a design choice, not a physical claim. Nobody has listened to the result: it is checked by measurement only (`shared/cinematic-sound/README.md`). No Python counterpart.

@@ -30,6 +30,7 @@
     <label>Environment <select id="env"><option value="dry">Dry (free field)</option></select></label>
     <label>Stance <select id="stance"><option value="ads">Aimed</option><option value="hip">Hip</option></select></label>
     <label class="chk"><input type="checkbox" id="hpd"> Earmuffs</label>
+    <label>Sound <select id="mode"><option value="cinematic">Cinematic (default)</option><option value="realistic">Realistic (simulation)</option></select></label>
     <label>Volume <input type="range" id="vol" min="0" max="1" step="0.01" value="0.25"></label>
     <label>Slow motion <select id="slow"><option value="40">40×</option><option value="10">10×</option><option value="1">Real time</option></select></label>
   </div>
@@ -55,13 +56,14 @@ let S = null, run = null;
 
 // ---------------------------------------------------------------- sound: dry shot -> room -> earmuffs, rendered offline
 async function shotBuffer(variant) {
-  const src = S.shot(variant), env = $('env').value, irLen = env === 'dry' ? 0 : S.params.overlays[env].persp.shooter.len;
-  const off = new OfflineAudioContext(1, Math.ceil((src.duration + irLen + 0.3) * 48000), 48000);
+  S.setMode($('mode').value);   // 'cinematic' (default): the designed shot, tail and bus; 'realistic': the physical simulation
+  const src = await S.shot(variant), env = $('env').value, irLen = S.mode === 'cinematic' ? (env === 'dry' ? 0.3 : 3.5) : env === 'dry' ? 0 : S.params.overlays[env].persp.shooter.len;
+  const off = new OfflineAudioContext(2, Math.ceil((src.duration + irLen + 0.3) * 48000), 48000);
   const chain = await S.chain({ overlay: env, perspective: 'shooter', hpd: $('hpd').checked, ear: true }, off);
   const n = off.createBufferSource(); n.buffer = src; n.connect(chain.input); chain.output.connect(off.destination); n.start();
-  const out = await off.startRendering(), d = out.getChannelData(0); let pk = 0;
-  for (let i = 0; i < d.length; i++) pk = Math.max(pk, Math.abs(d[i]));
-  if (pk > 0.98) for (let i = 0; i < d.length; i++) d[i] *= 0.98 / pk;
+  const out = await off.startRendering(), d = out.getChannelData(0), e = out.getChannelData(1); let pk = 0;
+  for (let i = 0; i < d.length; i++) pk = Math.max(pk, Math.abs(d[i]), Math.abs(e[i]));
+  if (pk > 0.98) for (let i = 0; i < d.length; i++) { d[i] *= 0.98 / pk; e[i] *= 0.98 / pk; }
   return out;
 }
 

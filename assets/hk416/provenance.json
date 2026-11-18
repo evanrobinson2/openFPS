@@ -21,6 +21,11 @@
       "part": "action and recoil simulation (action/)",
       "model": "Claude Fable 5.2",
       "date": "2026-11-17"
+    },
+    {
+      "part": "cinematic sound mode (sound/hk416-sound.js adapter; shared/cinematic-sound/)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
     }
   ],
   "reviewed_by": [

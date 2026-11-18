@@ -23,6 +23,8 @@
 // another buffer pass { peakDb: S.info(buffer).peak_db_spl } or { ear: false }.
 // chain({}) with no overlay uses S.defaultOverlay; overlay: null or 'dry' is the free-field shot.
 
+import '../../../shared/cinematic-sound/cinematic-sound.js';   // -> globalThis.OpenFPSCinematicSound (the shared cinematic synthesis)
+
 const P_REF = 20e-6;
 const fnv1a = (s) => { let h = 0x811c9dc5; for (const c of new TextEncoder().encode(s)) { h ^= c; h = Math.imul(h, 0x01000193) >>> 0; } return h >>> 0; };
 class Rng { // mulberry32, counter based; identical to sim.py
@@ -194,6 +196,12 @@ function makeCore(P) {
   return { dry, mech, steel, ir, hpd: () => unb64(P.hpd.fir), FS };
 }
 
+// Simulation values the cinematic design reads that are not in params.json. Copied from action/action.json and ballistics/ballistics.json;
+// shared/cinematic-sound/check.mjs fails if they drift. muzzle_energy_J = m v^2 / 2 for M855 (4.018 g at 850 m/s); supersonic_to_m: the
+// ballistics table is still above Mach 1 at its last row; bare_peak_db_ear: the bare rifle's simulated peak at the shooter's ear.
+const CINE_SIM = { muzzle_energy_J: 1451.3, muzzle_velocity: 850.0, bore_mm: 5.56, barrel_mm: 368.3, bullet_diam_mm: 5.70, bullet_len_mm: 23, supersonic_to_m: 600, bare_peak_db_ear: 157.5 };
+const CS = globalThis.OpenFPSCinematicSound;
+
 async function build(ctx, opts = {}) {
   const P = opts.params || await (await fetch(opts.paramsUrl || new URL('params.json', import.meta.url))).json();
   const core = makeCore(P), cache = new Map(), meta = new WeakMap(), norm = Math.pow(10, -1 / 20);
@@ -204,27 +212,28 @@ async function build(ctx, opts = {}) {
     meta.set(buf, normalise ? { peak_pa: pk, peak_db_spl: 20 * Math.log10(pk / P_REF), pa_per_fullscale: 1 / k } : { units: 'impulse response, direct path = 1' }); return buf;
   }
   const steelKey = (r) => Object.keys(P.steel).reduce((a, b) => Math.abs(P.steel[a].radius - r) <= Math.abs(P.steel[b].radius - r) ? a : b);
+  let G = null;
   const S = {
     params: P, raw: core, overlays: Object.fromEntries(Object.entries(P.overlays).map(([k, v]) => [k, { title: v.title, perspectives: Object.keys(v.persp) }])),
     defaultOverlay: P.default_overlay || null, variants: Object.keys(P.variants), perspectives: Object.keys(P.persp).filter((k) => k !== 'ongun' && k !== 'side1m'), mechClips: Object.keys(P.mech_clips), steelKeys: Object.keys(P.steel),
-    info: (buf) => meta.get(buf),
+    info: (buf) => meta.get(buf) || (G && G.info(buf)),
     // ear stage: the level (as a fraction of a buffer's full scale) at which the middle ear stops passing peaks, for a buffer whose -1 dBFS peak is peakDb
     earLimit: (peakDb) => Math.min(1, Math.pow(10, (P.ear.limit_db - peakDb - 1) / 20)),
-    shot: (variant = 'single', { perspective = 'shooter', ground = false } = {}) => memo(`shot/${variant}/${perspective}/${ground}`, () => toBuffer(core.dry(perspective, variant, ground), true)),
-    mech: (clip = 'cycle', { perspective = 'shooter' } = {}) => memo(`mech/${clip}/${perspective}`, () => toBuffer(core.mech(clip, perspective), true)),
+    realShot: (variant = 'single', { perspective = 'shooter', ground = false } = {}) => memo(`shot/${variant}/${perspective}/${ground}`, () => toBuffer(core.dry(perspective, variant, ground), true)),
+    realMech: (clip = 'cycle', { perspective = 'shooter' } = {}) => memo(`mech/${clip}/${perspective}`, () => toBuffer(core.mech(clip, perspective), true)),
     steel: (radius = 0.2, { dist = null, seed = 0 } = {}) => { const k = steelKey(radius); return memo(`steel/${k}/${dist}/${seed}`, () => toBuffer(core.steel(k, dist, seed), true)); },
     // the IR is built on first use (0.1 to 2 s of CPU depending on its length), then cached
     ir: (overlay, perspective = 'shooter') => memo(`ir/${overlay}/${perspective}`, () => new Promise((res) => setTimeout(() => res(toBuffer(core.ir(overlay, perspective), false)), 0))),
     hpd: () => memo('hpd', () => toBuffer(core.hpd(), false)),
     // input -> [room convolver] -> [earmuff FIR] -> [ear: peak limit + make-up] -> output. Connect output yourself.
-    async chain(o = {}, actx = ctx) { // actx: pass an OfflineAudioContext to render the chain
+    async realChain(o = {}, actx = ctx) { // actx: pass an OfflineAudioContext to render the chain
       const ctx = actx, input = ctx.createGain(), output = ctx.createGain(); let nodes = [];
       const c = { input, output, opts: {}, async set(n) {
         Object.assign(c.opts, n); const { overlay = S.defaultOverlay, perspective = 'shooter', hpd = false, ear = true, peakDb = null } = c.opts, next = []; // overlay: omit it for the default surroundings; null or 'dry' for none
         if (overlay && overlay !== 'dry') { const cv = ctx.createConvolver(); cv.normalize = false; cv.buffer = await S.ir(overlay, perspective); next.push(cv); }
         if (hpd) { const cv = ctx.createConvolver(); cv.normalize = false; cv.buffer = S.hpd(); next.push(cv); if (!ear) { const g = ctx.createGain(); g.gain.value = 4; next.push(g); } } // without the ear stage: +12 dB make-up so the muffled shot is still audible
         if (ear) { // the ear's own peak limit (see README "The ear stage"): memoryless, so it acts on the 0.2 ms shock that a compressor lets through
-          const L = S.earLimit(peakDb === null ? S.info(S.shot('single', { perspective })).peak_db_spl : peakDb), N = 16385, curve = new Float32Array(N);
+          const L = S.earLimit(peakDb === null ? S.info(S.realShot('single', { perspective })).peak_db_spl : peakDb), N = 16385, curve = new Float32Array(N);
           for (let i = 0; i < N; i++) { const x = 2 * i / (N - 1) - 1; curve[i] = L * Math.tanh(x / L); }
           const ws = ctx.createWaveShaper(); ws.curve = curve; ws.oversample = '4x'; const g = ctx.createGain(); g.gain.value = (hpd ? 4 : 1) * 0.85 / L; if (L < 1) next.push(ws); next.push(g); // earmuffs: +12 dB make-up so the muffled shot is still audible
         }
@@ -233,9 +242,49 @@ async function build(ctx, opts = {}) {
       return c.set(o);
     },
   };
+  // ---- cinematic mode (the default since 2026-11-17): shared/cinematic-sound/cinematic-sound.js sized by this rifle's simulation.
+  // S.realShot / S.realMech / S.realChain above are the physical simulation, unchanged; S.shot / S.mech / S.chain follow S.mode.
+  const subs = new WeakMap(), subCore = (sup) => { if (!subs.has(sup)) subs.set(sup, { core: makeCore(sup), S: null }); return subs.get(sup); };
+  S.suppressed = (sup) => { const e = subCore(sup); return e.S || (e.S = build(ctx, { params: sup, mode: 'realistic' })); };   // a realistic build of the patched tables
+  const built = P.suppressor ? P : null, pkOf = (x) => { let p = 0; for (let i = 0; i < x.length; i++) p = Math.max(p, Math.abs(x[i])); return p; };
+  const phys = (c) => memo2(c, () => ({ blast: c.dry('shooter', 'single', false, ['blast', 'nwave']), mech: c.dry('shooter', 'single', false, ['mech']) })), physCache = new WeakMap(), memo2 = (c, f) => { if (!physCache.has(c)) physCache.set(c, f()); return physCache.get(c); };
+  const envOf = (ov) => {
+    const O = P.overlays[ov]; if (!O) return null; const rc = O.persp.shooter, st = rc.elements.find((e) => e.type === 'stat');
+    if (st) return { kind: 'indoor', rt60: (st.T60[2] + st.T60[3] + st.T60[4] + st.T60[5]) / 4, slaps: [] };            // a room: the statistical tail's own decay time, 250 Hz to 2 kHz
+    const slaps = [], d3 = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]), add = (p) => { const r1 = d3(p, rc.src), r2 = d3(p, rc.lis), t = (r1 + r2 - rc.rd) / P.c; if (t > 0.03 && t < 2.5) slaps.push({ t, db: -20 * Math.log10((r1 + r2) / rc.rd) }); };
+    for (const e of rc.elements) {                                                                                       // outdoors: when each reflecting surface of the simulated place answers
+      if (e.type === 'patches' && e.seed !== 'groundscatter') add([e.o[0] + (e.eu[0] + e.ev[0]) / 2, e.o[1] + (e.eu[1] + e.ev[1]) / 2, e.o[2] + (e.eu[2] + e.ev[2]) / 2]);
+      if (e.type === 'trees') add([0, 1.6, e.z0]);
+    }
+    slaps.sort((a, b) => a.t - b.t); return { kind: 'outdoor', rt60: 0.6 * rc.len, slaps: slaps.slice(0, 4) };          // design: 0.6 of the simulated response's length stands for its decay time
+  };
+  const adapter = {
+    id: 'hk416', fs: core.FS, defaultKey: 'single', defaultOverlay: P.default_overlay || 'range_berm', builtSuppressed: built, hpdMakeupDb: 16,
+    sim: () => ({ ...CINE_SIM, gas_energy_J: P.gas.enthalpy_out_J, gas_mass_g: P.gas.gas_mass_g, cyclic_period_s: P.cycle_s }),
+    times: (key) => ({ base: 'single', times: (P.variants[key] || P.variants.single).times }),
+    perspective: (p) => { const pp = P.persp[p]; if (!pp || p === 'shooter') return pp ? { distance: 0, bearing: 'front' } : null; const e = pp.blast.free[0], th = e.theta == null ? 90 : e.theta, r = e.r == null ? Math.hypot(pp.lis[0], pp.lis[2]) : e.r; return { distance: Math.round(r), bearing: th < 60 ? 'front' : 'side' }; },
+    physical: (key, sup) => phys(sup && sup !== built ? subCore(sup).core : core),
+    // the physical reduction of the muzzle blast at the shooter's ear: the bare rifle's simulated peak over the patched tables' peak
+    suppression: (sup) => sup === built ? CINE_SIM.bare_peak_db_ear - 20 * Math.log10(pkOf(phys(core).blast) / P_REF) : 20 * Math.log10(pkOf(phys(core).blast) / pkOf(phys(subCore(sup).core).blast)),
+    mechClip: (name, sup) => {
+      const c = sup && sup !== built ? subCore(sup).core : core, Q = sup && sup !== built ? sup : P, ev = Q.mech_clips[name], tmin = Math.min(0, ...ev.map((e) => e[1])), t0 = 0.005 - tmin + 0.002;
+      return { phys: c.mech(name, 'shooter'), events: ev.map(([n, te]) => ({ t: t0 + te, w: Math.pow(10, (Q.mech[n].p1m - 111.2) / 20), ms: 0.2 })), slides: Q.slide_clips.includes(name) && Q.slide.n ? [{ t0: t0 + Q.slide.t, t1: t0 + Q.slide.t + Q.slide.n / core.FS, w: 1 }] : [] };
+    },
+    env: (ov) => (!ov || ov === 'dry') ? null : envOf(ov),
+    realShot: (key, o = {}) => o.suppressor ? S.suppressed(o.suppressor).then((s2) => s2.realShot(key, o)) : S.realShot(key, o),
+    realMech: (clip, o = {}) => S.realMech(clip, o),
+    realChain: (ro, cx, q = {}) => q.suppressor ? S.suppressed(q.suppressor).then((s2) => s2.realChain(ro, cx)) : S.realChain(ro, cx),
+    hpd: (cx) => { const cv = cx.createConvolver(); cv.normalize = false; cv.buffer = S.hpd(); return { input: cv, output: cv }; },
+  };
+  G = CS.makeGun(ctx, adapter, { mode: opts.mode });
+  Object.defineProperty(S, 'mode', { get: () => G.mode, set: (m) => { G.setMode(m); }, enumerable: true });
+  S.setMode = (m) => { G.setMode(m); return S; }; S.design = G.design; S.cinematic = G;
+  S.shot = (variant = 'single', o = {}) => (o.mode || G.mode) === 'realistic' && !o.suppressor ? S.realShot(variant, o) : G.shot(variant, o);
+  S.mech = (clip = 'cycle', o = {}) => (o.mode || G.mode) === 'realistic' ? S.realMech(clip, o) : G.mech(clip, o);
+  S.chain = async (o = {}, actx = ctx) => G.chain(o, actx);
   return S;
 }
 
-const HK416Sound = { build, makeCore, Rng, fft };
+const HK416Sound = { build, makeCore, Rng, fft, CINE_SIM };
 export default HK416Sound;
 export { HK416Sound, build, makeCore };

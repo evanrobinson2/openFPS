@@ -92,7 +92,7 @@ async function go() {
 }
 $('play').onclick = go; $('stop').onclick = stop;
 
-HK416Sound.build(AC).then((s) => {
+HK416Sound.build(AC, { mode: 'realistic' }).then((s) => {
   S = s; window.S = s;
   for (const v of S.variants) opt($('what'), 'shot:' + v, { single: 'Single shot', semi3: 'Semi, 3 rounds', auto1s: 'Auto, 1 s burst (850 rpm)' }[v] || v);
   for (const c of S.mechClips) opt($('what'), 'mech:' + c, 'Mechanical: ' + c.replace(/_/g, ' '));
