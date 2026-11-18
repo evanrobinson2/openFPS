@@ -41,9 +41,123 @@
 
   <h2>Point of impact with HK's 100 yd zero (mm, + high)</h2>
   <div class="wrap"><table id="poi"></table></div>
+
+  <!-- ================================================================ malfunctions (malfunctions/hk416-malfunctions.js) -->
+  <h2>Malfunctions: what a stoppage looks like and how it is cleared</h2>
+  <p>From <code>malfunctions/hk416-malfunctions.js</code>: each shot is drawn from the action simulation's energy and timing margins, and the rifle is a state machine the clearing steps act on. Education only: recognising a stoppage and making the rifle safe. Rates are calibrated to one published dust test and an assumed clean baseline; see <code>malfunctions/README.md</code> for sources and limits.</p>
+  <div class="row">
+    <label>Next shot <select id="mfForce"><option value="">by chance</option></select></label>
+    <label>Dust <input type="range" id="mfDust" min="0" max="1" step="0.05" value="0"></label>
+    <label>Ammunition <select id="mfAmmo"></select></label>
+    <label>Magazine <select id="mfMag"></select></label>
+    <label>Setting <select id="mfMode"><option value="range">Range (wait on a misfire)</option><option value="military">Immediate action</option></select></label>
+    <label>Seed <input type="range" id="mfSeed" min="1" max="99" step="1" value="7"></label>
+    <button class="go" id="mfFire" disabled>Press the trigger</button>
+    <button id="mfStep" disabled>Next clearing step</button>
+    <button id="mfReset" disabled>Reset</button>
+  </div>
+  <canvas id="mfGun" width="1000" height="300"></canvas>
+  <div id="mfText" style="margin-top:8px"></div>
+  <div class="wrap"><table id="mfLog"></table></div>
+  <div class="row" style="margin-top:12px">
+    <button id="mfDustTest" disabled>Run the 2007 dust test (10 rifles × 6,000 rounds)</button>
+    <button id="mfRun" disabled>Run 60,000 rounds in the conditions above</button>
+  </div>
+  <div class="wrap"><table id="mfRates"></table></div>
 </main>
 <script src="../action/hk416-action.js"></script>
 <script src="../ballistics/hk416-ballistics.js"></script>
+<script src="../malfunctions/hk416-malfunctions.js"></script>
+<script>
+// ---------------------------------------------------------------- malfunction demo (self-contained; uses only HK416Malfunctions)
+(function () {
+  const $ = (id) => document.getElementById(id), M = window.HK416Malfunctions;
+  let gun = null, anim = null, log = [];
+  const cfg = () => ({ seed: +$('mfSeed').value, dust: +$('mfDust').value, ammo: $('mfAmmo').value, magType: $('mfMag').value, mode: $('mfMode').value });
+  const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+
+  function draw(carrierMm) {
+    const c = $('mfGun').getContext('2d'), W = 1000, H = 300, s = 3.6, ox = 800, oy = 142; c.clearRect(0, 0, W, H);
+    const X = (z) => ox + z * s, Y = (y) => oy - y * s, st = gun.state, p = gun.pose(), x = carrierMm === undefined ? p.carrierMm : carrierMm, xb = Math.max(0, x - 10.5);
+    const box = (z0, z1, y0, y1, fill, stroke) => { if (fill) { c.fillStyle = fill; c.fillRect(X(z0), Y(y1), (z1 - z0) * s, (y1 - y0) * s); } if (stroke) { c.strokeStyle = stroke; c.strokeRect(X(z0), Y(y1), (z1 - z0) * s, (y1 - y0) * s); } };
+    c.lineWidth = 2; box(-190, 0, -14, 22, null, '#2f3a45');                               // upper receiver
+    box(-86, -21, -6, 10, 'rgba(108,195,255,0.07)', '#3b4a58');                           // ejection port (build.py: L -86 to -21)
+    box(-14, 31, -5.2, 5.2, null, '#55636f'); c.beginPath(); c.moveTo(X(31), Y(0)); c.lineTo(X(34), Y(0)); c.strokeStyle = '#55636f'; c.stroke();   // chamber
+    if (st.mag.present) { box(-78, -15.6, -40, -21.2, null, '#2f3a45'); if (st.mag.rounds > 0 && st.feedway !== 'nose_jam') brass(-74.1, -19.2, 1, 0, 57.4, true); }
+    box(-150 - x, -30 - x, -9, 9, '#ffb347');                                             // bolt carrier
+    box(-30.5 - xb, -14 - xb, -6, 6, '#6cc3ff');                                          // bolt head
+    function brass(z, y, az, ay, len, bullet) {                                           // a case or a round, base at (z, y), axis (az, ay) in the side view
+      const n = Math.hypot(az, ay) || 1, L = len * n; c.save(); c.translate(X(z), Y(y)); c.rotate(-Math.atan2(ay, az));
+      c.fillStyle = '#d9b44a'; c.fillRect(0, -4.8 * s, Math.min(L, 44.7 * n) * s, 9.6 * s);
+      if (bullet) { c.fillStyle = '#c8763a'; c.beginPath(); c.moveTo(44.7 * n * s, -2.9 * s); c.lineTo(L * s, 0); c.lineTo(44.7 * n * s, 2.9 * s); c.fill(); }
+      c.restore();
+    }
+    if (carrierMm === undefined || x === p.carrierMm) {
+      for (const q of p.props) {
+        if (q.prop === 'prop_bullet') { c.fillStyle = '#c8763a'; c.fillRect(Math.min(X(q.pos[2]), W - 30), Y(2.8), 23 * s, 5.6 * s); continue; }
+        brass(q.pos[2] * 1e3, q.pos[1] * 1e3, q.axis[2], q.axis[1], q.prop === 'prop_case' ? 44.7 : 57.4, q.prop !== 'prop_case');
+      }
+      if (st.chamber === 'live' || st.chamber === 'dud') brass(-14, 0, 1, 0, 57.4, true);
+    }
+    c.fillStyle = '#9aa6b0'; c.font = '12px ui-monospace,Menlo,monospace';
+    c.fillText(`carrier ${x.toFixed(1)} mm   bolt ${st.bolt}   chamber ${st.chamber}   feedway ${st.feedway}   hammer ${st.hammer}   bore ${st.bore}`, 12, 18);
+    c.fillText(`magazine ${st.mag.present ? st.mag.rounds + ' rounds' : 'out'}   selector ${st.selector}   shots ${st.shots}   ${gun.ready ? 'READY' : st.status !== 'ok' ? st.status.replace(/_/g, ' ').toUpperCase() : 'NOT READY'}`, 12, 36);
+    c.fillText('right side, muzzle to the right; the outlined window is the ejection port', 12, H - 10);
+  }
+
+  function describe(r) {
+    const d = M.malfunctions[r.outcome === 'hangfire' && r.then && !r.then.stoppage ? '' : (r.then && r.then.stoppage ? r.then.outcome : r.outcome)], o = gun.observe();
+    let h = '';
+    if (r.outcome === 'fired') h = '<p>Normal shot.' + (gun.state.bolt === 'held_open' ? ' Last round: the bolt is held open on the follower.' : '') + '</p>';
+    else if (r.outcome === 'fired_into_obstruction' || r.outcome === 'out_of_service') h = `<p style="color:var(--acc)">${esc(r.note || 'The rifle is out of service.')}</p>`;
+    else if (!d) h = `<p>${esc(r.outcome.replace(/_/g, ' '))}${r.delayS ? `: the round fired ${(r.delayS * 1e3).toFixed(0)} ms late` : ''}.</p>`;
+    else {
+      const v = r.then && r.then.stoppage ? r.then.variant : r.variant;
+      h = `<p style="color:var(--fg)"><b>${esc(d.name)}</b>${v && d.variants[v] ? ': ' + esc(d.variants[v]) : ''}${r.delayS ? ` (delay ${r.delayS.toFixed(2)} s${gun.state.pending ? ', not yet fired' : ''})` : ''}</p>` +
+        `<p>${esc(d.cause)}</p><p><b>Sees:</b> ${esc(d.cues.sees.join('; '))}. <b>Hears:</b> ${esc(d.cues.hears.join('; '))}. <b>Trigger:</b> ${esc(d.cues.trigger)}.</p>` +
+        `<p><b>In the mechanism:</b> ${esc(d.state)}</p><p style="color:var(--acc)"><b>Hazard:</b> ${esc(d.hazard)}</p>`;
+    }
+    if (!gun.ready && gun.state.status === 'ok') { const pid = gun.diagnose(), pr = M.procedures.procedures[pid]; h += `<p><b>Procedure for what can be seen (${esc(o.port.replace(/_/g, ' '))}):</b> ${esc(pr.name)}. Source: ${esc(pr.source)}.</p>`; }
+    $('mfText').innerHTML = h;
+  }
+  function showLog() { $('mfLog').innerHTML = log.length ? '<tr><th>Step</th><th>Expected</th><th>What happened</th><th>s</th></tr>' + log.map((l) => `<tr><td>${esc(l[0])}</td><td style="text-align:left">${esc(l[1])}</td><td style="text-align:left">${esc(l[2])}</td><td>${l[3]}</td></tr>`).join('') : ''; }
+
+  function reset() { gun = M.create(cfg()); log = []; anim = null; $('mfText').innerHTML = '<p>Ready: round chambered, 29 in the magazine.</p>'; showLog(); draw(); }
+  function fire() {
+    gun.set({ dust: +$('mfDust').value, ammo: $('mfAmmo').value, mode: $('mfMode').value });
+    const r = gun.fire($('mfForce').value ? { force: $('mfForce').value } : undefined); log = []; showLog(); describe(r);
+    const cyc = r.then || r, id = {}; anim = id;
+    if (!cyc.travelMm) { draw(); return; }
+    const t0 = performance.now(), tEnd = 0.09;                       // the carrier in 40x slow motion, from the action simulation's curve
+    (function frame() { if (anim !== id) return; const t = (performance.now() - t0) / 1000 / 40; if (t >= tEnd) { draw(); return; } draw(gun.carrierAt(t)); requestAnimationFrame(frame); })();
+  }
+  function step() {
+    anim = null; const s = gun.step();
+    if (s && s.step) log.push([s.label, s.expect, (s.result.ok ? '' : 'did not work. ') + (s.result.events.join(', ').replace(/_/g, ' ') || (s.result.ok ? 'done' : '')) + (s.result.note ? ' ' + s.result.note : ''), s.result.seconds]);
+    showLog(); draw();
+    if (gun.ready) $('mfText').innerHTML = `<p style="color:var(--fg)"><b>Cleared.</b> Ready to fire. ${log.reduce((a, l) => a + l[3], 0).toFixed(1)} s by the clock.</p>`;
+    else if (gun.state.status !== 'ok') $('mfText').innerHTML = `<p style="color:var(--acc)"><b>${gun.state.status === 'needs_inspection' ? 'Made safe.' : 'Out of service.'}</b> ${gun.state.status === 'needs_inspection' ? 'The rifle goes to an armourer: the barrel is inspected before it is fired again.' : 'The simulation stops here; reset to continue.'}</p>`;
+  }
+  function rates(runs, title, pub) {
+    const cats = {}, names = { FFD: 'failure to feed (with magazine)', FTC: 'failure to chamber', FFR: 'failure to fire', FXT: 'failure to extract', FEJ: 'failure to eject', FBR: 'bolt failed to lock back' };
+    let n = 0, rounds = 0; for (const r of runs) { n += r.stoppages; rounds += r.rounds; for (const k in r.counts) { const c = M.edtCategory(k); cats[c] = (cats[c] || 0) + r.counts[k]; } }
+    $('mfRates').innerHTML = `<tr><th>${esc(title)}</th><th>Simulated</th>${pub ? '<th>Published, HK416, 2007</th>' : ''}</tr>` +
+      Object.keys(names).map((c) => `<tr><td>${names[c]}</td><td>${cats[c] || 0}</td>${pub ? `<td>${pub[c]}</td>` : ''}</tr>`).join('') +
+      `<tr><td>all stoppages in ${rounds.toLocaleString()} rounds</td><td>${n}</td>${pub ? '<td>217</td>' : ''}</tr><tr><td>mean rounds between stoppages</td><td>${n ? (rounds / n).toFixed(0) : '-'}</td>${pub ? '<td>276</td>' : ''}</tr>`;
+  }
+  M.load('../malfunctions/malfunctions.json', '../malfunctions/procedures.json').then(() => {
+    const D = M.data;
+    for (const k in D.ammo) $('mfAmmo').add(new Option(D.ammo[k].name, k));
+    for (const k in D.magazines) $('mfMag').add(new Option(D.magazines[k].name, k));
+    for (const k in D.malfunctions) { const m = D.malfunctions[k], vs = Object.keys(m.variants); if (k === 'failure_to_lock_back') continue; if (vs.length < 2) $('mfForce').add(new Option(m.name, k)); else for (const v of vs) $('mfForce').add(new Option(m.name + ': ' + v.replace(/_/g, ' '), k + ':' + v)); }
+    for (const id of ['mfFire', 'mfStep', 'mfReset', 'mfDustTest', 'mfRun']) $(id).disabled = false;
+    $('mfFire').onclick = fire; $('mfStep').onclick = step; $('mfReset').onclick = reset; $('mfSeed').onchange = reset; $('mfMag').onchange = reset;
+    $('mfDustTest').onclick = () => { const t = D.calibration.targets, runs = []; for (let i = 0; i < 10; i++) runs.push(M.runProtocol(+$('mfSeed').value * 100 + i, 6000, { dust: 1 })); rates(runs, 'One simulated dust test (seed ' + $('mfSeed').value + ')', t); };
+    $('mfRun').onclick = () => { const c = cfg(), runs = []; for (let i = 0; i < 10; i++) runs.push(M.runProtocol(c.seed * 100 + i, 6000, c)); rates(runs, 'Ten rifles in the conditions above', null); };
+    reset();
+  }).catch((e) => { $('mfText').textContent = 'Could not load the malfunction tables: ' + e.message; });
+})();
+</script>
 <script type="module">
 import HK416Sound from '../sound/hk416-sound.js';
 const $ = (id) => document.getElementById(id);
