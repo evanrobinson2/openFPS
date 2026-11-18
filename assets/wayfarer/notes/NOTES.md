@@ -23,7 +23,8 @@
 
 ## Limits, plainly
 
-- First-pass detail everywhere except the engine section (conduits, fuel manifolds, accessory gearboxes, nozzle flaps
+- First-pass detail everywhere except the landing gear (uplocks, well hydraulics, landing lights, stroke marks, pad
+  springs), the engine section (conduits, fuel manifolds, accessory gearboxes, nozzle flaps
   and unison rings, compressor faces, struts, feed lines) and the cockpit, which has had its full-detail pass (flight seats, displays with
   bezel keys, standby gauges, keypads, throttle quadrant, switch panels, overhead panel, pedals, grab handles).
 - Flat colours. No textures, wear, decals or markings.
@@ -42,7 +43,7 @@
 
 carpetshark was away, so these were taken as defaults and can all be reversed: keep both the retractable gear and the
 stowed lander; keep the interior as drafted; keep the engine reading below; make the ramp flush (done); detail the
-cockpit first (done), then the engine section (done); keep the heavy brow as in the image, with the slit height now
+cockpit first (done), then the engine section (done) and the landing gear (done); keep the heavy brow as in the image, with the slit height now
   one number (`CANOPY_SLIT` in `model/spec.py`) so the view can be opened later. The questions below still want a real
   answer.
 
@@ -57,7 +58,7 @@ cockpit first (done), then the engine section (done); keep the heavy brow as in 
 4. **Ramp.** It now finishes flush with the lift deck, by way of a sill flap. Is that what you want?
 5. **Pilot's view.** From the seat the canopy slit is a low band (see `renders/pilot_eye.jpg`). Keep the heavy brow
    as in the image, or open the view up?
-6. **Which section next for full detail,** after the cockpit and engines: lift chassis, landing gear or lander bay?
+6. **Which section next for full detail,** after the cockpit, engines and landing gear: lift chassis, lander bay or the crew spaces?
 7. **The lander.** Its own asset later, or part of this one?
 
 ## Next

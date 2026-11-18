@@ -12,11 +12,11 @@ to places inside, hide modules, slide a cutaway through the hull and run every m
 ## Status
 
 This is the **structure stage**: the whole ship exists at true size with real walls, decks, doors and mechanisms, in
-a first pass of detail. The cockpit and the engine section have had their full-detail pass; the rest has not. It is not finished art.
+a first pass of detail. The cockpit, the engine section and the landing gear have had their full-detail pass; the rest has not. It is not finished art.
 
 | Part | State |
 |---|---|
-| Geometry (`model/`) | A recipe in Blender Python. 149 named objects in eight modules, 1,514 armour plates, 452,000 triangles of which 185,000 are fasteners. It writes `out/wayfarer.glb`, a build output that is never committed. |
+| Geometry (`model/`) | A recipe in Blender Python. 149 named objects in eight modules, 1,514 armour plates, 460,000 triangles of which 186,000 are fasteners. It writes `out/wayfarer.glb`, a build output that is never committed. |
 | Mechanisms | 11 keyed clips: landing gear, lift chassis with its ramp, lander bay doors and cradle, crew hatch, seven sliding doors. Kinematic only: the linkages are solved by geometry, not by forces. |
 | Sockets | 14 named points for the game: eyes, thresholds, muzzles, exhausts, ground. |
 | Checks (`model/tools/checks.py`) | 30 checks pass: the envelope, standing headroom on both decks, door and hatch sizes, the lift and lander fitting their openings, clip lengths. |
@@ -33,7 +33,7 @@ Needs a Python that `bpy` (Blender as a module) installs on, and `numpy`. Built 
 pip install bpy numpy
 cd assets/wayfarer/model
 python3 build.py --glb             # work/wayfarer.blend, out/wayfarer.glb (16 MB, every bolt)
-python3 build.py --glb --lod 1 --tag wayfarer_lod1   # out/wayfarer_lod1.glb (8 MB, no fasteners)
+python3 build.py --glb --lod 1 --tag wayfarer_lod1   # out/wayfarer_lod1.glb (9 MB, no fasteners)
 python3 build.py --only engines    # one module, for working on it
 python3 tools/checks.py            # sizes, clearances and clips
 python3 blockout.py                # the stage-3 blockout
@@ -76,7 +76,7 @@ Each module is one file in `model/modules/` and one node under the root `wayfare
 | `fuselage` | Armour plates, substructure shell, lining, ring frames and longerons, both decks, seven bulkheads, ceilings and light strips, opening coamings. |
 | `cockpit` | Canopy glazing and frame, instrument panel with displays and standby gauges, mode panel, pedestal with keypads and throttle quadrant, side consoles, pedals, overhead panel, two flight seats, two rear stations. The side sticks (`stick_pilot`, `stick_copilot`) and throttles (`throttle_port`, `throttle_stbd`) are their own nodes, pivoted where they turn, for the game to drive. |
 | `engines` | Two main pods (octagonal intake, vanes, ribbed barrel, conduits, fuel manifold, accessory gearbox, nozzle with outer flaps and unison ring), two upper pods with cowls, the centre nozzle and thrust plate, pylons, struts and plumbing. `engine_fan_port` and `engine_fan_stbd` (compressor faces) and `engine_core_bell` (pivoted at its gimbal) are their own nodes for the game to spin and steer. |
-| `landing_gear` | Four legs, each `gear_<pos>_leg` > `_piston` > `_pad`, with an actuator and two doors, in four wells. |
+| `landing_gear` | Four legs, each `gear_<pos>_leg` > `_piston` > `_pad`, with torque links, a landing light, an uplock roller, an actuator and two doors, in four wells fitted with an uplock jaw, accumulator, valve block and hydraulic lines. |
 | `lift_chassis` | `lift_cage` (belly plate, truss, deck, posts, rails, control pedestal), `lift_ramp`, `lift_ramp_sill`, `lift_gate_port`, `lift_gate_stbd`, four telescopic rams. |
 | `lander_bay` | Two belly doors, `lander_cradle` on four jack screws, `lander_stub`, guard rails. |
 | `gadgets` | Nose sensors, chin turret (`chin_turret_ring` > `chin_turret_yaw` > `chin_gun_cradle`), ventral gun pod, keel tanks, dorsal arrays, equipment bay fits, thrusters, nav lights. |
