@@ -21,6 +21,11 @@
       "part": "action and recoil simulation (action/)",
       "model": "Claude Fable 5.2",
       "date": "2026-11-17"
+    },
+    {
+      "part": "muzzle flash and smoke simulation (flash/)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
     }
   ],
   "reviewed_by": [

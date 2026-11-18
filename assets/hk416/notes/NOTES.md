@@ -237,3 +237,11 @@ Fixed after this review: the front QD cup and its sling crescent were too small 
 | buffer tube | castle nut wrench notch 4 | `castle_nut` | a void: cut into the host part with a boolean, so it has no solid of its own |
 | stock | stock bore for the buffer tube | `stock_body` | a void: cut into the host part with a boolean, so it has no solid of its own |
 | stock | sling slot through the stock | `stock_body` | a void: cut into the host part with a boolean, so it has no solid of its own |
+
+## Change log: muzzle flash and smoke (2026-11-17)
+
+Request: add the muzzle flash and smoke as a simulation (`flash/`), driven by `action/`'s interior ballistics. This
+is an addition; nothing in the model, sound, action or ballistics changed. An earlier partial version (kept outside
+the repository) carried its own interior ballistics, tuned to an exit temperature of 1298 K; that was dropped, and the
+flash now reads the bore state from `action/` (1797 K), which changed its brightness calibration and required the
+photo-fitted shape constants to be fitted again. Details, checks and limits: `flash/README.md`.
