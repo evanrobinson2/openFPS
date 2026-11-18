@@ -28,6 +28,12 @@ python3 tools/check_assets.py
 
 CI runs the same check on every push.
 
+## Licence
+
+Free for noncommercial use; commercial use needs a licence from carpetshark. Code is under
+[PolyForm Noncommercial 1.0.0](LICENSE.md) and documentation under [CC BY-NC 4.0](LICENSE-DOCS.txt). See
+[COMMERCIAL.md](COMMERCIAL.md) for what counts as commercial and how to ask for a licence.
+
 ## Credits
 
 By carpetshark. Modelling and simulation by Claude (see each asset's `provenance.json`).
