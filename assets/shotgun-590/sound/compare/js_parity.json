@@ -1,61 +1,121 @@
 {
  "note": "largest sample difference between sim.py and shotgun590-sound.js, dB relative to the signal peak; js_ms is node synthesis time",
- "worst_db": -312.5,
+ "worst_db": -290.7,
  "passed": true,
  "outputs": {
   "shot_buck00_shooter": {
-   "samples": 21600,
-   "max_error_db_re_peak": -329.2,
+   "samples": 96000,
+   "max_error_db_re_peak": -299.2,
+   "js_ms": 17
+  },
+  "shot_buck00_shooter_covered": {
+   "samples": 28800,
+   "max_error_db_re_peak": -307.2,
    "js_ms": 7
   },
+  "shot_buck00_shooter_field": {
+   "samples": 14400,
+   "max_error_db_re_peak": -324.4,
+   "js_ms": 6
+  },
+  "shot_buck00_shooter_free": {
+   "samples": 14400,
+   "max_error_db_re_peak": -324.4,
+   "js_ms": 3
+  },
   "shot_buck00_bystander": {
-   "samples": 21600,
-   "max_error_db_re_peak": -316.1,
+   "samples": 96000,
+   "max_error_db_re_peak": -292.1,
    "js_ms": 4
   },
-  "shot_slug_shooter": {
-   "samples": 21600,
-   "max_error_db_re_peak": -318.3,
+  "shot_buck00_bystander_covered": {
+   "samples": 28800,
+   "max_error_db_re_peak": -301.2,
    "js_ms": 2
   },
+  "shot_buck00_bystander_field": {
+   "samples": 14400,
+   "max_error_db_re_peak": -319.2,
+   "js_ms": 3
+  },
+  "shot_buck00_bystander_free": {
+   "samples": 14400,
+   "max_error_db_re_peak": -322.7,
+   "js_ms": 2
+  },
+  "shot_slug_shooter": {
+   "samples": 96000,
+   "max_error_db_re_peak": -298.1,
+   "js_ms": 4
+  },
+  "shot_slug_shooter_covered": {
+   "samples": 28800,
+   "max_error_db_re_peak": -306.2,
+   "js_ms": 2
+  },
+  "shot_slug_shooter_field": {
+   "samples": 14400,
+   "max_error_db_re_peak": -316.2,
+   "js_ms": 1
+  },
+  "shot_slug_shooter_free": {
+   "samples": 14400,
+   "max_error_db_re_peak": -325.7,
+   "js_ms": 1
+  },
   "shot_slug_bystander": {
-   "samples": 21600,
-   "max_error_db_re_peak": -317.2,
+   "samples": 96000,
+   "max_error_db_re_peak": -290.7,
+   "js_ms": 4
+  },
+  "shot_slug_bystander_covered": {
+   "samples": 28800,
+   "max_error_db_re_peak": -300.2,
+   "js_ms": 2
+  },
+  "shot_slug_bystander_field": {
+   "samples": 14400,
+   "max_error_db_re_peak": -312.0,
+   "js_ms": 1
+  },
+  "shot_slug_bystander_free": {
+   "samples": 14400,
+   "max_error_db_re_peak": -324.0,
    "js_ms": 1
   },
   "pump": {
-   "samples": 25920,
-   "max_error_db_re_peak": -313.3,
-   "js_ms": 9
+   "samples": 27360,
+   "max_error_db_re_peak": -300.3,
+   "js_ms": 16
   },
   "pump_back": {
-   "samples": 17280,
-   "max_error_db_re_peak": -313.3,
-   "js_ms": 1
+   "samples": 18720,
+   "max_error_db_re_peak": -300.1,
+   "js_ms": 7
   },
   "pump_forward": {
-   "samples": 18240,
-   "max_error_db_re_peak": -312.5,
-   "js_ms": 1
+   "samples": 19680,
+   "max_error_db_re_peak": -301.4,
+   "js_ms": 6
   },
   "dry_fire": {
-   "samples": 5760,
-   "max_error_db_re_peak": -317.8,
+   "samples": 9600,
+   "max_error_db_re_peak": -318.4,
    "js_ms": 1
   },
   "shell_insert": {
-   "samples": 12480,
-   "max_error_db_re_peak": -315.7,
-   "js_ms": 0
+   "samples": 15360,
+   "max_error_db_re_peak": -296.1,
+   "js_ms": 1
   },
   "safety": {
-   "samples": 3840,
-   "max_error_db_re_peak": -314.1,
-   "js_ms": 0
+   "samples": 5760,
+   "max_error_db_re_peak": -307.9,
+   "js_ms": 1
   },
   "action_release": {
-   "samples": 3840,
-   "max_error_db_re_peak": -318.0,
+   "samples": 5760,
+   "max_error_db_re_peak": -312.7,
    "js_ms": 0
   }
  }

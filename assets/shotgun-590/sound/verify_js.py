@@ -11,7 +11,7 @@ with tempfile.TemporaryDirectory() as d:
     subprocess.run(['node', os.path.join(HERE, 'verify_js.mjs'), d], check=True)
     times = json.load(open(d + '/times.json'))
     for name, snd in P['sounds'].items():
-        a = sim.render(snd, P['fs']); b = np.fromfile(f'{d}/{name}.f64'); assert len(a) == len(b), (name, len(a), len(b))
+        a = sim.render(snd, P['fs'], P['filters']); b = np.fromfile(f'{d}/{name}.f64'); assert len(a) == len(b), (name, len(a), len(b))
         err = 20 * np.log10(np.max(np.abs(a - b)) / np.max(np.abs(a)) + 1e-300); worst = max(worst, float(err))
         res[name] = dict(samples=len(a), max_error_db_re_peak=round(float(err), 1), js_ms=times[name]); print(f'{name:28s} max |py - js| = {err:7.1f} dB re peak   js {times[name]:4d} ms')
 json.dump(dict(note='largest sample difference between sim.py and shotgun590-sound.js, dB relative to the signal peak; js_ms is node synthesis time', worst_db=round(worst, 1), passed=worst < -120, outputs=res),
