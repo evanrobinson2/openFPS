@@ -1,6 +1,6 @@
 """G44 V (.22 LR blowback pistol): parametric recipe. Rebuilds every part from numbers:
 
-    blender -b --python build.py            # writes work/g44v.glb, work/g44v.blend (ignored), inventory.json (committed)
+    blender -b --python build.py            # writes <repo>/build/g44v/g44v.glb and .blend (ignored), and inventory.json (committed)
 
 Model frame (mm while modelling): L along the bore, + toward the muzzle, L = 0 at the slide's rear face in battery;
 S lateral, + = the pistol's left side; Z up, Z = 0 on the bore axis.
@@ -16,6 +16,7 @@ import bpy, bmesh, math, json, os, sys
 from mathutils import Vector
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+BUILD = os.path.normpath(os.path.join(HERE, '..', '..', '..', 'build', 'g44v'))     # meshes are build outputs: outside assets/, ignored by git
 MM = 0.001
 OUT = json.load(open(os.path.join(HERE, 'outlines.json')))
 O = OUT['mm']
@@ -694,9 +695,9 @@ def build():
     inv['attached'] = ATTACH
     inv['hierarchy'] = {o.name: (o.parent.name if o.parent else None) for o in OBJ.values()}
     json.dump(inv, open(os.path.join(HERE, 'inventory.json'), 'w'), indent=1)
-    os.makedirs(os.path.join(HERE, 'work'), exist_ok=True)
-    bpy.ops.wm.save_as_mainfile(filepath=os.path.join(HERE, 'work', 'g44v.blend'))
-    bpy.ops.export_scene.gltf(filepath=os.path.join(HERE, 'work', 'g44v.glb'), export_format='GLB', export_animations=True, export_animation_mode='NLA_TRACKS',
+    os.makedirs(BUILD, exist_ok=True); open(os.path.join(BUILD, '.gitignore'), 'w').write('*\n')      # build outputs are never committed
+    bpy.ops.wm.save_as_mainfile(filepath=os.path.join(BUILD, 'g44v.blend'))
+    bpy.ops.export_scene.gltf(filepath=os.path.join(BUILD, 'g44v.glb'), export_format='GLB', export_animations=True, export_animation_mode='NLA_TRACKS',
                               export_apply=False, export_yup=True, export_extras=True)
     print(f'G44V: {len(meshes)} mesh parts, {sum(q["triangles"] for q in inv["parts"])} triangles, {len(META_S)} sockets, {len(reg)} clips', flush=True)
 

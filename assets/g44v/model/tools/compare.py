@@ -1,4 +1,4 @@
-"""python3 tools/compare.py : the matched visual comparison (after `blender -b work/g44v.blend --python tools/render.py -- match_left`).
+"""python3 tools/compare.py : the matched visual comparison (after `blender -b ../../../build/g44v/g44v.blend --python tools/render.py -- match_left`).
 The render uses the reference's camera: orthographic, 5.785 px/mm, the same 1654 x 1042 frame as the maker's dimension image.
 Reference silhouette: work/ref_mask_side.png (tools/trace_ref.py, from the local copy of the image; see notes/REFERENCES.md).
 Writes compare.json (numbers, committed), ../renders/compare_outline.png (the model render with the traced outlines drawn over it; no

@@ -254,7 +254,7 @@ def main():
     D['firing'] = dict(dt=ft['dt'], striker_mm=ft['striker_mm'], lock_time_s=round(ft['lock_time'], 6), ignition_s=round(ft['t_ignition'], 6), impact_speed_mps=round(ft['impact_speed'], 3),
                        energy_J=round(ft['energy'], 4), note='striker_mm: rearward position of the firing pin from its fired position; it is released at the break and flies forward')
     D['mechanics'] = dict(full_travel_mm=mp('full_travel'), lock_open_mm=mp('lock_open_travel'), eject_mm=v('u_eject') * 1e3, feed_mm=v('u_feed') * 1e3,
-                          striker_precock_mm=mp('striker_precock'), striker_break_mm=kin['striker_break_mm'], trigger_break_deg=mp('trigger_break_deg'), bar_travel_mm=kin['bar_travel_break_mm'],
+                          muzzle_mm=mp('muzzle'), striker_precock_mm=mp('striker_precock'), striker_break_mm=kin['striker_break_mm'], trigger_break_deg=mp('trigger_break_deg'), bar_travel_mm=kin['bar_travel_break_mm'],
                           recoil_spring_free_mm=68.3, notes='travel numbers come from model/inventory.json so the clips and this simulation agree')
     D['trigger'] = dict(pull_N=v('trigger_pull'), curve_deg_N=[[0, 0], [0.5, 6.0], [mp('trigger_takeup_deg'), 11.0], [mp('trigger_takeup_deg') + 0.2, 22.0], [mp('trigger_break_deg'), 26.0]],
                         note='force at the trigger against rotation; only the 26 N break is published, the take-up shape is inferred')

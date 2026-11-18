@@ -1,4 +1,4 @@
-"""blender -b work/g44v.blend --python tools/checks.py      -> work/../checks.json (committed) and a printed summary
+"""blender -b ../../../build/g44v/g44v.blend --python tools/checks.py      -> work/../checks.json (committed) and a printed summary
 1 INVENTORY  every item of the manual's component list (p. 36) is a named object
 2 DIMENSIONS the build against the maker's specification table (the table manual p. 9 points to)
 3 MASS       model volumes x nominal densities against the published weights (an inference check, not a fit)

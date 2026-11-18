@@ -1,4 +1,4 @@
-"""blender -b work/g44v.blend --python tools/where.py -- <clip> <frame> <part a> <part b> : where two parts intersect (model mm), for debugging a clip."""
+"""blender -b ../../../build/g44v/g44v.blend --python tools/where.py -- <clip> <frame> <part a> <part b> : where two parts intersect (model mm), for debugging a clip."""
 import bpy, sys, os
 from mathutils.bvhtree import BVHTree
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); import clipeval

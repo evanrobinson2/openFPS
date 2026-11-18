@@ -1,4 +1,4 @@
-"""python3 tools/outline.py : source-indexed outlines traced from the official dimension image's left-side view.
+"""python3 tools/outline.py : source-indexed outlines traced from the maker's dimension image, left-side view.
 Reads work/ref_mask_side.png (from tools/trace_ref.py). Writes outlines.json: polygons in model mm (L along the bore from
 the slide's rear face, + toward the muzzle; Z up from the bore axis) plus the same polygons in photo pixels, and
 work/outlines_check.png to look at.  The ruler: see RULER below and NOTES.md."""

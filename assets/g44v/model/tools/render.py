@@ -1,4 +1,4 @@
-"""blender -b work/g44v.blend --python tools/render.py -- <view> [<view> ...]
+"""blender -b ../../../build/g44v/g44v.blend --python tools/render.py -- <view> [<view> ...]
 Views: match_left (orthographic, the camera, scale and framing of the dimension image: 1654 x 1042 px at 5.785 px/mm, written as
 an RGBA mask render for tools/compare.py), left, right, top, rear, three_quarter, internals (frame, slide and tube hidden),
 lock_open, field_strip.  Beauty renders go to ../renders/<view>.jpg, the matched render to work/match_left.png."""

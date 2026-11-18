@@ -1,11 +1,11 @@
-"""python3 tools/trace_ref.py : measure the official GLOCK dimension image (refs-local/glock-web/18162-Glock-44-V.jpg,
+"""python3 tools/trace_ref.py : measure the maker's dimension image (refs-local/glock-web/18162-Glock-44-V.jpg,
 https://eu-images.contentstack.com/v3/assets/bltf7171cc1cfc1a31f/blt9be7c190c34896ff/69036c17b4940ce99e7ceadd/18162-Glock-44-V.jpg).
 Writes work/ref_mask_side.png (silhouette of the left-side view), work/ref_mask_rear.png and prints the dimension-line pixel positions."""
 import numpy as np, os, json
 from PIL import Image
 from scipy import ndimage
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-im = np.asarray(Image.open(os.path.join(HERE, 'refs-local/glock-web/18162-Glock-44-V.jpg')).convert('RGB')).astype(int)
+im = np.asarray(Image.open(os.path.join(HERE, '..', 'refs-local/glock-web/18162-Glock-44-V.jpg')).convert('RGB')).astype(int)
 R, G, B = im[..., 0], im[..., 1], im[..., 2]
 orange = (R > 170) & (R - B > 70) & (G > 70) & (G < 200)
 orange_d = ndimage.binary_dilation(orange, iterations=2)
