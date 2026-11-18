@@ -1,0 +1,749 @@
+{
+ "units": "position metres + quaternion xyzw in the rifle frame (+X left, +Y up, +Z muzzle); angles degrees",
+ "sockets": {
+  "socket_hand_right": [
+   0.0,
+   -0.107023,
+   -0.178372
+  ],
+  "socket_hand_left": [
+   0.0,
+   -0.031215,
+   0.11
+  ]
+ },
+ "grips": {
+  "fire_indexed": {
+   "side": "R",
+   "doc": "Firing hand on the pistol grip, trigger finger straight along the receiver (R3-F03). CR-2: the hand's pose, the elbow swivel, the four metacarpals, the thumb's base and the compression of the four palm pads are searched together.  The search starts from a grid of orientations with the middle finger's knuckle pad on the right face of the grip under the trigger guard, and pulls the middle of the web toward its seat under the receiver's rear while that pad stays put, nothing is inside the rifle beyond what the pads give, and the wrist stays in range. Then three fingers wrap the front of the grip, the index finger is laid along the receiver and the thumb lies on the left side.  notes/NOTES.md says how far the web gets and why.",
+   "carried_by": "static",
+   "socket": "socket_hand_right",
+   "hand_in_socket": [
+    -0.0432236,
+    -0.005762,
+    -0.0566723,
+    0.3842412,
+    -0.5575751,
+    -0.4757484,
+    0.5613663
+   ],
+   "hand": [
+    -0.0432236,
+    -0.112785,
+    -0.2350443,
+    0.3842412,
+    -0.5575751,
+    -0.4757484,
+    0.5613663
+   ],
+   "forearm": [
+    -0.2556826,
+    -0.2427883,
+    -0.3336886,
+    -0.0213432,
+    -0.3954682,
+    -0.5068634,
+    0.7656624
+   ],
+   "angles_deg": {
+    "index_mcp_flex": -18.5,
+    "index_mcp_abd": -8.98,
+    "index_pip_flex": 38.62,
+    "index_dip_flex": 16.18,
+    "middle_mcp_flex": 22.79,
+    "middle_mcp_abd": -19.5,
+    "middle_pip_flex": 98.44,
+    "middle_dip_flex": 16.03,
+    "ring_mcp_flex": 16.22,
+    "ring_mcp_abd": 1.58,
+    "ring_pip_flex": 97.72,
+    "ring_dip_flex": 24.13,
+    "little_mcp_flex": 38.71,
+    "little_mcp_abd": -17.49,
+    "little_pip_flex": 72.58,
+    "little_dip_flex": 13.46,
+    "thumb_cmc_flex": -7.53,
+    "thumb_cmc_abd": -6.92,
+    "thumb_cmc_rot": 8.0,
+    "thumb_mcp_flex": 55.5,
+    "thumb_ip_flex": 8.14,
+    "mc4_flex": 4.57,
+    "mc5_flex": 6.35,
+    "mc2_flex": -0.88,
+    "mc3_flex": 1.72,
+    "pad_thenar": 0.0,
+    "pad_hypothenar": 0.3,
+    "pad_midpalm": 0.0,
+    "pad_distal": 2.43
+   },
+   "arm_deg": {
+    "wrist_flex": -51.6,
+    "wrist_dev": -25.5,
+    "pronation": -38.0,
+    "elbow_flex": 122.4,
+    "swivel": 55.0
+   },
+   "solver": {
+    "pads_gap_mm": {
+     "web": 3.16,
+     "thenar": 19.24,
+     "middle_pad_mid": 14.21,
+     "ring_pad_mid": 10.96,
+     "little_pad_mid": 9.95,
+     "middle_pad": 4.55,
+     "ring_pad": 3.82,
+     "little_pad": 2.76,
+     "middle_pad_prox": 9.38,
+     "ring_pad_prox": 4.72
+    },
+    "digit_target_error_mm": {
+     "middle": 0.0,
+     "ring": 0.0,
+     "little": 0.0,
+     "index": 0.9,
+     "thumb": 20.25
+    },
+    "min_clearance_mm_approx": 0.51,
+    "limit_violation_deg": 0.0,
+    "place_fit_rms": 0.0
+   }
+  },
+  "fire": {
+   "side": "R",
+   "doc": "Firing hand, pad of the index finger on the trigger face (R1-F06).  Same hand placement as fire_indexed.",
+   "carried_by": "static",
+   "socket": "socket_hand_right",
+   "hand_in_socket": [
+    -0.0432236,
+    -0.005762,
+    -0.0566723,
+    0.3842412,
+    -0.5575751,
+    -0.4757484,
+    0.5613663
+   ],
+   "hand": [
+    -0.0432236,
+    -0.112785,
+    -0.2350443,
+    0.3842412,
+    -0.5575751,
+    -0.4757484,
+    0.5613663
+   ],
+   "forearm": [
+    -0.2556826,
+    -0.2427883,
+    -0.3336886,
+    -0.0213432,
+    -0.3954682,
+    -0.5068634,
+    0.7656624
+   ],
+   "angles_deg": {
+    "index_mcp_flex": -9.18,
+    "index_mcp_abd": -9.03,
+    "index_pip_flex": 70.39,
+    "index_dip_flex": 8.19,
+    "middle_mcp_flex": 22.79,
+    "middle_mcp_abd": -19.5,
+    "middle_pip_flex": 98.44,
+    "middle_dip_flex": 16.03,
+    "ring_mcp_flex": 16.22,
+    "ring_mcp_abd": 1.58,
+    "ring_pip_flex": 97.72,
+    "ring_dip_flex": 24.13,
+    "little_mcp_flex": 38.71,
+    "little_mcp_abd": -17.49,
+    "little_pip_flex": 72.58,
+    "little_dip_flex": 13.46,
+    "thumb_cmc_flex": -7.53,
+    "thumb_cmc_abd": -6.92,
+    "thumb_cmc_rot": 8.0,
+    "thumb_mcp_flex": 55.5,
+    "thumb_ip_flex": 8.14,
+    "mc4_flex": 4.57,
+    "mc5_flex": 6.35,
+    "mc2_flex": -0.88,
+    "mc3_flex": 1.72,
+    "pad_thenar": 0.0,
+    "pad_hypothenar": 0.3,
+    "pad_midpalm": 0.0,
+    "pad_distal": 2.43
+   },
+   "arm_deg": {
+    "wrist_flex": -51.6,
+    "wrist_dev": -25.5,
+    "pronation": -38.0,
+    "elbow_flex": 122.4,
+    "swivel": 55.0
+   },
+   "solver": {
+    "pads_gap_mm": {
+     "web": 3.16,
+     "thenar": 19.24,
+     "middle_pad_mid": 14.21,
+     "ring_pad_mid": 10.96,
+     "little_pad_mid": 9.95,
+     "middle_pad": 4.55,
+     "ring_pad": 3.82,
+     "little_pad": 2.76,
+     "middle_pad_prox": 9.38,
+     "ring_pad_prox": 4.72
+    },
+    "digit_target_error_mm": {
+     "index": 2.65
+    },
+    "min_clearance_mm_approx": 0.51,
+    "limit_violation_deg": 0.0
+   }
+  },
+  "support": {
+   "side": "L",
+   "doc": "Support hand under the handguard, fingers up the right side, thumb over the top (R2-S01..S06).",
+   "carried_by": "static",
+   "socket": "socket_hand_left",
+   "hand_in_socket": [
+    0.0442387,
+    -0.0159449,
+    -0.0917216,
+    0.6716763,
+    -0.1577648,
+    0.3485435,
+    0.6344121
+   ],
+   "hand": [
+    0.0442387,
+    -0.0471599,
+    0.0182784,
+    0.6716763,
+    -0.1577648,
+    0.3485435,
+    0.6344121
+   ],
+   "forearm": [
+    0.1046376,
+    -0.2624621,
+    -0.1292592,
+    0.3045922,
+    -0.143824,
+    0.0734198,
+    0.9386947
+   ],
+   "angles_deg": {
+    "index_mcp_flex": 39.26,
+    "index_mcp_abd": -12.05,
+    "index_pip_flex": 32.29,
+    "index_dip_flex": 25.32,
+    "middle_mcp_flex": 63.37,
+    "middle_mcp_abd": -5.27,
+    "middle_pip_flex": 35.4,
+    "middle_dip_flex": 33.43,
+    "ring_mcp_flex": 72.79,
+    "ring_mcp_abd": -2.14,
+    "ring_pip_flex": 29.28,
+    "ring_dip_flex": 34.05,
+    "little_mcp_flex": 89.5,
+    "little_mcp_abd": -14.09,
+    "little_pip_flex": -4.42,
+    "little_dip_flex": 23.93,
+    "thumb_cmc_flex": -0.81,
+    "thumb_cmc_abd": -20.5,
+    "thumb_cmc_rot": -8.0,
+    "thumb_mcp_flex": 27.7,
+    "thumb_ip_flex": 31.86,
+    "mc4_flex": 3.0,
+    "mc5_flex": 8.0,
+    "mc2_flex": 0.0,
+    "mc3_flex": 0.0,
+    "pad_thenar": 0.0,
+    "pad_hypothenar": 0.0,
+    "pad_midpalm": 0.0,
+    "pad_distal": 0.0
+   },
+   "arm_deg": {
+    "wrist_flex": -61.4,
+    "wrist_dev": -23.2,
+    "pronation": -74.3,
+    "elbow_flex": 91.0,
+    "swivel": -7.5
+   },
+   "solver": {
+    "pads_gap_mm": {
+     "palm_distal": 14.37,
+     "thenar": 4.85,
+     "middle_pad": 4.07,
+     "index_pad": 4.3,
+     "ring_pad": 2.35,
+     "little_pad": 0.81,
+     "middle_pad_prox": 11.48,
+     "ring_pad_prox": 15.56,
+     "index_pad_prox": 2.39
+    },
+    "digit_target_error_mm": {
+     "index": 0.0,
+     "middle": 0.0,
+     "ring": 0.0,
+     "little": 0.0,
+     "thumb": 17.27
+    },
+    "min_clearance_mm_approx": 0.54,
+    "limit_violation_deg": 0.0
+   }
+  },
+  "mag_grip": {
+   "side": "L",
+   "doc": "Support hand round the magazine body below the magazine well (R3-S01, R3-S02, R1-S01): palm on the left face, fingers round the front onto the right face, thumb closed on the left and rear.  Moves with the magazine.",
+   "carried_by": "mag_body",
+   "socket": "socket_hand_left",
+   "hand_in_socket": [
+    0.0601906,
+    -0.1338136,
+    -0.1931573,
+    0.2698761,
+    0.5442255,
+    0.4409761,
+    0.6607008
+   ],
+   "hand": [
+    0.0601906,
+    -0.1650286,
+    -0.0831573,
+    0.2698761,
+    0.5442255,
+    0.4409761,
+    0.6607008
+   ],
+   "forearm": [
+    0.1414546,
+    -0.3590452,
+    -0.2490613,
+    0.161578,
+    0.5730464,
+    0.3343444,
+    0.7305644
+   ],
+   "angles_deg": {
+    "index_mcp_flex": -2.1,
+    "index_mcp_abd": 19.5,
+    "index_pip_flex": 52.01,
+    "index_dip_flex": 58.76,
+    "middle_mcp_flex": 44.86,
+    "middle_mcp_abd": -8.15,
+    "middle_pip_flex": 76.1,
+    "middle_dip_flex": 52.16,
+    "ring_mcp_flex": 29.26,
+    "ring_mcp_abd": 2.66,
+    "ring_pip_flex": 76.57,
+    "ring_dip_flex": 53.28,
+    "little_mcp_flex": -10.91,
+    "little_mcp_abd": -14.71,
+    "little_pip_flex": 89.33,
+    "little_dip_flex": 25.71,
+    "thumb_cmc_flex": -15.8,
+    "thumb_cmc_abd": 14.61,
+    "thumb_cmc_rot": -0.9,
+    "thumb_mcp_flex": 1.18,
+    "thumb_ip_flex": -4.36,
+    "mc4_flex": 3.0,
+    "mc5_flex": 8.0,
+    "mc2_flex": 0.0,
+    "mc3_flex": 0.0,
+    "pad_thenar": 0.0,
+    "pad_hypothenar": 0.0,
+    "pad_midpalm": 0.0,
+    "pad_distal": 0.0
+   },
+   "arm_deg": {
+    "wrist_flex": -2.4,
+    "wrist_dev": -19.3,
+    "pronation": 24.3,
+    "elbow_flex": 110.6,
+    "swivel": -10.0
+   },
+   "solver": {
+    "pads_gap_mm": {
+     "middle_pad": 1.98,
+     "index_pad": 5.03,
+     "ring_pad": 2.27,
+     "little_pad": 4.04,
+     "middle_pad_mid": 6.26,
+     "ring_pad_mid": 9.45,
+     "index_pad_mid": 4.6
+    },
+    "digit_target_error_mm": {
+     "index": 0.0,
+     "middle": 0.0,
+     "ring": 0.0,
+     "little": 0.0,
+     "thumb": 26.83
+    },
+    "min_clearance_mm_approx": 0.57,
+    "limit_violation_deg": 0.0,
+    "place_fit_rms": 7.06,
+    "backed_off": 10.5
+   }
+  },
+  "catch_ready": {
+   "side": "L",
+   "doc": "Support hand against the left of the magazine and magazine well, fingers up and forward along the receiver, thumb up beside the bolt catch paddle (no reference: inferred).",
+   "carried_by": "static",
+   "socket": "socket_hand_left",
+   "hand_in_socket": [
+    0.0545,
+    -0.087785,
+    -0.185,
+    0.2236068,
+    0.6708204,
+    0.2236068,
+    0.6708204
+   ],
+   "hand": [
+    0.0545,
+    -0.119,
+    -0.075,
+    0.2236068,
+    0.6708204,
+    0.2236068,
+    0.6708204
+   ],
+   "forearm": [
+    0.126653,
+    -0.3374666,
+    -0.2122469,
+    0.1031705,
+    0.6425919,
+    0.2856866,
+    0.7034306
+   ],
+   "angles_deg": {
+    "index_mcp_flex": 12.98,
+    "index_mcp_abd": -8.01,
+    "index_pip_flex": -1.62,
+    "index_dip_flex": 16.13,
+    "middle_mcp_flex": 9.68,
+    "middle_mcp_abd": 0.41,
+    "middle_pip_flex": 5.06,
+    "middle_dip_flex": 9.78,
+    "ring_mcp_flex": 57.51,
+    "ring_mcp_abd": -10.53,
+    "ring_pip_flex": 38.96,
+    "ring_dip_flex": 33.3,
+    "little_mcp_flex": 69.28,
+    "little_mcp_abd": 5.21,
+    "little_pip_flex": 18.09,
+    "little_dip_flex": 12.36,
+    "thumb_cmc_flex": -26.0,
+    "thumb_cmc_abd": 11.16,
+    "thumb_cmc_rot": -7.05,
+    "thumb_mcp_flex": 27.62,
+    "thumb_ip_flex": 33.27,
+    "mc4_flex": 2.0,
+    "mc5_flex": 4.0,
+    "mc2_flex": 0.0,
+    "mc3_flex": 0.0,
+    "pad_thenar": 0.0,
+    "pad_hypothenar": 0.0,
+    "pad_midpalm": 0.0,
+    "pad_distal": 0.0
+   },
+   "arm_deg": {
+    "wrist_flex": -15.7,
+    "wrist_dev": -4.6,
+    "pronation": 33.1,
+    "elbow_flex": 110.8,
+    "swivel": -7.5
+   },
+   "solver": {
+    "pads_gap_mm": {
+     "middle_pad": 2.8,
+     "index_pad": 2.94,
+     "ring_pad": 3.31,
+     "palm_centre": 21.93
+    },
+    "digit_target_error_mm": {
+     "index": 0.0,
+     "middle": 0.0,
+     "ring": 0.0,
+     "little": 0.0,
+     "thumb": 2.82
+    },
+    "min_clearance_mm_approx": 0.5,
+    "limit_violation_deg": 0.0,
+    "place_fit_rms": 0.0,
+    "backed_off": 19.0
+   }
+  },
+  "charge_grip": {
+   "side": "L",
+   "doc": "Support hand at the charging handle: palm toward the shooter, index fingertip hooked in front of the handle's left wing and latch, the other fingers curled (no reference: inferred).  Moves with the handle. CR-3: version 3's frame turned 24 degrees about the bore's direction and then 20 degrees about the vertical, both through the hooking point, and moved 8 mm back: the hand arrives flatter and from further forward, its wrist 45 mm higher, 25 mm further left and 34 mm further forward, so its curled fingers pass above the firing hand's thumb instead of through it while the wrist stays far enough from the left shoulder for the elbow to fold through the whole 75 mm draw (a hand turned 28 degrees without the second turn cleared the thumb but came within 157 mm of the shoulder, against the 170 mm a fully folded elbow leaves).  The index pad's point is on the wing's front face (version 3 had it 3.5 mm beyond the wing's tip, and the finger never touched).",
+   "carried_by": "charging_handle",
+   "socket": "socket_hand_left",
+   "hand_in_socket": [
+    0.1369,
+    -0.013185,
+    -0.2296,
+    -0.1634005,
+    -0.0449337,
+    0.5391603,
+    0.8249772
+   ],
+   "hand": [
+    0.1369,
+    -0.0444,
+    -0.1196,
+    -0.1634005,
+    -0.0449337,
+    0.5391603,
+    0.8249772
+   ],
+   "forearm": [
+    0.3181606,
+    -0.2338939,
+    -0.0647634,
+    -0.0951777,
+    -0.0390966,
+    0.3705075,
+    0.9231126
+   ],
+   "angles_deg": {
+    "index_mcp_flex": -18.5,
+    "index_mcp_abd": 2.83,
+    "index_pip_flex": 43.24,
+    "index_dip_flex": 26.56,
+    "middle_mcp_flex": 80.0,
+    "middle_mcp_abd": 0.0,
+    "middle_pip_flex": 95.0,
+    "middle_dip_flex": 55.0,
+    "ring_mcp_flex": 80.0,
+    "ring_mcp_abd": 0.0,
+    "ring_pip_flex": 95.0,
+    "ring_dip_flex": 55.0,
+    "little_mcp_flex": 80.0,
+    "little_mcp_abd": 0.0,
+    "little_pip_flex": 95.0,
+    "little_dip_flex": 55.0,
+    "thumb_cmc_flex": 5.0,
+    "thumb_cmc_abd": -5.0,
+    "thumb_cmc_rot": 0.0,
+    "thumb_mcp_flex": 20.0,
+    "thumb_ip_flex": 30.0,
+    "mc4_flex": 2.0,
+    "mc5_flex": 4.0,
+    "mc2_flex": 0.0,
+    "mc3_flex": 0.0,
+    "pad_thenar": 0.0,
+    "pad_hypothenar": 0.0,
+    "pad_midpalm": 0.0,
+    "pad_distal": 0.0
+   },
+   "arm_deg": {
+    "wrist_flex": 8.3,
+    "wrist_dev": -22.3,
+    "pronation": -72.2,
+    "elbow_flex": 130.4,
+    "swivel": 47.5
+   },
+   "solver": {
+    "pads_gap_mm": {
+     "index_pad": 7.88
+    },
+    "digit_target_error_mm": {
+     "middle": 0.0,
+     "ring": 0.0,
+     "little": 0.0,
+     "thumb": 0.0,
+     "index": 15.2
+    },
+    "min_clearance_mm_approx": 0.67,
+    "limit_violation_deg": 0.0,
+    "place_fit_rms": 0.0,
+    "backed_off": 0.0
+   }
+  },
+  "fire_reach": {
+   "side": "R",
+   "doc": "Firing hand slid 9 mm forward along the grip, trigger finger straight: the hold from which the fingertip reaches the magazine release (inferred: no reference shows the press; a hand of this size cannot reach the button from the firing grip without moving).",
+   "carried_by": "static",
+   "socket": "socket_hand_right",
+   "hand_in_socket": [
+    -0.0412661,
+    -0.0096177,
+    -0.051826,
+    0.3768867,
+    -0.5735693,
+    -0.4539819,
+    0.568221
+   ],
+   "hand": [
+    -0.0412661,
+    -0.1166407,
+    -0.230198,
+    0.3768867,
+    -0.5735693,
+    -0.4539819,
+    0.568221
+   ],
+   "forearm": [
+    -0.246995,
+    -0.252961,
+    -0.334423,
+    -0.0192412,
+    -0.4223208,
+    -0.4951828,
+    0.758992
+   ],
+   "angles_deg": {
+    "index_mcp_flex": -18.5,
+    "index_mcp_abd": -11.96,
+    "index_pip_flex": 34.8,
+    "index_dip_flex": 34.2,
+    "middle_mcp_flex": 1.84,
+    "middle_mcp_abd": 19.5,
+    "middle_pip_flex": -6.5,
+    "middle_dip_flex": -4.58,
+    "ring_mcp_flex": 53.64,
+    "ring_mcp_abd": -7.51,
+    "ring_pip_flex": 73.81,
+    "ring_dip_flex": 33.83,
+    "little_mcp_flex": 79.42,
+    "little_mcp_abd": -1.25,
+    "little_pip_flex": 21.89,
+    "little_dip_flex": 41.14,
+    "thumb_cmc_flex": -8.79,
+    "thumb_cmc_abd": -8.42,
+    "thumb_cmc_rot": 8.0,
+    "thumb_mcp_flex": 55.49,
+    "thumb_ip_flex": -1.35,
+    "mc4_flex": -1.24,
+    "mc5_flex": -1.28,
+    "mc2_flex": -1.14,
+    "mc3_flex": 0.17,
+    "pad_thenar": 0.0,
+    "pad_hypothenar": 0.0,
+    "pad_midpalm": 0.0,
+    "pad_distal": 0.8
+   },
+   "arm_deg": {
+    "wrist_flex": -49.7,
+    "wrist_dev": -24.6,
+    "pronation": -34.1,
+    "elbow_flex": 121.2,
+    "swivel": 52.5
+   },
+   "solver": {
+    "pads_gap_mm": {
+     "web": 1.41,
+     "thenar": 14.46,
+     "middle_pad_mid": 5.96,
+     "ring_pad_mid": 8.55,
+     "little_pad_mid": 2.02,
+     "middle_pad": 3.53,
+     "ring_pad": 0.65,
+     "little_pad": 1.62,
+     "middle_pad_prox": 6.09,
+     "ring_pad_prox": 5.66
+    },
+    "digit_target_error_mm": {
+     "middle": 0.0,
+     "ring": 0.0,
+     "little": 0.0,
+     "index": 0.52,
+     "thumb": 19.33
+    },
+    "min_clearance_mm_approx": 0.5,
+    "limit_violation_deg": 0.0,
+    "place_fit_rms": 0.0
+   }
+  },
+  "fire_select": {
+   "side": "R",
+   "doc": "Firing hand turned on the grip so that its thumb reaches the left selector lever (no reference: inferred). CR-3.  From fire_indexed no thumb pose comes nearer the lever than 10.5 mm, and no small move of the hand nearer than 7.8 mm (checks/selector_reach.json).  This hold is fire_indexed moved as far as the reach needs: a search over the hand's pose and the thumb's joints at three positions of the lever (safe, 58 degrees, fire) for the smallest move with the thumb's glove within reach of the lever at all three, nothing inside the rifle, no finger in the trigger guard, the trigger finger as straight as in fire_indexed, and the arm inside its range for some elbow swivel.  The three other fingers then close on the grip where they can.  The elbow has to come in under the rifle for it (see notes/NOTES.md): this is a hold for the moment of working the lever, not a firing grip.",
+   "carried_by": "static",
+   "socket": "socket_hand_right",
+   "hand_in_socket": [
+    -0.0144047,
+    -0.0055167,
+    -0.0590425,
+    -0.3277796,
+    0.8496681,
+    0.2686736,
+    -0.3137502
+   ],
+   "hand": [
+    -0.0144047,
+    -0.1125397,
+    -0.2374145,
+    -0.3277796,
+    0.8496681,
+    0.2686736,
+    -0.3137502
+   ],
+   "forearm": [
+    0.0153576,
+    -0.3471274,
+    -0.3633241,
+    -0.1443891,
+    0.8973525,
+    0.2032849,
+    -0.364123
+   ],
+   "angles_deg": {
+    "index_mcp_flex": -18.5,
+    "index_mcp_abd": -8.98,
+    "index_pip_flex": 38.62,
+    "index_dip_flex": 16.18,
+    "middle_mcp_flex": 38.4,
+    "middle_mcp_abd": -7.44,
+    "middle_pip_flex": 24.05,
+    "middle_dip_flex": -5.15,
+    "ring_mcp_flex": 31.48,
+    "ring_mcp_abd": 16.9,
+    "ring_pip_flex": 18.15,
+    "ring_dip_flex": 21.03,
+    "little_mcp_flex": 89.5,
+    "little_mcp_abd": -19.5,
+    "little_pip_flex": -6.5,
+    "little_dip_flex": 16.72,
+    "thumb_cmc_flex": -4.57,
+    "thumb_cmc_abd": -2.78,
+    "thumb_cmc_rot": 0.38,
+    "thumb_mcp_flex": 25.29,
+    "thumb_ip_flex": 59.12,
+    "mc4_flex": 4.57,
+    "mc5_flex": 6.35,
+    "mc2_flex": -0.88,
+    "mc3_flex": 1.72,
+    "pad_thenar": 0.0,
+    "pad_hypothenar": 4.12,
+    "pad_midpalm": 0.0,
+    "pad_distal": 0.0
+   },
+   "arm_deg": {
+    "wrist_flex": -0.7,
+    "wrist_dev": -23.7,
+    "pronation": 53.5,
+    "elbow_flex": 122.5,
+    "swivel": -10.0
+   },
+   "solver": {
+    "pads_gap_mm": {
+     "thumb_glove_to_lever_frame_1": 0.58,
+     "thumb_glove_to_lever_frame_4": 0.51,
+     "thumb_glove_to_lever_frame_6": 0.59
+    },
+    "digit_target_error_mm": {
+     "middle": 0.0,
+     "ring": 0.0,
+     "little": 0.0,
+     "index": 0.0,
+     "thumb": 0.59
+    },
+    "min_clearance_mm_approx": 0.51,
+    "limit_violation_deg": 0.0,
+    "move_mm": 28.9,
+    "turn_deg": 50.7
+   }
+  }
+ }
+}

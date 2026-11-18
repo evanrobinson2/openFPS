@@ -1,0 +1,234 @@
+{
+ "asset": "hands-gloved",
+ "asks": "CR-3: how far the firing hand has to leave the firing grip for the thumb to reach the selector lever at both ends of its travel",
+ "method": "CR-3.  checks/selector_reach.py showed that no thumb pose reaches the lever from the firing grip (10.5 mm) or after a small move of the hand (7.8 mm at best within 14 mm and 16 degrees).  This scan widens the move.  Each worker draws hand poses as moves from fire_indexed (three ways: along the line toward a pose known to reach, with scatter; a wide cloud round the middle of that line; and uniformly in a box) and keeps a pose if the arm fits it at some elbow swivel (every arm angle 1.5 degrees inside its limit) and the palm, web, cuff and the straight trigger finger are clear of the rifle with the pads pressed to their limits.  For every kept pose, 3,000 thumb poses drawn over the thumb's whole range are tried at the lever's two end positions: those with nothing inside the rifle are ranked by the distance from the thumb's glove to the lever.  The result is coarse (every third vertex of the thumb's shell, points sampled on the lever, no polishing): it says where reaching poses are, and grips/solve.py (solve_select) polishes the one it starts from.  For each kept pose the elbow swivels at which the arm fits are recorded too: that is what shows that the poses that reach need the elbow under the rifle.",
+ "reach_means": "thumb glove under 1.0 mm from the lever at safe and at fire, nothing inside the rifle (coarse: see the method)",
+ "hand_poses_tried": 24000,
+ "arm_out_of_range": 12948,
+ "palm_or_trigger_finger_inside_rifle": 9225,
+ "kept": 1827,
+ "reach_both_ends": 107,
+ "thumb_poses_per_hand_pose": 3000,
+ "by_hand_turn_deg": {
+  "0 to 15": {
+   "poses": 148,
+   "reach_both_ends": 0,
+   "smallest_gap_at_both_ends_mm": 12.32
+  },
+  "15 to 25": {
+   "poses": 240,
+   "reach_both_ends": 0,
+   "smallest_gap_at_both_ends_mm": 9.84
+  },
+  "25 to 35": {
+   "poses": 212,
+   "reach_both_ends": 0,
+   "smallest_gap_at_both_ends_mm": 6.19
+  },
+  "35 to 45": {
+   "poses": 279,
+   "reach_both_ends": 0,
+   "smallest_gap_at_both_ends_mm": 1.54
+  },
+  "45 to 55": {
+   "poses": 350,
+   "reach_both_ends": 11,
+   "smallest_gap_at_both_ends_mm": 0.62
+  },
+  "55 to 70": {
+   "poses": 496,
+   "reach_both_ends": 80,
+   "smallest_gap_at_both_ends_mm": 0.48
+  },
+  "70 to 120": {
+   "poses": 102,
+   "reach_both_ends": 16,
+   "smallest_gap_at_both_ends_mm": 0.46
+  }
+ },
+ "by_highest_elbow_swivel_the_arm_fits_deg": {
+  "-10 or more": {
+   "poses": 1827,
+   "reach_both_ends": 107,
+   "smallest_gap_at_both_ends_mm": 0.46
+  },
+  "0 or more": {
+   "poses": 1193,
+   "reach_both_ends": 11,
+   "smallest_gap_at_both_ends_mm": 0.46
+  },
+  "10 or more": {
+   "poses": 982,
+   "reach_both_ends": 2,
+   "smallest_gap_at_both_ends_mm": 0.62
+  },
+  "20 or more": {
+   "poses": 852,
+   "reach_both_ends": 0,
+   "smallest_gap_at_both_ends_mm": 1.01
+  },
+  "30 or more": {
+   "poses": 773,
+   "reach_both_ends": 0,
+   "smallest_gap_at_both_ends_mm": 5.46
+  },
+  "40 or more": {
+   "poses": 673,
+   "reach_both_ends": 0,
+   "smallest_gap_at_both_ends_mm": 5.54
+  },
+  "50 or more": {
+   "poses": 580,
+   "reach_both_ends": 0,
+   "smallest_gap_at_both_ends_mm": 5.54
+  }
+ },
+ "note_swivel": "The firing grip fits the arm only with the elbow 50 to 90 degrees out (grips.json has 55). No kept pose that reaches fits an elbow more than 15 degrees out: to reach the lever the elbow has to come in under the rifle.",
+ "smallest_moves_that_reach": [
+  {
+   "wrist_moved_mm": 24.3,
+   "hand_turned_deg": 48.8,
+   "gap_safe_mm": 0.78,
+   "gap_fire_mm": 0.4,
+   "elbow_swivel_fits_deg": [
+    -10.0,
+    -5.0
+   ],
+   "move": [
+    -24.3,
+    0.3,
+    1.0,
+    36.0,
+    28.9,
+    -16.0
+   ]
+  },
+  {
+   "wrist_moved_mm": 26.7,
+   "hand_turned_deg": 49.2,
+   "gap_safe_mm": 0.59,
+   "gap_fire_mm": 0.74,
+   "elbow_swivel_fits_deg": [
+    -10.0,
+    -5.0
+   ],
+   "move": [
+    -24.8,
+    3.0,
+    -9.4,
+    34.4,
+    30.3,
+    -17.8
+   ]
+  },
+  {
+   "wrist_moved_mm": 25.9,
+   "hand_turned_deg": 50.1,
+   "gap_safe_mm": 0.64,
+   "gap_fire_mm": 0.49,
+   "elbow_swivel_fits_deg": [
+    -10.0,
+    -10.0
+   ],
+   "move": [
+    -25.6,
+    2.3,
+    -3.3,
+    37.9,
+    29.9,
+    -13.3
+   ]
+  },
+  {
+   "wrist_moved_mm": 22.6,
+   "hand_turned_deg": 53.7,
+   "gap_safe_mm": 0.88,
+   "gap_fire_mm": 0.72,
+   "elbow_swivel_fits_deg": [
+    -10.0,
+    -5.0
+   ],
+   "move": [
+    -22.2,
+    3.1,
+    -2.9,
+    33.4,
+    39.9,
+    -13.2
+   ]
+  },
+  {
+   "wrist_moved_mm": 23.2,
+   "hand_turned_deg": 53.5,
+   "gap_safe_mm": 0.67,
+   "gap_fire_mm": 0.96,
+   "elbow_swivel_fits_deg": [
+    -10.0,
+    -10.0
+   ],
+   "move": [
+    -18.7,
+    9.4,
+    -10.0,
+    31.2,
+    43.0,
+    -6.6
+   ]
+  },
+  {
+   "wrist_moved_mm": 17.3,
+   "hand_turned_deg": 59.6,
+   "gap_safe_mm": 0.58,
+   "gap_fire_mm": 0.85,
+   "elbow_swivel_fits_deg": [
+    -10.0,
+    5.0
+   ],
+   "move": [
+    -16.5,
+    -5.2,
+    0.7,
+    36.1,
+    43.4,
+    -19.2
+   ]
+  },
+  {
+   "wrist_moved_mm": 20.2,
+   "hand_turned_deg": 59.3,
+   "gap_safe_mm": 0.82,
+   "gap_fire_mm": 0.47,
+   "elbow_swivel_fits_deg": [
+    -10.0,
+    -10.0
+   ],
+   "move": [
+    -16.7,
+    9.0,
+    -6.8,
+    34.0,
+    48.4,
+    -4.0
+   ]
+  },
+  {
+   "wrist_moved_mm": 6.5,
+   "hand_turned_deg": 73.0,
+   "gap_safe_mm": 0.79,
+   "gap_fire_mm": 0.52,
+   "elbow_swivel_fits_deg": [
+    -10.0,
+    5.0
+   ],
+   "move": [
+    -6.4,
+    -0.8,
+    0.9,
+    49.4,
+    48.0,
+    -24.0
+   ]
+  }
+ ],
+ "seconds": 1491
+}

@@ -1,0 +1,407 @@
+{
+ "asset": "hands-gloved",
+ "values_checked": 17754,
+ "outside_limits": 0,
+ "all_within_limits": true,
+ "sources": {
+  "BA": "Bain, Polites, Higgs, Heptinstall & McGrath 2015, J Hand Surg Eur 40(4):406-411: functional range 19-71 / 23-87 / 10-64 deg at MCP / PIP / DIP, being 48 / 59 / 60 % of the active range (abstract, read this session); the active-range end points -19..90, -7..101, -6..84 are recalled and agree with those percentages",
+  "HU": "Hume, Gellman, McKellop & Brumfield 1990, J Hand Surg Am 15(2):240-243 (citation and functional averages confirmed this session; thumb MP 0..56 and IP -5..73 active range recalled, not re-read)",
+  "CO": "Cooney, Lucca, Chao & Linscheid 1981, J Bone Joint Surg Am 63(9):1371-1381, trapeziometacarpal joint, 19 subjects: average total motion 53 deg flexion-extension, 42 abduction-adduction, 17 axial rotation; adduction with flexion is the commonest position in use (abstract, read 2026-11-17 through the PubMed API)",
+  "ES": "El-Shennawy, Nakamura, Patterson & Viegas 2001, J Hand Surg Am 26(6):1030-1035 (cadaver, 3-D motion analysis): overall flexion-extension of the 2nd to 5th carpometacarpal joints 11, 7, 20 and 27 deg; radial-ulnar deviation 2, 4, 7, 13; pronation-supination 5, 5, 27, 22 (abstract, read 2026-11-17 through the PubMed API)",
+  "AA": "American Academy of Orthopaedic Surgeons 1965, Joint Motion: Method of Measuring and Recording (wrist 80 flexion / 70 extension / 20 radial / 30 ulnar, forearm 80 / 80, elbow 0..150; recalled, not re-read)",
+  "K": "Kapandji, The Physiology of the Joints vol. 1: finger MCP abduction-adduction 20-30 deg each way (recalled)",
+  "I": "inference (no measurement found); see notes/NOTES.md"
+ },
+ "note": "Arm angles depend on the assumed shoulder position (an inference) and on the elbow swivel chosen per frame.",
+ "clips": {
+  "idle": {
+   "frames": 1,
+   "smallest_margin_deg": 0.5,
+   "at": {
+    "frame": 1,
+    "hand": "R",
+    "joint": "index_mcp_flex",
+    "value": -18.5,
+    "min": -19,
+    "max": 90
+   },
+   "pass_": true
+  },
+  "finger_to_trigger": {
+   "frames": 6,
+   "smallest_margin_deg": 0.5,
+   "at": {
+    "frame": 1,
+    "hand": "R",
+    "joint": "index_mcp_flex",
+    "value": -18.5,
+    "min": -19,
+    "max": 90
+   },
+   "pass_": true
+  },
+  "finger_off_trigger": {
+   "frames": 6,
+   "smallest_margin_deg": 0.5,
+   "at": {
+    "frame": 1,
+    "hand": "R",
+    "joint": "middle_mcp_abd",
+    "value": -19.5,
+    "min": -20,
+    "max": 20
+   },
+   "pass_": true
+  },
+  "trigger_pull": {
+   "frames": 10,
+   "smallest_margin_deg": 0.5,
+   "at": {
+    "frame": 1,
+    "hand": "R",
+    "joint": "middle_mcp_abd",
+    "value": -19.5,
+    "min": -20,
+    "max": 20
+   },
+   "pass_": true
+  },
+  "mag_release": {
+   "frames": 20,
+   "smallest_margin_deg": 0.5,
+   "at": {
+    "frame": 1,
+    "hand": "R",
+    "joint": "index_mcp_flex",
+    "value": -18.5,
+    "min": -19,
+    "max": 90
+   },
+   "pass_": true
+  },
+  "safety_to_fire": {
+   "frames": 30,
+   "smallest_margin_deg": 0.5,
+   "at": {
+    "frame": 1,
+    "hand": "R",
+    "joint": "index_mcp_flex",
+    "value": -18.5,
+    "min": -19,
+    "max": 90
+   },
+   "pass_": true
+  },
+  "safety_to_safe": {
+   "frames": 30,
+   "smallest_margin_deg": 0.5,
+   "at": {
+    "frame": 1,
+    "hand": "R",
+    "joint": "index_mcp_flex",
+    "value": -18.5,
+    "min": -19,
+    "max": 90
+   },
+   "pass_": true
+  },
+  "bolt_catch": {
+   "frames": 36,
+   "smallest_margin_deg": 0.5,
+   "at": {
+    "frame": 1,
+    "hand": "R",
+    "joint": "index_mcp_flex",
+    "value": -18.5,
+    "min": -19,
+    "max": 90
+   },
+   "pass_": true
+  },
+  "mag_out": {
+   "frames": 36,
+   "smallest_margin_deg": 0.03,
+   "at": {
+    "frame": 34,
+    "hand": "L",
+    "joint": "wrist_dev",
+    "value": 19.97,
+    "min": -30,
+    "max": 20
+   },
+   "pass_": true
+  },
+  "mag_in": {
+   "frames": 35,
+   "smallest_margin_deg": 0.07,
+   "at": {
+    "frame": 17,
+    "hand": "L",
+    "joint": "wrist_flex",
+    "value": -69.93,
+    "min": -70,
+    "max": 80
+   },
+   "pass_": true
+  },
+  "charge": {
+   "frames": 49,
+   "smallest_margin_deg": 0.02,
+   "at": {
+    "frame": 39,
+    "hand": "L",
+    "joint": "pronation",
+    "value": -79.98,
+    "min": -80,
+    "max": 80
+   },
+   "pass_": true
+  },
+  "dust_cover_open": {
+   "frames": 10,
+   "smallest_margin_deg": 0.5,
+   "at": {
+    "frame": 1,
+    "hand": "R",
+    "joint": "index_mcp_flex",
+    "value": -18.5,
+    "min": -19,
+    "max": 90
+   },
+   "pass_": true
+  }
+ },
+ "joints": {
+  "index_mcp_flex": {
+   "min_seen": -18.5,
+   "max_seen": 39.26,
+   "limit_min": -19,
+   "limit_max": 90,
+   "source": "BA"
+  },
+  "index_mcp_abd": {
+   "min_seen": -12.05,
+   "max_seen": 19.5,
+   "limit_min": -20,
+   "limit_max": 20,
+   "source": "K"
+  },
+  "index_pip_flex": {
+   "min_seen": -1.62,
+   "max_seen": 82.59,
+   "limit_min": -7,
+   "limit_max": 101,
+   "source": "BA"
+  },
+  "index_dip_flex": {
+   "min_seen": -5.5,
+   "max_seen": 58.76,
+   "limit_min": -6,
+   "limit_max": 84,
+   "source": "BA"
+  },
+  "middle_mcp_flex": {
+   "min_seen": -9.69,
+   "max_seen": 80.0,
+   "limit_min": -19,
+   "limit_max": 90,
+   "source": "BA"
+  },
+  "middle_mcp_abd": {
+   "min_seen": -19.5,
+   "max_seen": 19.5,
+   "limit_min": -20,
+   "limit_max": 20,
+   "source": "K"
+  },
+  "middle_pip_flex": {
+   "min_seen": -6.5,
+   "max_seen": 98.44,
+   "limit_min": -7,
+   "limit_max": 101,
+   "source": "BA"
+  },
+  "middle_dip_flex": {
+   "min_seen": -5.5,
+   "max_seen": 55.0,
+   "limit_min": -6,
+   "limit_max": 84,
+   "source": "BA"
+  },
+  "ring_mcp_flex": {
+   "min_seen": 9.23,
+   "max_seen": 80.0,
+   "limit_min": -19,
+   "limit_max": 90,
+   "source": "BA"
+  },
+  "ring_mcp_abd": {
+   "min_seen": -10.53,
+   "max_seen": 16.9,
+   "limit_min": -20,
+   "limit_max": 20,
+   "source": "K"
+  },
+  "ring_pip_flex": {
+   "min_seen": 0.93,
+   "max_seen": 97.72,
+   "limit_min": -7,
+   "limit_max": 101,
+   "source": "BA"
+  },
+  "ring_dip_flex": {
+   "min_seen": 2.1,
+   "max_seen": 55.0,
+   "limit_min": -6,
+   "limit_max": 84,
+   "source": "BA"
+  },
+  "little_mcp_flex": {
+   "min_seen": -10.91,
+   "max_seen": 89.5,
+   "limit_min": -19,
+   "limit_max": 90,
+   "source": "BA"
+  },
+  "little_mcp_abd": {
+   "min_seen": -19.5,
+   "max_seen": 5.21,
+   "limit_min": -20,
+   "limit_max": 20,
+   "source": "K"
+  },
+  "little_pip_flex": {
+   "min_seen": -6.5,
+   "max_seen": 95.0,
+   "limit_min": -7,
+   "limit_max": 101,
+   "source": "BA"
+  },
+  "little_dip_flex": {
+   "min_seen": -5.5,
+   "max_seen": 55.0,
+   "limit_min": -6,
+   "limit_max": 84,
+   "source": "BA"
+  },
+  "thumb_cmc_flex": {
+   "min_seen": -26.0,
+   "max_seen": 6.07,
+   "limit_min": -26.5,
+   "limit_max": 26.5,
+   "source": "CO"
+  },
+  "thumb_cmc_abd": {
+   "min_seen": -20.5,
+   "max_seen": 14.61,
+   "limit_min": -21,
+   "limit_max": 21,
+   "source": "CO"
+  },
+  "thumb_cmc_rot": {
+   "min_seen": -8.0,
+   "max_seen": 8.0,
+   "limit_min": -8.5,
+   "limit_max": 8.5,
+   "source": "CO"
+  },
+  "thumb_mcp_flex": {
+   "min_seen": 0.5,
+   "max_seen": 55.5,
+   "limit_min": 0,
+   "limit_max": 56,
+   "source": "HU"
+  },
+  "thumb_ip_flex": {
+   "min_seen": -4.5,
+   "max_seen": 60.98,
+   "limit_min": -5,
+   "limit_max": 73,
+   "source": "HU"
+  },
+  "mc4_flex": {
+   "min_seen": -1.24,
+   "max_seen": 4.57,
+   "limit_min": -3,
+   "limit_max": 17,
+   "source": "ES"
+  },
+  "mc5_flex": {
+   "min_seen": -1.28,
+   "max_seen": 8.0,
+   "limit_min": -4,
+   "limit_max": 23,
+   "source": "ES"
+  },
+  "mc2_flex": {
+   "min_seen": -1.14,
+   "max_seen": 0.0,
+   "limit_min": -1.7,
+   "limit_max": 9.3,
+   "source": "ES"
+  },
+  "mc3_flex": {
+   "min_seen": 0.0,
+   "max_seen": 1.72,
+   "limit_min": -1.0,
+   "limit_max": 6.0,
+   "source": "ES"
+  },
+  "pad_thenar": {
+   "min_seen": 0.0,
+   "max_seen": 0.0,
+   "limit_min": 0.0,
+   "limit_max": 5.3,
+   "source": "SP"
+  },
+  "pad_hypothenar": {
+   "min_seen": 0.0,
+   "max_seen": 4.12,
+   "limit_min": 0.0,
+   "limit_max": 7.12,
+   "source": "SP"
+  },
+  "pad_midpalm": {
+   "min_seen": 0.0,
+   "max_seen": 0.0,
+   "limit_min": 0.0,
+   "limit_max": 2.4,
+   "source": "SP"
+  },
+  "pad_distal": {
+   "min_seen": 0.0,
+   "max_seen": 2.43,
+   "limit_min": 0.0,
+   "limit_max": 2.9,
+   "source": "SP"
+  },
+  "wrist_flex": {
+   "min_seen": -69.93,
+   "max_seen": 34.8,
+   "limit_min": -70,
+   "limit_max": 80,
+   "source": "AA"
+  },
+  "wrist_dev": {
+   "min_seen": -29.93,
+   "max_seen": 19.97,
+   "limit_min": -30,
+   "limit_max": 20,
+   "source": "AA"
+  },
+  "pronation": {
+   "min_seen": -79.98,
+   "max_seen": 53.51,
+   "limit_min": -80,
+   "limit_max": 80,
+   "source": "AA"
+  },
+  "elbow_flex": {
+   "min_seen": 83.25,
+   "max_seen": 144.69,
+   "limit_min": 0,
+   "limit_max": 150,
+   "source": "AA"
+  }
+ }
+}

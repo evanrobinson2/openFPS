@@ -1,0 +1,47 @@
+{
+  "asset": "hands-gloved",
+  "credit": "carpetshark",
+  "modelled_by": [
+    {
+      "part": "hand recipe: proportions, skeleton, joint limits, glove shells, skinning (model/)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    },
+    {
+      "part": "grip solver and grips (grips/)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    },
+    {
+      "part": "hand clips synced to the HK416 clips (clips/, hands-gloved.json)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    },
+    {
+      "part": "runtime module and sample (hands-gloved.js, sample/)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    },
+    {
+      "part": "checks and reference decomposition (checks/, notes/)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    },
+    {
+      "part": "version 2 (CR-1): folding palm, firing and support grips re-solved against the references, contact check (model/, grips/, clips/, checks/, notes/)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    },
+    {
+      "part": "version 3 (CR-2): compressible palm pads and their check, flexion of all four metacarpals and arching, firing grip re-solved, knuckles and sleeve, selector-reach and hand-against-hand checks (model/, grips/, clips/, checks/, notes/)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-18"
+    },
+    {
+      "part": "version 4 (CR-3): the firing hand's move to the selector (hold, transit, thumb on the lever), the charge clip's hold and approach reworked, selector scan and selector move checks, frame strips (grips/, clips/, checks/, tools/, notes/)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-18"
+    }
+  ],
+  "status": "Version 4 (CR-3, an interim direction given while the owner slept), not reviewed by the owner. Structural checks pass against the rifle (joint limits, interpenetration 0.60 mm against a 1.0 mm tolerance with pad compression inside sourced limits, hand against hand 0.0 mm, runtime parity, finger proportions). The trigger, magazine release, bolt catch, charging handle and selector are touched. The selector is reached only by a large move of the firing hand (wrist 28.9 mm, hand 50.7 degrees, elbow under the rifle); the check shows contact, not a push. The web of the firing hand is still 19 mm to the right of its seat in the firing grip. The matched comparison still shows clear differences (notes/NOTES.md)."
+}

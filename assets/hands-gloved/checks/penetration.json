@@ -1,0 +1,827 @@
+{
+ "asset": "hands-gloved",
+ "tolerance_mm": 1.0,
+ "method": "exact triangle test, see tools/bvh_check.py; the glove is measured with its pads compressed as each frame says, and compression is reported apart (see this script's docstring)",
+ "unique_poses_measured": 339,
+ "frames_measured": 538,
+ "max_depth_mm": 0.597,
+ "all_within_tolerance": true,
+ "hand_against_hand": {
+  "note": "CR-2 goal 7. Frames in which the two gloves' boxes come within 2 mm are measured: the deepest vertex of either glove inside a closed shell of the other. Same tolerance. The gloves are not checked against themselves (a finger against its own palm).",
+  "frames_with_hands_near": 93,
+  "pose_pairs_measured": 83,
+  "max_depth_mm": 0.0,
+  "worst": {
+   "clip_frame": "bolt_catch:7",
+   "shell_entered": null,
+   "by": null
+  },
+  "frames_over_tolerance": [],
+  "max_depth_by_clip_mm": {
+   "bolt_catch": 0.0,
+   "charge": 0.0,
+   "mag_in": 0.0,
+   "mag_out": 0.0
+  },
+  "all_within_tolerance": true
+ },
+ "soft_pads": {
+  "note": "Compression, reported apart from interpenetration. commanded: what the frames carry at each pad's middle. overlap_uncompressed: how deep the pad would sit in the rifle with no compression. beyond_limit: overlap that the pad's limit could not take up (must stay within the tolerance). strain: commanded compression less the glove's give, over the tissue thickness.",
+  "strain_limit": 0.5,
+  "glove_give_mm": 0.4,
+  "pads": {
+   "thenar": {
+    "limit_mm": 5.3,
+    "tissue_mm": 9.8,
+    "how": "50 % (SP) of 9.8 mm of muscle and skin between the glove and the first metacarpal (model geometry; bone half-thickness 6.0 mm I), plus 0.4 mm of glove (I); tapering to 1.8 mm over the trapezium (SP: 2.5 to 3.0 mm of tissue there)",
+    "commanded_max_mm": 0.0,
+    "strain_at_commanded_max": 0.0,
+    "overlap_uncompressed_max_mm": 0.0,
+    "beyond_limit_max_mm": 0.0,
+    "within_limit": true
+   },
+   "hypothenar": {
+    "limit_mm": 7.12,
+    "tissue_mm": 13.44,
+    "how": "50 % (SP) of 13.4 mm between the glove and the fifth metacarpal (model geometry; bone half-thickness 4.5 mm I), plus 0.4 mm of glove (I)",
+    "commanded_max_mm": 4.12,
+    "strain_at_commanded_max": 0.277,
+    "overlap_uncompressed_max_mm": 0.82,
+    "beyond_limit_max_mm": 0.0,
+    "within_limit": true
+   },
+   "midpalm": {
+    "limit_mm": 2.4,
+    "tissue_mm": 4.0,
+    "how": "50 % (SP) of 4.0 mm of skin, fat and aponeurosis over the flexor tendons (I), plus 0.4 mm of glove (I)",
+    "commanded_max_mm": 0.0,
+    "strain_at_commanded_max": 0.0,
+    "overlap_uncompressed_max_mm": 0.21,
+    "beyond_limit_max_mm": 0.0,
+    "within_limit": true
+   },
+   "distal": {
+    "limit_mm": 2.9,
+    "tissue_mm": 5.0,
+    "how": "50 % (SP) of 5.0 mm of skin and fat pad in front of the metacarpal heads (I), plus 0.4 mm of glove (I)",
+    "commanded_max_mm": 2.43,
+    "strain_at_commanded_max": 0.406,
+    "overlap_uncompressed_max_mm": 1.861,
+    "beyond_limit_max_mm": 0.0,
+    "within_limit": true
+   }
+  },
+  "all_within_limits": true
+ },
+ "clips": {
+  "idle": {
+   "frames": 1,
+   "max_depth_mm": 0.508,
+   "worst": {
+    "frame": 1,
+    "hand": "L",
+    "rifle_part": "magwell_flare",
+    "glove_part": "cuff",
+    "kind": "rifle point in glove shell"
+   },
+   "frames_over_tolerance": [],
+   "per_frame_max_mm": [
+    0.508
+   ],
+   "pads": {
+    "thenar": {
+     "limit_mm": 5.3,
+     "commanded_max_mm": 0.0,
+     "overlap_uncompressed_max_mm": 0.0,
+     "beyond_limit_max_mm": 0.0
+    },
+    "hypothenar": {
+     "limit_mm": 7.12,
+     "commanded_max_mm": 0.3,
+     "overlap_uncompressed_max_mm": 0.651,
+     "beyond_limit_max_mm": 0.0
+    },
+    "midpalm": {
+     "limit_mm": 2.4,
+     "commanded_max_mm": 0.0,
+     "overlap_uncompressed_max_mm": 0.21,
+     "beyond_limit_max_mm": 0.0
+    },
+    "distal": {
+     "limit_mm": 2.9,
+     "commanded_max_mm": 2.43,
+     "overlap_uncompressed_max_mm": 1.861,
+     "beyond_limit_max_mm": 0.0
+    }
+   }
+  },
+  "finger_to_trigger": {
+   "frames": 6,
+   "max_depth_mm": 0.508,
+   "worst": {
+    "frame": 1,
+    "hand": "L",
+    "rifle_part": "magwell_flare",
+    "glove_part": "cuff",
+    "kind": "rifle point in glove shell"
+   },
+   "frames_over_tolerance": [],
+   "per_frame_max_mm": [
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508
+   ],
+   "pads": {
+    "thenar": {
+     "limit_mm": 5.3,
+     "commanded_max_mm": 0.0,
+     "overlap_uncompressed_max_mm": 0.0,
+     "beyond_limit_max_mm": 0.0
+    },
+    "hypothenar": {
+     "limit_mm": 7.12,
+     "commanded_max_mm": 0.3,
+     "overlap_uncompressed_max_mm": 0.651,
+     "beyond_limit_max_mm": 0.0
+    },
+    "midpalm": {
+     "limit_mm": 2.4,
+     "commanded_max_mm": 0.0,
+     "overlap_uncompressed_max_mm": 0.21,
+     "beyond_limit_max_mm": 0.0
+    },
+    "distal": {
+     "limit_mm": 2.9,
+     "commanded_max_mm": 2.43,
+     "overlap_uncompressed_max_mm": 1.861,
+     "beyond_limit_max_mm": 0.0
+    }
+   }
+  },
+  "finger_off_trigger": {
+   "frames": 6,
+   "max_depth_mm": 0.508,
+   "worst": {
+    "frame": 1,
+    "hand": "L",
+    "rifle_part": "magwell_flare",
+    "glove_part": "cuff",
+    "kind": "rifle point in glove shell"
+   },
+   "frames_over_tolerance": [],
+   "per_frame_max_mm": [
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508
+   ],
+   "pads": {
+    "thenar": {
+     "limit_mm": 5.3,
+     "commanded_max_mm": 0.0,
+     "overlap_uncompressed_max_mm": 0.0,
+     "beyond_limit_max_mm": 0.0
+    },
+    "hypothenar": {
+     "limit_mm": 7.12,
+     "commanded_max_mm": 0.3,
+     "overlap_uncompressed_max_mm": 0.651,
+     "beyond_limit_max_mm": 0.0
+    },
+    "midpalm": {
+     "limit_mm": 2.4,
+     "commanded_max_mm": 0.0,
+     "overlap_uncompressed_max_mm": 0.21,
+     "beyond_limit_max_mm": 0.0
+    },
+    "distal": {
+     "limit_mm": 2.9,
+     "commanded_max_mm": 2.43,
+     "overlap_uncompressed_max_mm": 1.861,
+     "beyond_limit_max_mm": 0.0
+    }
+   }
+  },
+  "trigger_pull": {
+   "frames": 10,
+   "max_depth_mm": 0.508,
+   "worst": {
+    "frame": 1,
+    "hand": "L",
+    "rifle_part": "magwell_flare",
+    "glove_part": "cuff",
+    "kind": "rifle point in glove shell"
+   },
+   "frames_over_tolerance": [],
+   "per_frame_max_mm": [
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508
+   ],
+   "pads": {
+    "thenar": {
+     "limit_mm": 5.3,
+     "commanded_max_mm": 0.0,
+     "overlap_uncompressed_max_mm": 0.0,
+     "beyond_limit_max_mm": 0.0
+    },
+    "hypothenar": {
+     "limit_mm": 7.12,
+     "commanded_max_mm": 0.3,
+     "overlap_uncompressed_max_mm": 0.651,
+     "beyond_limit_max_mm": 0.0
+    },
+    "midpalm": {
+     "limit_mm": 2.4,
+     "commanded_max_mm": 0.0,
+     "overlap_uncompressed_max_mm": 0.21,
+     "beyond_limit_max_mm": 0.0
+    },
+    "distal": {
+     "limit_mm": 2.9,
+     "commanded_max_mm": 2.43,
+     "overlap_uncompressed_max_mm": 1.861,
+     "beyond_limit_max_mm": 0.0
+    }
+   }
+  },
+  "mag_release": {
+   "frames": 20,
+   "max_depth_mm": 0.508,
+   "worst": {
+    "frame": 1,
+    "hand": "L",
+    "rifle_part": "magwell_flare",
+    "glove_part": "cuff",
+    "kind": "rifle point in glove shell"
+   },
+   "frames_over_tolerance": [],
+   "per_frame_max_mm": [
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508
+   ],
+   "pads": {
+    "thenar": {
+     "limit_mm": 5.3,
+     "commanded_max_mm": 0.0,
+     "overlap_uncompressed_max_mm": 0.0,
+     "beyond_limit_max_mm": 0.0
+    },
+    "hypothenar": {
+     "limit_mm": 7.12,
+     "commanded_max_mm": 0.0,
+     "overlap_uncompressed_max_mm": 0.205,
+     "beyond_limit_max_mm": 0.0
+    },
+    "midpalm": {
+     "limit_mm": 2.4,
+     "commanded_max_mm": 0.0,
+     "overlap_uncompressed_max_mm": 0.0,
+     "beyond_limit_max_mm": 0.0
+    },
+    "distal": {
+     "limit_mm": 2.9,
+     "commanded_max_mm": 1.94,
+     "overlap_uncompressed_max_mm": 0.965,
+     "beyond_limit_max_mm": 0.0
+    }
+   }
+  },
+  "safety_to_fire": {
+   "frames": 30,
+   "max_depth_mm": 0.508,
+   "worst": {
+    "frame": 1,
+    "hand": "L",
+    "rifle_part": "magwell_flare",
+    "glove_part": "cuff",
+    "kind": "rifle point in glove shell"
+   },
+   "frames_over_tolerance": [],
+   "per_frame_max_mm": [
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508
+   ],
+   "pads": {
+    "thenar": {
+     "limit_mm": 5.3,
+     "commanded_max_mm": 0.0,
+     "overlap_uncompressed_max_mm": 0.0,
+     "beyond_limit_max_mm": 0.0
+    },
+    "hypothenar": {
+     "limit_mm": 7.12,
+     "commanded_max_mm": 4.12,
+     "overlap_uncompressed_max_mm": 0.82,
+     "beyond_limit_max_mm": 0.0
+    },
+    "midpalm": {
+     "limit_mm": 2.4,
+     "commanded_max_mm": 0.0,
+     "overlap_uncompressed_max_mm": 0.21,
+     "beyond_limit_max_mm": 0.0
+    },
+    "distal": {
+     "limit_mm": 2.9,
+     "commanded_max_mm": 2.43,
+     "overlap_uncompressed_max_mm": 1.861,
+     "beyond_limit_max_mm": 0.0
+    }
+   }
+  },
+  "safety_to_safe": {
+   "frames": 30,
+   "max_depth_mm": 0.508,
+   "worst": {
+    "frame": 1,
+    "hand": "L",
+    "rifle_part": "magwell_flare",
+    "glove_part": "cuff",
+    "kind": "rifle point in glove shell"
+   },
+   "frames_over_tolerance": [],
+   "per_frame_max_mm": [
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508
+   ],
+   "pads": {
+    "thenar": {
+     "limit_mm": 5.3,
+     "commanded_max_mm": 0.0,
+     "overlap_uncompressed_max_mm": 0.0,
+     "beyond_limit_max_mm": 0.0
+    },
+    "hypothenar": {
+     "limit_mm": 7.12,
+     "commanded_max_mm": 4.12,
+     "overlap_uncompressed_max_mm": 0.82,
+     "beyond_limit_max_mm": 0.0
+    },
+    "midpalm": {
+     "limit_mm": 2.4,
+     "commanded_max_mm": 0.0,
+     "overlap_uncompressed_max_mm": 0.21,
+     "beyond_limit_max_mm": 0.0
+    },
+    "distal": {
+     "limit_mm": 2.9,
+     "commanded_max_mm": 2.43,
+     "overlap_uncompressed_max_mm": 1.861,
+     "beyond_limit_max_mm": 0.0
+    }
+   }
+  },
+  "bolt_catch": {
+   "frames": 36,
+   "max_depth_mm": 0.597,
+   "worst": {
+    "frame": 2,
+    "hand": "L",
+    "rifle_part": "magwell_flare",
+    "glove_part": "cuff",
+    "kind": "rifle point in glove shell"
+   },
+   "frames_over_tolerance": [],
+   "per_frame_max_mm": [
+    0.508,
+    0.597,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.088,
+    0.088,
+    0.088,
+    0.088,
+    0.088,
+    0.088,
+    0.088,
+    0.088,
+    0.088,
+    0.088,
+    0.088,
+    0.088,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.597,
+    0.508
+   ],
+   "pads": {
+    "thenar": {
+     "limit_mm": 5.3,
+     "commanded_max_mm": 0.0,
+     "overlap_uncompressed_max_mm": 0.0,
+     "beyond_limit_max_mm": 0.0
+    },
+    "hypothenar": {
+     "limit_mm": 7.12,
+     "commanded_max_mm": 0.3,
+     "overlap_uncompressed_max_mm": 0.651,
+     "beyond_limit_max_mm": 0.0
+    },
+    "midpalm": {
+     "limit_mm": 2.4,
+     "commanded_max_mm": 0.0,
+     "overlap_uncompressed_max_mm": 0.21,
+     "beyond_limit_max_mm": 0.0
+    },
+    "distal": {
+     "limit_mm": 2.9,
+     "commanded_max_mm": 2.43,
+     "overlap_uncompressed_max_mm": 1.861,
+     "beyond_limit_max_mm": 0.0
+    }
+   }
+  },
+  "mag_out": {
+   "frames": 36,
+   "max_depth_mm": 0.597,
+   "worst": {
+    "frame": 2,
+    "hand": "L",
+    "rifle_part": "magwell_flare",
+    "glove_part": "cuff",
+    "kind": "rifle point in glove shell"
+   },
+   "frames_over_tolerance": [],
+   "per_frame_max_mm": [
+    0.508,
+    0.597,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.053,
+    0.155,
+    0.16,
+    0.142,
+    0.145,
+    0.143,
+    0.179,
+    0.161,
+    0.171,
+    0.126,
+    0.164,
+    0.142,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "pads": {
+    "thenar": {
+     "limit_mm": 5.3,
+     "commanded_max_mm": 0.0,
+     "overlap_uncompressed_max_mm": 0.0,
+     "beyond_limit_max_mm": 0.0
+    },
+    "hypothenar": {
+     "limit_mm": 7.12,
+     "commanded_max_mm": 0.3,
+     "overlap_uncompressed_max_mm": 0.651,
+     "beyond_limit_max_mm": 0.0
+    },
+    "midpalm": {
+     "limit_mm": 2.4,
+     "commanded_max_mm": 0.0,
+     "overlap_uncompressed_max_mm": 0.21,
+     "beyond_limit_max_mm": 0.0
+    },
+    "distal": {
+     "limit_mm": 2.9,
+     "commanded_max_mm": 2.43,
+     "overlap_uncompressed_max_mm": 1.861,
+     "beyond_limit_max_mm": 0.0
+    }
+   }
+  },
+  "mag_in": {
+   "frames": 35,
+   "max_depth_mm": 0.597,
+   "worst": {
+    "frame": 34,
+    "hand": "L",
+    "rifle_part": "magwell_flare",
+    "glove_part": "cuff",
+    "kind": "rifle point in glove shell"
+   },
+   "frames_over_tolerance": [],
+   "per_frame_max_mm": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.597,
+    0.508
+   ],
+   "pads": {
+    "thenar": {
+     "limit_mm": 5.3,
+     "commanded_max_mm": 0.0,
+     "overlap_uncompressed_max_mm": 0.0,
+     "beyond_limit_max_mm": 0.0
+    },
+    "hypothenar": {
+     "limit_mm": 7.12,
+     "commanded_max_mm": 0.3,
+     "overlap_uncompressed_max_mm": 0.651,
+     "beyond_limit_max_mm": 0.0
+    },
+    "midpalm": {
+     "limit_mm": 2.4,
+     "commanded_max_mm": 0.0,
+     "overlap_uncompressed_max_mm": 0.21,
+     "beyond_limit_max_mm": 0.0
+    },
+    "distal": {
+     "limit_mm": 2.9,
+     "commanded_max_mm": 2.43,
+     "overlap_uncompressed_max_mm": 1.861,
+     "beyond_limit_max_mm": 0.0
+    }
+   }
+  },
+  "charge": {
+   "frames": 49,
+   "max_depth_mm": 0.508,
+   "worst": {
+    "frame": 1,
+    "hand": "L",
+    "rifle_part": "magwell_flare",
+    "glove_part": "cuff",
+    "kind": "rifle point in glove shell"
+   },
+   "frames_over_tolerance": [],
+   "per_frame_max_mm": [
+    0.508,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "pads": {
+    "thenar": {
+     "limit_mm": 5.3,
+     "commanded_max_mm": 0.0,
+     "overlap_uncompressed_max_mm": 0.0,
+     "beyond_limit_max_mm": 0.0
+    },
+    "hypothenar": {
+     "limit_mm": 7.12,
+     "commanded_max_mm": 0.3,
+     "overlap_uncompressed_max_mm": 0.651,
+     "beyond_limit_max_mm": 0.0
+    },
+    "midpalm": {
+     "limit_mm": 2.4,
+     "commanded_max_mm": 0.0,
+     "overlap_uncompressed_max_mm": 0.21,
+     "beyond_limit_max_mm": 0.0
+    },
+    "distal": {
+     "limit_mm": 2.9,
+     "commanded_max_mm": 2.43,
+     "overlap_uncompressed_max_mm": 1.861,
+     "beyond_limit_max_mm": 0.0
+    }
+   }
+  },
+  "dust_cover_open": {
+   "frames": 10,
+   "max_depth_mm": 0.508,
+   "worst": {
+    "frame": 1,
+    "hand": "L",
+    "rifle_part": "magwell_flare",
+    "glove_part": "cuff",
+    "kind": "rifle point in glove shell"
+   },
+   "frames_over_tolerance": [],
+   "per_frame_max_mm": [
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508
+   ],
+   "pads": {
+    "thenar": {
+     "limit_mm": 5.3,
+     "commanded_max_mm": 0.0,
+     "overlap_uncompressed_max_mm": 0.0,
+     "beyond_limit_max_mm": 0.0
+    },
+    "hypothenar": {
+     "limit_mm": 7.12,
+     "commanded_max_mm": 0.3,
+     "overlap_uncompressed_max_mm": 0.651,
+     "beyond_limit_max_mm": 0.0
+    },
+    "midpalm": {
+     "limit_mm": 2.4,
+     "commanded_max_mm": 0.0,
+     "overlap_uncompressed_max_mm": 0.21,
+     "beyond_limit_max_mm": 0.0
+    },
+    "distal": {
+     "limit_mm": 2.9,
+     "commanded_max_mm": 2.43,
+     "overlap_uncompressed_max_mm": 1.861,
+     "beyond_limit_max_mm": 0.0
+    }
+   }
+  }
+ }
+}
