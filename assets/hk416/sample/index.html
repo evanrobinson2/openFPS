@@ -22,7 +22,7 @@
 <body>
 <main>
   <h1>HK416 D14.5RS: simulation sample</h1>
-  <p>Everything on this page is computed from the asset's simulations: the sound is synthesised by <code>sound/hk416-sound.js</code>, the mechanism and recoil come from <code>action/hk416-action.js</code>, and the trajectory table from <code>ballistics/hk416-ballistics.js</code>. No recordings, no mesh files. Nothing plays until you press a button; start with the volume low.</p>
+  <p>Everything on this page is computed from the asset's simulations: the sound is synthesised by <code>sound/hk416-sound.js</code>, the mechanism and recoil come from <code>action/hk416-action.js</code>, the trajectory table from <code>ballistics/hk416-ballistics.js</code>, and the muzzle flash and smoke from <code>flash/hk416-flash.js</code>. No recordings, no mesh files. Nothing plays until you press a button; start with the volume low.</p>
 
   <div class="row">
     <button class="go" id="semi" disabled>Fire (semi)</button>
@@ -38,6 +38,18 @@
   <h2>Mechanism and recoil</h2>
   <canvas id="gun" width="1000" height="240"></canvas>
   <canvas id="plot" width="1000" height="200"></canvas>
+
+  <h2>Muzzle flash and smoke</h2>
+  <p>From <code>flash/hk416-flash.js</code>: the under-expanded jet through the flash hider, driven by the bore pressure and temperature of <code>action/</code>. Side view, muzzle to the right. The flash proper lasts well under a millisecond, so it plays about 3,000 times slower than life; the smoke then plays on a stretching clock. Brightness is the simulated luminance through the exposure you pick.</p>
+  <div class="row">
+    <button class="go" id="fl-go" disabled>Fire (flash only, no sound)</button>
+    <label class="chk"><input type="checkbox" id="fl-sec"> Secondary flash (fireball)</label>
+    <label>Exposure <select id="fl-exp"><option value="1">For the flash</option><option value="30">For a fireball</option></select></label>
+    <label>Cross-wind <select id="fl-wind"><option value="0">Calm</option><option value="2">2 m/s</option></select></label>
+    <button id="fl-frame" disabled>Show one 60 fps frame</button>
+  </div>
+  <canvas id="fl" width="1000" height="360"></canvas>
+  <div id="fl-status" style="color:var(--dim);margin-top:8px"></div>
 
   <h2>Point of impact with HK's 100 yd zero (mm, + high)</h2>
   <div class="wrap"><table id="poi"></table></div>
@@ -128,6 +140,68 @@ Promise.all([A.load('../action/action.json'), HK416Sound.build(AC)]).then(([, s]
   $('status').textContent = 'Ready. Sound is real time; the mechanism plays in slow motion.';
   drawGun(A.sample(0, {})); drawPlot([], 0.25);
 }).catch((e) => { $('status').textContent = 'Could not load: ' + e.message + ' (serve this folder over http, see USAGE.md)'; });
+</script>
+<script src="../flash/hk416-flash.js"></script>
+<script>
+// ---------------------------------------------------------------- muzzle flash and smoke (flash/hk416-flash.js)
+(function () {
+  const F = window.HK416Flash, $ = (id) => document.getElementById(id), cv = $('fl'), c = cv.getContext('2d'), W = 1000, H = 360;
+  let run = null;
+  const css = (rgb, a) => { const m = Math.max(rgb[0], rgb[1], rgb[2], 1e-6), g = (v) => Math.round(255 * Math.pow(Math.min(1, v / m), 1 / 2.2)); return `rgba(${g(rgb[0])},${g(rgb[1])},${g(rgb[2])},${a})`; };
+  // view: x right = down-range (z), y up; ox, oy = the hider face on the canvas; s = pixels per metre
+  function draw(cards, puffs, s, ox, label, white) {
+    c.globalCompositeOperation = 'source-over'; c.fillStyle = '#07090c'; c.fillRect(0, 0, W, H);
+    const oy = H / 2, X = (z) => ox + z * s, Y = (y) => oy - y * s, alpha = (L) => 1 - Math.exp(-L / white);
+    for (const p of puffs) {                                         // smoke: grey puffs, opacity from the optical depth
+      const r = Math.max(2, p.radius * s), g = c.createRadialGradient(X(p.position[2]), Y(p.position[1]), 0, X(p.position[2]), Y(p.position[1]), r);
+      g.addColorStop(0, `rgba(205,209,219,${Math.min(0.6, 0.6 * p.opacity)})`); g.addColorStop(1, 'rgba(205,209,219,0)');
+      c.fillStyle = g; c.beginPath(); c.arc(X(p.position[2]), Y(p.position[1]), r, 0, 7); c.fill();
+    }
+    c.fillStyle = '#1b2026'; c.fillRect(0, Y(0.0089), X(-0.0429), 0.0178 * s); c.fillStyle = '#242a31'; c.fillRect(X(-0.0429), Y(0.0106), 0.0429 * s, 0.0212 * s);   // barrel and hider
+    c.globalCompositeOperation = 'lighter';
+    for (const k of cards) {
+      const a = alpha(k.luminance); if (a < 0.003) continue;
+      const x = X(k.position[2]), y = Y(k.position[1]);
+      if (k.kind === 'slot') { if (k.normal[0] > 0.2) continue; c.fillStyle = css(k.rgb, a); c.fillRect(x - k.length * s / 2, y - Math.max(1, k.width * s / 2), k.length * s, Math.max(2, k.width * s)); }
+      else if (k.kind === 'plume') {
+        const ang = Math.atan2(-k.axis[1], k.axis[2]), len = k.length * s, w = k.width * s;
+        c.save(); c.translate(x, y); c.rotate(ang); c.scale(1, Math.max(0.05, w / Math.max(len, 1)) * 0.6);
+        const g = c.createRadialGradient(0, 0, 0, 0, 0, Math.max(len, 2)); g.addColorStop(0, css(k.rgb, a)); g.addColorStop(0.35, css(k.rgb, a * 0.35)); g.addColorStop(1, css(k.rgb, 0));
+        c.fillStyle = g; c.fillRect(0, -len, len, 2 * len); c.restore();
+      } else if (k.kind === 'blob') {
+        c.save(); c.translate(x, y); c.scale(1, k.width / k.length); const r = Math.max(2, k.length * s / 2), g = c.createRadialGradient(0, 0, 0, 0, 0, r);
+        g.addColorStop(0, css(k.rgb, a)); g.addColorStop(0.5, css(k.rgb, a * 0.4)); g.addColorStop(1, css(k.rgb, 0)); c.fillStyle = g; c.beginPath(); c.arc(0, 0, r, 0, 7); c.fill(); c.restore();
+      }
+    }
+    c.globalCompositeOperation = 'source-over'; c.fillStyle = '#9aa6b0'; c.font = '12px ui-monospace,Menlo,monospace'; c.fillText(label, 12, 18);
+    const bar = s > 1000 ? 0.05 : 0.5; c.fillRect(W - 20 - bar * s, H - 16, bar * s, 2); c.fillText(bar * 1000 + ' mm', W - 20 - bar * s, H - 22);
+  }
+  const opts = () => ({ secondary: $('fl-sec').checked, frame: 'muzzle' });
+  const wind = () => [-(+$('fl-wind').value), 0, 0];
+  const white = () => 2500 * +$('fl-exp').value;                       // cd/m2 that maps to 63 % of full white
+  function fire() {
+    const id = {}, t0 = performance.now(); run = id;
+    (function step() {
+      if (run !== id) return;
+      const w = (performance.now() - t0) / 1000;                      // wall seconds
+      let tau, s, ox;                                                 // tau: seconds after the bullet leaves the crown
+      if (w < 5) { tau = w / 5 * 1.6e-3 * ($('fl-sec').checked ? 6 : 1); s = $('fl-sec').checked ? 1100 : 2000; ox = 120; }
+      else { const u = Math.min(1, (w - 5) / 6); tau = 0.002 * Math.pow(1500, u); s = 300; ox = 250; }
+      const t = F.bulletExit + tau, f = F.sample(t, opts()), puffs = F.smoke(t, wind(), { frame: 'muzzle' });
+      draw(f.cards, puffs, s, ox, `t = ${(t * 1e3).toFixed(tau < 0.01 ? 3 : 0)} ms after ignition (${((t + F.ignitionAfterSear) * 1e3).toFixed(tau < 0.01 ? 3 : 0)} ms after the sear)   light source ${f.light.intensity.toPrecision(3)} cd, ${Math.round(f.light.colorK)} K`, white());
+      if (w < 11) requestAnimationFrame(step);
+    })();
+  }
+  function oneFrame() {
+    run = null; const f = F.frame(0, 1 / 60, opts());
+    draw(f.cards, F.smoke(1 / 60, wind(), { frame: 'muzzle' }), $('fl-sec').checked ? 1100 : 2000, 120, `one 1/60 s frame holding the whole flash: light source ${f.light.intensity.toPrecision(3)} cd for that frame, ${Math.round(f.light.colorK)} K`, white() / 60);
+  }
+  F.load('../flash/flash.json').then(() => {
+    $('fl-go').disabled = $('fl-frame').disabled = false; $('fl-go').onclick = fire; $('fl-frame').onclick = oneFrame;
+    $('fl-status').textContent = `Ready. Ordinary shot: peak ${F.data.light.peak_cd.toPrecision(3)} cd for about ${(F.data.light.fwhm_ms * 1e3).toFixed(0)} microseconds. A secondary flash lights on about ${Math.round(100 * F.secondaryProbability)} % of shots and is thousands of times brighter.`;
+    draw(F.sample(F.bulletExit + F.data.light.peak_t_ms / 1e3, { frame: 'muzzle' }).cards, [], 2000, 120, 'the flash at its peak', white());
+  }).catch((e) => { $('fl-status').textContent = 'Could not load the flash simulation: ' + e.message; });
+})();
 </script>
 </body>
 </html>
