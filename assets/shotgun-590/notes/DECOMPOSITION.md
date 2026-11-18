@@ -77,12 +77,12 @@ Each study is bound to its region and says what was measured and how.
   2 to 3 px under it. Bottom edge at y 98.6. The joint to the stock is slanted (x 358 at the top, 368 at the bottom):
   one plane cuts both parts.
 - **Barrel (P15).** Its top edge is traced at eight points: a collar at the receiver, a parallel chamber section, a
-  taper from x 665 to 809, then parallel to the muzzle at 10.2 mm radius. The photo was first read as tilted by
+  taper from x 665 to 809, then parallel to the muzzle at 10.8 mm radius. The photo was first read as tilted by
   0.64 degrees from this edge; the edge is a taper, not a tilt, and the correction is in `NOTES.md`.
-- **Magazine tube, ring, cap, lug band (P17, P20, P21, P22).** The tube's two edges give its axis (26.8 mm under the
-  bore) and its diameter (23.2 mm). The ring and the band show no hoop over the barrel's top edge, so both are built as
+- **Magazine tube, ring, cap, lug band (P17, P20, P21, P22).** The tube's two edges give its axis (28.3 mm under the
+  bore) and its diameter (24.5 mm). The ring and the band show no hoop over the barrel's top edge, so both are built as
   a ring around the tube joined to the barrel's underside by a web.
-- **Forend (P19).** A body of revolution about the tube's axis (the ribs run round it), 21.7 mm in radius, its top
+- **Forend (P19).** A body of revolution about the tube's axis (the ribs run round it), 23 mm in radius, its top
   cut flat under the barrel. About 19 ribs between x 735 and 850.
 - **Trigger guard and trigger (P13, P14).** The guard's outer line is ten points read from the photo's rows; the blade
   is an eight-point outline.
@@ -94,14 +94,14 @@ Each study is bound to its region and says what was measured and how.
 
 | Rule | Basis |
 |---|---|
-| One ruler: 0.9039 mm per photo pixel, origin at the receiver's front face on the bore axis. | Port front to muzzle = the published 20 in barrel (change request 1; version 1 used the overall length). See `NOTES.md`. |
-| Barrel, magazine tube, cap, follower and forend are bodies of revolution on two parallel axes 26.8 mm apart. | Observed: straight parallel edges, ring ribs. |
-| The forend, its inner tube and both action bars move as one (`slide_assembly`), straight back along the tube by the stroke. | Manual p14 (the forearm and action slide come off as one); the stroke is bounded by the photo: the forend's rear is 94.9 mm in front of the receiver. |
+| One ruler: 0.9563 mm per photo pixel, origin at the receiver's front face on the bore axis. | Photo extent = published overall length. See `NOTES.md`, "The ruler". |
+| Barrel, magazine tube, cap, follower and forend are bodies of revolution on two parallel axes 28.3 mm apart. | Observed: straight parallel edges, ring ribs. |
+| The forend, its inner tube and both action bars move as one (`slide_assembly`), straight back along the tube by the stroke. | Manual p14 (the forearm and action slide come off as one); the stroke is bounded by the photo: the forend's rear is 100.4 mm in front of the receiver. |
 | The bolt slide moves with the action bars; the bolt follows after the lost motion that drops the bolt lock. | Manual p17 (the bolt slide's lugs sit in the bars' slots and its top lug fits the bolt lock). The 9.5 mm is a guess. |
-| The elevator pivots on its studs at the hole under the port and lifts a shell from the tube's axis to the bore's. | Manual pp. 14 and 16; the hole is P10. The 22 degrees follows from 26.8 mm of lift over the elevator's length. |
+| The elevator pivots on its studs at the hole under the port and lifts a shell from the tube's axis to the bore's. | Manual pp. 14 and 16; the hole is P10. The 22 degrees follows from 28.3 mm of lift over the elevator's length. |
 | The safety slides along the receiver's rear slope: back is safe and covers the dot. | Manual p5. Travel (7 mm) is a guess. |
 | Everything is symmetric about the vertical plane through the bore, except the ejection port and extractor (right), the ejector and its screw, the action lock lever and the interrupter (left), and the cartridge stop (right). | Observed (P, L) and manual pp. 13 and 16. |
-| Widths: receiver 37.8 mm, stock 41.6 mm at the butt and 35 mm at the wrist, trigger guard 12 mm. | **Inferred.** No reference shows them. The receiver must hold the tube and a 12 gauge shell between two walls. |
+| Widths: receiver 40 mm, stock 44 mm at the butt and 37 mm at the wrist, trigger guard 12 mm. | **Inferred.** No reference shows them. The receiver must hold a 24.5 mm tube and a 12 gauge shell between two walls. |
 | Materials are flat: parkerised steel, dark alloy, black polymer, rubber, brass. No textures, no wear, no markings. | The photo's matte finishes; markings are left off by rule. |
 
 ## 5. Recipe and comparison

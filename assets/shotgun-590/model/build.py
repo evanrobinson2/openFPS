@@ -18,8 +18,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, 'masters')
 MM = 0.001
 TRACE = json.load(open(os.path.join(HERE, 'reference_trace.json')))
-K = TRACE['frame']['mm_per_px']                      # 0.9039 mm per photo pixel (ruler: published 20 in barrel; notes/NOTES.md, change request 1)
-SC = K / 0.9563                                      # lengths first fitted under the version 1 ruler (0.9563 mm per px) are carried over by this factor
+K = TRACE['frame']['mm_per_px']                      # 0.9563 mm per photo pixel (ruler: published overall length)
 X0, Y0 = TRACE['anchors_px']['receiver_front_x'], TRACE['frame']['y_axis0']
 def GZ(x): return (x - X0) * K
 def GY(y): return (Y0 - y) * K
@@ -28,29 +27,29 @@ def PX(pts): return [(GZ(x), GY(y)) for x, y in pts]
 # ------------------------------------------------------------------ shape numbers (photo pixels unless noted)
 P = dict(
     muzzle=GZ(1117), breech=GZ(555),                        # breech = front edge of the ejection port
-    barrel_r=10.8 * SC, bore_r=9.25,
+    barrel_r=10.8, bore_r=9.25,
     barrel_top=[(577, 38), (588, 38), (588, 39), (665, 39.3), (689, 40), (737, 42), (773, 43), (809, 44.3)],   # the barrel's top edge: collar, chamber, taper
       # bore: nominal 12 ga, 18.5 mm
-    tube_y=(GY(72) + GY(97.6)) / 2, tube_r=12.25 * SC, tube_z=(-12.0, GZ(1083)), tube_wall=0.5,   # wall inferred
-    recv_top=GY(30.5), recv_bot=GY(98.6), recv_half=20.0 * SC,                                       # half width inferred
+    tube_y=(GY(72) + GY(97.6)) / 2, tube_r=12.25, tube_z=(-12.0, GZ(1083)), tube_wall=0.9,   # wall inferred
+    recv_top=GY(30.5), recv_bot=GY(98.6), recv_half=20.0,                                       # half width inferred
     recv_top_pts=[(352, 56), (358, 53), (368, 47.6), (376, 44.2), (389, 41.5), (400, 38.5), (405, 34.5), (409, 30.5), (569, 30.5), (577, 38)],   # the surface under the safety button
     safety_top=[(376, 42), (398, 38)],
     recv_rear=(GZ(358), GZ(368)),                                                             # joint: top, bottom
-    port=(GZ(484), GZ(555), GY(70.7), GY(47.7)), load_port=(-97.0 * SC, -21.0 * SC, 11.0),              # loading port from the left photo; half width inferred
+    port=(GZ(484), GZ(555), GY(70.7), GY(47.7)), load_port=(-97.0, -21.0, 11.0),              # loading port from the left photo; half width inferred
     safety=(GZ(376), GZ(398), 7.0),                                                           # travel inferred
     housing_pin=(GZ(396.7), GY(85), 2.2), side_plug=(GZ(408.3), GY(65), 3.0), stud_hole=(GZ(495), GY(87.3), 3.2),
-    top_screws=[GZ(446), GZ(510)], ejector_screw=(-55.0 * SC, 7.5 * SC),                                # left photo, by proportion
+    top_screws=[GZ(446), GZ(510)], ejector_screw=(-55.0, 7.5),                                # left photo, by proportion
     guard=[(397, 98), (398, 108), (400, 116), (404, 122), (410, 127.5), (441, 127.5), (450, 124), (456, 118), (460.5, 110), (464, 98)],
     guard_wall=3.6, guard_half=6.0, housing=(GZ(366), GZ(470), GY(103), GY(96)),              # half widths inferred
     trigger=[(406, 99), (409.8, 99), (410.8, 108), (413.2, 116), (417.2, 122), (414, 122.8), (409, 116), (406.6, 108)], trigger_pivot=(409, 95),
-    lock_lever=(-183.0 * SC, -177.0 * SC, GY(104), GY(98)),                                             # left photo, by proportion
-    forend=(GZ(682), GZ(902)), forend_r=23.0 * SC, ribs=(GZ(735), GZ(850), 19), forend_top=-11.6 * SC,
-    bar=(GY(79), GY(70.5), 12.6 * SC, 15.4 * SC), stroke=92.0, lost_motion=9.5,                 # stroke: the forend's rear is 94.9 mm from the receiver face, less clearance (inferred); lost motion is a guess
-    lug_band=(GZ(951), GZ(985), GY(113), 13.8 * SC, GZ(939)), ring=(GZ(1057), GZ(1089), 15.7 * SC, GZ(1047)), cap=(GZ(1089), GZ(1104), GZ(1112), 12.9 * SC),
+    lock_lever=(-183.0, -177.0, GY(104), GY(98)),                                             # left photo, by proportion
+    forend=(GZ(682), GZ(902)), forend_r=23.0, ribs=(GZ(735), GZ(850), 19), forend_top=-11.6,
+    bar=(GY(79), GY(70.5), 12.6, 15.4), stroke=97.5, lost_motion=9.5,                           # stroke: the forend's rear is 100.4 mm from the receiver face, less clearance (inferred); lost motion is a guess
+    lug_band=(GZ(951), GZ(985), GY(113), 13.8, GZ(939)), ring=(GZ(1057), GZ(1089), 15.7, GZ(1047)), cap=(GZ(1089), GZ(1104), GZ(1112), 12.9),
     bead=(GZ(1103.3), 1.5),
     pad_joint=((GZ(54), GY(104)), (GZ(75), GY(215))), stud=(GZ(134), GY(196.5)),
-    stock_front=-196.0 * SC, butt_half=22.0 * SC, wrist_half=18.5 * SC,                                       # widths inferred
-    bolt=(-101.0, 11.8), bolt_slide=(-91.5, -38.0), cavity_wall=5.0, elevator_len=66.0, elevator_lift=22.0,   # inferred: sized so the bolt and bolt slide stay inside the receiver at full stroke (model/tools/checks.py)
+    stock_front=-196.0, butt_half=22.0, wrist_half=18.5,                                       # widths inferred
+    bolt=(-105.0, 12.4), bolt_slide=(-97.0, -40.0), cavity_wall=5.0, elevator_len=70.0, elevator_lift=22.0,   # inferred: sized so the bolt and bolt slide stay inside the receiver at full stroke (model/tools/checks.py)
 )
 SHELL = dict(rim_r=11.15, body_r=10.15, head=16.0, length=59.0)   # nominal 12 ga 2 3/4 in loaded shell (see notes/NOTES.md)
 
@@ -203,18 +202,18 @@ def JOINT():
     return (0, yt, zt), (n if n.z > 0 else -n)
 
 def build_stock():
-    zs = list(range(int(TRACE['extent_mm']['z_min']), int(P['stock_front']), 4)) + [P['stock_front']]
+    zs = list(range(-524, int(P['stock_front']), 4)) + [P['stock_front']]
     tops, bots = [], []
     for z in zs:
-        r = col_runs(z); tops.append(r[0][0]); bots.append(min(b for _, b in r if b > -180) if z < -212 * SC else r[0][1])
+        r = col_runs(z); tops.append(r[0][0]); bots.append(min(b for _, b in r if b > -180) if z < -212 else r[0][1])
     # the swivel stud and the trigger guard sit in the lower outline: take the stud out with a 5-point median, cap the wrist at the receiver's underside
     med = lambda v, i: sorted(v[max(0, i - 2):i + 3])[len(v[max(0, i - 2):i + 3]) // 2]
     bots = [med(bots, i) for i in range(len(bots))]
     rings = []
     for z, t, b in zip(zs, tops, bots):
-        u = min(1.0, max(0.0, (z - zs[0]) / (250.0 * SC))); hw = P['butt_half'] + (P['wrist_half'] - P['butt_half']) * u
-        if z > -230 * SC: hw = P['wrist_half'] + (P['recv_half'] - P['wrist_half']) * (z + 230 * SC) / (P['stock_front'] + 230 * SC)
-        if z > -212 * SC: t, b = max(t, recv_top(z)) if z > P['recv_rear'][0] else t, min(b, P['recv_bot'])
+        u = min(1.0, max(0.0, (z + 524) / 250.0)); hw = P['butt_half'] + (P['wrist_half'] - P['butt_half']) * u
+        if z > -230: hw = P['wrist_half'] + (P['recv_half'] - P['wrist_half']) * (z + 230) / (P['stock_front'] + 230)
+        if z > -212: t, b = max(t, recv_top(z)) if z > P['recv_rear'][0] else t, min(b, P['recv_bot'])
         if t - b < 4: t, b = (t + b) / 2 + 2, (t + b) / 2 - 2
         rings.append(ring_pts(z, t, b, hw, 2.6, 2.6, N=36))
     (z0, y0), (z1, y1) = P['pad_joint']; no = Vector((0, -(z1 - z0), (y1 - y0))).normalized()     # plane normal in (X, Y, Z), pointing to the muzzle
@@ -235,10 +234,10 @@ def recv_top(z):
 def build_receiver():
     hw, bot = P['recv_half'], P['recv_bot']
     zr_top, zr_bot = P['recv_rear']
-    zs = sorted(set([z for z, _ in PX(P['recv_top_pts'])] + list(range(-184, 0, 12)) + [0.0]))
-    rings = [ring_pts(z, recv_top(z), bot, hw, 3.2, 9.0, yc=recv_top(z) - 17.0 * SC, N=44) for z in zs]
+    zs = sorted(set([z for z, _ in PX(P['recv_top_pts'])] + list(range(-196, 0, 12)) + [0.0]))
+    rings = [ring_pts(z, recv_top(z), bot, hw, 3.2, 9.0, yc=recv_top(z) - 17.0, N=44) for z in zs]
     px0, px1, py0, py1 = P['port']; l0, l1, lh = P['load_port']
-    cav = box(-hw + 3.0, hw - 3.0, bot + 3.0, 14.0 * SC, zr_bot + P['cavity_wall'], 1.0)                 # inside of the receiver (inferred wall 3 mm)
+    cav = box(-hw + 3.0, hw - 3.0, bot + 3.0, 14.0, zr_bot + P['cavity_wall'], 1.0)                 # inside of the receiver (inferred wall 3 mm)
     port = box(-hw - 2, -hw + 6, py0, py1, px0, px1); lport = box(-lh, lh, bot - 2, bot + 6, l0, l1)
     part('receiver', cut_plane(loft(rings), *JOINT(), True), 'Alloy', 'receiver_group', ['P05', 'P07', 'P23', 'L05'], 'traced', bevel=0.5, cuts=(cav, port, lport))
     z, y, r = P['housing_pin']; part('trigger_housing_pin', cyl_x(z, y, -hw - 0.3, hw + 0.3, r), 'SteelDark', 'receiver_group', ['P09'], 'traced', pivot=(0, y, z), bevel=0.2)
@@ -262,8 +261,8 @@ def build_receiver():
     part('safety_red_dot', cyl_y(zd, 0, yt(zd) - 1.0, yt(zd) + 0.25, 1.6), 'PaintRed', 'receiver_group', ['M01'], 'manual', bevel=0)
     # the shell stops on the inner walls (manual Fig. 17 and 23: stop on the right, interrupter on the left)
     ty = P['tube_y']
-    part('cartridge_stop', join(box(-hw + 3.0, -hw + 4.6, ty - 2, ty + 5, -94, -6), box(-hw + 4.6, -hw + 7.2, ty - 1, ty + 3, -14, -8)), 'SteelDark', 'receiver_group', ['M03'], 'manual', pivot=(-hw + 3.0, ty, -94), bevel=0.2)
-    part('cartridge_interrupter', join(box(hw - 4.6, hw - 3.0, ty - 2, ty + 5, -94, -6), box(hw - 7.2, hw - 4.6, ty - 1, ty + 3, -12, -6)), 'SteelDark', 'receiver_group', ['M03'], 'manual', pivot=(hw - 3.0, ty, -94), bevel=0.2)
+    part('cartridge_stop', join(box(-hw + 3.0, -hw + 4.6, ty - 2, ty + 5, -100, -6), box(-hw + 4.6, -hw + 7.2, ty - 1, ty + 3, -14, -8)), 'SteelDark', 'receiver_group', ['M03'], 'manual', pivot=(-hw + 3.0, ty, -100), bevel=0.2)
+    part('cartridge_interrupter', join(box(hw - 4.6, hw - 3.0, ty - 2, ty + 5, -100, -6), box(hw - 7.2, hw - 4.6, ty - 1, ty + 3, -12, -6)), 'SteelDark', 'receiver_group', ['M03'], 'manual', pivot=(hw - 3.0, ty, -100), bevel=0.2)
 
 def build_trigger_group():
     h0, h1, hy0, hy1 = P['housing']; g = P['guard_half']
@@ -326,7 +325,7 @@ def build_bolt():
     part('bolt', body, 'SteelDark', 'bolt_group', ['P07', 'M06'], 'manual', bevel=0.3)
     px0, px1, py0, py1 = P['port']
     part('extractor', box(-r - 0.5, -r + 2.0, GY(61), GY(55), GZ(535), zf + 0.6), 'SteelParkerized', 'bolt_group', ['P08'], 'traced', bevel=0.2)
-    part('bolt_lock', box(-5.0, 5.0, r - 3.5, r + 1.2, zb + 34, zf - 8), 'SteelDark', 'bolt_group', ['M05'], 'manual', pivot=(0, r - 2, zb + 34), bevel=0.3)
+    part('bolt_lock', box(-5.0, 5.0, r - 3.5, r + 2.4, zb + 34, zf - 8), 'SteelDark', 'bolt_group', ['M05'], 'manual', pivot=(0, r - 2, zb + 34), bevel=0.3)
     s0, s1 = P['bolt_slide']
     part('bolt_slide', join(box(-9.5, 9.5, -15.5, -9.5, s0, s1), box(-P['bar'][2] - 0.2, P['bar'][2] + 0.2, -19.0, -15.5, s0 + 6, s0 + 20)), 'SteelDark', 'bolt_slide_group', ['M05'], 'manual', bevel=0.3)
 
@@ -351,8 +350,8 @@ def build_sockets():
     zr = PX([P['recv_top_pts'][6]])[0][0]; bz, br = P['bead']; yb = P['barrel_r'] + br * 1.8; yr = P['recv_top']
     slope = (yb - yr) / (bz - zr)                                    # sight line: receiver top rear edge over the bead
     empty('socket_muzzle', 'barrel_assembly', (0, 0, P['muzzle']), ['P15'])
-    empty('socket_ads_eye', 'receiver_group', (0, yr + slope * (-312 - zr), -312.0), ['P05', 'P16'])
-    empty('socket_hand_right', 'receiver_group', (0, -66.0, -248.0), ['P01'])
+    empty('socket_ads_eye', 'receiver_group', (0, yr + slope * (-330 - zr), -330.0), ['P05', 'P16'])
+    empty('socket_hand_right', 'receiver_group', (0, -70.0, -262.0), ['P01'])
     empty('socket_trigger_finger', 'receiver_group', (0, GY(112), GZ(411)), ['P14'])
     empty('socket_hand_left', 'slide_assembly', (0, ty - P['forend_r'], (f0 + f1) / 2), ['P19'])
     empty('socket_shoulder', 'receiver_group', (0, GY(165), GZ(33)), ['P02'])

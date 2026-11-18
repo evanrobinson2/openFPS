@@ -5,29 +5,29 @@ orthographically in the same pixel grid, and the difference map. Numbers are in 
 (`model/tools/compare.py`). Run 2026-11-17 on the build of `model/build.py` at this commit.
 
 Method: the photo's silhouette is every pixel darker than 200; the model's is the render's alpha. Both are 1148 x 263.
-One pixel is 0.904 mm. The ruler is the published 20 in barrel (`NOTES.md`, change request 1), so **scale is a
-calibration, not a result**; the shapes are the result, and they do not depend on which ruler is used.
+One pixel is 0.956 mm. The ruler was set from the photo's overall extent, so **overall length is a calibration, not a
+result**; the shapes inside that length are the result.
 
 ## Silhouette
 
 | Measure | Value |
 |---|---|
-| Intersection over union, whole gun | 0.973 |
-| Photo only / model only | 1,439 px / 704 px of 77,691 |
-| Top edge, per column | mean 0.24 mm, 95th percentile 0.90 mm, worst 4.5 mm at x 374 (the safety button) |
-| Bottom edge, per column | mean 1.0 mm, 95th percentile 2.7 mm, worst 25.3 mm at x 30 (the one column at the butt's heel, 1 px wide) |
+| Intersection over union, whole gun | 0.974 |
+| Photo only / model only | 1,354 px / 709 px of 77,691 |
+| Top edge, per column | mean 0.28 mm, 95th percentile 0.96 mm, worst 4.8 mm at x 374 (the safety button) |
+| Bottom edge, per column | mean 1.0 mm, 95th percentile 2.9 mm, worst 25.8 mm at x 29 (the one column at the butt's heel, 1 px wide) |
 
 | Region (photo x) | IoU | What differs |
 |---|---|---|
-| Butt and pad (20 to 130) | 0.978 | The heel's corner; the pad's joint is a straight cut. |
+| Butt and pad (20 to 130) | 0.983 | The heel's corner; the pad's joint is a straight cut. |
 | Stock (130 to 300) | 0.988 | The swivel stud is a simple post. |
-| Wrist (300 to 365) | 0.968 | The lower curve is smoothed by the 4 mm loft spacing. |
-| Receiver rear and trigger guard (365 to 470) | 0.925 | **Weakest.** The guard is a thin loop, so half a pixel either way costs a lot; the trigger's curve and the housing's rear corner are approximate; the safety button's profile is a wedge. |
-| Receiver front and port (470 to 580) | 0.981 | - |
+| Wrist (300 to 365) | 0.973 | The lower curve is smoothed by the 4 mm loft spacing. |
+| Receiver rear and trigger guard (365 to 470) | 0.924 | **Weakest.** The guard is a thin loop, so half a pixel either way costs a lot; the trigger's curve and the housing's rear corner are approximate; the safety button's profile is a wedge. |
+| Receiver front and port (470 to 580) | 0.985 | - |
 | Barrel root and action bars (580 to 683) | 0.980 | The collar's step is slightly high. |
 | Forend (683 to 905) | 0.980 | The nose's lower corner is squarer than the photo's. |
-| Barrel, tube, lug band (905 to 1055) | 0.969 | The lug's hook is a simplified notch; the band's fillets are missing. |
-| Ring, cap, muzzle (1055 to 1125) | 0.935 | The cap's dome and the stud's tip are simplified. |
+| Barrel, tube, lug band (905 to 1055) | 0.970 | The lug's hook is a simplified notch; the band's fillets are missing. |
+| Ring, cap, muzzle (1055 to 1125) | 0.934 | The cap's dome and the stud's tip are simplified. |
 
 ## Inside the silhouette, by eye
 
@@ -60,11 +60,11 @@ and front have no reference at all, so widths are inferred. A three-quarter rend
 | Fully rearward ejects and releases the next shell; fully forward chambers (pp. 9, 10) | clips `pump_back`, `pump_forward`, `pump_stroke`; events in `action.json` | OK |
 | Takedown order (pp. 10 to 14) | clip `takedown` in the same order; `renders/exploded.jpg` | OK as a sequence; the bolt slide lifts straight out instead of being tipped |
 | Trigger housing lifts out rear first (p13) | `trigger_housing_group` rotates about its front | OK |
-| Capacity (p8; maker: nine in all) | With the barrel ruler the modelled tube is long enough for seven 2 3/4 in shells, not eight, and its inside (22.2 mm) is under a 12 gauge rim (22.45 mm) | **Not met** (`NOTES.md`, change request 1). The mechanism still counts eight |
+| Capacity (p8; maker: nine in all) | Tube holds eight 2 3/4 in shells by the model's own length | OK |
 | Function test (p20) | `action/test_action.js`, first five checks | OK |
 
 ## Verdict
 
-The right-side outline follows the photo closely (IoU 0.973, edges within about 1 mm on average). That is a result
-about one view. Internal detail is schematic, the other views are inferred, the scale question in
-`NOTES.md` is open (overall length and length of pull are 5 to 6 % under the published figures), and the owner has not reviewed it.
+The right-side outline follows the photo closely (IoU 0.974, edges within about 1 mm on average). That is a result
+about one view. Internal detail is schematic, the other views are inferred, the barrel-length question in
+`NOTES.md` is open, and the owner has not reviewed it.

@@ -39,16 +39,16 @@
   }
  },
  "gun": {
-  "muzzle_z": 0.4881138790035587,
+  "muzzle_z": 0.516396694214876,
   "sights": {
    "bead_flat": {
     "rear": [
-     -0.15185765124555162,
-     0.022266429418742604
+     -0.16065674931129473,
+     0.023556614631160103
     ],
     "front": [
-     0.47573024911032025,
-     0.012908383959083107
+     0.5032955188246095,
+     0.0135
     ],
     "note": "line of sight from the rear edge of the receiver's flat top over the bead (model geometry, traced from the profile photo). An inference: the manual says nothing about the sight picture."
    },
@@ -630,91 +630,91 @@
   ]
  },
  "sight_bead_flat": {
-  "bore_above_sight_line_rad": 0.01491,
-  "sight_line_height_at_muzzle_m": 0.01272,
+  "bore_above_sight_line_rad": 0.01515,
+  "sight_line_height_at_muzzle_m": 0.0133,
   "poi": {
    "slug": [
     {
      "range_m": 5,
-     "above_sight_line_m": 0.0613
+     "above_sight_line_m": 0.0619
     },
     {
      "range_m": 10,
-     "above_sight_line_m": 0.1343
+     "above_sight_line_m": 0.1361
     },
     {
      "range_m": 15,
-     "above_sight_line_m": 0.2062
+     "above_sight_line_m": 0.2091
     },
     {
      "range_m": 20,
-     "above_sight_line_m": 0.2769
+     "above_sight_line_m": 0.281
     },
     {
      "range_m": 25,
-     "above_sight_line_m": 0.3464
+     "above_sight_line_m": 0.3517
     },
     {
      "range_m": 30,
-     "above_sight_line_m": 0.4147
+     "above_sight_line_m": 0.4212
     },
     {
      "range_m": 40,
-     "above_sight_line_m": 0.5472
+     "above_sight_line_m": 0.5561
     },
     {
      "range_m": 50,
-     "above_sight_line_m": 0.6742
+     "above_sight_line_m": 0.6854
     },
     {
      "range_m": 75,
-     "above_sight_line_m": 0.9636
+     "above_sight_line_m": 0.9807
     },
     {
      "range_m": 100,
-     "above_sight_line_m": 1.2069
+     "above_sight_line_m": 1.2299
     }
    ],
    "buck00": [
     {
      "range_m": 5,
-     "above_sight_line_m": 0.0611
+     "above_sight_line_m": 0.0617
     },
     {
      "range_m": 10,
-     "above_sight_line_m": 0.1332
+     "above_sight_line_m": 0.135
     },
     {
      "range_m": 15,
-     "above_sight_line_m": 0.2035
+     "above_sight_line_m": 0.2065
     },
     {
      "range_m": 20,
-     "above_sight_line_m": 0.2719
+     "above_sight_line_m": 0.276
     },
     {
      "range_m": 25,
-     "above_sight_line_m": 0.3381
+     "above_sight_line_m": 0.3434
     },
     {
      "range_m": 30,
-     "above_sight_line_m": 0.4021
+     "above_sight_line_m": 0.4085
     },
     {
      "range_m": 40,
-     "above_sight_line_m": 0.5223
+     "above_sight_line_m": 0.5311
     },
     {
      "range_m": 50,
-     "above_sight_line_m": 0.6311
+     "above_sight_line_m": 0.6423
     },
     {
      "range_m": 75,
-     "above_sight_line_m": 0.843
+     "above_sight_line_m": 0.8601
     },
     {
      "range_m": 100,
-     "above_sight_line_m": 0.9469
+     "above_sight_line_m": 0.9699
     }
    ]
   },

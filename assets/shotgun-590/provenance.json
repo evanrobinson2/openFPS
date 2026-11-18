@@ -30,5 +30,5 @@
   ],
   "reviewed_by": [],
   "references": "notes/REFERENCES.md",
-  "status": "Simulation-grade action, recoil, ballistics and sound; parametric geometry recipe (Blender Python) traced from one public-domain profile photo. Not yet reviewed by the owner. Scaled to the published 20 in barrel (change request 1); overall length then reads 38.7 in against the published 41 in: notes/NOTES.md."
+  "status": "Simulation-grade action, recoil, ballistics and sound; parametric geometry recipe (Blender Python) traced from one public-domain profile photo. Not yet reviewed by the owner. Open question on barrel length against overall length: notes/NOTES.md."
 }

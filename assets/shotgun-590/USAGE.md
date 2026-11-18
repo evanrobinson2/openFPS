@@ -15,7 +15,7 @@ and recoil drawn from the model's own part boxes, pellet holes on a target, a do
 | Action and recoil (`action/`) | Ready. The mechanism passes the manual's function test, loading and unloading procedures; recoil matches the SAAMI momentum balance. Shooter coupling and stroke timing are tuning. |
 | Ballistics (`ballistics/`) | Ready. The slug matches the maker's published table within 0.55 % in velocity and 0.04 in in path. The buckshot pattern is calibrated to a published rule of thumb, not to a measured pattern of this load. |
 | Sound (`sound/`) | Ready. Eleven synthesised sounds; the JavaScript matches the Python to rounding. Not checked by listening. |
-| Geometry (`model/`) | Ready as a recipe: 40 named parts, 10 clips, 14 sockets, one level of detail, flat materials. Right-side silhouette against the reference: IoU 0.973. **Open:** the photo cannot satisfy both the published barrel length (used, so the model agrees with the simulations) and the published overall length: the model is 38.7 in long, not 41 in. Widths and internal shapes are inferred. See `notes/NOTES.md`, change request 1. |
+| Geometry (`model/`) | Ready as a recipe: 40 named parts, 10 clips, 14 sockets, one level of detail, flat materials. Right-side silhouette against the reference: IoU 0.974. **Open:** the photo cannot satisfy both the published overall length (used) and the published barrel length; widths and internal shapes are inferred. See `notes/NOTES.md`. |
 
 ## Run the sample
 
@@ -63,7 +63,7 @@ Full APIs: `action/README.md`, `ballistics/README.md`, `sound/README.md`.
 Metres and seconds. +Z towards the muzzle, +Y up, +X to the shooter's left; the origin is on the bore axis at the
 receiver's front face. The ejection port is on -X. Time zero of a shot is the trigger break.
 
-Moving nodes: `slide_assembly` and `bolt_slide_group` (translate -Z by the stroke, 92.0 mm), `bolt_group` (follows
+Moving nodes: `slide_assembly` and `bolt_slide_group` (translate -Z by the stroke, 97.5 mm), `bolt_group` (follows
 after 9.5 mm), `bolt_lock`, `elevator_group`, `trigger`, `safety_button`, `action_lock_lever`, `magazine_follower`,
 `magazine_cap_group`, `barrel_assembly`, `trigger_housing_group`. Clips: `pump_stroke`, `pump_back`, `pump_forward`,
 `trigger_pull`, `dry_fire`, `safety_to_fire`, `safety_to_safe`, `action_release`, `shell_insert`, `takedown`.
@@ -87,21 +87,21 @@ the forend), `socket_shoulder`, `socket_eject`, `socket_load`, `socket_chamber`,
 Order matters: the simulations read `model/inventory.json`, and the sound reads `action/action.json`.
 `model/rebuild.sh` runs the build, the matched render and the comparison in one go.
 
-## Limits
-
-- One reference view. Only the right side is measured; widths, the left side's details and all internal shapes are
-  inferred (`notes/NOTES.md`, `notes/COMPARE.md`).
-- The model is scaled to the published 20 in barrel. Its overall length is then 38.7 in (published 41 in), its length of pull 13.2 in (published 13.87 in), and its magazine tube is too slim and too short for the published eight shells. Unresolved, pending the owner's review (`notes/NOTES.md`).
-- Flat materials, no textures, no markings, one level of detail. The sample page draws part boxes, not the mesh.
-- No modifications, conversions or ways round the safety are modelled, by design.
-- Each simulation's README lists its own limits.
-
 ## Published specifications: where they come from
 
 The overall length (41 in), barrel (20 in), length of pull (13.87 in), weight (7.25 lb) and capacity (9) used here
 are those of the maker's model number **50645**. They were **not read from the maker**: mossberg.com returned
 HTTP 403 to automated requests on 2026-11-17, so they come from a dealer's copy of the maker's specification sheet
 for that model number (`notes/REFERENCES.md`). **They still need confirming against mossberg.com by hand.**
+
+## Limits
+
+- One reference view. Only the right side is measured; widths, the left side's details and all internal shapes are
+  inferred (`notes/NOTES.md`, `notes/COMPARE.md`).
+- The modelled barrel measures 21.2 in from the breech in a 41.0 in gun; the published barrel is 20 in. Unresolved.
+- Flat materials, no textures, no markings, one level of detail. The sample page draws part boxes, not the mesh.
+- No modifications, conversions or ways round the safety are modelled, by design.
+- Each simulation's README lists its own limits.
 
 ## Sources
 

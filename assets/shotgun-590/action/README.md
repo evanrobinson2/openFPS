@@ -41,7 +41,7 @@ A gun object holds `slide`, `safety`, `hammerCocked`, `actionLocked`, `chamber`,
 | `releaseFromMagazine()`, `tipOutElevatorShell()` | p10: unloading | `shell_removed` |
 
 The magazine is last in, first out: the shell pushed in last is nearest the receiver and feeds next. A stroke that
-stops short of the rear (before 93 % of travel) releases no shell, so the action closes on an empty chamber.
+stops short of the rear (before 92 % of travel) releases no shell, so the action closes on an empty chamber.
 
 Two rules are **inferred**, because the manual describes neither case: the trigger must be let go and pulled again for
 each shot (holding it through the pump does not fire on closing), and the hammer cannot fall while the action is open.
@@ -61,7 +61,7 @@ each shot (holding it through the pump does not fire on closing), and the hammer
 3. **The pump stroke.** Hand-driven: slide position is `stroke x (t / T)^1.6` each way, so the slide is still moving
    when it meets its stop (about 1.1 m/s). Default 0.14 s back, 0.02 s dwell, 0.16 s forward: game tuning. Event
    positions come from the model's geometry: the lost motion, the fired hull's length, the cartridge stop's release
-   6 mm before the rear, the shell's place on the elevator.
+   8 mm before the rear, the shell's place on the elevator.
 4. **The hull.** Leaves the port sideways at 1.2 times the slide's speed, a little up and back, with seeded jitter;
    flies with gravity and a little drag; bounces by surface. All tuning.
 
@@ -73,11 +73,11 @@ each shot (holding it through the pump does not fire on closing), and the hammer
 | Peak pressure of the scaled curve | 70.0 MPa | 72.1 MPa |
 | Barrel time | 2.37 ms | 2.24 ms |
 | Free recoil, unloaded gun (SAAMI) | 4.62 m/s, 35.1 J (25.9 ft lb) | 5.02 m/s, 41.5 J (30.6 ft lb) |
-| At the shoulder: back, muzzle rise, peak force | 44 mm, 2.9 degrees, 1.18 kN | 48 mm, 3.1 degrees, 1.28 kN |
-| From the hip: back, muzzle rise | 79 mm, 4.0 degrees | 85 mm, 4.4 degrees |
+| At the shoulder: back, muzzle rise, peak force | 44 mm, 2.8 degrees, 1.18 kN | 48 mm, 3.0 degrees, 1.28 kN |
+| From the hip: back, muzzle rise | 79 mm, 4.0 degrees | 85 mm, 4.3 degrees |
 | 20 in barrel against the 30 in test barrel, by this curve | 6 % slower (an estimate, not used) | 7 % slower |
 
-## Checks (`action.json`, `checks`; 16 of 17 pass)
+## Checks (`action.json`, `checks`; all pass)
 
 | Check | Result |
 |---|---|
@@ -85,11 +85,11 @@ each shot (holding it through the pump does not fire on closing), and the hammer
 | Peak pressure is under the industry maximum average pressure (79.3 MPa, a recalled figure) | 70.0 and 72.1 MPa |
 | A held gun peaks a little under its free recoil speed | 4.03 and 4.14 of 4.62 m/s (buck); 4.43 and 4.53 of 5.02 (slug) |
 | The gun settles by 0.8 s | within 0.02 mm and 0.02 degrees |
-| The bolt travels further than a fired 3 in hull is long | 82.5 mm against 76.2 mm |
+| The bolt travels further than a fired 3 in hull is long | 88.0 mm against 76.2 mm |
 | The events of a stroke are in order | yes |
-| The modelled magazine tube holds the published eight shells | **Fails** since the ruler became the 20 in barrel (`notes/NOTES.md`, change request 1): 0.500 m inside, 45 mm allowed for follower and spring, seven 59 mm shells fit. The mechanism still holds the published eight |
+| The modelled magazine tube holds the published eight shells | 0.528 m inside, 45 mm allowed for follower and spring, eight 59 mm shells fit, not nine |
 | The muzzle velocity is the published one | a calibration, shown for completeness |
-| `test_action.js` | 30 of 30: the manual's function test (p20), action lock (p6, p9), loading to nine and firing them in the right order (p8, p9), the events of one pump, unloading (p10), poses, stroke timing, pressure and recoil playback, seeded hulls against `sim.py` within 0.007 mm |
+| `test_action.js` | 30 of 30: the manual's function test (p20), action lock (p6, p9), loading to nine and firing them in the right order (p8, p9), the events of one pump, unloading (p10), poses, stroke timing, pressure and recoil playback, seeded hulls against `sim.py` within 0.004 mm |
 
 ## Limits
 

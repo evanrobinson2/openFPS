@@ -1,22 +1,22 @@
 {
  "note": "largest sample difference between sim.py and shotgun590-sound.js, dB relative to the signal peak; js_ms is node synthesis time",
- "worst_db": -312.6,
+ "worst_db": -312.5,
  "passed": true,
  "outputs": {
   "shot_buck00_shooter": {
    "samples": 21600,
-   "max_error_db_re_peak": -317.2,
-   "js_ms": 8
+   "max_error_db_re_peak": -329.2,
+   "js_ms": 7
   },
   "shot_buck00_bystander": {
    "samples": 21600,
    "max_error_db_re_peak": -316.1,
-   "js_ms": 5
+   "js_ms": 4
   },
   "shot_slug_shooter": {
    "samples": 21600,
-   "max_error_db_re_peak": -319.0,
-   "js_ms": 1
+   "max_error_db_re_peak": -318.3,
+   "js_ms": 2
   },
   "shot_slug_bystander": {
    "samples": 21600,
@@ -25,27 +25,27 @@
   },
   "pump": {
    "samples": 25920,
-   "max_error_db_re_peak": -312.6,
+   "max_error_db_re_peak": -313.3,
    "js_ms": 9
   },
   "pump_back": {
    "samples": 17280,
-   "max_error_db_re_peak": -312.6,
-   "js_ms": 2
+   "max_error_db_re_peak": -313.3,
+   "js_ms": 1
   },
   "pump_forward": {
    "samples": 18240,
-   "max_error_db_re_peak": -318.0,
+   "max_error_db_re_peak": -312.5,
    "js_ms": 1
   },
   "dry_fire": {
    "samples": 5760,
-   "max_error_db_re_peak": -317.7,
-   "js_ms": 0
+   "max_error_db_re_peak": -317.8,
+   "js_ms": 1
   },
   "shell_insert": {
    "samples": 12480,
-   "max_error_db_re_peak": -315.9,
+   "max_error_db_re_peak": -315.7,
    "js_ms": 0
   },
   "safety": {
@@ -56,7 +56,7 @@
   "action_release": {
    "samples": 3840,
    "max_error_db_re_peak": -318.0,
-   "js_ms": 1
+   "js_ms": 0
   }
  }
 }

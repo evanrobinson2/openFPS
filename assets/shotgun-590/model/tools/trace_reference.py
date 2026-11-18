@@ -6,9 +6,9 @@ notes/REFERENCES.md) and writes numbers only. Method:
   2. Tilt: least-squares line through the barrel's top edge over its untapered front part, photo x = 820..1050
      (the rear 230 px of the barrel taper up to the chamber, so they are not used).
   3. Bore axis: midway between the barrel's top and bottom edges where both are visible (x = 990..1050).
-  4. Ruler: the published 20 in (508 mm) barrel spans the muzzle (x = 1117) to the breech, taken as the front
-     edge of the ejection port (x = 555), as the manual's Fig. 1A does for the barrel it shows. The photo cannot
-     also give the published 41 in overall length: see notes/NOTES.md, "The ruler" and change request 1.
+  4. Ruler: the silhouette's extent along the bore (butt to muzzle) is the published overall length, 41 in
+     (1041.4 mm). The photo cannot also satisfy the published 20 in barrel: see notes/NOTES.md, "The ruler", for
+     the other rulers this photo allows, what each implies, and why this one was chosen.
   5. Every silhouette column is rotated into the gun frame (Z along the bore, + muzzle, Z = 0 at the receiver
      front face; Y up, 0 on the bore) and written as runs of covered Y, every 2 mm of Z.
 """
@@ -19,7 +19,7 @@ from PIL import Image
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(HERE, '..', 'refs-local', 'commons-atf-mossberg-590.jpg')
 X_MUZZLE, X_BREECH, X_RECV_FRONT = 1117.0, 555.0, 577.0
-BARREL_MM = 20 * 25.4
+OAL_MM = 41 * 25.4
 
 def load():
     a = np.asarray(Image.open(SRC).convert('L')).astype(float)
@@ -36,8 +36,8 @@ def frame(a, mask):
     F = dict(theta=th, slope=float(slope), y_axis0=y_axis_at(0.0), mm_per_px=1.0)
     ys, xs2 = np.where(mask); u, _ = to_gun(F, xs2.astype(float), ys.astype(float))
     cnt, edges = np.histogram(u, bins=np.arange(np.floor(u.min()), np.ceil(u.max()) + 2))
-    good = np.where(cnt >= 3)[0]; F['extent_px'] = float(edges[good[-1] + 1] - edges[good[0]])
-    F['mm_per_px'] = BARREL_MM / ((X_MUZZLE - X_BREECH) / np.cos(th))
+    good = np.where(cnt >= 3)[0]; ext_px = float(edges[good[-1] + 1] - edges[good[0]])
+    F['mm_per_px'] = OAL_MM / ext_px; F['extent_px'] = ext_px
     return F
 
 def to_gun(F, x, y):
@@ -53,7 +53,7 @@ def to_px(F, z, yy):
     u, v = z / F['mm_per_px'], -yy / F['mm_per_px']
     return x0 + u * c - v * s, y0 + u * s + v * c
 
-def gun_mask(F, mask, z0=-530.0, z1=520.0, y0=-190.0, y1=40.0, step=0.5):
+def gun_mask(F, mask, z0=-560.0, z1=540.0, y0=-200.0, y1=40.0, step=0.5):
     """the silhouette resampled on a gun-frame grid (rows: Y from y1 down to y0; cols: Z)"""
     zs = np.arange(z0, z1, step); ys = np.arange(y1, y0, -step)
     Z, Y = np.meshgrid(zs, ys); px, py = to_px(F, Z, Y)
