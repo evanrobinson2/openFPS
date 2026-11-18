@@ -1224,7 +1224,7 @@
   {
    "name": "p28_trigger_pin",
    "part_no": "28",
-   "material": "Steel",
+   "material": "SteelDark",
    "parent": "p17_frame",
    "source": "dimension image px (682, 350)",
    "status": "measured",
@@ -1320,7 +1320,7 @@
   {
    "name": "p21_slide_lock",
    "part_no": "21",
-   "material": "Steel",
+   "material": "SteelDark",
    "parent": "p17_frame",
    "source": "dimension image px 602-640, 310-355; manual p. 22 picture 23",
    "status": "measured",
@@ -1544,7 +1544,7 @@
   {
    "name": "p27_slide_stop_lever",
    "part_no": "27",
-   "material": "Steel",
+   "material": "SteelDark",
    "parent": "p17_frame",
    "source": "dimension image px 815-870, 290-325 (pad); rear view shows a pad on each side; arms inferred",
    "status": "measured",

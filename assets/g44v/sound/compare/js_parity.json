@@ -13,7 +13,7 @@
   },
   "dry_cci_standard_velocity_bystander_free": {
    "max_error_db_re_peak": -323.8,
-   "js_ms": 1
+   "js_ms": 0
   },
   "dry_cci_standard_velocity_bystander_field": {
    "max_error_db_re_peak": -323.8,
@@ -21,7 +21,7 @@
   },
   "dry_cci_standard_velocity_downrange_free": {
    "max_error_db_re_peak": -316.1,
-   "js_ms": 1
+   "js_ms": 0
   },
   "dry_cci_standard_velocity_downrange_field": {
    "max_error_db_re_peak": -316.1,
@@ -29,7 +29,7 @@
   },
   "dry_cci_mini_mag_shooter_free": {
    "max_error_db_re_peak": -341.3,
-   "js_ms": 1
+   "js_ms": 0
   },
   "dry_cci_mini_mag_shooter_field": {
    "max_error_db_re_peak": -335.3,
@@ -37,7 +37,7 @@
   },
   "dry_cci_mini_mag_bystander_free": {
    "max_error_db_re_peak": -331.0,
-   "js_ms": 1
+   "js_ms": 0
   },
   "dry_cci_mini_mag_bystander_field": {
    "max_error_db_re_peak": -325.0,

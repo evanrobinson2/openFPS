@@ -353,7 +353,7 @@ def build_frame():
                 union(box(l0, l1, -12.6, -9.0, FT - 1.0, FT), box(l0, l1, -9.35, -8.55, FT - 0.01, -6.6), box(l0, l1, -10.9, -9.34, -7.9, -6.7))
             part(f'p17_frame_guide_{tag}_{nm}', g, 'SteelDark', 'p17_frame', no='17', bevel=0.08, seg=1, src='manual p. 6 (steel guides in the polymer frame); position inferred', status='inferred')
     # 28 trigger pin, 29 trigger housing pin (short)
-    part('p28_trigger_pin', cylS(tpl, tpz, -FW + 0.2, FW - 0.2, 2.0, n=20), 'Steel', 'p17_frame', no='28', bevel=0.15, seg=1, src='dimension image px (682, 350)', status='measured')
+    part('p28_trigger_pin', cylS(tpl, tpz, -FW + 0.2, FW - 0.2, 2.0, n=20), 'SteelDark', 'p17_frame', no='28', bevel=0.15, seg=1, src='dimension image px (682, 350)', status='measured')
     part('p29_trigger_housing_pin', cylS(hpl, hpz, -FW + 0.3, FW - 0.3, 1.5, n=16), 'Polymer', 'p17_frame', no='29', bevel=0.15, seg=1, src='dimension image px (1047, 440); manual p. 38', status='measured')
     # 22 locking block
     ck = [(76.0, -10.2), (98.6, -10.2), (98.6, -23.5), (95.0, -23.5), (95.0, -12.7), (91.8, -12.7), (91.8, -23.5), (76.0, -23.5)]
@@ -363,7 +363,7 @@ def build_frame():
     # 21 slide lock (pulled down to strip), 20 its spring
     sl = union(box(92.3, 93.9, -FW - 0.7, FW + 0.7, -21.0, -13.0),
               *[box(LX(640), LX(602), s0, s1, ZY(355), ZY(310)) for s0, s1 in ((FW + 0.02, FW + 0.7), (-FW - 0.7, -FW - 0.02))])
-    part('p21_slide_lock', sl, 'Steel', 'p17_frame', pivot=(93.1, 0, -17.0), no='21', bevel=0.15, seg=1, src='dimension image px 602-640, 310-355; manual p. 22 picture 23', status='measured')
+    part('p21_slide_lock', sl, 'SteelDark', 'p17_frame', pivot=(93.1, 0, -17.0), no='21', bevel=0.15, seg=1, src='dimension image px 602-640, 310-355; manual p. 22 picture 23', status='measured')
     part('p20_slide_lock_spring', helix((93.1, 0, -24.9), (0, 0, 1), 3.8, 1.0, 0.35, 3.5), 'Spring', 'p17_frame', pivot=(93.1, 0, -24.9), no='20', bevel=0,
          src='exploded drawing item 20', status='inferred', )
     # 23 trigger mechanism housing with ejector
@@ -405,7 +405,7 @@ def build_frame():
                  box(50.0, 59.2, w0, w1, -20.5, -15.0 if sgn > 0 else -16.8),                                       # through the window (lower on the right, under the trigger bar)
                  box(LX(870), LX(815), sgn * (FW + 0.05) if sgn > 0 else -FW - 1.5, FW + 1.5 if sgn > 0 else -FW - 0.05, ZY(325) if sgn > 0 else -16.9, FT - 0.3)]   # thumb pad (px 815-870, 290-325)
     arms += [box(51.0, 54.0, 11.0, 12.5, -15.1, FT - 0.3), box(56.0, 59.0, 10.4, 11.6, -18.4, -13.8), box(56.0, 59.0, 7.5, 10.41, -14.8, -13.8)]     # nose under the slide notch; nub over the follower
-    part('p27_slide_stop_lever', union(*arms), 'Steel', 'p17_frame', pivot=(tpl, 0, tpz), no='27', bevel=0.12, seg=1, cuts=[cylS(tpl, tpz, -17, 17, 2.15, n=20)],
+    part('p27_slide_stop_lever', union(*arms), 'SteelDark', 'p17_frame', pivot=(tpl, 0, tpz), no='27', bevel=0.12, seg=1, cuts=[cylS(tpl, tpz, -17, 17, 2.15, n=20)],
          src='dimension image px 815-870, 290-325 (pad); rear view shows a pad on each side; arms inferred', status='measured')
     # 19 magazine catch (reversible, button on the left), 18 its spring
     mc = union(box(61.8, 64.4, -FW + 0.3, FW + 0.1, -45.5, -39.5), box(59.6, 61.81, -9.4, -7.6, -44.8, -40.6),

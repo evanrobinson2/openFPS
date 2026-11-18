@@ -39,17 +39,17 @@ built from how the part must work (each one is a stated guess). Positions are mm
 | - | `placeholder_panel_grip_r` | measured | dimension image px 1030-1095, 660-715: maker's mark on the grip replaced by a plain panel | 16.4, -14.6, -77.7 | 10.8 to 22.0 | -82.5 to -73.0 | Placeholder |
 | 17 | `p17_frame_guide_rear_r` | inferred | manual p. 6 (steel guides in the polymer frame); position inferred | 36.0, -9.8, -8.5 | 30.0 to 42.0 | -10.6 to -6.6 | SteelDark |
 | 17 | `p17_frame_guide_front_r` | inferred | manual p. 6 (steel guides in the polymer frame); position inferred | 113.0, -9.8, -8.5 | 108.0 to 118.0 | -10.6 to -6.6 | SteelDark |
-| 28 | `p28_trigger_pin` | measured | dimension image px (682, 350) | 82.2, 0.0, -19.4 | 80.2 to 84.2 | -21.4 to -17.4 | Steel |
+| 28 | `p28_trigger_pin` | measured | dimension image px (682, 350) | 82.2, 0.0, -19.4 | 80.2 to 84.2 | -21.4 to -17.4 | SteelDark |
 | 29 | `p29_trigger_housing_pin` | measured | dimension image px (1047, 440); manual p. 38 | 19.1, 0.0, -34.9 | 17.6 to 20.6 | -36.4 to -33.4 | Polymer |
 | 22 | `p22_locking_block` | inferred | exploded drawing item 22; position from the trigger pin and slide lock in the dimension image | 92.1, 0.0, -17.8 | 76.0 to 98.6 | -23.5 to -10.2 | Steel |
-| 21 | `p21_slide_lock` | measured | dimension image px 602-640, 310-355; manual p. 22 picture 23 | 93.1, 0.0, -17.0 | 89.5 to 96.0 | -21.0 to -12.4 | Steel |
+| 21 | `p21_slide_lock` | measured | dimension image px 602-640, 310-355; manual p. 22 picture 23 | 93.1, 0.0, -17.0 | 89.5 to 96.0 | -21.0 to -12.4 | SteelDark |
 | 20 | `p20_slide_lock_spring` | inferred | exploded drawing item 20 | 93.1, 0.0, -24.9 | 92.0 to 94.2 | -24.7 to -21.3 | Spring |
 | 23 | `p23_trigger_mechanism_housing` | inferred | exploded drawing item 23; ejector named in manual p. 31 picture 35; shape inferred | 21.4, 0.0, -26.0 | 11.0 to 58.0 | -38.5 to -0.8 | Polymer |
 | 24 | `p24_connector` | inferred | exploded drawing item 24; manual p. 28 picture 32 (right rear corner of the frame); simplified to a strip | 18.5, -10.9, -17.2 | 14.0 to 23.0 | -18.3 to -16.2 | Steel |
 | 26 | `p26_trigger` | traced | traced: outlines.json trigger; hub to the pin inferred | 82.2, 0.0, -19.4 | 70.3 to 91.2 | -48.4 to -16.2 | Polymer |
 | 26 | `p26_trigger_safety` | inferred | manual p. 7 and p. 9 (trigger safety lever in the trigger); the traced outline is the blade, 2 mm proud of the trigger face | 81.6, 0.0, -34.0 | 80.6 to 91.5 | -45.0 to -34.0 | Polymer |
 | 26 | `p26_trigger_bar` | inferred | manual p. 7 (trigger bar: holds the firing pin, lifts the firing pin safety, drops on the ramp); exploded drawing item 26; routing inferred | 79.5, -5.0, -28.2 | 9.0 to 81.0 | -29.8 to -9.9 | Steel |
-| 27 | `p27_slide_stop_lever` | measured | dimension image px 815-870, 290-325 (pad); rear view shows a pad on each side; arms inferred | 82.2, 0.0, -19.4 | 49.7 to 85.6 | -22.8 to -9.9 | Steel |
+| 27 | `p27_slide_stop_lever` | measured | dimension image px 815-870, 290-325 (pad); rear view shows a pad on each side; arms inferred | 82.2, 0.0, -19.4 | 49.7 to 85.6 | -22.8 to -9.9 | SteelDark |
 | 19 | `p19_magazine_catch` | measured | dimension image px 800-880, 455-515 (pad); manual p. 40; bar and nib inferred | 62.0, 0.0, -42.5 | 48.0 to 64.4 | -47.9 to -37.5 | Polymer |
 | 18 | `p18_magazine_catch_spring` | inferred | manual p. 40 pictures 53-54: a straight wire in the front strap | 54.6, 0.0, -63.8 | 47.3 to 61.8 | -81.2 to -46.5 | Spring |
 | 17 | `p17_frame_grip_texture_l` | measured | dimension image: studded grip panel, patch outline px (880,500)...(850,540), maker's mark window left clear | 0.0, 0.0, 0.0 | -2.0 to 53.1 | -97.8 to -40.5 | Polymer |
