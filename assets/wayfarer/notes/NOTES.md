@@ -19,7 +19,7 @@
   than through it. That set the lander's width at 2.2 m.
 - **Lower deck doors** part in the middle, because a single leaf could not slide past the gear wells.
 - **Landing gear.** Front pair folds aft, rear pair folds forward, each into a real well with two doors.
-- **Level of detail.** `--lod 1` leaves out fasteners (492,000 triangles down to 269,000).
+- **Level of detail.** `--lod 1` leaves out fasteners (525,000 triangles down to 283,000).
 
 ## Limits, plainly
 
@@ -31,10 +31,14 @@
   jack drive motors and cross shaft, control pedestal, hose reel, service panel, tool board) and the crew spaces
   (bunk bedding, curtains and ladders, galley, lockers, pack stowage, first aid, oxygen, ready lights, gauge board
   and valve manifold, breaker cabinet, workbench, expansion tank, battery boxes, cable trays, intercoms,
-  extinguishers). The outer hull plating and the external gadgets are still first pass.
+  extinguishers). The outer hull has its pass too (seam straps, access panels, rung ladders, lifting lugs, vents, walkway rails, belly fittings, hull number).
 - The crew-space fittings are placed by rule (against the lining, clear of doors and gear wells) and looked at in
   renders. Nothing checks that a crew member can reach or use them.
-- Flat colours. No textures, wear, decals or markings.
+- Wear is a per-vertex colour layer made by rule (`model/wear.py`), not textures. It gives tone, grime and plate
+  variation but no scratches, chips or fine streaks; next to the concept image the ship still reads clean. Getting
+  closer needs textures, which would be generated at build time and never committed.
+- The reactor compartment is a crawl space: 0.3 m between the door and the end of the vessel. It was looked at in a
+  render (`renders/reactor.jpg`) and left, since moving the vessel changes the engineering layout.
 - Clips are kinematic. Nothing is simulated: no mass, thrust, flight, gear loads, hydraulics or sound.
 - The lander is a stub.
 - No collision meshes.
@@ -50,7 +54,7 @@
 
 carpetshark was away, so these were taken as defaults and can all be reversed: keep both the retractable gear and the
 stowed lander; keep the interior as drafted; keep the engine reading below; make the ramp flush (done); detail the
-cockpit first (done), then the engine section, the landing gear, the lift chassis, the lander bay and the crew spaces (all done); keep the heavy brow as in the image, with the slit height now
+cockpit first (done), then the engine section, the landing gear, the lift chassis, the lander bay and the crew spaces, then the outer hull and a wear layer (all done); keep the heavy brow as in the image, with the slit height now
   one number (`CANOPY_SLIT` in `model/spec.py`) so the view can be opened later. The questions below still want a real
   answer.
 
@@ -65,13 +69,13 @@ cockpit first (done), then the engine section, the landing gear, the lift chassi
 4. **Ramp.** It now finishes flush with the lift deck, by way of a sill flap. Is that what you want?
 5. **Pilot's view.** From the seat the canopy slit is a low band (see `renders/pilot_eye.jpg`). Keep the heavy brow
    as in the image, or open the view up?
-6. **What next.** Every section has had its detail pass. The choices now are materials and wear, the outer hull
-   and gadgets, the real lander, collision, or the first simulation layer. Which first?
+6. **What next.** Every section has had its detail pass. The outer hull and a first wear layer are done too. Held for
+   you: the real lander and simulation. Also open: textures for real scratches and streaks, and collision. Which first?
 7. **The lander.** Its own asset later, or part of this one?
 
 ## Next
 
-1. Detail pass on the outer hull and gadgets; materials and wear.
+1. Textures for wear, if wanted (generated at build time).
 2. The real lander.
 3. Collision set and distance levels.
 4. Simulation layers: mass and balance, thrust and flight, gear loads, mechanism timing, sound.

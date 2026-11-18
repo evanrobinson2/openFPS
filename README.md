@@ -12,7 +12,7 @@ audio files; every asset ships `USAGE.md`, a sample page and `provenance.json`; 
 | Asset | What | Sample |
 |---|---|---|
 | [HK416 D14.5RS](assets/hk416/USAGE.md) | 5.56 mm rifle: action and recoil, ballistics (M855, Mk 262, M856), synthesised sound with ten surroundings and earmuffs. Parametric geometry recipe: 301 named parts, 13 clips, 7 sockets. | [`assets/hk416/sample/`](assets/hk416/sample/index.html) |
-| [F-27 Wayfarer](assets/wayfarer/USAGE.md) | Boardable 30 m gunship, structure stage: eight modules, 157 named parts, 1,514 armour plates, two walkable decks, landing gear, lift chassis and lander bay. Parametric geometry recipe with 11 clips and 14 sockets. No simulation layers yet. | [`assets/wayfarer/sample/`](assets/wayfarer/sample/index.html) |
+| [F-27 Wayfarer](assets/wayfarer/USAGE.md) | Boardable 30 m gunship, structure stage: eight modules, 158 named parts, 1,514 armour plates, two walkable decks, landing gear, lift chassis and lander bay. Parametric geometry recipe with 11 clips and 14 sockets. No simulation layers yet. | [`assets/wayfarer/sample/`](assets/wayfarer/sample/index.html) |
 
 ## Try it
 
