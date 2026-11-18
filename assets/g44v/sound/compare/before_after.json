@@ -1,0 +1,654 @@
+{
+ "note": "shooter's ear, cci_mini_mag. \"pascals\" is the physical signal; \"as_played\" is the signal after the playback mapping of chain({ear: true}) (version 1: a Web Audio DynamicsCompressor, measured in Chrome, see chrome_measurement; version 2: asinh(30 x)/asinh(30), computed here and checked in Chrome).",
+ "measures": "first_2ms_energy_share: share of the energy in the 2 ms after the blast arrives. t20_ms_by_band: time after the band's own peak at which its envelope is last within 20 dB of that peak.",
+ "before": {
+  "dry_free_field": {
+   "pascals": {
+    "first_2ms_energy_share": 0.9923,
+    "t20_ms_by_band": {
+     "125": 9.88,
+     "250": 8.48,
+     "500": 2.5,
+     "1000": 2.12,
+     "2000": 1.12,
+     "4000": 0.54,
+     "8000": 0.29
+    },
+    "band_exposure_db": {
+     "125": 93.7,
+     "250": 97.6,
+     "500": 102.0,
+     "1000": 104.9,
+     "2000": 104.7,
+     "4000": 102.5,
+     "8000": 98.6
+    },
+    "band_peak_db": {
+     "125": 117.2,
+     "250": 124.2,
+     "500": 131.5,
+     "1000": 137.2,
+     "2000": 140.0,
+     "4000": 140.7,
+     "8000": 139.6
+    },
+    "late_energy_share_by_band": {
+     "125": 0.3057,
+     "250": 0.106,
+     "500": 0.0115,
+     "1000": 0.0052,
+     "2000": 0.0091,
+     "4000": 0.0177,
+     "8000": 0.0331
+    },
+    "peak_db": 152.32,
+    "a_duration_ms": 0.328,
+    "b_duration_ms": 0.85,
+    "negative_phase": {
+     "depth_re_peak": -0.058,
+     "length_ms": 1.125
+    },
+    "lae_db": 110.89,
+    "peak_minus_lae_db": 41.44,
+    "spectral_centroid_hz": 2174,
+    "exposure_by_time_db": {
+     "0-2 ms": 111.1,
+     "2-8 ms": 86.3,
+     "8-30 ms": 87.4,
+     "30-200 ms": 48.4
+    }
+   }
+  },
+  "default_open_air": {
+   "pascals": {
+    "first_2ms_energy_share": 0.9485,
+    "t20_ms_by_band": {
+     "125": 11.31,
+     "250": 10.42,
+     "500": 8.65,
+     "1000": 7.98,
+     "2000": 7.52,
+     "4000": 7.35,
+     "8000": 7.25
+    },
+    "band_exposure_db": {
+     "125": 94.7,
+     "250": 97.8,
+     "500": 102.3,
+     "1000": 105.1,
+     "2000": 104.9,
+     "4000": 102.7,
+     "8000": 98.8
+    },
+    "band_peak_db": {
+     "125": 117.9,
+     "250": 124.0,
+     "500": 131.5,
+     "1000": 137.2,
+     "2000": 140.0,
+     "4000": 140.7,
+     "8000": 139.6
+    },
+    "late_energy_share_by_band": {
+     "125": 0.3784,
+     "250": 0.1504,
+     "500": 0.0639,
+     "1000": 0.0491,
+     "2000": 0.0436,
+     "4000": 0.0566,
+     "8000": 0.0769
+    },
+    "peak_db": 152.32,
+    "a_duration_ms": 0.328,
+    "b_duration_ms": 1.06,
+    "negative_phase": {
+     "depth_re_peak": -0.058,
+     "length_ms": 1.125
+    },
+    "lae_db": 111.07,
+    "peak_minus_lae_db": 41.25,
+    "spectral_centroid_hz": 2174,
+    "exposure_by_time_db": {
+     "0-2 ms": 111.1,
+     "2-8 ms": 98.0,
+     "8-30 ms": 88.0,
+     "30-200 ms": 47.2
+    }
+   }
+  }
+ },
+ "after": {
+  "dry_free_field": {
+   "pascals": {
+    "first_2ms_energy_share": 0.9982,
+    "t20_ms_by_band": {
+     "125": 19.83,
+     "250": 8.19,
+     "500": 2.5,
+     "1000": 1.25,
+     "2000": 1.1,
+     "4000": 0.58,
+     "8000": 0.17
+    },
+    "band_exposure_db": {
+     "125": 84.5,
+     "250": 92.5,
+     "500": 100.4,
+     "1000": 106.2,
+     "2000": 108.5,
+     "4000": 107.1,
+     "8000": 105.0
+    },
+    "band_peak_db": {
+     "125": 108.0,
+     "250": 119.1,
+     "500": 129.9,
+     "1000": 138.7,
+     "2000": 143.8,
+     "4000": 145.2,
+     "8000": 146.0
+    },
+    "late_energy_share_by_band": {
+     "125": 0.2908,
+     "250": 0.1379,
+     "500": 0.0158,
+     "1000": 0.0065,
+     "2000": 0.003,
+     "4000": 0.0006,
+     "8000": 0.0004
+    },
+    "peak_db": 156.38,
+    "a_duration_ms": 0.16,
+    "b_duration_ms": 0.65,
+    "negative_phase": {
+     "depth_re_peak": -0.265,
+     "length_ms": 0.479
+    },
+    "lae_db": 114.23,
+    "peak_minus_lae_db": 42.16,
+    "spectral_centroid_hz": 3807,
+    "exposure_by_time_db": {
+     "0-2 ms": 114.0,
+     "2-8 ms": 80.6,
+     "8-30 ms": 84.8,
+     "30-200 ms": 73.9
+    }
+   },
+   "as_played": {
+    "first_2ms_energy_share": 0.9637,
+    "t20_ms_by_band": {
+     "125": 25.62,
+     "250": 17.71,
+     "500": 2.54,
+     "1000": 1.31,
+     "2000": 1.12,
+     "4000": 0.6,
+     "8000": 0.96
+    },
+    "band_exposure_db": {
+     "125": 35.5,
+     "250": 37.8,
+     "500": 44.0,
+     "1000": 48.6,
+     "2000": 49.4,
+     "4000": 46.9,
+     "8000": 42.1
+    },
+    "band_peak_db": {
+     "125": 58.2,
+     "250": 64.0,
+     "500": 73.5,
+     "1000": 80.9,
+     "2000": 84.5,
+     "4000": 84.6,
+     "8000": 80.7
+    },
+    "late_energy_share_by_band": {
+     "125": 0.3452,
+     "250": 0.1864,
+     "500": 0.0341,
+     "1000": 0.0297,
+     "2000": 0.0398,
+     "4000": 0.0109,
+     "8000": 0.0126
+    },
+    "peak_db": 92.36,
+    "a_duration_ms": 0.163,
+    "b_duration_ms": 0.98,
+    "negative_phase": {
+     "depth_re_peak": -0.626,
+     "length_ms": 0.479
+    },
+    "lae_db": 55.04,
+    "peak_minus_lae_db": 37.32,
+    "spectral_centroid_hz": 3216,
+    "exposure_by_time_db": {
+     "0-2 ms": 55.0,
+     "2-8 ms": 37.5,
+     "8-30 ms": 37.7,
+     "30-200 ms": 26.5
+    }
+   }
+  },
+  "default_open_air": {
+   "pascals": {
+    "first_2ms_energy_share": 0.94,
+    "t20_ms_by_band": {
+     "125": 20.02,
+     "250": 11.06,
+     "500": 8.85,
+     "1000": 8.27,
+     "2000": 7.62,
+     "4000": 7.85,
+     "8000": 7.19
+    },
+    "band_exposure_db": {
+     "125": 85.8,
+     "250": 92.8,
+     "500": 100.6,
+     "1000": 106.5,
+     "2000": 108.8,
+     "4000": 107.4,
+     "8000": 105.3
+    },
+    "band_peak_db": {
+     "125": 108.9,
+     "250": 118.9,
+     "500": 129.9,
+     "1000": 138.7,
+     "2000": 143.8,
+     "4000": 145.2,
+     "8000": 146.0
+    },
+    "late_energy_share_by_band": {
+     "125": 0.2937,
+     "250": 0.2192,
+     "500": 0.0708,
+     "1000": 0.0593,
+     "2000": 0.0632,
+     "4000": 0.0616,
+     "8000": 0.0657
+    },
+    "peak_db": 156.38,
+    "a_duration_ms": 0.16,
+    "b_duration_ms": 0.85,
+    "negative_phase": {
+     "depth_re_peak": -0.265,
+     "length_ms": 0.479
+    },
+    "lae_db": 114.49,
+    "peak_minus_lae_db": 41.9,
+    "spectral_centroid_hz": 3821,
+    "exposure_by_time_db": {
+     "0-2 ms": 114.0,
+     "2-8 ms": 98.9,
+     "8-30 ms": 99.2,
+     "30-200 ms": 77.9
+    }
+   },
+   "as_played": {
+    "first_2ms_energy_share": 0.616,
+    "t20_ms_by_band": {
+     "125": 26.04,
+     "250": 18.27,
+     "500": 11.6,
+     "1000": 16.52,
+     "2000": 17.6,
+     "4000": 15.0,
+     "8000": 19.12
+    },
+    "band_exposure_db": {
+     "125": 37.4,
+     "250": 38.6,
+     "500": 44.9,
+     "1000": 50.0,
+     "2000": 51.5,
+     "4000": 49.7,
+     "8000": 46.4
+    },
+    "band_peak_db": {
+     "125": 59.2,
+     "250": 63.8,
+     "500": 73.6,
+     "1000": 80.9,
+     "2000": 84.5,
+     "4000": 84.6,
+     "8000": 80.7
+    },
+    "late_energy_share_by_band": {
+     "125": 0.4293,
+     "250": 0.3361,
+     "500": 0.1939,
+     "1000": 0.2847,
+     "2000": 0.4027,
+     "4000": 0.476,
+     "8000": 0.6351
+    },
+    "peak_db": 92.36,
+    "a_duration_ms": 0.163,
+    "b_duration_ms": 4.48,
+    "negative_phase": {
+     "depth_re_peak": -0.626,
+     "length_ms": 0.479
+    },
+    "lae_db": 57.1,
+    "peak_minus_lae_db": 35.26,
+    "spectral_centroid_hz": 3588,
+    "exposure_by_time_db": {
+     "0-2 ms": 55.0,
+     "2-8 ms": 48.6,
+     "8-30 ms": 51.0,
+     "30-200 ms": 30.3
+    }
+   }
+  },
+  "outdoor_berm": {
+   "pascals": {
+    "first_2ms_energy_share": 0.9315,
+    "t20_ms_by_band": {
+     "125": 154.98,
+     "250": 157.23,
+     "500": 8.94,
+     "1000": 7.96,
+     "2000": 7.98,
+     "4000": 7.35,
+     "8000": 7.23
+    },
+    "band_exposure_db": {
+     "125": 86.0,
+     "250": 93.0,
+     "500": 100.8,
+     "1000": 106.5,
+     "2000": 108.9,
+     "4000": 107.3,
+     "8000": 105.3
+    },
+    "band_peak_db": {
+     "125": 108.9,
+     "250": 118.9,
+     "500": 129.9,
+     "1000": 138.7,
+     "2000": 143.8,
+     "4000": 145.2,
+     "8000": 146.0
+    },
+    "late_energy_share_by_band": {
+     "125": 0.3166,
+     "250": 0.2465,
+     "500": 0.102,
+     "1000": 0.0702,
+     "2000": 0.0868,
+     "4000": 0.053,
+     "8000": 0.0574
+    },
+    "peak_db": 156.38,
+    "a_duration_ms": 0.16,
+    "b_duration_ms": 0.88,
+    "negative_phase": {
+     "depth_re_peak": -0.265,
+     "length_ms": 0.479
+    },
+    "lae_db": 114.53,
+    "peak_minus_lae_db": 41.85,
+    "spectral_centroid_hz": 3772,
+    "exposure_by_time_db": {
+     "0-2 ms": 114.0,
+     "2-8 ms": 99.8,
+     "8-30 ms": 97.7,
+     "30-200 ms": 94.4
+    }
+   },
+   "as_played": {
+    "first_2ms_energy_share": 0.5871,
+    "t20_ms_by_band": {
+     "125": 197.17,
+     "250": 185.85,
+     "500": 189.73,
+     "1000": 179.42,
+     "2000": 162.67,
+     "4000": 18.15,
+     "8000": 18.23
+    },
+    "band_exposure_db": {
+     "125": 37.8,
+     "250": 39.3,
+     "500": 45.6,
+     "1000": 50.2,
+     "2000": 52.1,
+     "4000": 49.1,
+     "8000": 46.1
+    },
+    "band_peak_db": {
+     "125": 59.2,
+     "250": 63.8,
+     "500": 73.5,
+     "1000": 80.9,
+     "2000": 84.5,
+     "4000": 84.6,
+     "8000": 80.7
+    },
+    "late_energy_share_by_band": {
+     "125": 0.4951,
+     "250": 0.4363,
+     "500": 0.3149,
+     "1000": 0.3285,
+     "2000": 0.4835,
+     "4000": 0.4,
+     "8000": 0.6079
+    },
+    "peak_db": 92.36,
+    "a_duration_ms": 0.163,
+    "b_duration_ms": 3.35,
+    "negative_phase": {
+     "depth_re_peak": -0.626,
+     "length_ms": 0.479
+    },
+    "lae_db": 57.34,
+    "peak_minus_lae_db": 35.02,
+    "spectral_centroid_hz": 3318,
+    "exposure_by_time_db": {
+     "0-2 ms": 55.0,
+     "2-8 ms": 48.8,
+     "8-30 ms": 49.6,
+     "30-200 ms": 46.9
+    }
+   }
+  },
+  "parts_at_the_ear": {
+   "blast_direct": {
+    "peak_db": 156.4,
+    "exposure_db": 114.0
+   },
+   "ground_reflection_and_scatter": {
+    "peak_db": 138.4,
+    "exposure_db": 101.9
+   },
+   "mechanical": {
+    "peak_db": 122.0,
+    "exposure_db": 86.7
+   },
+   "mechanical_events": [
+    {
+     "name": "firing pin on the rim",
+     "t_ms": 2.55,
+     "modes_hz": [
+      1188.8,
+      3276.9,
+      6424.1,
+      2544.7,
+      7014.6,
+      13751.4,
+      1765.9,
+      11066.5
+     ],
+     "longest_decay_ms": 18.0
+    },
+    {
+     "name": "case on the ejector",
+     "t_ms": 4.75,
+     "modes_hz": [
+      1188.8,
+      3276.9,
+      6424.1,
+      2544.7,
+      7014.6,
+      13751.4,
+      9000.0,
+      15000.0
+     ],
+     "longest_decay_ms": 8.8
+    },
+    {
+     "name": "slide on the frame",
+     "t_ms": 9.03,
+     "modes_hz": [
+      1009.7,
+      1860.6,
+      3187.9,
+      1188.8,
+      3276.9,
+      6424.1,
+      2544.7,
+      7014.6,
+      13751.4,
+      1765.9,
+      11066.5,
+      1336.3,
+      1714.7,
+      4966.6,
+      383.3,
+      766.7,
+      1150.0
+     ],
+     "longest_decay_ms": 41.5
+    },
+    {
+     "name": "breech picks up the next round",
+     "t_ms": 13.66,
+     "modes_hz": [
+      1009.7,
+      1860.6,
+      3187.9,
+      2544.7,
+      7014.6,
+      13751.4,
+      1336.3,
+      1714.7,
+      4966.6,
+      9000.0,
+      15000.0
+     ],
+     "longest_decay_ms": 8.8
+    },
+    {
+     "name": "firing pin caught by the trigger bar",
+     "t_ms": 18.21,
+     "modes_hz": [
+      1188.8,
+      3276.9,
+      6424.1,
+      2544.7,
+      7014.6,
+      13751.4
+     ],
+     "longest_decay_ms": 4.2
+    },
+    {
+     "name": "slide closes on the barrel",
+     "t_ms": 19.71,
+     "modes_hz": [
+      1009.7,
+      1860.6,
+      3187.9,
+      1188.8,
+      3276.9,
+      6424.1,
+      2544.7,
+      7014.6,
+      13751.4,
+      1765.9,
+      11066.5,
+      1336.3,
+      1714.7,
+      4966.6,
+      383.3,
+      766.7,
+      1150.0
+     ],
+     "longest_decay_ms": 41.5
+    },
+    {
+     "name": "magazine stack rises",
+     "t_ms": 27.71,
+     "modes_hz": [
+      1009.7,
+      1860.6,
+      3187.9,
+      1336.3,
+      1714.7,
+      4966.6
+     ],
+     "longest_decay_ms": 3.9
+    },
+    {
+     "name": "trigger reset",
+     "t_ms": 130.0,
+     "modes_hz": [
+      1009.7,
+      1860.6,
+      3187.9,
+      1188.8,
+      3276.9,
+      6424.1
+     ],
+     "longest_decay_ms": 3.9
+    }
+   ]
+  }
+ },
+ "chrome_measurement": {
+  "how": "S.shot(cci_mini_mag, {ground: true}) played through S.chain({overlay: null, hpd: false, ear: true}) in an OfflineAudioContext, Chrome, 2026-11-17. Peak in each window, dB re full scale. Windows are times after the trigger break.",
+  "windows_ms": [
+   "4-7 (blast)",
+   "10.5-13.5 (ground echo, slide on the frame)",
+   "13.5-19",
+   "21-30 (slide closes)",
+   "30-60",
+   "60-200"
+  ],
+  "before_input": [
+   -1.0,
+   -14.0,
+   -46.1,
+   -30.1,
+   -58.6,
+   null
+  ],
+  "before_ear_on": [
+   -13.5,
+   -23.9,
+   -55.5,
+   -36.8,
+   -62.0,
+   null
+  ],
+  "before_finding": "the version-1 mapping (DynamicsCompressor, threshold -30 dB, ratio 6) turned the whole shot down by 12.5 dB and lifted what follows the blast by only 3 to 6 dB relative to it",
+  "after_input": [
+   -1.0,
+   -19.0,
+   -28.8,
+   -37.0,
+   -45.4,
+   -61.9
+  ],
+  "after_ear_on": [
+   -1.6,
+   -7.8,
+   -14.2,
+   -21.3,
+   -30.1,
+   -45.7
+  ],
+  "after_agrees_with_python": "sim.ear_map gives the same six numbers, the same peak (0.8303) and the same sum of squares (9.8945)"
+ }
+}

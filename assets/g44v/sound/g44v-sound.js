@@ -1,19 +1,22 @@
-// G44 V simulated sound: browser synthesis from params.json (written by sim.py).
+// G44 V simulated sound, version 2: browser synthesis from params.json (written by sim.py).
 // A port of "stage B" of sound/sim.py: the same tables, the same named random streams, the same arithmetic. Nothing here is a recording.
 //
 //   import G44VSound from './sound/g44v-sound.js';
 //   const S = await G44VSound.build(audioContext);                 // loads params.json next to this file
 //   S.shot('cci_standard_velocity')                                -> AudioBuffer: free field, shooter's ear, peak at -1 dBFS
-//   S.shot('cci_mini_mag', { perspective: 'bystander', ground: true })
+//   S.shot('cci_mini_mag', { perspective: 'bystander', ground: true })   // ground: reflection and diffuse scatter of open ground
 //   S.mech('slide_rack' | 'slide_release' | 'slide_lock_open' | 'trigger' | 'dry_fire' | 'magazine_out' | 'magazine_in' | 'case_ground')
 //   S.ir('indoor_range' | 'outdoor_berm')                          -> AudioBuffer impulse response (direct path = first sample)
 //   S.chain({ overlay: 'indoor_range', hpd: false, ear: true })    -> { input, output, set(opts) }   (overlay null = no room)
 //   S.info(buffer)                                                 -> { peak_pa, peak_db_spl, pa_per_fullscale }: the true simulated level
 //   S.loads, S.perspectives, S.clips, S.overlays, S.params;  S.raw.dry / mech / ir -> Float64Array in pascals (IR: units), for tests
 //
-// Playback is normalised: 150 dB at the ear cannot be reproduced, so every buffer is scaled to -1 dBFS and S.info() carries the true level.
-// chain()'s 'hpd' is a two-shelf approximation of an earmuff (about 24 dB NRR, the minimum the manual asks for, p. 13) and 'ear' is a compressor
-// so the tails stay audible; both are playback mappings, not part of the physics.
+// Playback is normalised: 157 dB at the ear cannot be reproduced, so every buffer is scaled to -1 dBFS and S.info() carries the true level.
+// chain()'s 'ear' is the playback mapping (not physics). In life the ground echo is 138 dB and the action 122 dB: loud sounds. Played 70 dB or more
+// below the real level they fall under the room's noise and only the blast is left, as a click. 'ear' therefore (1) lifts the bass by the difference
+// between the equal-loudness contours at the real and the played level (low shelf, +10 dB below 150 Hz) and (2) compresses the level with
+// y = asinh(k x) / asinh(k), k = params.ear_map_k: about 2:1 over the top 30 dB, a fixed lift below. sim.py ear_map() is the same mapping.
+// 'hpd' is a two-shelf approximation of an earmuff (about 24 dB NRR, the minimum the manual asks for, p. 13).
 
 const P_REF = 20e-6;
 const fnv1a = (s) => { let h = 0x811c9dc5; for (const c of new TextEncoder().encode(s)) { h ^= c; h = Math.imul(h, 0x01000193) >>> 0; } return h >>> 0; };
@@ -24,41 +27,59 @@ class Rng { // mulberry32; identical to sim.py
 }
 function makeCore(P) {
   const fs = P.fs;
-  function addBlast(buf, pk, T, t0, lp) {
-    const b = P.friedlander_b, rise = P.rise, n0 = Math.max(0, Math.floor(t0 * fs)), n1 = Math.min(buf.length, Math.ceil((t0 + rise + 8 * T) * fs) + 1); let y = 0;
+  function addImpact(buf, ev, t0, seed) {
+    const te = t0 + ev.t, nz = ev.noise; let tmax = nz.tau; for (const m of ev.modes) tmax = Math.max(tmax, m.tau); tmax *= 7;
+    const n0 = Math.max(0, Math.floor(te * fs)), n1 = Math.min(buf.length, n0 + Math.floor(tmax * fs) + 2), rng = new Rng(seed); let z = 0;
     for (let n = n0; n < n1; n++) {
-      const t = n / fs - t0; let x = 0;
-      if (t >= 0) { if (t < rise) x = pk * t / rise; else { const u = (t - rise) / T; x = pk * (1 - u) * Math.exp(-b * u); } }
-      y += lp * (x - y); buf[n] += y;
+      const t = n / fs - te; if (t < 0) continue;
+      let x = 0; for (const m of ev.modes) x += m.a * Math.exp(-t / m.tau) * Math.sin(2 * Math.PI * m.f * t);
+      z += nz.lp * (rng.gauss() - z); buf[n] += x + nz.a * Math.exp(-t / nz.tau) * z;
     }
   }
-  function addImpact(buf, ev, t0, gain, lp, seed) {
-    let tmax = 0; for (const m of ev.modes) tmax = Math.max(tmax, m.tau); tmax *= 7;
-    const n0 = Math.max(0, Math.floor((t0 + ev.t) * fs)), n1 = Math.min(buf.length, n0 + Math.floor(tmax * fs) + 2), rng = new Rng(seed), nz = ev.noise; let y = 0, z = 0;
-    for (let n = n0; n < n1; n++) {
-      const t = n / fs - (t0 + ev.t); let x = 0;
-      if (t >= 0) {
-        for (const m of ev.modes) x += m.a * Math.exp(-t / m.tau) * Math.sin(2 * Math.PI * m.f * t);
-        z += nz.lp * (rng.gauss() - z); x += nz.a * Math.exp(-t / nz.tau) * z;
-      }
-      y += lp * (x * gain - y); buf[n] += y;
+  function addFriction(buf, fr, t0, seed) {
+    const rng = new Rng(seed), n0 = Math.floor((t0 + fr.t) * fs), N = fr.env.length; let z = 0, y = 0;
+    for (let i = 0; i < (N - 1) * fr.step; i++) {
+      const k = Math.floor(i / fr.step), u = (i - k * fr.step) / fr.step, e = fr.env[k] + (fr.env[k + 1] - fr.env[k]) * u, g = rng.gauss();
+      z += fr.lp * (g - z); y += fr.hp * (z - y);
+      if (n0 + i >= 0 && n0 + i < buf.length) buf[n0 + i] += e * (z - y) * 2.0;
     }
   }
-  function dry(load, persp = 'shooter', field = false) {
-    const L = P.loads[load], ps = P.perspectives[persp], buf = new Float64Array(Math.floor(P.dur_shot * fs)), paths = field ? [ps.direct, ps.ground] : [ps.direct];
-    paths.forEach((pth, i) => {
-      addBlast(buf, L.peak_pa_1m_90 * pth.gain, L.t_pos, L.t_blast + pth.delay, pth.lp);
-      L.mech.forEach((ev, j) => addImpact(buf, ev, pth.delay, pth.mech_gain, pth.lp, `mech|${load}|${j}|${i}`));
-    });
-    return buf;
+  function sourceBlast(L, n) { const buf = new Float64Array(n), tb = L.blast; for (let i = 0; i < tb.length; i++) if (L.n_blast + i >= 0 && L.n_blast + i < n) buf[L.n_blast + i] += tb[i]; return buf; }
+  function sourceMech(events, friction, n, t0, seed) {
+    const buf = new Float64Array(n); events.forEach((ev, j) => addImpact(buf, ev, t0, `${seed}|${j}`));
+    if (friction) addFriction(buf, friction, t0, seed + '|friction'); return buf;
   }
+  // out += src convolved with kernel k, shifted by nd samples, times g (only where src is not zero)
+  function addConv(out, src, k, nd, g) {
+    const N = out.length, K = k.length;
+    for (let i = 0; i < src.length; i++) { const s = src[i]; if (s === 0) continue; const b = nd + i, j0 = Math.max(0, -b), j1 = Math.min(K, N - b); for (let j = j0; j < j1; j++) out[b + j] += g * s * k[j]; }
+  }
+  function scatterKernel(sc, seed) {
+    const rng = new Rng(seed), k = new Float64Array(sc.amp.length * sc.bin); let z = 0;
+    for (let i = 0; i < k.length; i++) { const g = rng.gauss(); z += 0.2 * (g - z); k[i] = sc.amp[Math.floor(i / sc.bin)] * (g - z) * 1.118; }
+    return k;
+  }
+  function parts(L, ps, field, seed) {
+    const n = Math.floor(P.dur_shot * fs), out = new Float64Array(n), sb = sourceBlast(L, n), sm = sourceMech(L.mech || [], L.friction, n, 0, 'mech|' + seed);
+    addConv(out, sb, ps.blast.direct.fir, ps.blast.direct.n, ps.blast.direct.gain); addConv(out, sm, ps.mech.direct.fir, ps.mech.direct.n, ps.mech.direct.gain);
+    if (field) {
+      addConv(out, sb, ps.blast.ground.fir, ps.blast.ground.n, ps.blast.ground.gain); addConv(out, sm, ps.mech.ground.fir, ps.mech.ground.n, ps.mech.ground.gain);
+      if (ps.scatter) addConv(out, sb, scatterKernel(ps.scatter, 'scatter|' + seed), ps.scatter.n0, 1);
+    }
+    return out;
+  }
+  const dry = (load, persp = 'shooter', field = false) => parts(P.loads[load], P.perspectives[persp], field, load);
   function mech(clip, persp = 'shooter') {
-    const pth = P.perspectives[persp].direct, buf = new Float64Array(Math.floor(P.dur_clip * fs));
-    P.clips[clip].forEach((ev, j) => addImpact(buf, ev, 0.002, pth.mech_gain, pth.lp, `clip|${clip}|${j}`));
-    return buf;
+    const C = P.clips[clip], n = Math.floor(P.dur_clip * fs), out = new Float64Array(n), pth = P.perspectives[persp].mech.direct;
+    addConv(out, sourceMech(C.events, C.friction, n, 0.002, 'clip|' + clip), pth.fir, pth.n, pth.gain); return out;
   }
   function ir(overlay) {
     const O = P.overlays[overlay], tl = O.tail, n = Math.floor((tl.t0 + tl.rt60 * 1.1) * fs) + 1, h = new Float64Array(n); h[0] = 1;
+    if (O.ground) { const g = O.ground; g.fir.forEach((v, i) => { if (g.n + i > 0 && g.n + i < n) h[g.n + i] += g.gain * v; }); }
+    if (O.scatter) {
+      const sc = P.perspectives.shooter.scatter, k = scatterKernel(sc, 'scatter|ir'), gd = P.perspectives.shooter.blast.direct, n0 = sc.n0 - gd.n - P.fir_centre;
+      for (let i = 0; i < k.length; i++) if (n0 + i > 0 && n0 + i < n) h[n0 + i] += k[i] / gd.gain;
+    }
     for (const tp of O.taps) { const k = Math.floor(tp.delay * fs + 0.5); if (k > 0 && k < n) h[k] += tp.gain; }
     const rng = new Rng('ir|' + overlay), k0 = Math.floor(tl.t0 * fs); let z = 0;
     for (let k = k0; k < n; k++) { const t = (k - k0) / fs; z += tl.lp * (rng.gauss() - z); h[k] += tl.level * z * Math.exp(-6.907755 * t / tl.rt60); }
@@ -74,6 +95,8 @@ async function build(ctx, opts = {}) {
     for (let i = 0; i < x.length; i++) d[i] = x[i] * g;
     levels.set(b, { peak_pa: pk, peak_db_spl: 20 * Math.log10(pk / P_REF), pa_per_fullscale: 1 / g }); return b;
   }
+  const K = P.ear_map_k || 30, curve = new Float32Array(16385);       // input -1..1 is half scale: curve(u) = asinh(2 K u) / asinh(K)
+  for (let i = 0; i < curve.length; i++) curve[i] = Math.asinh(2 * K * (i / 8192 - 1)) / Math.asinh(K);
   const S = {
     params: P, loads: Object.keys(P.loads), perspectives: Object.keys(P.perspectives), clips: Object.keys(P.clips), overlays: Object.keys(P.overlays), raw: core,
     shot: (load = 'cci_standard_velocity', o = {}) => toBuffer(core.dry(load, o.perspective || 'shooter', !!o.ground), true),
@@ -81,15 +104,17 @@ async function build(ctx, opts = {}) {
     ir: (overlay) => toBuffer(core.ir(overlay), false),
     info: (b) => levels.get(b),
     chain(o = {}) {
-      const input = ctx.createGain(), conv = ctx.createConvolver(), dryG = ctx.createGain(), lo = ctx.createBiquadFilter(), hi = ctx.createBiquadFilter(), comp = ctx.createDynamicsCompressor(), output = ctx.createGain();
+      const input = ctx.createGain(), conv = ctx.createConvolver(), dryG = ctx.createGain(), lo = ctx.createBiquadFilter(), hi = ctx.createBiquadFilter(), output = ctx.createGain();
+      const loud = ctx.createBiquadFilter(), pre = ctx.createGain(), shaper = ctx.createWaveShaper(), post = ctx.createGain();
       conv.normalize = false; lo.type = 'lowshelf'; lo.frequency.value = 250; hi.type = 'highshelf'; hi.frequency.value = 1000;
-      comp.threshold.value = -30; comp.ratio.value = 6; comp.attack.value = 0.001; comp.release.value = 0.15;
+      loud.type = 'lowshelf'; loud.frequency.value = 150; loud.gain.value = 10; pre.gain.value = 0.5; shaper.curve = curve; shaper.oversample = 'none'; post.gain.value = 0.85;
       const mix = ctx.createGain(); input.connect(dryG); dryG.connect(mix); input.connect(conv); conv.connect(mix); mix.connect(lo); lo.connect(hi);
+      loud.connect(pre); pre.connect(shaper); shaper.connect(post); post.connect(output);
       const api = { input, output, set(q) {
         const ov = q.overlay && q.overlay !== 'dry' ? q.overlay : null;
         if (ov) { conv.buffer = S.ir(ov); dryG.gain.value = 0; } else { conv.buffer = null; dryG.gain.value = 1; }
         lo.gain.value = q.hpd ? -15 : 0; hi.gain.value = q.hpd ? -18 : 0;          // about 15 dB at 125 Hz and 33 dB above 1 kHz
-        hi.disconnect(); comp.disconnect(); if (q.ear !== false) { hi.connect(comp); comp.connect(output); } else hi.connect(output);
+        hi.disconnect(); if (q.ear !== false) hi.connect(loud); else hi.connect(output);
         return api;
       } };
       return api.set(o);
