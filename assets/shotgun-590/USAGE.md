@@ -14,7 +14,7 @@ and recoil drawn from the model's own part boxes, pellet holes on a target, a do
 |---|---|
 | Action and recoil (`action/`) | Ready. The mechanism passes the manual's function test, loading and unloading procedures; recoil matches the SAAMI momentum balance. Shooter coupling and stroke timing are tuning. |
 | Ballistics (`ballistics/`) | Ready. The slug matches the maker's published table within 0.55 % in velocity and 0.04 in in path. The buckshot pattern is calibrated to a published rule of thumb, not to a measured pattern of this load. |
-| Sound (`sound/`) | Version 2. Twenty-three synthesised sounds; levels, duration, spectrum and B-duration checked against published 12 gauge measurements; the JavaScript matches the Python to rounding. Not checked by listening. |
+| Sound (`sound/`) | Version 3. Thirty-three synthesised sounds; levels, duration, spectrum and B-duration checked against published 12 gauge measurements; the JavaScript matches the Python to rounding. Not checked by listening. |
 | Geometry (`model/`) | Ready as a recipe: 40 named parts, 10 clips, 14 sockets, one level of detail, flat materials. Right-side silhouette against the reference: IoU 0.974. **Open:** the photo cannot satisfy both the published overall length (used) and the published barrel length; widths and internal shapes are inferred. See `notes/NOTES.md`. |
 
 ## Run the sample
@@ -61,12 +61,14 @@ Full APIs: `action/README.md`, `ballistics/README.md`, `sound/README.md`.
 ### Sound: which shot to play
 
 `shot_<load>_<listener>` (load `buck00` or `slug`, listener `shooter` or `bystander`) is the shot fired in the
-default surroundings, a plywood-lined training room, and is what the sample page plays. The same shot is also built
-as `..._covered` (a covered firing point on an outdoor range), `..._field` (open grass, ground reflection only) and
+default surroundings, an outdoor range with the shooter under a covered firing point, and is what the sample page
+plays. The same shot is also built as `..._room` (a plywood-lined training room), `..._covered` (the firing point
+and backstop without the woods), `..._field` (open grass, ground reflection only) and
 `..._free` (no reflection at all). Use `_free` if your game adds its own reverb: outdoors and dry, a shot is over
 within a few milliseconds, and it is the surroundings that give it body. The other sounds (`pump`, `pump_back`,
-`pump_forward`, `shell_insert`, `dry_fire`, `safety`, `action_release`) and the API are as before. Default shots
-are 2 s long. `python3 sound/sim.py wav` writes listening WAVs to `sound/audio/`, which git ignores.
+`pump_forward`, `shell_insert`, `dry_fire`, `safety`, `action_release`) and the API are as before. Six more sounds,
+`shot_buck00_range_side_25m` to `shot_buck00_range_front_100m`, are the buckshot shot heard far off on that range.
+Default shots are 1.4 s long. `python3 sound/sim.py wav` writes listening WAVs to `sound/audio/`, which git ignores.
 
 ## Frame and units
 

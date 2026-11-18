@@ -126,7 +126,8 @@
    "open_grass": 5.08,
    "covered_firing_point": 16.02,
    "room": 181.77,
-   "room_bystander": 391.46
+   "room_bystander": 391.46,
+   "outdoor_range": 16.02
   },
   "published": {
    "outdoor_typical_under_ms": 10.0,
@@ -158,7 +159,22 @@
  },
  "click_measures": {
   "note": "how much of the shot is over within 2 ms, and how long each octave band takes to stay 20 dB under its own maximum (2 ms rms envelope). Buckshot at the shooter's ear. Version 1 is in bands_v1.json",
-  "default_room": {
+  "default_outdoor_range": {
+   "energy_in_first_2ms_percent": 49.9,
+   "energy_in_first_10ms_percent": 74.3,
+   "band_stays_20db_down_after_ms": {
+    "63": 1388.8,
+    "125": 1388.3,
+    "250": 49.7,
+    "500": 46.1,
+    "1000": 45.4,
+    "2000": 44.2,
+    "4000": 49.8,
+    "8000": 44.8
+   },
+   "b_duration_ms": 16.02
+  },
+  "room": {
    "energy_in_first_2ms_percent": 8.8,
    "energy_in_first_10ms_percent": 16.8,
    "band_stays_20db_down_after_ms": {
@@ -217,6 +233,282 @@
     "8000": 8.6
    },
    "b_duration_ms": 3.77
+  }
+ },
+ "outdoor_range": {
+  "note": "the outdoor-range renders: share of energy in four windows after the onset, and the time each octave band takes to stay 20 dB under its own maximum. Model numbers only; no parameter was set from a recording",
+  "shooter": {
+   "energy_percent": {
+    "0_2ms": 49.6,
+    "2_10ms": 25.0,
+    "10_50ms": 24.1,
+    "50_200ms": 1.3,
+    "after_200ms": 0.0
+   },
+   "band_stays_20db_down_after_ms": {
+    "125": 1388.3,
+    "250": 49.7,
+    "500": 46.1,
+    "1000": 45.4,
+    "2000": 44.2,
+    "4000": 49.8
+   },
+   "peak_db": 159.5,
+   "surroundings": {
+    "environment": "range",
+    "direct_peak_pa": 1895.9,
+    "reflections": 88,
+    "first_reflection_ms": 4.24,
+    "strongest_reflection_db_re_direct": -6.2,
+    "specular_energy_db_re_direct": -1.2,
+    "scattered_energy_db_re_direct": -6.8,
+    "scattered_decay_ms": 31.2,
+    "flutter_period_ms": 15.87,
+    "berm_energy_db_re_direct": -38.2,
+    "berm_arrives_ms": 296.7,
+    "trees_energy_db_re_direct": -37.4,
+    "trees_first_ms": 399.8
+   }
+  },
+  "range_side_25m": {
+   "energy_percent": {
+    "0_2ms": 83.7,
+    "2_10ms": 12.6,
+    "10_50ms": 0.0,
+    "50_200ms": 0.0,
+    "after_200ms": 3.6
+   },
+   "band_stays_20db_down_after_ms": {
+    "125": 30.6,
+    "250": 16.2,
+    "500": 10.4,
+    "1000": 3.6,
+    "2000": 235.0,
+    "4000": 7.5
+   },
+   "peak_db": 134.9,
+   "surroundings": {
+    "environment": "range",
+    "back_wall_delay_ms_and_db": null,
+    "weak_shock_stretch": 1.298,
+    "ground_delay_ms": 0.56,
+    "grazing_deg": 7.06,
+    "backstop_energy_db_re_direct": -15.1,
+    "backstop_arrives_after_direct_ms": [
+     229.5,
+     313.4
+    ],
+    "trees_energy_db_re_direct": -13.6,
+    "trees_first_after_direct_ms": 330.0,
+    "air_db_per_100m": {
+     "500": 0.31,
+     "1000": 0.62,
+     "2000": 1.04,
+     "4000": 2.2,
+     "8000": 6.62
+    }
+   }
+  },
+  "range_front_25m": {
+   "energy_percent": {
+    "0_2ms": 78.8,
+    "2_10ms": 15.9,
+    "10_50ms": 2.8,
+    "50_200ms": 1.3,
+    "after_200ms": 1.2
+   },
+   "band_stays_20db_down_after_ms": {
+    "125": 31.0,
+    "250": 22.5,
+    "500": 197.7,
+    "1000": 20.8,
+    "2000": 20.8,
+    "4000": 20.7
+   },
+   "peak_db": 139.2,
+   "surroundings": {
+    "environment": "range",
+    "back_wall_delay_ms_and_db": [
+     19.0,
+     -13.9
+    ],
+    "weak_shock_stretch": 1.505,
+    "ground_delay_ms": 0.56,
+    "grazing_deg": 7.06,
+    "backstop_energy_db_re_direct": -15.3,
+    "backstop_arrives_after_direct_ms": [
+     168.8,
+     257.7
+    ],
+    "trees_energy_db_re_direct": -16.3,
+    "trees_first_after_direct_ms": 270.4,
+    "air_db_per_100m": {
+     "500": 0.31,
+     "1000": 0.62,
+     "2000": 1.04,
+     "4000": 2.2,
+     "8000": 6.62
+    }
+   }
+  },
+  "range_side_50m": {
+   "energy_percent": {
+    "0_2ms": 76.8,
+    "2_10ms": 11.4,
+    "10_50ms": 0.0,
+    "50_200ms": 2.5,
+    "after_200ms": 9.2
+   },
+   "band_stays_20db_down_after_ms": {
+    "125": 30.6,
+    "250": 16.2,
+    "500": 288.8,
+    "1000": 195.8,
+    "2000": 4.2,
+    "4000": 199.1
+   },
+   "peak_db": 128.2,
+   "surroundings": {
+    "environment": "range",
+    "back_wall_delay_ms_and_db": null,
+    "weak_shock_stretch": 1.353,
+    "ground_delay_ms": 0.281,
+    "grazing_deg": 3.54,
+    "backstop_energy_db_re_direct": -11.3,
+    "backstop_arrives_after_direct_ms": [
+     181.6,
+     298.3
+    ],
+    "trees_energy_db_re_direct": -7.7,
+    "trees_first_after_direct_ms": 276.3,
+    "air_db_per_100m": {
+     "500": 0.31,
+     "1000": 0.62,
+     "2000": 1.04,
+     "4000": 2.2,
+     "8000": 6.62
+    }
+   }
+  },
+  "range_front_50m": {
+   "energy_percent": {
+    "0_2ms": 65.2,
+    "2_10ms": 13.0,
+    "10_50ms": 3.3,
+    "50_200ms": 14.9,
+    "after_200ms": 3.7
+   },
+   "band_stays_20db_down_after_ms": {
+    "125": 85.3,
+    "250": 89.6,
+    "500": 185.5,
+    "1000": 82.5,
+    "2000": 72.9,
+    "4000": 86.0
+   },
+   "peak_db": 133.0,
+   "surroundings": {
+    "environment": "range",
+    "back_wall_delay_ms_and_db": [
+     18.4,
+     -12.7
+    ],
+    "weak_shock_stretch": 1.593,
+    "ground_delay_ms": 0.281,
+    "grazing_deg": 3.54,
+    "backstop_energy_db_re_direct": -7.4,
+    "backstop_arrives_after_direct_ms": [
+     57.6,
+     206.6
+    ],
+    "trees_energy_db_re_direct": -8.7,
+    "trees_first_after_direct_ms": 152.5,
+    "air_db_per_100m": {
+     "500": 0.31,
+     "1000": 0.62,
+     "2000": 1.04,
+     "4000": 2.2,
+     "8000": 6.62
+    }
+   }
+  },
+  "range_side_100m": {
+   "energy_percent": {
+    "0_2ms": 58.0,
+    "2_10ms": 10.0,
+    "10_50ms": 0.0,
+    "50_200ms": 5.2,
+    "after_200ms": 26.9
+   },
+   "band_stays_20db_down_after_ms": {
+    "125": 170.2,
+    "250": 300.4,
+    "500": 684.6,
+    "1000": 468.6,
+    "2000": 256.5,
+    "4000": 229.1
+   },
+   "peak_db": 121.2,
+   "surroundings": {
+    "environment": "range",
+    "back_wall_delay_ms_and_db": null,
+    "weak_shock_stretch": 1.407,
+    "ground_delay_ms": 0.14,
+    "grazing_deg": 1.77,
+    "backstop_energy_db_re_direct": -10.9,
+    "backstop_arrives_after_direct_ms": [
+     131.2,
+     283.1
+    ],
+    "trees_energy_db_re_direct": -2.4,
+    "trees_first_after_direct_ms": 191.4,
+    "air_db_per_100m": {
+     "500": 0.31,
+     "1000": 0.62,
+     "2000": 1.04,
+     "4000": 2.2,
+     "8000": 6.62
+    }
+   }
+  },
+  "range_front_100m": {
+   "energy_percent": {
+    "0_2ms": 59.3,
+    "2_10ms": 12.4,
+    "10_50ms": 11.5,
+    "50_200ms": 10.2,
+    "after_200ms": 6.6
+   },
+   "band_stays_20db_down_after_ms": {
+    "125": 35.0,
+    "250": 85.3,
+    "500": 464.2,
+    "1000": 165.1,
+    "2000": 20.1,
+    "4000": 37.5
+   },
+   "peak_db": 125.8,
+   "surroundings": {
+    "environment": "range",
+    "back_wall_delay_ms_and_db": [
+     18.1,
+     -12.1
+    ],
+    "weak_shock_stretch": 1.677,
+    "ground_delay_ms": 0.14,
+    "grazing_deg": 1.77,
+    "backstop_energy_db_re_direct": null,
+    "backstop_arrives_after_direct_ms": null,
+    "trees_energy_db_re_direct": -3.5,
+    "trees_first_after_direct_ms": 0.1,
+    "air_db_per_100m": {
+     "500": 0.31,
+     "1000": 0.62,
+     "2000": 1.04,
+     "4000": 2.2,
+     "8000": 6.62
+    }
+   }
   }
  },
  "all_passed": true

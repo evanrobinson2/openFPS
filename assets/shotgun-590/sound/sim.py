@@ -24,7 +24,7 @@ HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 import measure as M
 
 ACT = json.load(open(os.path.join(HERE, '..', 'action', 'action.json'))); INV = json.load(open(os.path.join(HERE, '..', 'model', 'inventory.json')))
-FS = 48000; P0 = 101325.0; C = 340.294; RHO = 1.225; PREF = 20e-6; GAMMA = ACT['params']['gamma']['value']
+FS = 48000; P0 = 101325.0; C = 340.294; RHO = 1.225; PREF = 20e-6; GAMMA_AIR = 1.4; GAMMA = ACT['params']['gamma']['value']
 
 # ----------------------------------------------------------------------------- sources of every number that is not derived
 SRC = dict(
@@ -55,13 +55,16 @@ SRC = dict(
         source='a covered firing point on an outdoor range. A concrete pad, a plywood roof on rafters 2.7 m up, a painted block wall 3 m behind the shooter, open at the front and the sides, an earth backstop 50 m downrange. The layout is a choice, not a measurement of any range. Absorption coefficients are handbook values near 500 Hz to 1 kHz (concrete 0.02, plywood panel 0.10, painted block 0.05); the scattering coefficients, the half of the scattered sound taken to stay under the roof rather than leave through the open sides, and the berm (0.40, Lambert) are inferred. Murphy and Tubbs (2007) saw the same kind of early reflections under a fabric tent at an outdoor range'),
     room=dict(basis='chosen', value=dict(width=8.5, height=2.7, length=10.0, left_of_muzzle=6.5, behind_ear=2.0, mixing_ms=40.0, bands_hz=[350, 1000, 2800], alpha_walls_ceiling=[0.20, 0.09, 0.10], alpha_floor=[0.01, 0.02, 0.02], air_m_per_m=[0.0003, 0.001, 0.004]),
         source='the default surroundings: an empty training room, 8.5 x 2.7 x 10 m: plywood-lined walls and ceiling on a concrete floor, the shooter 2 m from the back wall. The layout is a choice. Absorption: handbook values for a 3/8 in plywood panel (0.28, 0.22, 0.17, 0.09, 0.10, 0.11 from 125 Hz to 4 kHz) and smooth concrete, read at the three tail bands. Early reflections are image sources (J. B. Allen and D. A. Berkley, J. Acoust. Soc. Am. 65:943-950, 1979) out to 40 ms; after that a statistical tail with the Eyring decay time of each band (C. F. Eyring, 1930), whose energy rate is that of the image lattice for a source with the blast\'s directivity, 4 pi c <D^2> r_d^2 / (V D_d^2) per second relative to the direct wave: the method of the hk416 asset'),
+    outdoor_range=dict(basis='chosen', value=dict(mic_height=1.5, temperature_C=25.0, humidity_percent=70.0, backstop_distance=50.0, backstop_width=60.0, backstop_height=6.0, alpha_berm=0.40,
+                                                  trees_behind_backstop=[65.0, 165.0, 60.0], shelter_wall_half_width=6.0, side_belts=[130.0, 230.0, -60.0, 165.0], stems_per_m2=0.05, trunk_radius=0.12, bin_ms=10.0),
+        source='an outdoor range in a clearing in pine woods: grass, an earth backstop 50 m downrange (60 m wide, 6 m high, the berm of the covered firing point), woods from 15 m behind the backstop for 100 m (60 m to either side of the line of fire) and belts of woods 130 to 230 m to either side. The firing point is the covered one above; far listeners get its back wall (12 m wide) as one mirror reflection and nothing from its roof, whose reflections do not reach beyond its edge. The layout is a choice, not a survey of any range. Backstop: Lambert scattering, absorption 0.40 (inferred). Trees: single scattering by trunks as rigid cylinders, geometric acoustics, intensity I a sin(phi/2) / (2 R) at distance R from a trunk of radius a for scattering angle phi (P. M. Morse and K. U. Ingard, "Theoretical Acoustics", 1968, scattering from a cylinder, short-wave limit), weakened as (ka)^3 / (1 + (ka)^3) at long wavelengths, with extinction exp(-2 a n l) along l metres of woods. 500 stems per hectare of 0.12 m radius is a guess for a pine stand; branches, foliage and undergrowth scatter more and are left out, so the tree returns are a lower bound. Air: ISO 9613-1 at 25 C and 70 % humidity (chosen: a warm humid day). Ground at grazing angles: spherical-wave reflection coefficient Q = R + (1 - R) F(w) (C. F. Chien and W. W. Soroka, J. Sound Vib. 43:9-20, 1975) on Delany-Bazley grass. Distance: weak-shock decay and lengthening of a spherical wave, P = P1 / (r s), T = T1 s, s = sqrt(1 + k ln r), k = (gamma + 1) / (2 gamma) P1 / (p0 c T1), referred to 1 m (L. D. Landau, 1945; the form used by the hk416 asset). No path is shadowed by the backstop, and each return is single: no berm-to-trees or trees-to-ground paths'),
     mechanical_scale=dict(value=3.5, basis='guess', source='pascals at the shooter\'s ear per kg m/s of impact momentum, before the force spectrum and radiation weights. Set so that a brisk rack peaks near 105 dB at the ear. No published level for a pump action was found'),
     hertz=dict(basis='derived', source='contact time of an impact from Hertz\'s theory, t_c = 2.87 (m^2 / (R E*^2 v))^(1/5), with the moving mass from the model and the speed from the action simulation; contact radius 5 mm (guess). The force is a half sine of that length, so modes above about 1 / t_c are barely excited (K. L. Johnson, "Contact Mechanics", 1985)'),
     structure=dict(basis='derived from inferred dimensions', source='barrel, magazine tube: free-free bending of steel tubes of the model\'s size. Receiver walls: simply supported aluminium plates, 3 mm (notes/NOTES.md). Action bars: free-free steel strips 2.8 mm thick. Stock and forend shells: simply supported polymer plates 3 mm thick, E = 3 GPa, 1150 kg/m^3 (guess: a glass-filled polymer). Loss factors: steel tubes 0.008 to 0.01, receiver and bars 0.02, polymer 0.06 (inferred: a gun held in two hands). Radiation: (ka)^2 / (1 + (ka)^2) for plates, (ka)^3 / (1 + (ka)^3) for tubes in bending; a mode\'s share of the sound is the square root of that. How strongly each event drives each part is a guess (PART_WEIGHT, EVENTS)'),
     hammer=dict(value=dict(mass=0.03, speed=4.5), basis='guess', source='hammer 30 g arriving at 4.5 m/s (about 0.3 J)'),
 )
 PERSPECTIVES = dict(shooter=dict(note='at the shooter\'s ear, behind the muzzle'), bystander=dict(offset=[5.0, 0.016, 0.0], note='5 m to the side of the muzzle, at ear height'))
-ENVIRONMENTS = dict(room='the default: a plywood-lined training room, 8.5 x 2.7 x 10 m, the only kind of place with a published B-duration for this gun', covered='a covered firing point on an outdoor range (roof, back wall, concrete pad, backstop berm)', field='open grass, ground reflection only', free='free field, no reflection at all: the dry shot')
+ENVIRONMENTS = dict(range='the default: an outdoor range in a clearing in pine woods, the shooter under a covered firing point', room='a plywood-lined training room, 8.5 x 2.7 x 10 m', covered='the covered firing point and the backstop alone, without the woods', field='open grass, ground reflection only', free='free field, no reflection at all: the dry shot')
 
 # ----------------------------------------------------------------------------- components
 def fried(t0, amp, tpos, fir=None):
@@ -177,6 +180,80 @@ def diffuse(t0, energy, attack, decay, tpos, seed):
         amp = math.sqrt(wgt * e / (attack / 3 + d / 2)) / noise_rms(fc, q); out.append(noise(t0, amp, fc, q, attack, d, seed + j))
     return out
 
+def air_db_per_m(f, T_C=None, rh=None):
+    """ISO 9613-1 pure-tone absorption of air, dB per metre, at one atmosphere"""
+    o = SRC['outdoor_range']['value']; T = (o['temperature_C'] if T_C is None else T_C) + 273.15; rh = o['humidity_percent'] if rh is None else rh; T0 = 293.15; T01 = 273.16
+    psat = 10 ** (-6.8346 * (T01 / T) ** 1.261 + 4.6151); h = rh * psat; frO = 24 + 4.04e4 * h * (0.02 + h) / (0.391 + h); frN = (T / T0) ** -0.5 * (9 + 280 * h * math.exp(-4.170 * ((T / T0) ** (-1 / 3) - 1)))
+    f = np.asarray(f, dtype=float)
+    return 8.686 * f * f * (1.84e-11 * (T / T0) ** 0.5 + (T / T0) ** -2.5 * (0.01275 * math.exp(-2239.1 / T) / (frO + f * f / frO) + 0.1068 * math.exp(-3352.0 / T) / (frN + f * f / frN)))
+
+def path_fir(dist, ground=None, ntap=128, lag=32, nfft=4096):
+    """air absorption over dist metres as a short filter; with ground = (grazing angle, reflected path length, sigma), times the
+    spherical-wave reflection coefficient of the ground"""
+    from scipy.special import wofz
+    f = np.fft.rfftfreq(nfft, 1 / FS); H = 10 ** (-air_db_per_m(f) * dist / 20) + 0j
+    if ground:
+        psi, r2, sigma = ground; ff = np.maximum(f, 20.0); X = ff * RHO / sigma; Z = 1 + 0.0571 * X ** -0.754 + 1j * 0.087 * X ** -0.732; Rp = (Z * math.sin(psi) - 1) / (Z * math.sin(psi) + 1)
+        w = np.sqrt(1j * 2 * math.pi * ff / C * r2 / 2) * (math.sin(psi) + 1 / Z); F = 1 + 1j * math.sqrt(math.pi) * w * wofz(w); H = H * (Rp + (1 - Rp) * F)
+    h = np.fft.irfft(np.conj(H), nfft); h = np.roll(h, lag)[:ntap]; win = np.ones(ntap); win[:lag] = np.hanning(2 * lag)[:lag]; win[lag:] = np.hanning(2 * (ntap - lag))[ntap - lag:]
+    return dict(lag=lag, taps=[round(float(v), 8) for v in h * win], distance_m=round(dist, 2), mean_abs_250_4k=round(float(np.mean(np.abs(H[(f >= 250) & (f <= 4000)]))), 3))
+
+def _in_woods(x, z):
+    o = SRC['outdoor_range']['value']; z0, z1, hw = o['trees_behind_backstop']; x0, x1, zs0, zs1 = o['side_belts']
+    return ((z >= z0) & (z <= z1) & (np.abs(x) <= hw)) | ((np.abs(x) >= x0) & (np.abs(x) <= x1) & (z >= zs0) & (z <= zs1))
+
+def range_returns(src, h, L, tpos, p1=None):
+    """backstop and tree returns for one listener: lists of (arrival time after the shot leaves, energy in Pa^2 s, kind).
+    p1(theta) is the peak at 1 m in a direction; the incident wave at R is p1 / R (spreading only: a little high at long range)"""
+    o = SRC['outdoor_range']['value']; S = [0.0, h, 0.0]; p1 = p1 or (lambda th: blast_peak(src, 1.0, th)); out = []
+    bz = o['backstop_distance']; nx, ny = 30, 6; dA = (o['backstop_width'] / nx) * (o['backstop_height'] / ny)
+    for ix in range(nx):
+        for iy in range(ny):
+            Pp = [(ix + 0.5) * o['backstop_width'] / nx - o['backstop_width'] / 2, (iy + 0.5) * o['backstop_height'] / ny, bz]; r1, th1 = ray(S, Pp); r2, _ = ray(Pp, L)
+            if L[2] >= bz: continue                                                   # a listener behind the face gets nothing from it
+            out.append(((r1 + r2) / C, (p1(th1) / r1) ** 2 * 0.25 * tpos * (1 - o['alpha_berm']) * (bz / r1) * ((bz - L[2]) / r2) * dA / (math.pi * r2 * r2), 'backstop'))
+    a = o['trunk_radius']; n = o['stems_per_m2']; step = 5.0; xs = np.arange(-240 + step / 2, 240, step); zs = np.arange(-70 + step / 2, 170, step); fr = (np.arange(24) + 0.5) / 24
+    for x in xs:
+        for z in zs:
+            if not _in_woods(x, z): continue
+            Pp = [float(x), 1.5, float(z)]; r1, th1 = ray(S, Pp); r2, _ = ray(Pp, L)
+            l1 = r1 * float(np.mean(_in_woods(fr * x, fr * z))); l2 = r2 * float(np.mean(_in_woods(L[0] + fr * (x - L[0]), L[2] + fr * (z - L[2]))))
+            cosphi = ((x) * (x - L[0]) + (z) * (z - L[2])) / (math.hypot(x, z) * math.hypot(x - L[0], z - L[2]) + 1e-9); phi = math.pi - math.acos(max(-1.0, min(1.0, cosphi)))    # pi: straight back
+            e = p1(th1) ** 2 * 0.25 * tpos * a * math.sin(phi / 2) / (2 * r1 * r2 * (r1 + r2)) * n * step * step * math.exp(-2 * a * n * (l1 + l2)); out.append(((r1 + r2) / C, e, 'trees'))
+    return out
+
+def returns_as_noise(items, t_exit, tpos, seed, floor_e):
+    """time histogram of returns -> overlapping noise bursts in the three tail bands, with air absorption over each path and the trunks' long-wave weakness"""
+    o = SRC['outdoor_range']['value']; dt = o['bin_ms'] * 1e-3; comps = []; w = band_weights(tpos, TAIL_BANDS); bins = {}
+    for t, e, kind in items: bins.setdefault((int(t / dt), kind), 0.0); bins[(int(t / dt), kind)] += e
+    for (ib, kind), e in sorted(bins.items()):
+        if e < floor_e: continue
+        eb = []
+        for (fc, q), wi in zip(TAIL_BANDS, w):
+            ka = 2 * math.pi * fc / C * o['trunk_radius']; g = 10 ** (-float(air_db_per_m(fc)) * ib * dt * C / 10) * (ka ** 3 / (1 + ka ** 3) if kind == 'trees' else 1.0); eb.append(e * g)
+        for j, ((fc, q), wi) in enumerate(zip(TAIL_BANDS, w)):
+            amp = math.sqrt(wi * eb[j] / (dt / 3 + dt / 2)) / noise_rms(fc, q); comps.append(noise(t_exit + ib * dt, amp, fc, q, dt, dt, seed + 3 * ib + j + (500 if kind == 'trees' else 0)))
+    return comps
+
+def far_shot(load, d, az_deg, tag, filters, src=None):
+    """the shot heard d metres from the muzzle, az degrees off the line of fire, on the outdoor range"""
+    src = src or source(load); o = SRC['outdoor_range']['value']; h, _ = stance(); az = math.radians(az_deg); L = [d * math.sin(az), o['mic_height'], d * math.cos(az)]; S = [0.0, h, 0.0]; r, th = ray(S, L); t_exit = src['t_exit']
+    P1 = blast_peak(src, 1.0, th); T1 = blast_tpos(src); kw = (GAMMA_AIR + 1) / (2 * GAMMA_AIR) * P1 / (P0 * C * T1); s = math.sqrt(1 + kw * math.log(r)); peak = P1 / (r * s); tpos = T1 * s
+    t_arr = math.ceil((t_exit + r / C) * FS) / FS - 1e-7; filters['air_' + tag] = path_fir(r); comps = [fried(t_arr, peak, tpos, 'air_' + tag)]
+    Li = [L[0], -L[1], L[2]]; r2, th2 = ray(S, Li); psi = math.atan2(h + L[1], math.hypot(L[0], L[2])); filters['ground_' + tag] = path_fir(r2, (psi, r2, SRC['ground']['value']))
+    comps.append(fried(t_arr + (r2 - r) / C, blast_peak(src, 1.0, th2) / (r2 * s), tpos, 'ground_' + tag))
+    zj = SRC['jet_source']['value'] * src['_Dj']; rj, thj = ray([0.0, h, zj], L); fj = min(src['_fjet'], 9000.0); aj = jet_rms(src, rj, thj) * 10 ** (-float(air_db_per_m(fj)) * rj / 20)
+    comps.append(jet(t_exit + zj / src['_uj'] + rj / C, aj / noise_rms(fj, 0.5), src['_theta'], (GAMMA + 1) / (2 * (GAMMA - 1)), fj, 0.5, 11, attack=0.0005))
+    cv = SRC['covered_line']['value']; _, ear = stance(); zw = ear[2] - cv['back_wall_behind_ear']; rw, thw = ray(S, [L[0], L[1], 2 * zw - L[2]]); xw = L[0] * (0 - zw) / (L[2] - 2 * zw + 1e-9) if L[2] > zw else 1e9; wall_db = None
+    if abs(xw) <= o['shelter_wall_half_width']:                                      # the shelter's back wall, if the mirror point lies on it
+        aw = blast_peak(src, 1.0, thw) / (rw * s) * math.sqrt((1 - cv['alpha_wall']) * (1 - cv['scatter_wall'])); filters['wall_' + tag] = path_fir(rw); comps.append(fried(t_exit + rw / C, aw, tpos, 'wall_' + tag)); wall_db = [round((rw - r) / C * 1e3, 1), round(20 * math.log10(aw / peak), 1)]
+    items = range_returns(src, h, L, tpos); e_dir = peak * peak * 0.25 * tpos; comps += returns_as_noise(items, t_exit, tpos, 700, e_dir * 1e-6)
+    eb = sum(e for _, e, k in items if k == 'backstop'); et = sum(e for _, e, k in items if k == 'trees'); tb = [t for t, _, k in items if k == 'backstop']; tt = [t for t, e, k in items if k == 'trees']
+    doc = dict(environment='range', back_wall_delay_ms_and_db=wall_db, weak_shock_stretch=round(s, 3), ground_delay_ms=round((r2 - r) / C * 1e3, 3), grazing_deg=round(math.degrees(psi), 2), backstop_energy_db_re_direct=round(10 * math.log10(eb / e_dir), 1) if eb else None,
+               backstop_arrives_after_direct_ms=[round((min(tb) - r / C) * 1e3, 1), round((max(tb) - r / C) * 1e3, 1)] if tb else None, trees_energy_db_re_direct=round(10 * math.log10(et / e_dir), 1), trees_first_after_direct_ms=round((min(tt) - r / C) * 1e3, 1),
+               air_db_per_100m=dict(zip(['500', '1000', '2000', '4000', '8000'], [round(float(v) * 100, 2) for v in air_db_per_m([500, 1000, 2000, 4000, 8000])])))
+    return dict(duration=round(r / C + 1.3, 2), components=comps, environment='range', peak_pa_design=round(peak, 3), positive_phase_ms=round(tpos * 1e3, 4), distance_m=round(r, 2), angle_deg=round(math.degrees(th), 1), surroundings=doc)
+
 def _axis_images(a0, a1, x, n_max):
     """images of a point between two parallel walls: (coordinate, reflections off the wall at a0, off the wall at a1)"""
     D = a1 - a0; out = []
@@ -215,6 +292,9 @@ def surroundings(src, h, L, env, tag, filters, t_exit, seed=300):
     if env == 'free': return comps, doc
     if env == 'room':
         comps, d = room(src, h, L, t_exit, tpos, seed); doc.update(d); return comps, doc
+    if env == 'range':
+        comps, doc = surroundings(src, h, L, 'covered', tag, filters, t_exit, seed); items = [it for it in range_returns(src, h, L, tpos) if it[2] == 'trees']; rd, thd = ray(S, L); e_dir = blast_peak(src, rd, thd) ** 2 * 0.25 * tpos
+        comps += returns_as_noise(items, t_exit, tpos, 700, e_dir * 1e-7); doc.update(environment='range', trees_energy_db_re_direct=round(10 * math.log10(sum(e for _, e, _k in items) / e_dir), 1), trees_first_ms=round(min(t for t, _, _k in items) * 1e3, 1)); return comps, doc
     if env == 'field':
         Li = [L[0], -L[1], L[2]]; r, th = ray(S, Li); psi = math.atan2(S[1] + L[1], math.hypot(L[0], L[2])); key = 'ground_' + tag
         filters[key] = ground_fir(psi, SRC['ground']['value']); comps.append(fried(t_exit + r / C, blast_peak(src, r, th), tpos, key))
@@ -270,7 +350,7 @@ def shot_at(load, h, L, env='free', tag='x', filters=None, mech=True, near=1.0, 
     if mech:
         hm = SRC['hammer']['value']; comps += impact(ACT['shots'][load]['t0'], 'hammer', hm['mass'], hm['speed'], 21, scale=near)          # the hammer, before the blast
         comps += ring(t_exit, 'barrel', 0.25 * near) + ring(t_exit, 'receiver', 0.08 * near)                                                     # the gun rings after the shot (guessed strength, pascals)
-    return dict(duration=dict(covered=0.6, room=2.0).get(env, 0.3), components=comps, environment=env, peak_pa_design=round(peak, 2), positive_phase_ms=round(tpos * 1e3, 4), distance_m=round(r, 3), angle_deg=round(math.degrees(th), 1),
+    return dict(duration=dict(covered=0.6, room=2.0, range=1.4).get(env, 0.3), components=comps, environment=env, peak_pa_design=round(peak, 2), positive_phase_ms=round(tpos * 1e3, 4), distance_m=round(r, 3), angle_deg=round(math.degrees(th), 1),
                 jet_rms_pa_at_start=round(jet_rms(src, rj, thj), 1), jet_arrives_after_blast_ms=round((t_jet - t_arr) * 1e3, 2), surroundings=doc)
 
 # ----------------------------------------------------------------------------- structure: modes of the parts, from the model
@@ -407,18 +487,20 @@ def build():
         src = source(load); srcs[load] = {k: v for k, v in src.items() if not k.startswith('_')}
         for persp in PERSPECTIVES:
             h, L = listener(persp); near = 1.0 if persp == 'shooter' else 0.3 / ray([0.0, h, 0.0], L)[0]
-            for env, suffix in (('room', ''), ('covered', '_covered'), ('field', '_field'), ('free', '_free')):
+            for env, suffix in (('range', ''), ('room', '_room'), ('covered', '_covered'), ('field', '_field'), ('free', '_free')):
                 snd[f'shot_{load}_{persp}{suffix}'] = shot_at(load, h, L, env, f'{persp}', filters, near=near, src=src)
+    for d in (25, 50, 100):                                                         # far listeners on the outdoor range, buckshot: beside the gun and 40 degrees off the line of fire
+        for nm, az in (('side', 90.0), ('front', 40.0)): snd[f'shot_buck00_range_{nm}_{d}m'] = far_shot('buck00', float(d), az, f'{nm}{d}', filters, src=source('buck00'))
     for w in ('pump', 'pump_back', 'pump_forward'): snd[w] = pump(w)
     for n in ('dry_fire', 'shell_insert', 'safety', 'action_release'): snd[n] = simple(n)
     modes = {k: [round(f, 1) for f in v['f']] for k, v in PARTS.items()}
-    return dict(version=2, fs=FS, units='pascals at the listener; times in seconds from the trigger break (shots, dry_fire) or from the start of the motion', sources=SRC, perspectives=PERSPECTIVES, environments=ENVIRONMENTS,
+    return dict(version=3, fs=FS, units='pascals at the listener; times in seconds from the trigger break (shots, dry_fire) or from the start of the motion', sources=SRC, perspectives=PERSPECTIVES, environments=ENVIRONMENTS,
                 calibration=cal, shot_source=srcs, modes_hz=modes, slide_mass_kg=round(SLIDE_MASS, 4), filters=filters, sounds=snd)
 
 def checks(P):
     """the model against the published figures; everything here is a number computed from the simulation"""
     Y = lambda n: render(P['sounds'][n], FS, P['filters']); out = dict(calibration=P['calibration']); h, ear = stance(); src = source('buck00')
-    free = Y('shot_buck00_shooter_free'); fld = Y('shot_buck00_shooter_field'); cov = Y('shot_buck00_shooter_covered'); rom = Y('shot_buck00_shooter')
+    free = Y('shot_buck00_shooter_free'); fld = Y('shot_buck00_shooter_field'); cov = Y('shot_buck00_shooter_covered'); rom = Y('shot_buck00_shooter_room'); rng_ = Y('shot_buck00_shooter')
     kw = SRC['kardous_willson_2004']['value']; mt = SRC['murphy_tubbs_2007']['value']; mk = SRC['meinke_2017']['value']; hh = SRC['niosh_hhe_2013']['value']
     a = M.a_duration(free, FS); a_blast = M.a_duration(render(dict(duration=0.05, components=[c for c in P['sounds']['shot_buck00_shooter_free']['components'] if c['kind'] == 'friedlander']), FS), FS); neg = M.negative_phase(render(dict(duration=0.05, components=[c for c in P['sounds']['shot_buck00_shooter_free']['components'] if c['kind'] == 'friedlander']), FS), FS)
     out['peak'] = dict(model_db_at_ear=dict(buck00=round(M.db(np.max(np.abs(free))), 1), slug=round(M.db(np.max(np.abs(Y('shot_slug_shooter_free')))), 1)), published=dict(kardous_willson_indoor_ear=kw['peak_db'], krammer_18p5_in=SRC['krammer']['value']['barrel_18p5_in_db'], krammer_28_in=SRC['krammer']['value']['barrel_28_in_db'], meinke_shotguns_left_ear=mk['shotgun_peak_db']),
@@ -433,7 +515,7 @@ def checks(P):
                            total_level_over_window_db=dict(direct=tot(tod['bands']), with_ground=tot(to['bands'])), at_ear_free_field_max_band_hz=tof['band_hz'], third_octave_bands_with_ground_db=to['bands'],
                            note='the paper also says the maximum band exceeded 130 dB for most weapons. The model does not reach that: its whole level over the window is about 133 dB, and Maher and Shaw\'s energy figure scaled to this microphone gives about 131 dB, so no single band of an impulse can hold 130 dB. Not reconciled')
     out['ground_reflection'] = dict(position='the same microphone', model_delay_ms=s['surroundings']['ground_delay_ms'], published_delay_ms=mt['ground_reflection_ms'], passed=bool(abs(s['surroundings']['ground_delay_ms'] - mt['ground_reflection_ms']) < 0.6), at_ear_delay_ms=P['sounds']['shot_buck00_shooter_field']['surroundings']['ground_delay_ms'])
-    b = {k: round(M.b_duration(v, FS) * 1e3, 2) for k, v in (('free_field', free), ('open_grass', fld), ('covered_firing_point', cov), ('room', rom), ('room_bystander', Y('shot_buck00_bystander')))}
+    b = {k: round(M.b_duration(v, FS) * 1e3, 2) for k, v in (('free_field', free), ('open_grass', fld), ('covered_firing_point', cov), ('room', rom), ('room_bystander', Y('shot_buck00_bystander_room')), ('outdoor_range', rng_))}
     out['b_duration'] = dict(model_ms=b, published=dict(outdoor_typical_under_ms=mk['outdoor_duration_ms'], indoor_shoothouse_doorway_ms=hh['doorway_b_duration_ms'], indoor_shoothouse_walkway_ms=hh['walkway_b_duration_ms']),
                              passed=bool(b['open_grass'] < mk['outdoor_duration_ms'] and b['open_grass'] < b['covered_firing_point'] < hh['doorway_b_duration_ms'][1] and hh['doorway_b_duration_ms'][0] <= b['room'] <= hh['walkway_b_duration_ms'][1]), note='open ground must be under the published outdoor figure; the covered firing point must sit between open ground and the indoor values; the room, at the shooter, must fall inside the published indoor range, 30 to 185 ms. Nothing in the room was adjusted to make it so. The published microphones were at instructor positions in rooms whose size is not given')
     out['directivity'] = dict(model_front_to_back_rms9_db=round(P['calibration']['rows'][0]['model_db'] - P['calibration']['rows'][1]['model_db'], 1), published_db=[SRC['maher_shaw_2010']['value']['front_to_back_db'], 16.0], note='about 15 dB in the text; 145 on axis against a lowest value of 129 gives 16')
@@ -441,7 +523,12 @@ def checks(P):
     def click(y):
         s = M.summary(y, FS); return dict(energy_in_first_2ms_percent=round(100 * (1 - 10 ** (s['energy_after_2ms_db'] / 10)), 1), energy_in_first_10ms_percent=round(100 * (1 - 10 ** (s['energy_after_10ms_db'] / 10)), 1), band_stays_20db_down_after_ms={k: v['stays_20db_down_after_ms'] for k, v in s['bands'].items()}, b_duration_ms=s['b_duration_ms'])
     out['click_measures'] = dict(note='how much of the shot is over within 2 ms, and how long each octave band takes to stay 20 dB under its own maximum (2 ms rms envelope). Buckshot at the shooter\'s ear. Version 1 is in bands_v1.json',
-                                 default_room=click(rom), covered_firing_point=click(cov), open_grass=click(fld), free_field=click(free))
+                                 default_outdoor_range=click(rng_), room=click(rom), covered_firing_point=click(cov), open_grass=click(fld), free_field=click(free))
+    def shares(y):
+        i0 = M.onset(y, 0.02); e = float(np.sum(y[i0:] ** 2)); w = lambda a, z: round(100 * float(np.sum(y[i0 + int(a * FS / 1e3): i0 + int(z * FS / 1e3)] ** 2)) / e, 1); b = M.band_envelopes(y, FS)
+        return dict(energy_percent={'0_2ms': w(0, 2), '2_10ms': w(2, 10), '10_50ms': w(10, 50), '50_200ms': w(50, 200), 'after_200ms': w(200, 1e6)}, band_stays_20db_down_after_ms={k: b[k]['stays_20db_down_after_ms'] for k in ('125', '250', '500', '1000', '2000', '4000')}, peak_db=round(M.db(np.max(np.abs(y))), 1))
+    out['outdoor_range'] = dict(note='the outdoor-range renders: share of energy in four windows after the onset, and the time each octave band takes to stay 20 dB under its own maximum. Model numbers only; no parameter was set from a recording',
+                                **{n.replace('shot_buck00_', ''): dict(shares(Y(n)), surroundings={k: v for k, v in P['sounds'][n]['surroundings'].items() if k != 'earliest'}) for n in P['sounds'] if n.startswith('shot_buck00_range_') or n == 'shot_buck00_shooter'})
     out['all_passed'] = bool(all(v.get('passed', True) for v in out.values() if isinstance(v, dict)))
     return out
 
@@ -461,7 +548,7 @@ def write_wavs(P):
         g = np.minimum(max_boost_db, -20 * np.log10(np.maximum(env, 1e-6)) * (1 - 1 / ratio)); g[env < 1e-5] = 0.0
         return y * 10 ** (g / 20)
     os.makedirs(os.path.join(d, 'listen'), exist_ok=True)
-    for name in ('shot_buck00_shooter', 'shot_buck00_shooter_covered', 'shot_buck00_shooter_field', 'shot_buck00_shooter_free', 'shot_slug_shooter', 'shot_buck00_bystander', 'pump', 'dry_fire', 'shell_insert'):
+    for name in ('shot_buck00_shooter', 'shot_buck00_shooter_room', 'shot_buck00_shooter_covered', 'shot_buck00_shooter_field', 'shot_buck00_shooter_free', 'shot_slug_shooter', 'shot_buck00_bystander', 'pump', 'dry_fire', 'shell_insert'):
         z = listen(np.concatenate([np.zeros(2400), render(P['sounds'][name], FS, P['filters']), np.zeros(4800)])); wav(os.path.join('listen', name + '_listen'), z, float(np.max(np.abs(z))))
     seq = np.zeros(int(3.2 * FS)); a = render(P['sounds']['shot_buck00_shooter'], FS, P['filters']); b = render(P['sounds']['pump'], FS, P['filters'])     # a shot, then a rack, at a listening mix (not the true 55 dB apart)
     seq[2400:2400 + len(a)] += a / np.max(np.abs(a)); i = int(1.0 * FS); seq[i:i + len(b)] += 0.25 * b / np.max(np.abs(b)); wav('demo_shot_then_pump_mixed', seq, float(np.max(np.abs(seq))))
@@ -479,7 +566,7 @@ def main():
     bands = {n: M.summary(render(s, FS, P['filters']), FS) for n, s in P['sounds'].items()}
     json.dump(dict(note='band envelopes and summary measures of every sound in params.json, version 2 (see measure.py for the definitions); simulation only. bands_v1.json holds the same measures of version 1', sounds=bands), open(os.path.join(HERE, 'compare', 'bands.json'), 'w'), indent=1)
     import matplotlib; matplotlib.use('Agg'); import matplotlib.pyplot as plt
-    names = ['shot_buck00_shooter_free', 'shot_buck00_shooter_field', 'shot_buck00_shooter_covered', 'shot_buck00_shooter', 'pump', 'dry_fire']; fig, ax = plt.subplots(3, len(names), figsize=(3.3 * len(names), 7.5))
+    names = ['shot_buck00_shooter_free', 'shot_buck00_shooter', 'shot_buck00_range_side_50m', 'shot_buck00_range_front_50m', 'shot_buck00_shooter_room', 'pump']; fig, ax = plt.subplots(3, len(names), figsize=(3.3 * len(names), 7.5))
     for i, nm in enumerate(names):
         y = render(P['sounds'][nm], FS, P['filters']); t = np.arange(len(y)) / FS * 1e3; ax[0, i].plot(t, y, lw=0.6); ax[0, i].set(title=nm, xlabel='ms', ylabel='Pa' if i == 0 else '')
         w = int(0.001 * FS); env = np.sqrt(np.convolve(y ** 2, np.ones(w) / w, 'same')); ax[1, i].plot(t, 20 * np.log10(env / np.max(np.abs(y)) + 1e-9), lw=0.6); ax[1, i].set(ylim=(-80, 3), xlabel='ms', ylabel='1 ms rms, dB re peak' if i == 0 else '')

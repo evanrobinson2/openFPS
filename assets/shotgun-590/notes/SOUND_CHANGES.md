@@ -52,3 +52,22 @@ front-to-back difference is 1 to 2 dB short of the published 15 to 16 dB.
 
 **Files.** `sound/sim.py`, `sound/measure.py` (new), `sound/shotgun590-sound.js`, `sound/params.json`,
 `sound/verify_js.py`, `sound/README.md`, `sound/compare/*`, `USAGE.md` (sound section), this file.
+
+## Sound change request 2 (2026-11-17, from the coordinating session): an outdoor range, scored against recordings
+
+**Request.** The owner made downloaded recordings the gate (an outdoor range, microphones roughly 20 to 70 m
+away), scored by the coordinating session. Version 2's room had too much tail and its outdoor shots almost none.
+Add a physical outdoor-range environment and far listeners; fit nothing to the recordings.
+
+**What changed** (sound version 3). A chosen outdoor range: weak-shock lengthening with distance, ISO 9613-1 air
+absorption, spherical-wave ground reflection at grazing angles, Lambert returns from a backstop 50 m away,
+single scattering from tree trunks in woods behind and beside the range, one mirror reflection from the shelter
+wall. Six far listeners for buckshot at 25, 50 and 100 m, beside the gun and 40 degrees off the line of fire. The
+range is the default again; version 2's room shot is `..._room`.
+
+**Not done, on purpose.** I did not open the recordings and set no parameter from them or from the gate's
+figures. The layout has nothing 1 to 17 m off the direct path except the shelter wall, so the far shots carry almost
+no energy between 10 and 50 ms and only 10 to 16 % between 2 and 10 ms. Benches, posts, vehicles or side berms would
+fill that, but their presence and place at the recorded range are unknown, and I did not invent them.
+
+**Results** are in `sound/README.md` (version 3 table) and `sound/compare/checks.json` (`outdoor_range`).

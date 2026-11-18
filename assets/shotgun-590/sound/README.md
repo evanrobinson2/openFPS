@@ -1,6 +1,6 @@
-# Shotgun 590: synthesised sound (version 2)
+# Shotgun 590: synthesised sound (version 3)
 
-Twenty-three sounds, built from the action simulation and the model, rendered identically in Python and in the
+Thirty-three sounds, built from the action simulation and the model, rendered identically in Python and in the
 browser. **No recording was used**: not as a sample, not as a filter, not as something to fit, and there is no
 reference recording of this gun. The outside numbers are published measurements of 12 gauge guns, named below.
 Credit: carpetshark.
@@ -22,6 +22,41 @@ Needs Python 3 with numpy and matplotlib (scipy is used if present), and node fo
 | `verify_js.py`, `verify_js.mjs` | the parity check |
 | `compare/` | `checks.json` (model against published figures), `bands.json` and `bands_v1.json` (band envelopes of this version and the last), `levels.json`, `js_parity.json`, `waveforms.png` (simulation only) |
 
+## Version 3: the outdoor range
+
+Version 2 made a room the default shot. Version 3 adds an outdoor range and makes it the default; the room shot is
+now `..._room`. It also adds six far listeners for the buckshot load. Everything else below is as in version 2.
+
+**The range** (`SRC['outdoor_range']` in `sim.py`; a chosen layout, not a survey): the covered firing point of
+version 2, grass, an earth backstop 50 m downrange (60 × 6 m), pine woods from 15 m behind the backstop and in
+belts 130 to 230 m to either side.
+
+| Term | Model | Source |
+|---|---|---|
+| Distance | weak-shock decay and lengthening, `s = √(1 + k ln r)`: the wave is 1.30 to 1.68 times longer at 25 to 100 m | Landau 1945, as in the hk416 asset |
+| Air | absorption at 25 °C, 70 % humidity, as a filter on each path: 0.6, 2.2 and 6.6 dB per 100 m at 1, 4 and 8 kHz | ISO 9613-1 |
+| Ground at grazing angles | spherical-wave reflection coefficient on Delany-Bazley grass, 0.14 to 0.56 ms after the direct wave | Chien and Soroka 1975 |
+| Backstop | Lambert scattering, absorption 0.40, patch by patch | inferred |
+| Woods | single scattering by trunks as rigid cylinders (short-wave limit, weaker below about 450 Hz), 500 stems per hectare of 0.12 m radius, with extinction through the stand | Morse and Ingard 1968; the stand is a guess, and branches and foliage are left out, so this is a lower bound |
+| Shelter wall | one mirror reflection for listeners whose mirror point lies on the 12 m wall: 18 to 19 ms late, 12 to 14 dB down | image source |
+
+Far listeners, buckshot, microphone 1.5 m up (`compare/checks.json`, `outdoor_range`). "Side" is 90° from the line
+of fire, "front" is 40° from it:
+
+| Sound | Peak | Energy 0 to 2 ms | 2 to 10 | 10 to 50 | 50 to 200 | after 200 ms | Backstop, dB re direct | Woods, dB re direct |
+|---|---|---|---|---|---|---|---|---|
+| `shot_buck00_range_side_25m` | 134.9 dB | 84 % | 13 % | 0 % | 0 % | 4 % | −15.1 (230 to 313 ms late) | −13.6 |
+| `shot_buck00_range_front_25m` | 139.2 dB | 79 % | 16 % | 3 % | 1 % | 1 % | −15.3 (169 to 258 ms) | −16.3 |
+| `shot_buck00_range_side_50m` | 128.2 dB | 77 % | 11 % | 0 % | 3 % | 9 % | −11.3 (182 to 298 ms) | −7.7 |
+| `shot_buck00_range_front_50m` | 133.0 dB | 65 % | 13 % | 3 % | 15 % | 4 % | −7.4 (58 to 207 ms) | −8.7 |
+| `shot_buck00_range_side_100m` | 121.2 dB | 58 % | 10 % | 0 % | 5 % | 27 % | −10.9 (131 to 283 ms) | −2.4 |
+| `shot_buck00_range_front_100m` | 125.8 dB | 59 % | 12 % | 12 % | 10 % | 7 % | none (it stands beside the backstop, at the edge of the woods) | −3.5 |
+| `shot_buck00_shooter` (default) | 159.5 dB | 50 % | 25 % | 24 % | 1 % | 0 % | −38.2 | −37.4 |
+
+What this layout does not produce: energy between 2 and 50 ms at the far listeners. Nothing in it lies 1 to 17 m
+further than the direct path except the shelter wall. A real range has benches, posts, target frames, vehicles and
+side berms there; which, and where, is not known, and none was invented. No parameter was set from a recording.
+
 ## Why version 1 sounded like a click
 
 Measured on version 1's buckshot shot at the shooter's ear (`compare/bands_v1.json`):
@@ -38,16 +73,18 @@ Measured on version 1's buckshot shot at the shooter's ear (`compare/bands_v1.js
 The published energy of a 12 gauge shot (Maher and Shaw, below) agrees with a short pulse in free field. **Outdoors,
 a real shot at this distance is brief**: the model's dry shot has 93 % of its energy in the first 2 ms, and the
 published figures leave no room for more. What gives a shot its body is where it is fired. The only published
-durations for this gun come from indoors, so the default shot is now fired in a room; the dry and outdoor shots
-are still there under their own names.
+durations for this gun come from indoors. Version 2 therefore made a room the default; version 3 makes it the
+outdoor range above and keeps the room as `..._room`.
 
 ## Sounds
 
 | Name | What | Peak at the listener |
 |---|---|---|
-| `shot_buck00_shooter`, `shot_slug_shooter` | the shot at the shooter's ear, **in the default room** | 159.5 and 160.8 dB |
-| `shot_buck00_bystander`, `shot_slug_bystander` | 5 m to the side of the muzzle, same room | 152.6 and 153.5 dB |
-| `..._covered` (all four) | the same shot at a covered firing point on an outdoor range | 159.5, 160.8, 151.8, 153.1 dB |
+| `shot_buck00_shooter`, `shot_slug_shooter` | the shot at the shooter's ear, **on the default outdoor range** | 159.5 and 160.8 dB |
+| `shot_buck00_bystander`, `shot_slug_bystander` | 5 m to the side of the muzzle, same range | 151.8 and 153.1 dB |
+| `shot_buck00_range_side_25m`, `_50m`, `_100m`, `shot_buck00_range_front_25m`, `_50m`, `_100m` | buckshot heard far off on the range | 121 to 139 dB |
+| `..._room` (all four) | the same shot in a plywood-lined training room | 159.5, 160.8, 152.6, 153.5 dB |
+| `..._covered` (all four) | the covered firing point and backstop without the woods | 159.5, 160.8, 151.8, 153.1 dB |
 | `..._field` (all four) | on open grass: ground reflection only | the same |
 | `..._free` (all four) | free field, no reflection: the dry shot, for a game with its own reverb | the same |
 | `pump`, `pump_back`, `pump_forward` | the whole rack, or each stroke | about 106 dB |
@@ -56,7 +93,7 @@ are still there under their own names.
 | `safety`, `action_release` | the two small controls | 68 and 64 dB |
 
 Levels are peak dB re 20 µPa. Time zero of a shot or `dry_fire` is the trigger break; of the others, the start of
-the motion. The names of version 1 are unchanged; the `_covered`, `_field` and `_free` shots are new.
+the motion. The names of version 1 are unchanged; the `_room`, `_covered`, `_field`, `_free` and `range_` shots are new.
 
 ## How the shot is made
 
@@ -101,7 +138,7 @@ burst** with an attack and a decay (friction, scattered sound).
    roof at 4.24 ms and −6.2 dB, the pad at 7.03 ms and −6.6 dB, then a flutter between pad and roof every 15.9 ms.
    Together they carry 1.2 dB less energy than the direct wave. Sound scattered by the roof's framing is a noise
    tail (−6.8 dB, 31 ms). The backstop berm 50 m away returns a diffuse slap at 297 ms, −38 dB in energy.
-6. **Room** (the default). A plywood-lined room, 8.5 × 2.7 × 10 m, concrete floor: 48 image sources out to 40 ms
+6. **Room** (`_room`). A plywood-lined room, 8.5 × 2.7 × 10 m, concrete floor: 48 image sources out to 40 ms
    (+3.0 dB in energy over the direct wave), then a statistical tail in three bands with Eyring decay times of
    0.90 s (350 Hz), 1.86 s (1 kHz) and 1.50 s (2.8 kHz). The tail carries 9.2 dB more energy than the direct wave
    at the shooter, because the shooter stands in the blast's quietest direction and the room returns the rest.
@@ -157,7 +194,7 @@ Rms error of the four levels: 1.6 dB. The fit cannot satisfy both papers at once
 | Delay of the ground reflection at that microphone | 6.24 ms (Murphy and Tubbs) | 6.15 ms | pass |
 | Front to back, 9 ms rms | about 15 dB; 16 dB to the lowest value (Maher and Shaw) | 13.8 dB | 1 to 2 dB short |
 | B-duration outdoors | impulses typically under 10 ms (Meinke et al.) | 3.8 ms free field, 5.1 ms open grass, 16.0 ms covered firing point | pass |
-| B-duration indoors, at the shooter | 30 to 62 ms and 172 to 185 ms, same gun in a shoothouse (NIOSH HHE 2013-0124-3208, instructor positions) | 182 ms in the default room | pass |
+| B-duration indoors, at the shooter | 30 to 62 ms and 172 to 185 ms, same gun in a shoothouse (NIOSH HHE 2013-0124-3208, instructor positions) | 182 ms in the room | pass |
 | **Parity: Python against JavaScript**, every sound, sample by sample | | worst difference −291 dB re peak | pass |
 
 Not passed or not checkable:
@@ -180,15 +217,15 @@ under its own maximum.
 | | Energy in the first 2 ms | In the first 10 ms | 20 dB down, 500 Hz to 8 kHz | B-duration |
 |---|---|---|---|---|
 | Version 1 (its only shot) | 35 % | 55 % | 61 to 88 ms | 29.9 ms |
-| Version 2, default (room) | 9 % | 17 % | 449 to 591 ms | 181.8 ms |
-| Version 2, covered firing point | 50 % | 75 % | 44 to 50 ms | 16.0 ms |
-| Version 2, open grass | 83 % | 100 % | 8.5 to 10.4 ms | 5.1 ms |
-| Version 2, free field (dry) | 93 % | 100 % | 4.5 to 8.6 ms | 3.8 ms |
+| Version 3, default (outdoor range, shooter's ear) | 50 % | 75 % | 44 to 50 ms | 16.0 ms |
+| Room (`_room`) | 9 % | 17 % | 449 to 591 ms | 181.8 ms |
+| Open grass (`_field`) | 83 % | 100 % | 8.5 to 10.4 ms | 5.1 ms |
+| Free field (`_free`) | 93 % | 100 % | 4.5 to 8.6 ms | 3.8 ms |
 
 Version 1's 65 % after 2 ms was mostly the 95 Hz tone: in the 1 kHz band it was 14 dB down by 10 to 50 ms and 25 dB
-down by 50 to 200 ms. The default shot is 6 dB and 8.5 dB down in the same windows.
+down by 50 to 200 ms. The room shot is 6 dB and 8.5 dB down in the same windows.
 
-Octave-band rms level of the default shot, dB SPL, version 1 then version 2:
+Octave-band rms level, dB SPL: version 1's shot, then the room shot:
 
 | Band | 0 to 2 ms | 2 to 10 ms | 10 to 50 ms | 50 to 200 ms | 200 to 500 ms |
 |---|---|---|---|---|---|
@@ -219,7 +256,7 @@ S.info('pump').peak_db;                                                        /
 The API is that of version 1; `renderSound(snd, fs, filters)` takes the filter table as a third argument. Without
 `normalize`, every buffer shares one scale (full scale is `S.fullScalePa` pascals), so the rack is 53 dB under the
 shot, as simulated: most games will want `normalize: true` and their own mix. Buffers are mono, 48 kHz, 0.12 to
-2 s. Node synthesis time: under 20 ms a sound.
+2 s. The far shots start with the sound's travel time as silence. `params.json` is 0.7 MB.
 
 A shot is 160 dB at the ear with a crest of 20 dB and more over its tail. A page that plays it peak-normalised on
 small speakers plays the tail quietly: that is playback mapping (a compressor), not something this module does.
@@ -263,5 +300,7 @@ small speakers plays the tail quietly: that is playback mapping (a compressor), 
   (DTIC refused automated requests).
 - J. Corner, "Theory of the Interior Ballistics of Guns", 1950: emptying of the bore. NASA SP-8072 (1971): acoustic
   efficiency. Recalled, not re-read.
+- Chien and Soroka, J. Sound Vib. 43:9-20, 1975; ISO 9613-1; Morse and Ingard, "Theoretical Acoustics", 1968; Landau
+  (1945): the outdoor range. Recalled, not re-read.
 - Delany and Bazley (1970); Embleton, Piercy and Daigle (1983): ground. Allen and Berkley (1979); Eyring (1930): room.
 - K. L. Johnson, "Contact Mechanics", 1985: Hertz contact time.
