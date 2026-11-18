@@ -109,11 +109,11 @@ for k, (nm, cap) in enumerate((('front', 'FRONT'), ('rear', 'REAR'), ('section_l
         dim(P, (11.4, -1.3, -3.9), (11.4, 1.3, -3.9), '2.60', sz=20, off=(0, 0))
         label(P, (11.4, 1.75, spec.Z_MAIN + 1.9), 'main deck', sz=18); label(P, (11.4, 1.3, spec.Z_LOWER + 1.9), 'hold', sz=18)
     if nm == 'section_bay':
-        dim(P, (17.4, -1.2, spec.Z_LOWER - 0.45), (17.4, 1.2, spec.Z_LOWER - 0.45), 'lander 2.40', sz=20)
+        dim(P, (17.4, -1.1, spec.Z_LOWER - 0.45), (17.4, 1.1, spec.Z_LOWER - 0.45), 'lander 2.20', sz=20)
         label(P, (17.4, 0, spec.Z_MAIN + 1.9), 'mission bay', sz=18)
 yq = y + h + 36
 notes = [
-    'Modules (built and exported separately): fuselage · cockpit · engines · landing gear · lift chassis · lander bay · gadgets.',
+    'Modules (built and exported separately): fuselage · cockpit · engines · landing gear · lift chassis · lander bay · gadgets · interior.',
     'Read from the concept image: rounded barrel hull, wraparound canopy slit under an armoured brow, recessed red waist channel, row of equipment bays under it, chin cannon,',
     'ventral gun pod, side engine pods with octagonal intake faces and ribbed barrels, armoured cowl over the upper pods, exposed machinery along the keel.',
     'Not in the image, designed here: everything inside, the four-leg landing gear, the lift chassis that lowers from the hold, and the lander bay with its belly doors.',
