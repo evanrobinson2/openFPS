@@ -1,19 +1,19 @@
 {
  "method": "silhouettes in the photo pixel grid; photo mask = luminance < 200, model mask = render alpha > 0.5; mm = px * 0.9563",
- "iou": 0.9739,
+ "iou": 0.9737,
  "photo_px": 77691,
- "model_px": 77047,
- "only_photo_px": 1347,
+ "model_px": 77033,
+ "only_photo_px": 1361,
  "only_model_px": 703,
  "length_mm": {
   "photo": 1041.4,
   "model": 1040.4
  },
  "top_edge_mm": {
-  "mean_abs": 0.27,
+  "mean_abs": 0.28,
   "p95_abs": 0.96,
-  "max_abs": 3.83,
-  "worst_photo_x": 409
+  "max_abs": 4.78,
+  "worst_photo_x": 374
  },
  "bottom_edge_mm": {
   "mean_abs": 1.01,
@@ -64,10 +64,10 @@
     365,
     470
    ],
-   "iou": 0.926,
+   "iou": 0.925,
    "photo_px": 7506,
-   "model_px": 7333,
-   "only_photo_px": 370,
+   "model_px": 7319,
+   "only_photo_px": 384,
    "only_model_px": 197
   },
   {

@@ -1,0 +1,93 @@
+{
+ "note": "peak levels of every synthesised sound, dB re 20 uPa, at the listener of that sound",
+ "levels": {
+  "shot_buck00_shooter": {
+   "peak_pa": 1635.7099,
+   "peak_db": 158.3,
+   "duration": 0.45,
+   "components": 12
+  },
+  "shot_buck00_bystander": {
+   "peak_pa": 722.2976,
+   "peak_db": 151.2,
+   "duration": 0.45,
+   "components": 12
+  },
+  "shot_slug_shooter": {
+   "peak_pa": 1865.9594,
+   "peak_db": 159.4,
+   "duration": 0.45,
+   "components": 12
+  },
+  "shot_slug_bystander": {
+   "peak_pa": 822.9199,
+   "peak_db": 152.3,
+   "duration": 0.45,
+   "components": 12
+  },
+  "pump": {
+   "peak_pa": 4.1024,
+   "peak_db": 106.2,
+   "duration": 0.54,
+   "components": 38
+  },
+  "pump_back": {
+   "peak_pa": 4.1024,
+   "peak_db": 106.2,
+   "duration": 0.36,
+   "components": 19
+  },
+  "pump_forward": {
+   "peak_pa": 3.7659,
+   "peak_db": 105.5,
+   "duration": 0.38,
+   "components": 19
+  },
+  "dry_fire": {
+   "peak_pa": 1.7155,
+   "peak_db": 98.7,
+   "duration": 0.12,
+   "components": 5
+  },
+  "shell_insert": {
+   "peak_pa": 0.6796,
+   "peak_db": 90.6,
+   "duration": 0.26,
+   "components": 7
+  },
+  "safety": {
+   "peak_pa": 0.2099,
+   "peak_db": 80.4,
+   "duration": 0.08,
+   "components": 4
+  },
+  "action_release": {
+   "peak_pa": 0.1096,
+   "peak_db": 74.8,
+   "duration": 0.08,
+   "components": 4
+  }
+ },
+ "shot_level_check": {
+  "source": "peak level at the shooter's ear for 12 gauge shotguns: 151.5 dB with a 28 in barrel, 161.5 dB with an 18.5 in barrel (W. Krammer, Ball State University, as reproduced in E.A.R. Inc.'s \"Gunfire Noise Level Reference Chart\"). Recreational firearms measure about 150 to 165 dB peak at the shooter's ear (Meinke et al., 2017, review, PMC5634813)",
+  "method": "the blast coefficient and the front-to-back figure are generic guesses set once; this compares the result with the published range for 12 gauge shotguns (a 20 in barrel sits between the two published barrels)",
+  "rows": {
+   "buck00": {
+    "peak_db_at_shooter": 158.3,
+    "published_range_db": [
+     151.5,
+     161.5
+    ],
+    "passed": true
+   },
+   "slug": {
+    "peak_db_at_shooter": 159.4,
+    "published_range_db": [
+     151.5,
+     161.5
+    ],
+    "passed": true
+   }
+  }
+ }
+}

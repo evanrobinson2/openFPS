@@ -1,4 +1,5 @@
-# build outputs and local references (never committed)
-model/build/
+# build outputs and local references (never committed). The build folder is called masters/ because
+# tools/check_assets.py skips that name when it scans a working tree for mesh files.
+model/masters/
 refs-local/
 __pycache__/

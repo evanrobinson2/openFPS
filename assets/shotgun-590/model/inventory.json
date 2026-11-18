@@ -16,7 +16,7 @@
     "L05"
    ],
    "basis": "traced",
-   "triangles": 3480,
+   "triangles": 3466,
    "bbox_mm": {
     "x": [
      -20.0,
@@ -31,8 +31,8 @@
      -0.0
     ]
    },
-   "volume_cm3": 140.19,
-   "mass_g": 378.5
+   "volume_cm3": 135.33,
+   "mass_g": 365.4
   },
   "trigger_housing_pin": {
    "group": "receiver_group",
@@ -255,12 +255,12 @@
      9.5
     ],
     "z": [
-     -104.0,
+     -101.0,
      -25.0
     ]
    },
-   "volume_cm3": 0.5,
-   "mass_g": 3.9
+   "volume_cm3": 0.48,
+   "mass_g": 3.8
   },
   "safety_button": {
    "group": "receiver_group",
@@ -809,12 +809,12 @@
      -14.7
     ],
     "z": [
-     -114.0,
+     -91.0,
      104.4
     ]
    },
-   "volume_cm3": 5.14,
-   "mass_g": 40.4
+   "volume_cm3": 4.62,
+   "mass_g": 36.3
   },
   "action_bar_left": {
    "group": "slide_assembly",
@@ -834,12 +834,12 @@
      -14.7
     ],
     "z": [
-     -114.0,
+     -91.0,
      104.4
     ]
    },
-   "volume_cm3": 5.14,
-   "mass_g": 40.4
+   "volume_cm3": 4.62,
+   "mass_g": 36.3
   },
   "bolt": {
    "group": "bolt_group",
@@ -860,12 +860,12 @@
      -9.5
     ],
     "z": [
-     -108.0,
+     -105.0,
      -21.0
     ]
    },
-   "volume_cm3": 2.67,
-   "mass_g": 21.0
+   "volume_cm3": 2.58,
+   "mass_g": 20.3
   },
   "extractor": {
    "group": "bolt_group",
@@ -910,12 +910,12 @@
      14.8
     ],
     "z": [
-     -74.0,
+     -71.0,
      -29.0
     ]
    },
-   "volume_cm3": 2.65,
-   "mass_g": 20.8
+   "volume_cm3": 2.47,
+   "mass_g": 19.4
   },
   "bolt_slide": {
    "group": "bolt_slide_group",
@@ -935,12 +935,12 @@
      -9.5
     ],
     "z": [
-     -120.0,
-     -42.0
+     -97.0,
+     -40.0
     ]
    },
-   "volume_cm3": 10.13,
-   "mass_g": 79.5
+   "volume_cm3": 7.74,
+   "mass_g": 60.8
   },
   "elevator": {
    "group": "elevator_group",
@@ -1214,8 +1214,8 @@
  },
  "totals": {
   "parts": 40,
-  "triangles": 31040,
-  "mass_g_from_volumes": 2873.0
+  "triangles": 31026,
+  "mass_g_from_volumes": 2831.0
  },
  "params": {
   "muzzle": 516.396694214876,
@@ -1472,7 +1472,7 @@
    12.6,
    15.4
   ],
-  "stroke": 100.0,
+  "stroke": 97.5,
   "lost_motion": 9.5,
   "lug_band": [
    357.6525252525252,
@@ -1515,13 +1515,14 @@
   "butt_half": 22.0,
   "wrist_half": 18.5,
   "bolt": [
-   -108.0,
+   -105.0,
    12.4
   ],
   "bolt_slide": [
-   -120.0,
-   -42.0
+   -97.0,
+   -40.0
   ],
+  "cavity_wall": 5.0,
   "elevator_len": 70.0,
   "elevator_lift": 22.0
  },

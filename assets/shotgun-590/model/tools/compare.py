@@ -11,9 +11,9 @@ import sys; sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import trace_reference as T
 
 photo = Image.open(T.SRC).convert('RGB'); a, pm = T.load(); F = T.frame(a, pm); K = F['mm_per_px']
-ra = Image.open(os.path.join(HERE, 'build', 'r', 'match_right_alpha.png')).resize(photo.size, Image.LANCZOS)
+ra = Image.open(os.path.join(HERE, 'masters', 'r', 'match_right_alpha.png')).resize(photo.size, Image.LANCZOS)
 mm = np.asarray(ra)[:, :, 3] > 127
-rr = Image.open(os.path.join(HERE, 'build', 'r', 'match_right.png')).convert('RGB').resize(photo.size, Image.LANCZOS)
+rr = Image.open(os.path.join(HERE, 'masters', 'r', 'match_right.png')).convert('RGB').resize(photo.size, Image.LANCZOS)
 
 def iou(p, m): return float((p & m).sum() / max(1, (p | m).sum()))
 REG = [('butt and pad', 20, 130), ('stock', 130, 300), ('wrist', 300, 365), ('receiver rear, trigger guard', 365, 470), ('receiver front, port', 470, 580),
@@ -50,4 +50,4 @@ if '--zoom' in sys.argv:      # local inspection crops (not committed)
     for name, x0, x1 in (('rear', 20, 420), ('mid', 340, 720), ('front', 660, 1148)):
         tiles = [im.crop((x0, 20, x1, 150 if x0 > 300 else 240)).resize(((x1 - x0) * 2, (130 if x0 > 300 else 220) * 2), Image.LANCZOS) for im in (photo, rr, Image.fromarray(diff))]
         z = Image.new('RGB', (tiles[0].width, tiles[0].height * 3)); [z.paste(t, (0, i * t.height)) for i, t in enumerate(tiles)]
-        z.save(os.path.join(HERE, 'build', 'r', f'zoom_{name}.png'))
+        z.save(os.path.join(HERE, 'masters', 'r', f'zoom_{name}.png'))

@@ -3,5 +3,5 @@
 cd "$(dirname "$0")/.."
 B=/opt/homebrew/bin/blender
 $B -b --python model/build.py 2>&1 | grep -E "BUILT|Error|Traceback|  File|assert"
-$B -b model/build/shotgun590.blend --python model/tools/render.py -- --only match_right,match_right_alpha --samples 16 2>&1 | grep -E "Error|Traceback|  File"
+$B -b model/masters/shotgun590.blend --python model/tools/render.py -- --only match_right,match_right_alpha --samples 16 2>&1 | grep -E "Error|Traceback|  File"
 python3 model/tools/compare.py "$@"

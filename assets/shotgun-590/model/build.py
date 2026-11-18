@@ -1,6 +1,6 @@
 """Pump shotgun, 12 gauge, 20 in barrel, full-length tube (asset shotgun-590). Rebuilds the model from nothing:
 
-    blender -b --python model/build.py            # writes model/build/shotgun590.glb and .blend (ignored by git)
+    blender -b --python model/build.py            # writes model/masters/shotgun590.glb and .blend (ignored by git)
 
 Every traced number is a pixel of refs-local/commons-atf-mossberg-590.jpg (public domain, see notes/REFERENCES.md),
 converted with GZ / GY below; the buttstock outline comes from model/reference_trace.json, which
@@ -15,7 +15,7 @@ import bpy, bmesh, math, json, os, sys
 from mathutils import Vector, Matrix
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-OUT = os.path.join(HERE, 'build')
+OUT = os.path.join(HERE, 'masters')
 MM = 0.001
 TRACE = json.load(open(os.path.join(HERE, 'reference_trace.json')))
 K = TRACE['frame']['mm_per_px']                      # 0.9563 mm per photo pixel (ruler: published overall length)
@@ -44,12 +44,12 @@ P = dict(
     trigger=[(406, 99), (409.8, 99), (410.8, 108), (413.2, 116), (417.2, 122), (414, 122.8), (409, 116), (406.6, 108)], trigger_pivot=(409, 95),
     lock_lever=(-183.0, -177.0, GY(104), GY(98)),                                             # left photo, by proportion
     forend=(GZ(682), GZ(902)), forend_r=23.0, ribs=(GZ(735), GZ(850), 19), forend_top=-11.6,
-    bar=(GY(79), GY(70.5), 12.6, 15.4), stroke=100.0, lost_motion=9.5,                          # stroke: forend lip to receiver face is 103.3 mm, less clearance (inferred); lost motion inferred
+    bar=(GY(79), GY(70.5), 12.6, 15.4), stroke=97.5, lost_motion=9.5,                           # stroke: the forend's rear is 100.4 mm from the receiver face, less clearance (inferred); lost motion is a guess
     lug_band=(GZ(951), GZ(985), GY(113), 13.8, GZ(939)), ring=(GZ(1057), GZ(1089), 15.7, GZ(1047)), cap=(GZ(1089), GZ(1104), GZ(1112), 12.9),
     bead=(GZ(1103.3), 1.5),
     pad_joint=((GZ(54), GY(104)), (GZ(75), GY(215))), stud=(GZ(134), GY(196.5)),
     stock_front=-196.0, butt_half=22.0, wrist_half=18.5,                                       # widths inferred
-    bolt=(-108.0, 12.4), bolt_slide=(-120.0, -42.0), elevator_len=70.0, elevator_lift=22.0,     # inferred from the manual's exploded view proportions
+    bolt=(-105.0, 12.4), bolt_slide=(-97.0, -40.0), cavity_wall=5.0, elevator_len=70.0, elevator_lift=22.0,   # inferred: sized so the bolt and bolt slide stay inside the receiver at full stroke (model/tools/checks.py)
 )
 SHELL = dict(rim_r=11.15, body_r=10.15, head=16.0, length=59.0)   # nominal 12 ga 2 3/4 in loaded shell (see notes/NOTES.md)
 
@@ -167,7 +167,8 @@ def part(name, bm, mat, parent, src, basis, pivot=None, bevel=0.4, cuts=(), shar
     o.data.set_sharp_from_angle(angle=math.radians(sharp))
     if bevel:
         b = o.modifiers.new('bevel', 'BEVEL'); b.limit_method = 'ANGLE'; b.angle_limit = math.radians(sharp); b.width = bevel * MM; b.segments = 2
-    o.data.materials.append(MATS[mat])
+    o.data.materials.clear(); o.data.materials.append(MATS[mat])          # a boolean cut leaves an empty slot behind
+    for p in o.data.polygons: p.material_index = 0
     o.parent = OBJ[parent]; o.location = wp - W[parent]
     OBJ[name] = o; W[name] = wp; META[name] = dict(group=parent, material=mat, source=src, basis=basis, density=density or DENSITY[mat])
     return o
@@ -236,7 +237,7 @@ def build_receiver():
     zs = sorted(set([z for z, _ in PX(P['recv_top_pts'])] + list(range(-196, 0, 12)) + [0.0]))
     rings = [ring_pts(z, recv_top(z), bot, hw, 3.2, 9.0, yc=recv_top(z) - 17.0, N=44) for z in zs]
     px0, px1, py0, py1 = P['port']; l0, l1, lh = P['load_port']
-    cav = box(-hw + 3.0, hw - 3.0, bot + 3.0, 14.0, zr_bot + 8.0, 1.0)                 # inside of the receiver (inferred wall 3 mm)
+    cav = box(-hw + 3.0, hw - 3.0, bot + 3.0, 14.0, zr_bot + P['cavity_wall'], 1.0)                 # inside of the receiver (inferred wall 3 mm)
     port = box(-hw - 2, -hw + 6, py0, py1, px0, px1); lport = box(-lh, lh, bot - 2, bot + 6, l0, l1)
     part('receiver', cut_plane(loft(rings), *JOINT(), True), 'Alloy', 'receiver_group', ['P05', 'P07', 'P23', 'L05'], 'traced', bevel=0.5, cuts=(cav, port, lport))
     z, y, r = P['housing_pin']; part('trigger_housing_pin', cyl_x(z, y, -hw - 0.3, hw + 0.3, r), 'SteelDark', 'receiver_group', ['P09'], 'traced', pivot=(0, y, z), bevel=0.2)

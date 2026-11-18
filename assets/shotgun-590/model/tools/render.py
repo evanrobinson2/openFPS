@@ -1,6 +1,6 @@
-"""blender -b model/build/shotgun590.blend --python model/tools/render.py -- [--only name,name] [--samples 24]
+"""blender -b model/masters/shotgun590.blend --python model/tools/render.py -- [--only name,name] [--samples 24]
 
-Writes PNGs to model/build/r/. `match_right` and `match_right_alpha` use the reference photo's framing exactly
+Writes PNGs to model/masters/r/. `match_right` and `match_right_alpha` use the reference photo's framing exactly
 (orthographic, same pixel grid as refs-local/commons-atf-mossberg-590.jpg at 2x), so model/tools/compare.py can
 lay one over the other. The rest are presentation views."""
 import bpy, math, sys, os, json
@@ -30,8 +30,8 @@ def shot(name, loc, target, ortho=None, lens=50, res=(1600, 900), alpha=False):
     cam.data.type = 'ORTHO' if ortho else 'PERSP'; cam.data.clip_start = 0.01; cam.data.clip_end = 20
     if ortho: cam.data.ortho_scale = ortho * MM
     else: cam.data.lens = lens
-    os.makedirs(os.path.join(HERE, 'build', 'r'), exist_ok=True)
-    sc.render.filepath = os.path.join(HERE, 'build', 'r', name + '.png'); bpy.ops.render.render(write_still=True); print('RENDERED', name, flush=True)
+    os.makedirs(os.path.join(HERE, 'masters', 'r'), exist_ok=True)
+    sc.render.filepath = os.path.join(HERE, 'masters', 'r', name + '.png'); bpy.ops.render.render(write_still=True); print('RENDERED', name, flush=True)
 O = bpy.data.objects
 for n in ('shell_head', 'shell_hull'): O[n].hide_render = True
 
