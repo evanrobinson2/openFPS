@@ -1,0 +1,123 @@
+{
+ "mangin_first_order": {
+  "what": "Effective focal length of the collimator: ray-transfer matrices (thick Mangin mirror, first order) against the plate scale of the exact ray trace",
+  "paraxial_efl_mm": 94.843248,
+  "ray_trace_efl_mm": 95.595769,
+  "difference_percent": 0.79343618,
+  "note": "The difference is the off-axis geometry: the emitter sits 8.3 degrees off the tube axis and the plate scale is measured in its plane; 1/cos^2 of that angle is the size of the effect.",
+  "passed": true
+ },
+ "thin_lens_parallax": {
+  "what": "Parallax error for 1 mm of eye offset: exact ray trace against the thin-lens relation e * (1/D - 1/D0)",
+  "rows": [
+   {
+    "distance_m": 10,
+    "trace_sagittal_urad": 46.351142,
+    "thin_lens_sagittal_urad": 46.63126,
+    "trace_tangential_urad": 99.795958,
+    "thin_lens_tangential_urad": 99.734241
+   },
+   {
+    "distance_m": 25,
+    "trace_sagittal_urad": -12.664155,
+    "thin_lens_sagittal_urad": -13.36874,
+    "trace_tangential_urad": 40.778222,
+    "thin_lens_tangential_urad": 39.734241
+   },
+   {
+    "distance_m": 50,
+    "trace_sagittal_urad": -32.742955,
+    "thin_lens_sagittal_urad": -33.36874,
+    "trace_tangential_urad": 20.698555,
+    "thin_lens_tangential_urad": 19.734241
+   },
+   {
+    "distance_m": 100,
+    "trace_sagittal_urad": -42.860455,
+    "thin_lens_sagittal_urad": -43.36874,
+    "trace_tangential_urad": 10.580611,
+    "thin_lens_tangential_urad": 9.7342411
+   },
+   {
+    "distance_m": 300,
+    "trace_sagittal_urad": -49.634656,
+    "thin_lens_sagittal_urad": -50.035407,
+    "trace_tangential_urad": 3.8061091,
+    "thin_lens_tangential_urad": 3.0675745
+   }
+  ],
+  "max_difference_urad": 1.0439808,
+  "passed": true
+ },
+ "dot_size": {
+  "what": "Angle between the traced images of the two edges of the emitter",
+  "emitter_diameter_um": 55.615364,
+  "traced_moa": 2.0001149,
+  "wanted_moa": 2.0,
+  "passed": true
+ },
+ "collimation_along_the_axis": {
+  "what": "Largest change in the dot direction when the eye moves 100 mm nearer or farther (centre and 6 mm off axis)",
+  "max_change_urad": 2.0341519,
+  "max_change_moa": 0.0069928992,
+  "passed": true
+ },
+ "window_see_through": {
+  "what": "Residual power of the doublet for the scene (it should be a zero-power window)",
+  "power_dioptre": -0.00051496522,
+  "passed": true
+ },
+ "polynomial_fit": {
+  "what": "Order-5 polynomial of the beam direction against the ray trace over an 11.5 mm eye disc",
+  "max_residual_urad": 0.027181632,
+  "passed": true
+ },
+ "published_parallax": {
+  "what": "Dot movement on the target as the eye sweeps edge to edge across the window, mean over 25, 50 and 100 yd and both axes",
+  "model_mean_moa": 2.2775484,
+  "model_by_distance_and_axis_moa": {
+   "distances_m": [
+    22.86,
+    45.72,
+    91.44
+   ],
+   "sagittal": [
+    0.51549385,
+    1.1429288,
+    1.9791934
+   ],
+   "tangential": [
+    4.7269891,
+    3.0684936,
+    2.2321915
+   ]
+  },
+  "published": {
+   "source": "Green Eye Tactical, \"Comparative Study of Red Dot Sight Parallax\" (2017), as transcribed in a post on the accuratereloading.com optics forum (thread 7031016252), read 2026-11-17. Average deviation over all distances and testers.",
+   "aimpoint_micro_t2_moa": 4.5,
+   "aimpoint_comp_m2_moa": 6.29,
+   "aimpoint_micro_t1_moa": 9.68
+  },
+  "verdict": "The model sits below the published averages for three tube and micro sights. That study had human testers moving their heads, so its figures include more than the optics; this is a plausibility check, not a calibration.",
+  "passed": true
+ },
+ "published_brightness": {
+  "what": "Top daylight setting against the brightest background the class is specified for",
+  "published": "Aimpoint CompM4 product sheet: dot visible against a background luminance of 0.1 to 55,000 lx (seen in a search summary on 2026-11-17, not in the document itself)",
+  "background_luminance_cd_m2": 15756.339,
+  "background_note": "55,000 lx on a 90 percent diffuse white surface: L = E * 0.9 / pi",
+  "top_setting_cd_m2": 200000.0,
+  "weber_contrast": 13.309169,
+  "passed": true
+ },
+ "click": {
+  "what": "Click value against the class figure",
+  "model_mm_at_100m": 14.54441,
+  "published_mm_at_100m": 16.0,
+  "published_source": "Aimpoint CompM4 user manual, section 1.1 Specification",
+  "emitter_shift_per_click_um": 13.903841,
+  "emitter_travel_for_full_range_mm": 3.3369218,
+  "passed": true
+ },
+ "all_passed": true
+}

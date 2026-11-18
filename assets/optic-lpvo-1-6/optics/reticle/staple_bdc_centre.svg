@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000">
+<title>staple BDC (original design, carpetshark). The drawing is 16 mrad wide at 6x.</title>
+<rect width="1000" height="1000" fill="#cfd6cf"/>
+<circle cx="500.00" cy="500.00" r="9.38" fill="#ff2a12"/>
+<path d="M 654.55 449.78 A 162.50 162.50 0 0 0 550.22 345.45" fill="none" stroke="#0a0a0a" stroke-width="8.75"/>
+<path d="M 449.78 345.45 A 162.50 162.50 0 0 0 345.45 449.78" fill="none" stroke="#0a0a0a" stroke-width="8.75"/>
+<path d="M 345.45 550.22 A 162.50 162.50 0 0 0 449.78 654.55" fill="none" stroke="#0a0a0a" stroke-width="8.75"/>
+<path d="M 550.22 654.55 A 162.50 162.50 0 0 0 654.55 550.22" fill="none" stroke="#0a0a0a" stroke-width="8.75"/>
+<line x1="453.12" y1="557.61" x2="546.88" y2="557.61" stroke="#0a0a0a" stroke-width="4.38"/>
+<line x1="453.12" y1="555.42" x2="453.12" y2="565.77" stroke="#0a0a0a" stroke-width="3.12"/>
+<line x1="546.88" y1="555.42" x2="546.88" y2="565.77" stroke="#0a0a0a" stroke-width="3.12"/>
+<circle cx="418.40" cy="557.61" r="4.38" fill="#0a0a0a"/>
+<circle cx="581.60" cy="557.61" r="4.38" fill="#0a0a0a"/>
+<polyline points="609.72,537.61 629.72,537.61 629.72,577.61 609.72,577.61" fill="none" stroke="#0a0a0a" stroke-width="3.12" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="615.72,557.61 629.72,557.61" fill="none" stroke="#0a0a0a" stroke-width="3.12" stroke-linejoin="round" stroke-linecap="round"/>
+<line x1="464.84" y1="634.04" x2="535.16" y2="634.04" stroke="#0a0a0a" stroke-width="4.38"/>
+<line x1="464.84" y1="631.85" x2="464.84" y2="648.64" stroke="#0a0a0a" stroke-width="3.12"/>
+<line x1="535.16" y1="631.85" x2="535.16" y2="648.64" stroke="#0a0a0a" stroke-width="3.12"/>
+<circle cx="382.73" cy="634.04" r="4.38" fill="#0a0a0a"/>
+<circle cx="617.27" cy="634.04" r="4.38" fill="#0a0a0a"/>
+<polyline points="645.40,614.04 645.40,634.04 665.40,634.04" fill="none" stroke="#0a0a0a" stroke-width="3.12" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="665.40,614.04 665.40,654.04" fill="none" stroke="#0a0a0a" stroke-width="3.12" stroke-linejoin="round" stroke-linecap="round"/>
+<line x1="471.88" y1="731.73" x2="528.12" y2="731.73" stroke="#0a0a0a" stroke-width="4.38"/>
+<line x1="471.88" y1="729.54" x2="471.88" y2="749.49" stroke="#0a0a0a" stroke-width="3.12"/>
+<line x1="528.12" y1="729.54" x2="528.12" y2="749.49" stroke="#0a0a0a" stroke-width="3.12"/>
+<circle cx="340.75" cy="731.73" r="4.38" fill="#0a0a0a"/>
+<circle cx="659.25" cy="731.73" r="4.38" fill="#0a0a0a"/>
+<polyline points="707.38,711.73 687.38,711.73 687.38,731.73 707.38,731.73 707.38,751.73 687.38,751.73" fill="none" stroke="#0a0a0a" stroke-width="3.12" stroke-linejoin="round" stroke-linecap="round"/>
+<line x1="476.56" y1="857.33" x2="523.44" y2="857.33" stroke="#0a0a0a" stroke-width="4.38"/>
+<line x1="476.56" y1="855.14" x2="476.56" y2="872.19" stroke="#0a0a0a" stroke-width="3.12"/>
+<line x1="523.44" y1="855.14" x2="523.44" y2="872.19" stroke="#0a0a0a" stroke-width="3.12"/>
+<circle cx="290.65" cy="857.33" r="4.38" fill="#0a0a0a"/>
+<circle cx="709.35" cy="857.33" r="4.38" fill="#0a0a0a"/>
+<polyline points="757.47,837.33 737.47,837.33 737.47,877.33 757.47,877.33 757.47,857.33 737.47,857.33" fill="none" stroke="#0a0a0a" stroke-width="3.12" stroke-linejoin="round" stroke-linecap="round"/>
+<line x1="500.00" y1="678.12" x2="500.00" y2="857.33" stroke="#0a0a0a" stroke-width="2.81"/>
+<line x1="300.00" y1="500.00" x2="-62.50" y2="500.00" stroke="#0a0a0a" stroke-width="4.38"/>
+<line x1="250.00" y1="521.88" x2="250.00" y2="478.12" stroke="#0a0a0a" stroke-width="3.12"/>
+<line x1="187.50" y1="537.50" x2="187.50" y2="462.50" stroke="#0a0a0a" stroke-width="3.12"/>
+<line x1="125.00" y1="521.88" x2="125.00" y2="478.12" stroke="#0a0a0a" stroke-width="3.12"/>
+<line x1="62.50" y1="521.88" x2="62.50" y2="478.12" stroke="#0a0a0a" stroke-width="3.12"/>
+<line x1="0.00" y1="521.88" x2="0.00" y2="478.12" stroke="#0a0a0a" stroke-width="3.12"/>
+<line x1="-62.50" y1="500.00" x2="-2000.00" y2="500.00" stroke="#0a0a0a" stroke-width="37.50"/>
+<line x1="700.00" y1="500.00" x2="1062.50" y2="500.00" stroke="#0a0a0a" stroke-width="4.38"/>
+<line x1="750.00" y1="521.88" x2="750.00" y2="478.12" stroke="#0a0a0a" stroke-width="3.12"/>
+<line x1="812.50" y1="537.50" x2="812.50" y2="462.50" stroke="#0a0a0a" stroke-width="3.12"/>
+<line x1="875.00" y1="521.88" x2="875.00" y2="478.12" stroke="#0a0a0a" stroke-width="3.12"/>
+<line x1="937.50" y1="521.88" x2="937.50" y2="478.12" stroke="#0a0a0a" stroke-width="3.12"/>
+<line x1="1000.00" y1="521.88" x2="1000.00" y2="478.12" stroke="#0a0a0a" stroke-width="3.12"/>
+<line x1="1062.50" y1="500.00" x2="3000.00" y2="500.00" stroke="#0a0a0a" stroke-width="37.50"/>
+<line x1="500.00" y1="947.19" x2="500.00" y2="3000.00" stroke="#0a0a0a" stroke-width="37.50"/>
+</svg>

@@ -1,0 +1,77 @@
+{
+ "js_vs_python": {
+  "what": "largest |JS - Python| over 10 eye positions and 5 distances, in rad",
+  "exact_trace_beam_direction": 2.90694e-13,
+  "exact_trace_parallax_error": 2.706e-13,
+  "polynomial_vs_python_trace": 0.00000777314,
+  "polynomial_vs_python_trace_moa": 0.0267221
+ },
+ "parallax_examples_moa": {
+  "10 m": {
+   "eye_3mm_right": 0.689172,
+   "eye_6mm_right": 1.18956,
+   "eye_6mm_up": 2.23699,
+   "eye_10mm_up": 4.62077
+  },
+  "25 m": {
+   "eye_3mm_right": 0.236177,
+   "eye_6mm_right": 0.399826,
+   "eye_6mm_up": 1.1439,
+   "eye_10mm_up": 2.73923
+  },
+  "50 m": {
+   "eye_3mm_right": 0.292028,
+   "eye_6mm_right": 0.649028,
+   "eye_6mm_up": 0.86012,
+   "eye_10mm_up": 2.16912
+  },
+  "100 m": {
+   "eye_3mm_right": 0.365016,
+   "eye_6mm_right": 0.827829,
+   "eye_6mm_up": 0.76527,
+   "eye_10mm_up": 1.91387
+  },
+  "300 m": {
+   "eye_3mm_right": 0.421589,
+   "eye_6mm_right": 0.954812,
+   "eye_6mm_up": 0.729378,
+   "eye_10mm_up": 1.76149
+  }
+ },
+ "brightness": {
+  "top_setting_on_sunlit_paper": {
+   "label": "8",
+   "luminance": 200000,
+   "contrast": 10.4852,
+   "look": "crisp",
+   "apparentMoa": 2.03465,
+   "halo": 0.000699013,
+   "starburst": false
+  },
+  "lowest_day_setting_indoors": {
+   "label": "1",
+   "luminance": 91.4495,
+   "contrast": 1.59811,
+   "look": "washed_out",
+   "apparentMoa": 2.00532,
+   "halo": 0.000106541,
+   "starburst": false
+  }
+ },
+ "sight_picture": {
+  "front_window_half_angle_deg": 2.67751,
+  "rear_window_half_angle_deg": 4.32687
+ },
+ "zero_tables_vs_ballistics_runtime": {
+  "what": "every zero angle and hold-table row (3 loads, 4 zeros, 19 distances) against HK416Ballistics with the optic mounted (sightHeight 0.07579 m, eyeToMuzzle 0.6239 m)",
+  "max_zero_angle_difference_mrad": 0.0000814373,
+  "max_hold_difference_mrad": 0.000637339,
+  "max_poi_difference_mm": 0.0751667
+ },
+ "speed": {
+  "polynomial_ns": 243.763,
+  "exact_trace_us": 6.5029
+ },
+ "failures": 0,
+ "passed": true
+}
