@@ -41,6 +41,20 @@
 
   <h2>Point of impact with HK's 100 yd zero (mm, + high)</h2>
   <div class="wrap"><table id="poi"></table></div>
+
+  <h2>Barrel and handguard heat</h2>
+  <p>The thermal model of <code>heat/hk416-heat.js</code>, stepped live. Fire a schedule and watch the barrel, gas block and handguard warm and cool; the readout is what a game would use (mirage, handguard comfort, cook-off risk, point-of-impact shift). No sound here.</p>
+  <div class="row">
+    <button class="go" id="h1" disabled>Fire 1</button>
+    <button class="go" id="h30" disabled>30-round magazine, automatic</button>
+    <button class="go" id="h250" disabled>Manual's limit: 250 rounds in 3 min</button>
+    <button id="hstop" disabled>Cease fire</button>
+    <button id="hreset" disabled>Reset to ambient</button>
+    <label>Time <select id="hspeed"><option value="1">Real time</option><option value="10" selected>10×</option><option value="60">60×</option><option value="300">300×</option></select></label>
+    <label>Wind <select id="hwind"><option value="0">Still air</option><option value="3">3 m/s</option><option value="8">8 m/s</option></select></label>
+  </div>
+  <canvas id="heat" width="1000" height="250"></canvas>
+  <div class="wrap"><table id="heatT"></table></div>
 </main>
 <script src="../action/hk416-action.js"></script>
 <script src="../ballistics/hk416-ballistics.js"></script>
@@ -128,6 +142,87 @@ Promise.all([A.load('../action/action.json'), HK416Sound.build(AC)]).then(([, s]
   $('status').textContent = 'Ready. Sound is real time; the mechanism plays in slow motion.';
   drawGun(A.sample(0, {})); drawPlot([], 0.25);
 }).catch((e) => { $('status').textContent = 'Could not load: ' + e.message + ' (serve this folder over http, see USAGE.md)'; });
+</script>
+<script src="../heat/hk416-heat.js"></script>
+<script>
+// ---------------------------------------------------------------- barrel and handguard heat (heat/hk416-heat.js)
+(function () {
+  const $ = (id) => document.getElementById(id), HH = window.HK416Heat;
+  let gun = null, queue = [], simT = 0, last = null;
+  // temperature -> colour: dark steel, then a heat ramp, then the model's own incandescence above 525 C
+  function col(T) {
+    const u = Math.max(0, Math.min(1, (T - 25) / 500)), g = T > 525 ? HH.glow(T) : null;
+    if (g) { const k = Math.min(1, 0.55 + Math.log10(Math.max(g.cdM2, 0.01)) / 6); return `rgb(${Math.round(255 * k * g.rgb[0])},${Math.round(255 * k * g.rgb[1])},${Math.round(255 * k * g.rgb[2])})`; }
+    const stops = [[40, 46, 54], [44, 90, 160], [60, 160, 150], [230, 180, 60], [235, 104, 52]], x = u * (stops.length - 1), i = Math.min(stops.length - 2, Math.floor(x)), f = x - i;
+    return `rgb(${stops[i].map((a, j) => Math.round(a + (stops[i + 1][j] - a) * f)).join(',')})`;
+  }
+  function draw(s) {
+    const c = $('heat').getContext('2d'), W = 1000, H = 250, R = HH.runtime, p = gun.profile(); c.clearRect(0, 0, W, H);
+    const px = 2.35, ox = 40, oy = 150, X = (z) => ox + (z - R.breech_mm) * px;
+    const dzs = R.dz.map((d) => d * 1e3);
+    for (let i = 0; i < R.nz; i++) {                                     // barrel: outer surface colour, bore line in the bore-cell colour
+      const x0 = X(R.z_mm[i] - dzs[i] / 2), w = dzs[i] * px + 0.6, r = R.r_out[i] * 1e3 * px;
+      c.fillStyle = col(p.outerC[i]); c.fillRect(x0, oy - r, w, 2 * r);
+      c.fillStyle = col(p.boreC[i]); c.fillRect(x0, oy - 2.8 * px, w, 5.6 * px);
+    }
+    const m = R.marks_mm;
+    c.fillStyle = col(s.gasBlockC); c.fillRect(X(m.gas_block[0]), oy - 30 * px, (m.gas_block[1] - m.gas_block[0]) * px, 20 * px);     // gas block above the barrel
+    c.fillStyle = col(s.pistonC); c.fillRect(X(18), oy - 23.4 * px, (m.gas_block[0] - 18) * px, 9.8 * px);                              // piston and rod
+    c.fillStyle = col(s.flashHiderC); c.fillRect(X(R.muzzle_mm), oy - 10.6 * px, (m.flash_hider[1] - R.muzzle_mm) * px, 21.2 * px);    // flash hider crown
+    for (let j = 0; j < p.handguardC.length; j++) {                      // handguard: top and bottom walls
+      const i = R.hgi[j], x0 = X(R.z_mm[i] - dzs[i] / 2), w = dzs[i] * px + 0.6, T = p.handguardC[j], ex = T - s.ambientC;
+      c.fillStyle = col(T + 0.2 * ex); c.fillRect(x0, oy - 33.2 * px, w, 3 * px);
+      c.fillStyle = col(T - 0.1 * ex); c.fillRect(x0, oy + 27.6 * px, w, 3 * px);
+    }
+    // heat shimmer: wavy streaks above the handguard and the exposed barrel, as strong as the mirage output
+    const k = s.mirage.strength; if (k > 0.01) {
+      c.strokeStyle = `rgba(233,238,242,${0.12 + 0.5 * k})`; c.lineWidth = 1;
+      const top = Math.min(110, s.mirage.heightM * 1e3 * px * 0.5), ph = performance.now() / 1000 * (0.5 + 4 * s.mirage.riseMps);
+      for (let x = X(10); x < X(m.flash_hider[0]); x += 14) {
+        const y0 = x < X(m.gas_block[0]) ? oy - 34 * px : oy - 10 * px; c.beginPath();
+        for (let y = 0; y < top; y += 4) { const xx = x + Math.sin(y / 9 + ph * 3 + x) * (1 + 5 * k) * (y / top + 0.2); y ? c.lineTo(xx, y0 - y) : c.moveTo(xx, y0 - y); }
+        c.stroke();
+      }
+    }
+    c.fillStyle = '#9aa6b0'; c.font = '12px ui-monospace,Menlo,monospace';
+    c.fillText(`t = ${s.t.toFixed(0)} s   rounds ${s.shots}   ${queue.length ? queue.length + ' rounds to go' : 'not firing'}`, 12, 18);
+    c.fillText('breech', X(R.breech_mm) - 14, H - 8); c.fillText('gas block', X(m.gas_block[0]) - 20, H - 8); c.fillText('muzzle', X(R.muzzle_mm) - 20, H - 8);
+    for (let T = 25, i = 0; T <= 525; T += 100, i++) { c.fillStyle = col(T); c.fillRect(700 + i * 46, 8, 44, 10); c.fillStyle = '#9aa6b0'; c.fillText(T + '', 704 + i * 46, 32); }
+    c.fillText('°C', 980, 32);
+  }
+  function table(s) {
+    const f = (x, n) => x.toFixed(n == null ? 0 : n), co = s.cookoff;
+    const rows = [
+      ['Bore surface at the throat / chamber wall', `${f(s.throatBoreC)} °C / ${f(s.chamberC)} °C`],
+      ['Hottest outer surface (at z)', `${f(s.barrelMaxC)} °C (${f(s.barrelMaxZMm)} mm)`],
+      ['Gas block / flash hider', `${f(s.gasBlockC)} °C / ${f(s.flashHiderC)} °C`],
+      ['Handguard under the hand: surface, skin contact, ISO 13732-1 class', `${f(s.comfort.surfaceC, 1)} °C, ${f(s.comfort.contactC, 1)} °C, ${s.comfort.name.replace(/_/g, ' ')}`],
+      ['Mirage: strength, plume height, jitter on the sight line', `${f(s.mirage.strength, 2)}, ${f(s.mirage.heightM, 2)} m, ${f(s.mirage.jitterMoa, 2)} MOA`],
+      ['Cook-off: risk, a fresh round left chambered would fire after', `${co.risk}, ${isFinite(co.timeS) ? f(co.timeS) + ' s' : 'never'}`],
+      ['Point of impact: barrel bow, velocity gain of the chambered round', `${f(s.poi.bowMoa, 2)} MOA, ${f(s.poi.mvDelta, 1)} m/s`],
+    ];
+    $('heatT').innerHTML = rows.map((r) => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('');
+  }
+  function frame(now) {
+    if (!gun) return;
+    const dt = Math.min(0.1, last == null ? 0 : (now - last) / 1000) * +$('hspeed').value; last = now;
+    let left = dt;
+    while (queue.length && queue[0] <= simT + left) { const d = Math.max(0, queue[0] - simT); gun.advance(d); simT += d; left -= d; gun.fire(); queue.shift(); }
+    gun.advance(left); simT += left;
+    const s = gun.state(); draw(s); table(s);
+    $('hstop').disabled = !queue.length;
+    requestAnimationFrame(frame);
+  }
+  function add(n, rpm) { const t0 = queue.length ? queue[queue.length - 1] + 60 / rpm : simT; for (let i = 0; i < n; i++) queue.push(t0 + i * 60 / rpm); }
+  HH.load('../heat/heat.json').then(() => {
+    gun = HH.create({ wind: +$('hwind').value });
+    $('h1').onclick = () => add(1, 600); $('h30').onclick = () => add(30, HH.runtime.p.cyclic_rpm); $('h250').onclick = () => add(250, 250 / 3);
+    $('hstop').onclick = () => { queue = []; }; $('hreset').onclick = () => { queue = []; gun = HH.create({ wind: +$('hwind').value }); simT = 0; };
+    $('hwind').onchange = () => gun.setEnvironment({ wind: +$('hwind').value });
+    for (const id of ['h1', 'h30', 'h250', 'hreset']) $(id).disabled = false;
+    requestAnimationFrame(frame);
+  }).catch((e) => { $('heatT').innerHTML = '<tr><td>Could not load heat/heat.json: ' + e.message + '</td></tr>'; });
+})();
 </script>
 </body>
 </html>
