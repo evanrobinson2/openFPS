@@ -19,7 +19,7 @@
   than through it. That set the lander's width at 2.2 m.
 - **Lower deck doors** part in the middle, because a single leaf could not slide past the gear wells.
 - **Landing gear.** Front pair folds aft, rear pair folds forward, each into a real well with two doors.
-- **Level of detail.** `--lod 1` leaves out fasteners (178,000 of 409,000 triangles).
+- **Level of detail.** `--lod 1` leaves out fasteners (492,000 triangles down to 269,000).
 
 ## Limits, plainly
 

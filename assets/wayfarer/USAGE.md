@@ -16,7 +16,7 @@ its detail pass. Every section has now had one: cockpit, engine section, landing
 
 | Part | State |
 |---|---|
-| Geometry (`model/`) | A recipe in Blender Python. 149 named objects in eight modules, 1,514 armour plates, 460,000 triangles of which 186,000 are fasteners. It writes `out/wayfarer.glb`, a build output that is never committed. |
+| Geometry (`model/`) | A recipe in Blender Python. 157 named objects in eight modules, 1,514 armour plates, 492,000 triangles of which 189,000 are fasteners. It writes `out/wayfarer.glb`, a build output that is never committed. |
 | Mechanisms | 11 keyed clips: landing gear, lift chassis with its ramp, lander bay doors and cradle, crew hatch, seven sliding doors. Kinematic only: the linkages are solved by geometry, not by forces. |
 | Sockets | 14 named points for the game: eyes, thresholds, muzzles, exhausts, ground. |
 | Checks (`model/tools/checks.py`) | 30 checks pass: the envelope, standing headroom on both decks, door and hatch sizes, the lift and lander fitting their openings, clip lengths. |
@@ -77,10 +77,10 @@ Each module is one file in `model/modules/` and one node under the root `wayfare
 | `cockpit` | Canopy glazing and frame, instrument panel with displays and standby gauges, mode panel, pedestal with keypads and throttle quadrant, side consoles, pedals, overhead panel, two flight seats, two rear stations. The side sticks (`stick_pilot`, `stick_copilot`) and throttles (`throttle_port`, `throttle_stbd`) are their own nodes, pivoted where they turn, for the game to drive. |
 | `engines` | Two main pods (octagonal intake, vanes, ribbed barrel, conduits, fuel manifold, accessory gearbox, nozzle with outer flaps and unison ring), two upper pods with cowls, the centre nozzle and thrust plate, pylons, struts and plumbing. `engine_fan_port` and `engine_fan_stbd` (compressor faces) and `engine_core_bell` (pivoted at its gimbal) are their own nodes for the game to spin and steer. |
 | `landing_gear` | Four legs, each `gear_<pos>_leg` > `_piston` > `_pad`, with torque links, a landing light, an uplock roller, an actuator and two doors, in four wells fitted with an uplock jaw, accumulator, valve block and hydraulic lines. |
-| `lift_chassis` | `lift_cage` (belly plate, truss, deck, posts, rails, control pedestal), `lift_ramp`, `lift_ramp_sill`, `lift_gate_port`, `lift_gate_stbd`, four telescopic rams. |
-| `lander_bay` | Two belly doors, `lander_cradle` on four jack screws, `lander_stub`, guard rails. |
+| `lift_chassis` | `lift_cage` (belly plate, truss, deck, posts, rails, toe boards, control pedestal, work lights, beacons, tie-downs), `lift_ramp`, `lift_ramp_sill`, ramp-end gates `lift_gate_port` and `lift_gate_stbd`, hold-end gates `lift_gate_aft_port` and `lift_gate_aft_stbd`, four telescopic rams, and the fixed guide rails, ram valves and pipework in the hold. |
+| `lander_bay` | Two belly doors, `lander_cradle` (bracing, sway pads, clamp rams) on four jack screws with their drive motors and cross shaft, `lander_stub`, guard rails, and the catwalk fittings: control pedestal, hose reel, service panel, tool board, trestles, extinguishers. |
 | `gadgets` | Nose sensors, chin turret (`chin_turret_ring` > `chin_turret_yaw` > `chin_gun_cradle`), ventral gun pod, keel tanks, dorsal arrays, equipment bay fits, thrusters, nav lights. |
-| `interior` | Viewport glazing, crew hatch, sliding doors, ladder, bunks, lockers, galley, jump seats, racks, reactor, pump skids, switchboard, avionics racks. |
+| `interior` | Viewport glazing, crew hatch, sliding doors, ladder, bunks, lockers, galley, jump seats, racks, reactor, pump skids, switchboard, avionics racks, and one `<room>_details` object per room (`vestibule`, `crew_deck`, `mission_bay`, `engineering`, `lower_deck`) holding the fittings: bedding, galley, stowage, first aid, gauge board, breaker cabinet, workbench, battery boxes, cable trays, intercoms, extinguishers. |
 
 Objects ending in `_bolts` hold the fasteners, one per module, so they can be hidden or dropped at distance.
 
