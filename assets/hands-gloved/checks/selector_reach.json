@@ -16,47 +16,47 @@
  },
  "after_a_small_move_of_the_hand": {
   "tried": 700,
-  "kept_clear_and_in_wrist_range": 135,
+  "kept_clear_and_in_wrist_range": 144,
   "limits": "up to 14 mm along each axis and 16 degrees about each",
   "six_best": [
    {
-    "glove_to_lever_mm": 10.92,
+    "glove_to_lever_mm": 10.18,
     "thumb_inside_rifle_mm": 0.0,
-    "hand_moved_mm": 14.3,
-    "hand_turned_deg": 15.4
+    "hand_moved_mm": 12.9,
+    "hand_turned_deg": 14.3
    },
    {
-    "glove_to_lever_mm": 10.95,
-    "thumb_inside_rifle_mm": 0.0,
-    "hand_moved_mm": 16.5,
-    "hand_turned_deg": 5.6
-   },
-   {
-    "glove_to_lever_mm": 7.84,
-    "thumb_inside_rifle_mm": 0.0,
-    "hand_moved_mm": 9.6,
-    "hand_turned_deg": 12.8
-   },
-   {
-    "glove_to_lever_mm": 10.02,
-    "thumb_inside_rifle_mm": 0.0,
-    "hand_moved_mm": 14.8,
-    "hand_turned_deg": 9.0
-   },
-   {
-    "glove_to_lever_mm": 11.4,
+    "glove_to_lever_mm": 10.9,
     "thumb_inside_rifle_mm": 0.0,
     "hand_moved_mm": 11.7,
-    "hand_turned_deg": 12.9
+    "hand_turned_deg": 12.8
    },
    {
     "glove_to_lever_mm": 11.14,
     "thumb_inside_rifle_mm": 0.0,
     "hand_moved_mm": 12.3,
     "hand_turned_deg": 14.5
+   },
+   {
+    "glove_to_lever_mm": 10.42,
+    "thumb_inside_rifle_mm": 0.0,
+    "hand_moved_mm": 17.5,
+    "hand_turned_deg": 11.7
+   },
+   {
+    "glove_to_lever_mm": 10.73,
+    "thumb_inside_rifle_mm": 0.0,
+    "hand_moved_mm": 14.9,
+    "hand_turned_deg": 13.4
+   },
+   {
+    "glove_to_lever_mm": 10.09,
+    "thumb_inside_rifle_mm": 0.0,
+    "hand_moved_mm": 9.2,
+    "hand_turned_deg": 13.3
    }
   ],
-  "smallest_gap_mm": 7.84
+  "smallest_gap_mm": 10.09
  },
  "geometry": {
   "thumb_base_joint_mm": [

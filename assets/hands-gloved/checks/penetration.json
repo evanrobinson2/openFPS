@@ -2,38 +2,28 @@
  "asset": "hands-gloved",
  "tolerance_mm": 1.0,
  "method": "exact triangle test, see tools/bvh_check.py; the glove is measured with its pads compressed as each frame says, and compression is reported apart (see this script's docstring)",
- "unique_poses_measured": 310,
- "frames_measured": 474,
+ "unique_poses_measured": 339,
+ "frames_measured": 538,
  "max_depth_mm": 0.597,
  "all_within_tolerance": true,
  "hand_against_hand": {
   "note": "CR-2 goal 7. Frames in which the two gloves' boxes come within 2 mm are measured: the deepest vertex of either glove inside a closed shell of the other. Same tolerance. The gloves are not checked against themselves (a finger against its own palm).",
-  "frames_with_hands_near": 102,
-  "pose_pairs_measured": 93,
-  "max_depth_mm": 10.289,
+  "frames_with_hands_near": 93,
+  "pose_pairs_measured": 83,
+  "max_depth_mm": 0.0,
   "worst": {
-   "clip_frame": "charge:16",
-   "shell_entered": "finger_ring",
-   "by": "right glove vertex in left glove"
+   "clip_frame": "bolt_catch:7",
+   "shell_entered": null,
+   "by": null
   },
-  "frames_over_tolerance": [
-   "charge:12",
-   "charge:13",
-   "charge:14",
-   "charge:15",
-   "charge:16",
-   "charge:17",
-   "charge:18",
-   "charge:19",
-   "charge:35"
-  ],
+  "frames_over_tolerance": [],
   "max_depth_by_clip_mm": {
    "bolt_catch": 0.0,
-   "charge": 10.289,
+   "charge": 0.0,
    "mag_in": 0.0,
    "mag_out": 0.0
   },
-  "all_within_tolerance": false
+  "all_within_tolerance": true
  },
  "soft_pads": {
   "note": "Compression, reported apart from interpenetration. commanded: what the frames carry at each pad's middle. overlap_uncompressed: how deep the pad would sit in the rifle with no compression. beyond_limit: overlap that the pad's limit could not take up (must stay within the tolerance). strain: commanded compression less the glove's give, over the tissue thickness.",
@@ -54,9 +44,9 @@
     "limit_mm": 7.12,
     "tissue_mm": 13.44,
     "how": "50 % (SP) of 13.4 mm between the glove and the fifth metacarpal (model geometry; bone half-thickness 4.5 mm I), plus 0.4 mm of glove (I)",
-    "commanded_max_mm": 0.3,
-    "strain_at_commanded_max": 0.0,
-    "overlap_uncompressed_max_mm": 0.651,
+    "commanded_max_mm": 4.12,
+    "strain_at_commanded_max": 0.277,
+    "overlap_uncompressed_max_mm": 0.82,
     "beyond_limit_max_mm": 0.0,
     "within_limit": true
    },
@@ -328,7 +318,7 @@
    }
   },
   "safety_to_fire": {
-   "frames": 14,
+   "frames": 30,
    "max_depth_mm": 0.508,
    "worst": {
     "frame": 1,
@@ -339,6 +329,22 @@
    },
    "frames_over_tolerance": [],
    "per_frame_max_mm": [
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
     0.508,
     0.508,
     0.508,
@@ -363,26 +369,26 @@
     },
     "hypothenar": {
      "limit_mm": 7.12,
-     "commanded_max_mm": 0.0,
-     "overlap_uncompressed_max_mm": 0.472,
+     "commanded_max_mm": 4.12,
+     "overlap_uncompressed_max_mm": 0.82,
      "beyond_limit_max_mm": 0.0
     },
     "midpalm": {
      "limit_mm": 2.4,
      "commanded_max_mm": 0.0,
-     "overlap_uncompressed_max_mm": 0.031,
+     "overlap_uncompressed_max_mm": 0.21,
      "beyond_limit_max_mm": 0.0
     },
     "distal": {
      "limit_mm": 2.9,
-     "commanded_max_mm": 2.26,
-     "overlap_uncompressed_max_mm": 1.682,
+     "commanded_max_mm": 2.43,
+     "overlap_uncompressed_max_mm": 1.861,
      "beyond_limit_max_mm": 0.0
     }
    }
   },
   "safety_to_safe": {
-   "frames": 14,
+   "frames": 30,
    "max_depth_mm": 0.508,
    "worst": {
     "frame": 1,
@@ -393,6 +399,22 @@
    },
    "frames_over_tolerance": [],
    "per_frame_max_mm": [
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
+    0.508,
     0.508,
     0.508,
     0.508,
@@ -417,20 +439,20 @@
     },
     "hypothenar": {
      "limit_mm": 7.12,
-     "commanded_max_mm": 0.0,
-     "overlap_uncompressed_max_mm": 0.205,
+     "commanded_max_mm": 4.12,
+     "overlap_uncompressed_max_mm": 0.82,
      "beyond_limit_max_mm": 0.0
     },
     "midpalm": {
      "limit_mm": 2.4,
      "commanded_max_mm": 0.0,
-     "overlap_uncompressed_max_mm": 0.0,
+     "overlap_uncompressed_max_mm": 0.21,
      "beyond_limit_max_mm": 0.0
     },
     "distal": {
      "limit_mm": 2.9,
-     "commanded_max_mm": 2.39,
-     "overlap_uncompressed_max_mm": 0.965,
+     "commanded_max_mm": 2.43,
+     "overlap_uncompressed_max_mm": 1.861,
      "beyond_limit_max_mm": 0.0
     }
    }
@@ -664,7 +686,7 @@
   },
   "charge": {
    "frames": 49,
-   "max_depth_mm": 0.272,
+   "max_depth_mm": 0.508,
    "worst": {
     "frame": 1,
     "hand": "L",
@@ -674,13 +696,13 @@
    },
    "frames_over_tolerance": [],
    "per_frame_max_mm": [
-    0.272,
+    0.508,
     0.0,
     0.0,
     0.0,
     0.0,
     0.0,
-    0.124,
+    0.0,
     0.0,
     0.0,
     0.0,

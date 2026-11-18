@@ -476,41 +476,41 @@
   },
   "charge_grip": {
    "side": "L",
-   "doc": "Support hand at the charging handle: palm toward the shooter, index fingertip hooked in front of the handle's left wing and latch, the other fingers curled (no reference: inferred).  Moves with the handle.",
+   "doc": "Support hand at the charging handle: palm toward the shooter, index fingertip hooked in front of the handle's left wing and latch, the other fingers curled (no reference: inferred).  Moves with the handle. CR-3: version 3's frame turned 24 degrees about the bore's direction and then 20 degrees about the vertical, both through the hooking point, and moved 8 mm back: the hand arrives flatter and from further forward, its wrist 45 mm higher, 25 mm further left and 34 mm further forward, so its curled fingers pass above the firing hand's thumb instead of through it while the wrist stays far enough from the left shoulder for the elbow to fold through the whole 75 mm draw (a hand turned 28 degrees without the second turn cleared the thumb but came within 157 mm of the shoulder, against the 170 mm a fully folded elbow leaves).  The index pad's point is on the wing's front face (version 3 had it 3.5 mm beyond the wing's tip, and the finger never touched).",
    "carried_by": "charging_handle",
    "socket": "socket_hand_left",
    "hand_in_socket": [
-    0.1119,
-    -0.057985,
-    -0.2632,
-    -0.0453388,
-    0.1105649,
-    0.3766862,
-    0.9186007
+    0.1369,
+    -0.013185,
+    -0.2296,
+    -0.1634005,
+    -0.0449337,
+    0.5391603,
+    0.8249772
    ],
    "hand": [
-    0.1119,
-    -0.0892,
-    -0.1532,
-    -0.0453388,
-    0.1105649,
-    0.3766862,
-    0.9186007
+    0.1369,
+    -0.0444,
+    -0.1196,
+    -0.1634005,
+    -0.0449337,
+    0.5391603,
+    0.8249772
    ],
    "forearm": [
-    0.2883163,
-    -0.2825023,
-    -0.0959119,
-    -0.1417823,
-    0.0702442,
-    0.3451443,
-    0.9251157
+    0.3181606,
+    -0.2338939,
+    -0.0647634,
+    -0.0951777,
+    -0.0390966,
+    0.3705075,
+    0.9231126
    ],
    "angles_deg": {
     "index_mcp_flex": -18.5,
-    "index_mcp_abd": -2.45,
-    "index_pip_flex": 44.31,
-    "index_dip_flex": 30.81,
+    "index_mcp_abd": 2.83,
+    "index_pip_flex": 43.24,
+    "index_dip_flex": 26.56,
     "middle_mcp_flex": 80.0,
     "middle_mcp_abd": 0.0,
     "middle_pip_flex": 95.0,
@@ -538,24 +538,24 @@
     "pad_distal": 0.0
    },
    "arm_deg": {
-    "wrist_flex": -11.5,
-    "wrist_dev": -5.0,
-    "pronation": -44.5,
-    "elbow_flex": 133.4,
-    "swivel": 50.0
+    "wrist_flex": 8.3,
+    "wrist_dev": -22.3,
+    "pronation": -72.2,
+    "elbow_flex": 130.4,
+    "swivel": 47.5
    },
    "solver": {
     "pads_gap_mm": {
-     "index_pad": 6.18
+     "index_pad": 7.88
     },
     "digit_target_error_mm": {
      "middle": 0.0,
      "ring": 0.0,
      "little": 0.0,
      "thumb": 0.0,
-     "index": 5.95
+     "index": 15.2
     },
-    "min_clearance_mm_approx": 0.62,
+    "min_clearance_mm_approx": 0.67,
     "limit_violation_deg": 0.0,
     "place_fit_rms": 0.0,
     "backed_off": 0.0
@@ -654,6 +654,95 @@
     "min_clearance_mm_approx": 0.5,
     "limit_violation_deg": 0.0,
     "place_fit_rms": 0.0
+   }
+  },
+  "fire_select": {
+   "side": "R",
+   "doc": "Firing hand turned on the grip so that its thumb reaches the left selector lever (no reference: inferred). CR-3.  From fire_indexed no thumb pose comes nearer the lever than 10.5 mm, and no small move of the hand nearer than 7.8 mm (checks/selector_reach.json).  This hold is fire_indexed moved as far as the reach needs: a search over the hand's pose and the thumb's joints at three positions of the lever (safe, 58 degrees, fire) for the smallest move with the thumb's glove within reach of the lever at all three, nothing inside the rifle, no finger in the trigger guard, the trigger finger as straight as in fire_indexed, and the arm inside its range for some elbow swivel.  The three other fingers then close on the grip where they can.  The elbow has to come in under the rifle for it (see notes/NOTES.md): this is a hold for the moment of working the lever, not a firing grip.",
+   "carried_by": "static",
+   "socket": "socket_hand_right",
+   "hand_in_socket": [
+    -0.0144047,
+    -0.0055167,
+    -0.0590425,
+    -0.3277796,
+    0.8496681,
+    0.2686736,
+    -0.3137502
+   ],
+   "hand": [
+    -0.0144047,
+    -0.1125397,
+    -0.2374145,
+    -0.3277796,
+    0.8496681,
+    0.2686736,
+    -0.3137502
+   ],
+   "forearm": [
+    0.0153576,
+    -0.3471274,
+    -0.3633241,
+    -0.1443891,
+    0.8973525,
+    0.2032849,
+    -0.364123
+   ],
+   "angles_deg": {
+    "index_mcp_flex": -18.5,
+    "index_mcp_abd": -8.98,
+    "index_pip_flex": 38.62,
+    "index_dip_flex": 16.18,
+    "middle_mcp_flex": 38.4,
+    "middle_mcp_abd": -7.44,
+    "middle_pip_flex": 24.05,
+    "middle_dip_flex": -5.15,
+    "ring_mcp_flex": 31.48,
+    "ring_mcp_abd": 16.9,
+    "ring_pip_flex": 18.15,
+    "ring_dip_flex": 21.03,
+    "little_mcp_flex": 89.5,
+    "little_mcp_abd": -19.5,
+    "little_pip_flex": -6.5,
+    "little_dip_flex": 16.72,
+    "thumb_cmc_flex": -4.57,
+    "thumb_cmc_abd": -2.78,
+    "thumb_cmc_rot": 0.38,
+    "thumb_mcp_flex": 25.29,
+    "thumb_ip_flex": 59.12,
+    "mc4_flex": 4.57,
+    "mc5_flex": 6.35,
+    "mc2_flex": -0.88,
+    "mc3_flex": 1.72,
+    "pad_thenar": 0.0,
+    "pad_hypothenar": 4.12,
+    "pad_midpalm": 0.0,
+    "pad_distal": 0.0
+   },
+   "arm_deg": {
+    "wrist_flex": -0.7,
+    "wrist_dev": -23.7,
+    "pronation": 53.5,
+    "elbow_flex": 122.5,
+    "swivel": -10.0
+   },
+   "solver": {
+    "pads_gap_mm": {
+     "thumb_glove_to_lever_frame_1": 0.58,
+     "thumb_glove_to_lever_frame_4": 0.51,
+     "thumb_glove_to_lever_frame_6": 0.59
+    },
+    "digit_target_error_mm": {
+     "middle": 0.0,
+     "ring": 0.0,
+     "little": 0.0,
+     "index": 0.0,
+     "thumb": 0.59
+    },
+    "min_clearance_mm_approx": 0.51,
+    "limit_violation_deg": 0.0,
+    "move_mm": 28.9,
+    "turn_deg": 50.7
    }
   }
  }

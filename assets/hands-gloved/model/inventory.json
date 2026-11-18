@@ -513,14 +513,14 @@
    "pre_roll": 5
   },
   "safety_to_fire": {
-   "frames": 14,
+   "frames": 30,
    "rifle_clip": "safety_to_fire",
-   "pre_roll": 4
+   "pre_roll": 12
   },
   "safety_to_safe": {
-   "frames": 14,
+   "frames": 30,
    "rifle_clip": "safety_to_safe",
-   "pre_roll": 4
+   "pre_roll": 12
   },
   "bolt_catch": {
    "frames": 36,
@@ -559,7 +559,7 @@
   "socket_wrist_right"
  ],
  "skinning_parity": {
-  "grips": 7,
+  "grips": 8,
   "worst_vertex_difference_mm": 0.00011,
   "note": "Blender's armature modifier against handlib's linear-blend skinning, every shell vertex, every grip"
  },

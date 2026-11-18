@@ -1,6 +1,6 @@
 {
  "asset": "hands-gloved",
- "values_checked": 15642,
+ "values_checked": 17754,
  "outside_limits": 0,
  "all_within_limits": true,
  "sources": {
@@ -80,7 +80,7 @@
    "pass_": true
   },
   "safety_to_fire": {
-   "frames": 14,
+   "frames": 30,
    "smallest_margin_deg": 0.5,
    "at": {
     "frame": 1,
@@ -93,7 +93,7 @@
    "pass_": true
   },
   "safety_to_safe": {
-   "frames": 14,
+   "frames": 30,
    "smallest_margin_deg": 0.5,
    "at": {
     "frame": 1,
@@ -146,14 +146,14 @@
   },
   "charge": {
    "frames": 49,
-   "smallest_margin_deg": 0.01,
+   "smallest_margin_deg": 0.02,
    "at": {
-    "frame": 23,
+    "frame": 39,
     "hand": "L",
-    "joint": "wrist_dev",
-    "value": -29.99,
-    "min": -30,
-    "max": 20
+    "joint": "pronation",
+    "value": -79.98,
+    "min": -80,
+    "max": 80
    },
    "pass_": true
   },
@@ -229,7 +229,7 @@
    "source": "BA"
   },
   "ring_mcp_flex": {
-   "min_seen": 12.62,
+   "min_seen": 9.23,
    "max_seen": 80.0,
    "limit_min": -19,
    "limit_max": 90,
@@ -237,20 +237,20 @@
   },
   "ring_mcp_abd": {
    "min_seen": -10.53,
-   "max_seen": 2.66,
+   "max_seen": 16.9,
    "limit_min": -20,
    "limit_max": 20,
    "source": "K"
   },
   "ring_pip_flex": {
-   "min_seen": 0.82,
+   "min_seen": 0.93,
    "max_seen": 97.72,
    "limit_min": -7,
    "limit_max": 101,
    "source": "BA"
   },
   "ring_dip_flex": {
-   "min_seen": 1.03,
+   "min_seen": 2.1,
    "max_seen": 55.0,
    "limit_min": -6,
    "limit_max": 84,
@@ -264,7 +264,7 @@
    "source": "BA"
   },
   "little_mcp_abd": {
-   "min_seen": -17.49,
+   "min_seen": -19.5,
    "max_seen": 5.21,
    "limit_min": -20,
    "limit_max": 20,
@@ -286,7 +286,7 @@
   },
   "thumb_cmc_flex": {
    "min_seen": -26.0,
-   "max_seen": 5.0,
+   "max_seen": 6.07,
    "limit_min": -26.5,
    "limit_max": 26.5,
    "source": "CO"
@@ -314,7 +314,7 @@
   },
   "thumb_ip_flex": {
    "min_seen": -4.5,
-   "max_seen": 35.03,
+   "max_seen": 60.98,
    "limit_min": -5,
    "limit_max": 73,
    "source": "HU"
@@ -356,7 +356,7 @@
   },
   "pad_hypothenar": {
    "min_seen": 0.0,
-   "max_seen": 0.3,
+   "max_seen": 4.12,
    "limit_min": 0.0,
    "limit_max": 7.12,
    "source": "SP"
@@ -377,28 +377,28 @@
   },
   "wrist_flex": {
    "min_seen": -69.93,
-   "max_seen": 18.3,
+   "max_seen": 34.8,
    "limit_min": -70,
    "limit_max": 80,
    "source": "AA"
   },
   "wrist_dev": {
-   "min_seen": -29.99,
+   "min_seen": -29.93,
    "max_seen": 19.97,
    "limit_min": -30,
    "limit_max": 20,
    "source": "AA"
   },
   "pronation": {
-   "min_seen": -79.88,
-   "max_seen": 33.22,
+   "min_seen": -79.98,
+   "max_seen": 53.51,
    "limit_min": -80,
    "limit_max": 80,
    "source": "AA"
   },
   "elbow_flex": {
    "min_seen": 83.25,
-   "max_seen": 149.7,
+   "max_seen": 144.69,
    "limit_min": 0,
    "limit_max": 150,
    "source": "AA"
