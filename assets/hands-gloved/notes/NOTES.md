@@ -1,7 +1,9 @@
 # Notes: decisions, inferences, results, limits
 
-Version 3, 2026-11-18, modelled by Claude Fable 5.2. Credit: carpetshark. Versions 1 and 2 are the earlier commits in this
-folder's history; their numbers are kept in the "before" columns below.
+Version 4, 2026-11-18, modelled by Claude Fable 5.2. Credit: carpetshark. Versions 1 to 3 are the earlier commits in this
+folder's history (version 3: `b123f6e`); their numbers are kept in the "before" columns below. Sections not marked
+version 4 are version 3's and still hold: the hand recipe and the grips `fire`, `fire_indexed`, `fire_reach`, `support`,
+`mag_grip` and `catch_ready` did not change.
 
 ## Change requests (rule 7)
 
@@ -9,6 +11,20 @@ folder's history; their numbers are kept in the "before" columns below.
 |---|---|---|---|
 | CR-1 | 2026-11-17 | The owner's review of version 1: references R1 to R3 approved; make version 2 with (1) a folding palm; (2) the firing grip re-solved against R1 and R3 with a numerical comparison; (3) the support grip brought onto R2; (4) contact within 1 mm at the magazine release and at the selector, interpenetration still at most 1.0 mm; (5) the little-finger length row fixed or justified; (6) if time allows, stock and sight clips and a hand-against-hand check. | **Version 2 built; four of the six items are met only in part, and the selector is not reached. Item by item below.** Approved by the owner in the project thread, message `cmsg_01K1vC6sgxYrGKq5a7aX428P3KySEwyFdWgdFJWbWQTJbj`, 2026-11-18 02:49 UTC ("appprove"); the modeller of version 2 read that message itself. |
 | CR-2 | 2026-11-18 | The owner was shown version 2 and asked whether he wanted another round. His instruction was to keep the work moving; the next round was named as compressible palm pads, metacarpal flex and the sleeve fix. Goals as passed to the modeller, in priority order: (1) thenar, hypothenar and mid-palm pads and glove padding as soft tissue with sourced limits, compression reported apart from interpenetration; (2) flexion of the 2nd and 3rd metacarpals and metacarpal arching; (3) firing grip against R1 and R3, web high under the tang, three fingers round the grip; (4) thumb on the selector within 1 mm, or numbers showing why not; (5) the forearm sleeve must not hide the hand; (6) keep what version 2 met, improve the support grip and the trigger pad; (7) if time allows, stock and sight clips and hand against hand. Also: fingers, knuckles and seams must read in the matched views. | **Version 3 built. Of the seven goals two are met, three in part and two not; goal by goal below.** This was a direction to continue, not an approval of anything: the owner has not reviewed version 2's result or version 3's. References R1 to R3 stay as approved under CR-1. |
+| CR-3 | 2026-11-18 | Passed on by the main session while the owner slept: he had said to keep the work moving. **An interim, reversible choice that he may change; not his approval of any result.** Keep the level firing grip that matches R1 and R3; do not adopt the tucked-elbow grip; do not change `fire` or `fire_indexed`. Goal 1: give `safety_to_fire` and `safety_to_safe` their own deliberate hand move, as large as it needs, trigger finger straight and away from the trigger, thumb on the lever (glove within 1.0 mm) through the lever's whole stroke in step with the rifle's clip, hand back exactly on the level grip, interpenetration at most 1.0 mm in every frame, joint limits respected, no frame with the index finger in the trigger guard; report the size of the move. Goal 2, if it fits: fix the hand-against-hand failure in `charge` by reworking its approach. Keep everything version 3 met; relax no check. | Version 4. Both goals met by the numbers; the selector move is large and takes the elbow under the rifle. See "CR-3" below. **Not reviewed by the owner.** |
+
+### CR-3 (version 4), goal by goal
+
+| Goal | Before (version 3) | After (version 4) | Met? |
+|---|---|---|---|
+| 1a. Thumb's glove within 1.0 mm of the lever through the lever's whole stroke | 12.1 and 11.7 mm short; the hand did not move | `safety_to_fire`: 0.34, 0.40, 0.51, 0.40, 0.37, 0.42 mm in the six frames of the rifle's clip. `safety_to_safe`: 0.50, 0.45, 0.37, 0.51, 0.45, 0.46 mm | **Yes.** |
+| 1b. Interpenetration at most 1.0 mm in every frame | 0.51 mm | 0.51 mm at worst in both clips, and that is the support hand's cuff at rest; the firing hand is never deeper | **Yes.** |
+| 1c. Joint limits | 0 outside | 0 of 17,754 values outside; in the two clips the smallest margin is 0.5 degrees, the trigger finger's knuckle as in the firing grip. The arm is kept 1.5 degrees inside its limits through the move | **Yes.** |
+| 1d. Trigger finger straight and out of the trigger guard | Not measured | No glove vertex of any finger inside the guard's window in any of the 60 frames (the same test finds at least 78 vertices of the index finger there in every frame of `trigger_pull`). The trigger finger keeps the firing grip's joint angles throughout and never comes nearer the trigger than 19.3 mm | **Yes.** |
+| 1e. Hand returns exactly to the level grip | It never left | Last frame equals first: 0.0 mm, 0.0 degrees, every angle equal | **Yes.** |
+| 1f. Size of the move | None | **The wrist joint moves 28.9 mm and the hand turns 50.7 degrees; the elbow swings from 55 degrees out to 10 degrees inside straight down, 292 mm at the elbow's point.** Knuckle pads move 22 (index) to 43 mm (little), the trigger finger's tip 90 mm. Mid-move the hand is up to 42.7 mm and 56.8 degrees from the firing grip. Twelve frames (0.5 s) each way | Reported. **It is a large move; see below.** |
+| 2. `charge`: hand against hand | 10.3 mm, frames 12 to 19 and 35 | 0.0 mm in every one of the 93 frames where the hands come near; the gloves are never closer than 4.8 mm in `charge`. Its other checks: interpenetration 0.51 mm (was 0.27), limits 0 outside (smallest margin 0.02 degrees, forearm, in the return), index finger on the handle at 0.29 mm in 14 frames (was 6.2 mm, never touching) | **Yes.** |
+| Keep: everything version 3 met | | Unchanged clips are taken frame for frame from version 3. Interpenetration 0.60 mm at worst; magazine release 0.51 and 0.51 mm; trigger 0.40 mm; bolt catch 0.42 mm; runtime parity 2.3 micrometres; proportions 10 of 10; comparison with R1, R2, R3 unchanged (16.2 mm, 21.3 mm, 15.1 degrees) | **Yes.** No check was relaxed. |
 
 ### CR-2, goal by goal
 
@@ -54,7 +70,7 @@ folder's history; their numbers are kept in the "before" columns below.
 | 3. Studies and grammar | Done (`STUDIES.md`); version 3 added the soft pads, the four metacarpals, the knuckles and the sleeve. |
 | 4. Procedural reconstruction | Done: `model/`, `grips/`, `clips/`. |
 | 5. Matched comparison | Done with numbers for all three references and two first-person views. **It still shows clear differences. This is not a faithful translation yet.** |
-| 6. Owner review | Not done for version 2 or version 3. The list is at the end of this file. |
+| 6. Owner review | Not done for version 2, 3 or 4. The list is at the end of this file. Version 4's two clips have no reference: they are inferred motion, checked structurally and shown in frame strips, and nothing about them is a comparison with a source. |
 
 Structural results (proportions, limits, interpenetration, compression, contact, runtime parity) and visual results are
 separate things. The structural checks say nothing about whether the hands look like the references.
@@ -64,13 +80,15 @@ separate things. The structural checks say nothing about whether the hands look 
 | Check | Result | File |
 |---|---|---|
 | Proportions | Unchanged dimensions. Ten independent finger-length rows, all inside 6 %, worst 1.9 % (index). | `checks/proportions.json` |
-| Joint limits | 15,642 values (25 joint angles and 4 pad compressions per hand, 4 arm angles): 0 outside. Margins of 0.0 degrees exist where a pose was clamped at a limit. | `checks/limits.json` |
-| Contact | Trigger: touching in 10 of 10 frames (0.40 mm). Magazine release: 0.51 and 0.51 mm. Bolt catch: 0.42 mm. Selector: 12.1 and 11.7 mm, not touching. Charging handle: 6.2 mm, not touching (the finger hooks in front of it). | `checks/contact.json` |
-| Selector reach | From the firing grip 10.5 mm at best; 7.8 mm at best after any of 135 small moves of the hand that stay clear and in wrist range. | `checks/selector_reach.json` |
-| Interpenetration with the rifle | 474 hand-frames (310 distinct poses) against the rifle's triangles, pads compressed as each frame says: deepest 0.60 mm (support hand's cuff against the magazine well's flare); tolerance 1.0 mm. | `checks/penetration.json` |
-| Soft-pad compression | Most in any frame: distal palm 2.43 mm of 2.90 (41 % strain), hypothenar 0.30 of 7.12, thenar 0 of 5.30, mid-palm 0 of 2.40. Without compression those pads would sit 1.86, 0.65, 0 and 0.21 mm inside the rifle. Nothing beyond what a limit could take up. | `checks/penetration.json` (`soft_pads`) |
-| Hand against hand | 102 frames with the hands near each other, 93 distinct pairs of poses: 0 mm in three clips, 10.3 mm in `charge`. **Fails.** | `checks/penetration.json` (`hand_against_hand`) |
-| Runtime parity | JS fingertips against the Python recipe: worst 2.72 micrometres over 2,370 points. Blender skinning with the pads' shape keys against the recipe: 0.00011 mm. | `checks/test_runtime.js`, `model/inventory.json` |
+| Joint limits | Version 4: 17,754 values, 0 outside. Version 3: 15,642 values (25 joint angles and 4 pad compressions per hand, 4 arm angles): 0 outside. Margins of 0.0 degrees exist where a pose was clamped at a limit. | `checks/limits.json` |
+| Contact | Trigger: touching in 10 of 10 frames (0.40 mm). Magazine release: 0.51 and 0.51 mm. Bolt catch: 0.42 mm. Selector: version 4, 0.34 and 0.37 mm, touching in all six frames of the lever's stroke in both clips (version 3: 12.1 and 11.7 mm, not touching). Charging handle: version 4, 0.29 mm, touching in 14 frames (version 3: 6.2 mm, not touching). | `checks/contact.json` |
+| Selector reach | From the firing grip 10.5 mm at best; after a small move of the hand 10.1 mm at best of 144 that stay clear and in wrist range (version 3 reported 7.8 mm of 135 from a file older than its last grip; see "CR-3"). | `checks/selector_reach.json` |
+| Selector scan (version 4) | 24,000 hand poses, 1,827 kept, 107 reach the lever at both ends; none turned under 45 degrees, none with the elbow more than 15 degrees out. | `checks/selector_scan.json` |
+| Selector move (version 4) | Both safety clips pass every condition of CR-3 goal 1; the move is 28.9 mm and 50.7 degrees at the wrist and 292 mm at the elbow. | `checks/selector_move.json` |
+| Interpenetration with the rifle | Version 4: 538 hand-frames (339 distinct poses), deepest 0.60 mm, the same place. Version 3: 474 hand-frames (310 distinct poses) against the rifle's triangles, pads compressed as each frame says: deepest 0.60 mm (support hand's cuff against the magazine well's flare); tolerance 1.0 mm. | `checks/penetration.json` |
+| Soft-pad compression | Most in any frame: distal palm 2.43 mm of 2.90 (41 % strain), hypothenar 4.12 of 7.12 (version 4, in the selector hold; version 3: 0.30), thenar 0 of 5.30, mid-palm 0 of 2.40. Without compression those pads would sit 1.86, 0.65, 0 and 0.21 mm inside the rifle. Nothing beyond what a limit could take up. | `checks/penetration.json` (`soft_pads`) |
+| Hand against hand | Version 4: 93 frames with the hands near each other, 83 distinct pairs of poses: 0.0 mm in all four clips. **Passes.** Version 3: 102 frames, 10.3 mm in `charge`, failed. | `checks/penetration.json` (`hand_against_hand`) |
+| Runtime parity | JS fingertips against the Python recipe: worst 2.33 micrometres over 2,690 points (version 3: 2.72 over 2,370). Blender skinning with the pads' shape keys against the recipe: 0.00011 mm. | `checks/test_runtime.js`, `model/inventory.json` |
 | Matched comparison | R1: mean 16.2 mm. R2: mean 21.3 mm. R3: index finger 15.1 degrees from the other three against 2.5 in the photograph. Sleeve: table above. | `checks/comparison.json`, `renders/` |
 
 The interpenetration tolerance is unchanged: 1.0 mm, everywhere. Version 2 allowed no compression at all; version 3 lets
@@ -112,6 +130,68 @@ thumb still cannot reach the selector.** The cause is not the palm's stiffness. 
 
 What would change it, in the order I would try: a web that drapes (item 3); a measured position of the thumb's base
 and web (item 5); a different stance for the firing arm, which is the owner's call (item 1).
+
+## CR-3: the move to the selector (version 4)
+
+What was built, what it rests on, and what it does not show. All of it is inferred: no reference shows a hand at the
+selector, and none was chosen for it.
+
+1. **How far the hand has to go** (`checks/selector_scan.json`). 24,000 hand poses as moves from the firing grip; 1,827
+   leave the palm and the trigger finger clear of the rifle and the arm in range; each was tried with 3,000 thumb poses
+   at both ends of the lever's travel. None of the 879 poses turned less than 45 degrees reaches both ends (best: 1.5
+   mm short at 35 to 45 degrees, 6.2 mm at 25 to 35). 107 reach, all with the hand turned 45 degrees or more.
+2. **The elbow has to come in.** The firing grip fits the arm only with the elbow 50 to 90 degrees out. Of the poses
+   that reach, none fits an elbow more than 15 degrees out, and with the elbow kept 30 degrees or more out the best is
+   5.5 mm short. So the reach belongs to the other way of holding the arm, the one version 3 found and rejected as a
+   firing grip. CR-3 says not to adopt it as the grip; here the hand goes there for the lever and comes back.
+3. **The hold** (`fire_select`, `grips/solve.py` `solve_select`). Started from the scan's smallest reaching move and
+   searched on the hand's pose and the thumb at three positions of the lever for the smallest move that keeps the
+   thumb's glove on the lever at all three: wrist moved 28.9 mm, hand turned 50.7 degrees, thumb 0.58, 0.51 and 0.59
+   mm from the lever. The three fingers close loosely on the grip; the palm leaves the grip's right face.
+4. **The way there** (`clips/make.py` `transit`). No single elbow position serves both holds, and halfway along the
+   straight blend between them no elbow position fits at all (1.9 degrees past a limit at the worst point). So the elbow is swung
+   evenly from 55 to -10 degrees over twelve frames and at each frame the hand is moved off the blend by the least that
+   keeps the arm 1.5 degrees inside its limits at that elbow position and everything clear: up to 35 mm and 12 degrees
+   off the blend, with the fingers and thumb opened in the middle of the move. Fastest: elbow swivel 9 degrees a frame,
+   hand 15.8 degrees a frame.
+5. **The thumb on the lever** (`ride_lever`). Hand held still; per frame of the rifle's clip the thumb's joints are
+   searched for glove on lever, with the vertex that starts nearest the lever pulled to stay on its spot of the lever.
+   It slips 3.0 mm along the lever in `safety_to_fire` and 8.6 mm in `safety_to_safe`.
+
+**What this does not show.**
+- **It is contact, not a push.** The thumb's glove lies on the lever's outer face (4 mm out from the wall, within 3 mm
+  of the lever's centre line), not behind an edge of it. Nothing measures force. In `safety_to_safe` the thumb starts
+  over the pivot and ends 11 mm out along the lever.
+- **It is a big, slow way to work a selector**: half a second each way and a 292 mm swing of the elbow for a lever that
+  turns in a quarter of a second. It follows from this model's stance, wrist limits and rigid web (the three things
+  version 3's notes name), not from how the drill is taught. A draping web or a measured thumb base would probably
+  shorten it; that is still the proposed next change.
+- Mid-move the three fingers stand straight out from the grip (frames 7 to 10 of the strip). Inside the limits and
+  clear of everything, and odd to look at.
+- The middle finger's tip passes near the trigger guard's front while the hand is at the lever. Not inside its window
+  by the check; visible in the strip.
+- The hypothenar pad is pressed 4.12 mm of its 7.12 mm limit in these clips (version 3's most: 0.30 mm).
+- The cuff and sleeve are not checked against the rifle with the elbow under it, beyond the glove's own check.
+- The hold is solved by a random search; of two runs one ended at 13.5 and one at 4.5 on its score, and the better is
+  kept. A rebuild gives the same result (fixed seeds), a changed rifle or hand may not.
+
+**A correction to version 3.** `checks/selector_reach.json` was rerun unchanged and its second figure moved: the best
+after a small move of the hand is 10.1 mm, not 7.8 mm (144 moves kept, not 135). Version 3's file had been written
+before the firing grip's last re-solve. The first figure (10.5 mm from the firing grip) is the same. CR-3's brief quoted
+7.8 mm.
+
+## CR-3: `charge` (version 4)
+
+Version 3's support hand reached the handle from below with its three curled fingers hanging where the firing hand's
+thumb lies, and went through it. Now: (a) the hold is turned 24 degrees about the bore's direction and 20 degrees about
+the vertical, both through the hooking point, and set 8 mm back, so the wrist is 45 mm higher, 25 mm further left and
+34 mm further forward; turning it flatter alone cleared the thumb but brought the wrist within 157 mm of the left
+shoulder at full draw, nearer than a folded elbow allows (170 mm). (b) The index pad's point is on the wing's front
+face (version 3 had it 3.5 mm beyond the wing's tip) and the finger is closed on the handle. (c) The hand leaves the
+handguard down and outboard, arrives from outboard and ahead, and is turned 15 degrees toward pronation at both
+waypoints; without that the forearm ran up to 8.5 degrees past its limit in between. The clearance pass now moves a
+frame 36 mm at most (version 3: 81 mm). All of it inferred; the waypoints are in `clips/make.py` (`CHARGE_OFF`,
+`CHARGE_ON`, `CHARGE_ROLL`). The index finger's knuckle is bent back 17.5 degrees in the hold, of the 19 its limit allows.
 
 ## What the comparison shows
 
@@ -196,8 +276,10 @@ kept in `proportions.json` as `reported` (-6.1 % and -5.6 %).
 | Thumb of the firing hand (never visible in a reference) | toward the left of the grip | R1-F09. |
 | The slide forward for the magazine release | the wrist moves 6.5 mm and turns 3.3 degrees (asked: 9 mm along the grip) | `mag_release`, `mag_out`. |
 | All of `bolt_catch`, `charge`, `mag_out`, `mag_in`, selector and release clips | `STUDIES.md` study 6 | No reference shows them. |
-| A frame that would cut through the rifle is moved clear | `clips/make.py` `ESCAPE` | Up to 81 mm in `charge`; for the firing hand up to 8.4 mm (`mag_release`, `mag_out`), 6.6 mm (`safety_to_fire`); version 2: 4 mm. |
-| A frame that asks for more elbow flexion than there is has its hand moved out along the shoulder-wrist line | 1.45 mm in `charge` | Joint limits. |
+| Version 4: the selector hold, the twelve frames each way, the even swing of the elbow, the 1.5 degree arm margin, the window taken as the trigger guard | `grips/solve.py` `solve_select`, `TRIGGER_GUARD`; `clips/make.py` `SEL_IN`, `transit` | The whole of both safety clips. |
+| Version 4: the charging hold's direction and the waypoints to it | `spec_charge_grip`, `CHARGE_OFF`, `CHARGE_ON`, `CHARGE_ROLL` | `charge`. |
+| A frame that would cut through the rifle is moved clear | `clips/make.py` `ESCAPE` | Up to 36 mm in `charge` (version 3: 81 mm); for the firing hand up to 8.4 mm (`mag_release`, `mag_out`), none in the safety clips (version 3: 6.6 mm); version 2: 4 mm. |
+| A frame that asks for more elbow flexion than there is has its hand moved out along the shoulder-wrist line | None in version 4 (version 3: 1.45 mm in `charge`) | Joint limits. |
 
 ## Sources
 
@@ -215,7 +297,8 @@ figure, and the bone half-thicknesses used for the pads. Each is marked in `mode
 
 - Rifle clips with no hand clip: `stock_extend`, `stock_collapse`, `sights_up`, `sights_down` (CR-1 item 6, CR-2 goal 7).
 - A hand against its own fingers is not measured.
-- `charge` has the hands passing through each other (above); not fixed.
+- Fixed in version 4: `charge` had the hands passing through each other.
+- The selector move is checked for where the glove is, not for whether the thumb could push the lever ("CR-3").
 - R1's support hold on the front of the magazine well (R1-S01) is not a grip here.
 - The printed pattern and the maker's lettering on R1's glove (on purpose), fabric texture, stitching.
 - Only the 50th-percentile hand is solved against the rifle.
@@ -228,6 +311,20 @@ figure, and the bone half-thicknesses used for the pads. Each is marked in `mode
 
 ## For the owner to review
 
+Version 4 first (CR-3 was an interim choice made while the owner slept; any of it can be undone, version 3 is `b123f6e`):
+
+1. **The selector move**: `renders/selector_move_safety_to_fire.jpg` and `renders/selector_move_safety_to_safe.jpg`
+   (thirteen frames each; rows: from the left, from the right, from behind). It meets every number asked and it is a
+   half-second move with the elbow swinging under the rifle and back. Keep it, shorten it by changing the stance or
+   softening the web, or go back to version 3's thumb that stops short?
+2. Whether a thumb lying on the lever's face counts as working it, or the clip must show it behind an edge.
+3. **`charge`**: `renders/charge_strip.jpg`. The hand now comes in flatter and from further forward and no longer
+   passes through the firing hand. Does the approach read as right?
+4. The firing grip's two answers, still open, and now with a third use: the tucked hold is where the hand goes for the
+   selector.
+
+Carried over from version 3:
+
 1. The pictures: `renders/compare_R1_firing_grip.jpg`, `compare_R2_support_grip.jpg`,
    `compare_R3_indexed_and_magazine_grip.jpg`, `first_person_low_ready.jpg`, `first_person_sights.jpg`, and the
    side-by-sides with the photographs in `refs-local/build/compare/` (local; rebuild with `checks/compare.py`).
@@ -236,8 +333,8 @@ figure, and the bone half-thicknesses used for the pads. Each is marked in `mode
    hand rising 37 degrees, R1 at 42 mm. Which one, or neither?
 3. **The stance** (stock extended for the arms only, firing elbow 55 degrees out). It decides item 2.
 4. Whether the next change request should be a web that drapes and a measured thumb base, as proposed above.
-5. Whether the selector clips may ship while the thumb stops 12 mm short.
-6. `charge`: the hands pass through each other by up to 10 mm. Rework the approach, or accept for now?
+5. (Answered for now by version 4: the selector clips reach.)
+6. (Answered for now by version 4: `charge` reworked.)
 7. The support grip: 21.3 mm from R2 with the wrist safely in range, against 18.4 mm at the edge of it.
 8. The sleeve in R1's view (38 % of the hand behind it), and the look of the knuckle ribs and the plain glove.
 9. The pads' limits: half the tissue thickness, from a 3 mm indenter, applied to a whole grip.

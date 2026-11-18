@@ -146,7 +146,7 @@ Built from the rifle's own controls and the usual right-handed drill:
 |---|---|---|
 | `trigger_pull` | Right index | Pad stays on the trigger face as the trigger turns 6 degrees. |
 | `mag_release` | Right index | From the straight position the pad presses the button on the right side 1.5 mm in. |
-| `safety_to_fire`, `safety_to_safe` | Right thumb | The pad rides the left selector lever through its 90 degrees. |
+| `safety_to_fire`, `safety_to_safe` | Right hand and thumb | Version 4 (CR-3): the hand lets go and turns on the grip as the elbow comes in, the thumb lies on the left selector lever and turns with it through its 90 degrees, the hand returns. Trigger finger straight and outside the guard. Sizes in `checks/selector_move.json`. (Versions 1 to 3: the thumb reached toward the lever from the firing grip and stopped short.) |
 | `bolt_catch` | Left thumb | The support hand comes back to the magazine well and the thumb presses the paddle on the left. |
-| `charge` | Left index and middle | The hand goes to the charging handle, hooks its left wing from the front, and rides it 75 mm back and forward. |
+| `charge` | Left index | The hand goes to the charging handle, hooks its left wing from the front, and rides it 75 mm back and forward. Version 4 (CR-3): it arrives flatter and from further forward, above the firing hand's thumb, by way of two waypoints outboard of the magazine well. |
 | `mag_out`, `mag_in` | Left hand, right index on the release | Study 5 grip on the magazine body; the hand follows the magazine. |
