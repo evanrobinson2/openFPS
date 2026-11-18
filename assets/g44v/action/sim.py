@@ -266,7 +266,7 @@ def main():
         mom_b = v('m_bullet') * ib['v_exit']; imp = float(np.trapezoid(ib['p_breech'], dx=ib['dt']) * v('case_area'))
         L = dict(label=load['label'], published=dict(muzzle_velocity_test_barrel_mps=round(load['mv_test'], 2), source='cci-ammunition.com product page, retrieved 2026-11-17', maker_note=load['maker_note']),
                  guessed=dict(charge_kg=load['charge'], p_max_Pa=load['p_max']), calibrated=dict(burn_coeff=round(beta, 3), loss_factor=round(loss, 4), converged=ok),
-                 test_barrel=dict(v_mps=round(test['v_exit'], 2), p_max_MPa=round(test['p_max'] / 1e6, 1)),
+                 test_barrel=dict(v_mps=round(test['v_exit'], 2), p_max_MPa=round(test['p_max'] / 1e6, 1), muzzle_pressure_MPa=round(test['p_exit'] / 1e6, 3)),
                  pistol=dict(muzzle_velocity_mps=round(ib['v_exit'], 2), muzzle_velocity_fps=round(ib['v_exit'] / FPS, 1), p_max_MPa=round(ib['p_max'] / 1e6, 1), barrel_time_ms=round(ib['t_exit'] * 1e3, 4),
                              muzzle_pressure_MPa=round(ib['p_exit'] / 1e6, 2), burnt_at_exit=round(ib['z_exit'], 3), muzzle_energy_J=round(0.5 * v('m_bullet') * ib['v_exit'] ** 2, 1),
                              bullet_momentum_Ns=round(mom_b, 4), breech_impulse_Ns=round(imp, 4)))
