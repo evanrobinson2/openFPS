@@ -1,0 +1,27 @@
+{
+  "asset": "optic-red-dot",
+  "credit": "carpetshark",
+  "modelled_by": [
+    {
+      "part": "model (model/build.py, model/kit.py)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    },
+    {
+      "part": "optical simulation (optics/sim.py)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    },
+    {
+      "part": "browser runtime and checks (optics/optic-red-dot.js, optics/test.js)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    },
+    {
+      "part": "sample page (sample/index.html)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    }
+  ],
+  "status": "Simulation-grade optics (ray-traced collimator, parallax, brightness, zero tables) with a browser runtime; parametric geometry recipe (Blender Python). Generic sight: the shape is a proposal from class dimensions, not a reconstruction of a reference, and awaits owner review."
+}

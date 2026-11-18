@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>1-6x LPVO sample</title>
+<style>
+  :root { --fg:#e9eef2; --dim:#9aa6b0; --acc:#ffb347; --acc2:#6cc3ff; --bg:#0d1014; --panel:#161b21; --line:#2a323b; }
+  html,body { margin:0; background:var(--bg); color:var(--fg); font:14px/1.45 ui-monospace,Menlo,monospace; }
+  main { max-width:1080px; margin:0 auto; padding:20px 16px 48px; }
+  h1 { font-size:20px; margin:0 0 4px; } h2 { font-size:15px; margin:22px 0 6px; } p { color:var(--dim); margin:4px 0 12px; }
+  .cols { display:grid; grid-template-columns:minmax(0,600px) minmax(0,1fr); gap:16px; align-items:start; }
+  @media (max-width:860px) { .cols { grid-template-columns:1fr; } }
+  .panel { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:12px; display:grid; gap:10px; }
+  label { display:grid; gap:3px; color:var(--dim); font-size:12px; } label b { color:var(--fg); font-weight:normal; }
+  select,button,input[type=range] { font:inherit; color:var(--fg); background:#0f1318; border:1px solid var(--line); border-radius:6px; padding:6px 8px; }
+  input[type=range] { padding:0; width:100%; }
+  button { cursor:pointer; } button.go { border-color:var(--acc); color:var(--acc); }
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  #inset { max-width:360px; justify-self:center; cursor:default; }
+  canvas { width:100%; display:block; background:#07090c; border:1px solid var(--line); border-radius:8px; touch-action:none; cursor:crosshair; }
+  table { border-collapse:collapse; width:100%; font-size:13px; } th,td { border-bottom:1px solid var(--line); padding:4px 8px; text-align:right; } th:first-child,td:first-child { text-align:left; }
+  .wrap { overflow-x:auto; } #status { color:var(--dim); margin:8px 0; } .hit { color:var(--acc); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Generic 1-6x24 LPVO: simulation sample</h1>
+  <p>The view through the tube, drawn pixel by pixel from <code>optics/optic-lpvo.js</code>: the field of view, the exit pupil and the eye relief come from the thin-lens zoom at the magnification you set; the dark crescent is the scope shadow for where your eye is; the reticle is the asset's own second-focal-plane BDC. Shots are flown by the rifle's <code>ballistics/hk416-ballistics.js</code> with the scope mounted. Drag on the picture to move your eye. The small picture is the middle of the big one, six times enlarged.</p>
+  <div id="status">Loading…</div>
+  <div class="cols">
+    <canvas id="view" width="600" height="600"></canvas>
+    <div class="panel">
+      <canvas id="inset" width="360" height="360" title="the middle of the picture, six times enlarged"></canvas>
+      <label>Magnification <b id="vM"></b><input type="range" id="M" min="0" max="1" step="0.002" value="0"></label>
+      <div class="two">
+        <label>Eye sideways <b id="vex"></b><input type="range" id="ex" min="-10" max="10" step="0.1" value="0"></label>
+        <label>Eye up <b id="vey"></b><input type="range" id="ey" min="-10" max="10" step="0.1" value="0"></label>
+      </div>
+      <label>Eye distance from the design eye point <b id="vez"></b><input type="range" id="ez" min="-60" max="80" step="1" value="0"></label>
+      <div class="two">
+        <label>Light <select id="light"></select></label>
+        <label>Illumination <b id="vil"></b><input type="range" id="il" min="0" max="10" step="1" value="6"></label>
+      </div>
+      <div class="two">
+        <label>Target <select id="tgt"></select></label>
+        <label>Hold with <select id="mark"></select></label>
+      </div>
+      <div class="two">
+        <label>Load <select id="ammo"><option>M855</option><option>Mk262</option></select></label>
+        <button class="go" id="fire">Fire</button>
+      </div>
+      <button id="centre">Centre the eye</button>
+      <div class="wrap"><table id="read"></table></div>
+      <div id="shot" class="hit"></div>
+    </div>
+  </div>
+
+  <h2>Per magnification (from the simulation)</h2>
+  <div class="wrap"><table id="mags"></table></div>
+  <h2>Reticle marks against the ballistics runtime (200 m zero, mrad)</h2>
+  <div class="wrap"><table id="marks"></table></div>
+  <p>The scene is a flat range with 45 cm wide boards at the distances in the list. Outside the eyepiece the page draws the same scene at 1x, as the naked eye sees it past the scope: at 1x the two line up. The reticle is in the second focal plane, so its marks are true only at 6x; try the 300 m mark at 3x.</p>
+</main>
+<script src="../../hk416/ballistics/hk416-ballistics.js"></script>
+<script src="../optics/optic-lpvo.js"></script>
+<script>
+const $ = (id) => document.getElementById(id);
+const L = window.OpticLPVO, B = window.HK416Ballistics;
+const cv = $('view');
+const TARGETS = [25, 50, 100, 200, 300, 400, 500, 600];
+const LIGHTS = [['Sunlit range', 5000], ['Overcast', 2500], ['Indoor range', 60], ['Deep twilight', 1], ['Full moon', 0.03]];
+const EYE_H = 1.5, BOARD_W = 0.45, BOARD_H = 0.75, SPAN = 0.27;     // camera height (m); board size (m); half-width of the picture as a tangent
+let hits = [];                                                       // {D, x, y} impacts on boards, metres from the board centre
+
+function boardX(D) { return (TARGETS.indexOf(D) - 3.5) * 0.02 * D; }   // boards fan out sideways: 20 mrad apart as seen from the firing point
+
+// colour of the scene along a ray: tx, ty = tangents right / up from the horizontal straight ahead. Linear-ish RGB 0..1.
+function scene(tx, ty, lum, out) {
+  let r, g, b;
+  if (ty >= 0) { const k = Math.min(1, ty * 6); r = 0.74 - 0.30 * k; g = 0.82 - 0.22 * k; b = 0.90 - 0.08 * k; }
+  else {
+    const d = EYE_H / -ty, x = tx * d, haze = 1 - Math.exp(-d / 2500);
+    const n = (Math.sin(x * 1.7) * Math.sin(d * 0.23) + Math.sin(x * 0.31 + d * 0.11)) * 0.03;
+    r = 0.30 + n; g = 0.38 + n; b = 0.20 + n * 0.5;
+    const line = Math.abs(((d + 50) % 100) - 50); if (line < d * 0.0025 + 0.05 && d > 20) { r += 0.25; g += 0.25; b += 0.22; }
+    if (d > 640) { r = 0.36; g = 0.31; b = 0.22; }
+    r += (0.74 - r) * haze; g += (0.82 - g) * haze; b += (0.90 - b) * haze;
+  }
+  for (let i = 0; i < TARGETS.length; i++) {            // nearest board wins
+    const D = TARGETS[i], x = tx * D - boardX(D), y = ty * D;
+    if (Math.abs(x) <= BOARD_W / 2 && y <= BOARD_H / 2 && y >= -BOARD_H / 2 - 0) {
+      const rr = Math.hypot(x, y); r = g = b = 0.92;
+      if (rr < 0.10) { r = g = b = 0.08; } else if (Math.abs(rr - 0.2) < 0.006) { r = g = b = 0.2; }
+      for (const h of hits) if (h.D === D && Math.hypot(x - h.x, y - h.y) < Math.max(0.012, D * 0.00012)) { r = 1; g = 0.45; b = 0.1; }
+      break;
+    }
+    if (Math.abs(x) <= 0.03 && y < -BOARD_H / 2 && y > -EYE_H) { r = 0.35; g = 0.27; b = 0.2; break; }     // the post
+  }
+  const e = Math.min(1.6, 0.35 + 0.3 * Math.log10(lum + 1));            // a crude exposure so dim scenes look dim
+  out[0] = r * e; out[1] = g * e; out[2] = b * e;
+}
+
+let S = { M: 1, ex: 0, ey: 0, ez: 0, lum: 5000, il: 6, tgt: 200, mark: 'centre', ammo: 'M855' };
+function magOf(v) { return Math.pow(6, v); }
+function markHold() {                                   // object-space mrad from the optical axis down to the mark in use, at the current power
+  if (S.mark === 'centre') return 0;
+  const m = L.data.reticle.bdc_marks.find((k) => String(k.distance_m) === S.mark.split(' ')[0]);
+  return (S.mark.endsWith('legs') ? m.mk262_hold_mrad : m.m855_hold_mrad) * 6 / S.M;
+}
+// where the optical axis points: at the chosen board, raised by the hold
+function aim() { return { yaw: boardX(S.tgt) / S.tgt, pitch: markHold() / 1000 }; }
+
+const layers = new Map();
+function layer(N, k) { const id = N + k; if (!layers.has(id)) { const c = document.createElement('canvas'); c.width = c.height = N; layers.set(id, c); } return layers.get(id); }
+function draw() {
+  const st = L.state(S.M, { luminance: S.lum });
+  drawView($('view'), 0.27, st); drawView($('inset'), 0.045, st); readout(st);
+}
+// one picture: SPAN is the half-width of the canvas as a tangent of the apparent angle from the optical axis
+function drawView(canvas, SPAN, st) {
+  const N = canvas.width, ctx = canvas.getContext('2d'), scratch = layer(N, 'r'), sctx = scratch.getContext('2d'), shadow = layer(N, 's'), shctx = shadow.getContext('2d');
+  const a = aim(), img = ctx.createImageData(N, N), sh = shctx.createImageData(N, N), px = img.data, sp = sh.data, c = [0, 0, 0];
+  const eye = { x: S.ex, y: S.ey, z: S.ez }, back = st.designEyeRelief + S.ez;                 // eye to the eye lens, mm
+  const lens = { x: -S.ex / back, y: -S.ey / back, r: L.data.body.ocular_clear_mm / 2 / back }, rim = L.data.body.ocular_od_mm / 2 / (back - 3);
+  const tr = L.data.transmission.linear_srgb, to8 = (v) => Math.max(0, Math.min(255, Math.pow(Math.max(0, v), 1 / 2.2) * 255));
+  for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) {
+    const ax = (i + 0.5 - N / 2) / (N / 2) * SPAN, ay = (N / 2 - j - 0.5) / (N / 2) * SPAN, k = (j * N + i) * 4;
+    const dl = Math.hypot(ax - lens.x, ay - lens.y);
+    let alpha = 0;
+    if (dl < lens.r) {                                   // through the eye lens: the scope pass
+      const s = L.shade(st, eye, ax, ay);
+      if (s.inField) {
+        scene(a.yaw + (s.u - 0.5) * 2 * st.tanReal, a.pitch + (s.v - 0.5) * 2 * st.tanReal, S.lum, c);
+        px[k] = to8(c[0] * tr[0]); px[k + 1] = to8(c[1] * tr[1]); px[k + 2] = to8(c[2] * tr[2]);
+        alpha = 1 - Math.pow(s.brightness, 1 / 2.2);
+      } else { px[k] = px[k + 1] = px[k + 2] = 4; alpha = 1; }
+    } else if (dl < rim * 1.02 + 0.004) { const v = 14 + 22 * Math.max(0, (ay - lens.y) / rim); px[k] = px[k + 1] = px[k + 2] = v; }       // eyepiece body
+    else { scene(a.yaw + ax, a.pitch + ay, S.lum, c); px[k] = to8(c[0]); px[k + 1] = to8(c[1]); px[k + 2] = to8(c[2]); }                 // the world past the scope, at 1x
+    px[k + 3] = 255; sp[k] = sp[k + 1] = sp[k + 2] = 0; sp[k + 3] = alpha * 255;
+  }
+  ctx.putImageData(img, 0, 0);
+  // reticle: fixed apparent size, clipped to the eye lens, then the scope shadow over both
+  const pxPerTan = N / 2 / SPAN, ill = S.il === 0 ? 0 : Math.min(1, L.illumination(S.il, S.lum).contrast / 8);
+  sctx.clearRect(0, 0, N, N); sctx.save(); sctx.beginPath(); sctx.arc(N / 2 + lens.x * pxPerTan, N / 2 - lens.y * pxPerTan, lens.r * pxPerTan, 0, 7); sctx.clip();
+  sctx.beginPath(); sctx.arc(N / 2, N / 2, st.tanApparent * pxPerTan, 0, 7); sctx.clip();
+  L.drawReticle(sctx, N / 2, N / 2, pxPerTan / 1000, { illumination: ill }); sctx.restore();
+  ctx.drawImage(scratch, 0, 0); shctx.putImageData(sh, 0, 0); ctx.drawImage(shadow, 0, 0);
+}
+
+function readout(st) {
+  const f = L.field(S.M), dz = S.ez + st.designEyeRelief - st.eyeRelief, e = Math.hypot(S.ex, S.ey);
+  const centre = L.shade(st, { x: S.ex, y: S.ey, z: S.ez }, 0, 0).brightness, par = L.parallax(S.M, e, S.tgt);
+  const rows = [['Magnification', S.M.toFixed(2) + 'x'], ['Field of view', f.realFovDeg.toFixed(2) + '° = ' + f.fovMAt100m.toFixed(1) + ' m at 100 m'],
+    ['Exit pupil', st.exitPupil.toFixed(1) + ' mm (' + st.apertureStop + ')'], ['Eye pupil in this light', st.eyePupil.toFixed(1) + ' mm'],
+    ['Eye relief at this power', st.eyeRelief.toFixed(1) + ' mm'], ['Eye off the exit pupil', e.toFixed(1) + ' mm sideways, ' + (dz >= 0 ? '+' : '') + dz.toFixed(0) + ' mm along'],
+    ['Brightness at the centre', (centre * 100).toFixed(0) + '%'], ['Parallax at ' + S.tgt + ' m', (par * 1000).toFixed(3) + ' mrad = ' + Math.abs(par * S.tgt * 1000).toFixed(0) + ' mm'],
+    ['Reticle scale', '×' + st.reticleScale.toFixed(2) + ' its 6x subtension']];
+  $('read').innerHTML = rows.map((r) => '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td></tr>').join('');
+  $('vM').textContent = S.M.toFixed(2) + 'x'; $('vex').textContent = S.ex.toFixed(1) + ' mm'; $('vey').textContent = S.ey.toFixed(1) + ' mm';
+  $('vez').textContent = (S.ez >= 0 ? '+' : '') + S.ez + ' mm'; $('vil').textContent = S.il === 0 ? 'off' : S.il;
+}
+
+function fire() {
+  // a level shot along the line of sight with the 200 m zero; the optical axis is raised by the hold, so the bullet meets the board that much higher
+  const D = S.tgt, poi = B.poi(S.ammo, 200, D), y = poi + markHold() / 1000 * D;
+  hits.push({ D, x: 0, y }); if (hits.length > 12) hits.shift();
+  $('shot').textContent = S.ammo + ' at ' + D + ' m holding ' + S.mark + ' at ' + S.M.toFixed(1) + 'x: impact ' + (y >= 0 ? '+' : '') + (y * 1000).toFixed(0) + ' mm from the centre (bullet path ' + (poi * 1000).toFixed(0) + ' mm, hold +' + (markHold() / 1000 * D * 1000).toFixed(0) + ' mm).';
+  draw();
+}
+
+function tables() {
+  const J = L.data;
+  $('mags').innerHTML = '<tr><th>Power</th><th>Field (ft at 100 yd)</th><th>Field (°)</th><th>Exit pupil (mm)</th><th>Eye relief (mm)</th><th>Eye box sideways, 3 mm pupil (mm to half brightness)</th><th>Eye box along the axis (mm until the edge is half)</th></tr>' +
+    J.by_magnification.map((r) => '<tr><td>' + r.magnification + 'x</td><td>' + r.fov_ft_at_100yd.toFixed(1) + '</td><td>' + r.real_fov_deg.toFixed(2) + '</td><td>' + r.exit_pupil_mm.toFixed(1) + '</td><td>' + r.eye_relief_mm.toFixed(1) +
+      '</td><td>±' + r.eyebox_eye_pupil_3mm.lateral_half_brightness_mm.toFixed(1) + '</td><td>±' + r.eyebox_eye_pupil_3mm.axial_edge_half_brightness_mm.toFixed(0) + '</td></tr>').join('');
+  let h = '<tr><th>Mark</th><th>M855 bar</th><th>runtime</th><th>miss (mm)</th><th>Mk 262 leg tips</th><th>runtime</th><th>miss (mm)</th></tr>';
+  for (const m of J.reticle.bdc_marks) {
+    const a = -B.poi('M855', 200, m.distance_m) / m.distance_m * 1000, b = -B.poi('Mk262', 200, m.distance_m) / m.distance_m * 1000;
+    h += '<tr><td>' + m.distance_m + ' m</td><td>' + m.m855_hold_mrad.toFixed(3) + '</td><td>' + a.toFixed(3) + '</td><td>' + ((m.m855_hold_mrad - a) * m.distance_m).toFixed(1) + '</td><td>' + m.mk262_hold_mrad.toFixed(3) + '</td><td>' + b.toFixed(3) + '</td><td>' + ((m.mk262_hold_mrad - b) * m.distance_m).toFixed(1) + '</td></tr>';
+  }
+  $('marks').innerHTML = h;
+}
+
+async function main() {
+  await L.load('../optics/lpvo.json');
+  L.mountTo(B); B.configure({ spinDrift: false });
+  $('tgt').innerHTML = TARGETS.map((d) => '<option value="' + d + '"' + (d === 200 ? ' selected' : '') + '>' + d + ' m</option>').join('');
+  $('light').innerHTML = LIGHTS.map((l) => '<option value="' + l[1] + '">' + l[0] + '</option>').join('');
+  $('mark').innerHTML = '<option value="centre">centre dot (200 m)</option>' + L.data.reticle.bdc_marks.map((m) => '<option>' + m.distance_m + ' m bar</option><option>' + m.distance_m + ' m legs</option>').join('');
+  const sync = () => { S.M = magOf(+$('M').value); S.ex = +$('ex').value; S.ey = +$('ey').value; S.ez = +$('ez').value; S.lum = +$('light').value; S.il = +$('il').value; S.tgt = +$('tgt').value; S.mark = $('mark').value; S.ammo = $('ammo').value; draw(); };
+  for (const id of ['M', 'ex', 'ey', 'ez', 'il']) $(id).oninput = sync;
+  for (const id of ['light', 'tgt', 'mark', 'ammo']) $(id).onchange = sync;
+  $('fire').onclick = fire;
+  $('centre').onclick = () => { $('ex').value = $('ey').value = $('ez').value = 0; sync(); };
+  let drag = null;
+  cv.onpointerdown = (e) => { drag = { x: e.clientX, y: e.clientY, ex: S.ex, ey: S.ey }; cv.setPointerCapture(e.pointerId); };
+  cv.onpointermove = (e) => { if (!drag) return; $('ex').value = Math.max(-10, Math.min(10, drag.ex + (e.clientX - drag.x) * 0.05)); $('ey').value = Math.max(-10, Math.min(10, drag.ey - (e.clientY - drag.y) * 0.05)); sync(); };
+  cv.onpointerup = () => { drag = null; };
+  tables(); sync();
+  $('status').textContent = 'Ready. ' + L.data.body.name + '; reticle: ' + L.data.reticle.name + ' (' + L.data.reticle.focal_plane + ' focal plane).';
+  window.sample = { S, draw, fire, sync };
+}
+main().catch((e) => { $('status').textContent = 'Failed: ' + e.message; console.error(e); });
+</script>
+</body>
+</html>

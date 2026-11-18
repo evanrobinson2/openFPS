@@ -1,0 +1,305 @@
+{
+ "afocal_and_magnification": {
+  "what": "Ray-transfer matrix of the whole scope at 18 magnifications (a second code path): it must be afocal (C = 0), magnify by M, compress the beam by M (Lagrange invariant), and put the exit pupil where the chief-ray trace does",
+  "max_abs_C_per_mm": 0.0,
+  "max_magnification_error": 0.0,
+  "max_eye_relief_difference_mm": 0.0,
+  "rows": [
+   {
+    "magnification": 1.0,
+    "matrix_C": 0.0,
+    "matrix_magnification": 1.0,
+    "matrix_eye_relief_mm": 102.095262958,
+    "trace_eye_relief_mm": 102.095262958,
+    "beam_compression": 1.0
+   },
+   {
+    "magnification": 1.25,
+    "matrix_C": -0.0,
+    "matrix_magnification": 1.25,
+    "matrix_eye_relief_mm": 92.376168918,
+    "trace_eye_relief_mm": 92.376168918,
+    "beam_compression": 1.25
+   },
+   {
+    "magnification": 1.5,
+    "matrix_C": 0.0,
+    "matrix_magnification": 1.5,
+    "matrix_eye_relief_mm": 90.798146893,
+    "trace_eye_relief_mm": 90.798146893,
+    "beam_compression": 1.5
+   },
+   {
+    "magnification": 1.75,
+    "matrix_C": -0.0,
+    "matrix_magnification": 1.75,
+    "matrix_eye_relief_mm": 93.270033393,
+    "trace_eye_relief_mm": 93.270033393,
+    "beam_compression": 1.75
+   },
+   {
+    "magnification": 2.0,
+    "matrix_C": 0.0,
+    "matrix_magnification": 2.0,
+    "matrix_eye_relief_mm": 96.411901181,
+    "trace_eye_relief_mm": 96.411901181,
+    "beam_compression": 2.0
+   },
+   {
+    "magnification": 2.5,
+    "matrix_C": 0.0,
+    "matrix_magnification": 2.5,
+    "matrix_eye_relief_mm": 100.778608676,
+    "trace_eye_relief_mm": 100.778608676,
+    "beam_compression": 2.5
+   },
+   {
+    "magnification": 3.0,
+    "matrix_C": 0.0,
+    "matrix_magnification": 3.0,
+    "matrix_eye_relief_mm": 102.711265332,
+    "trace_eye_relief_mm": 102.711265332,
+    "beam_compression": 3.0
+   },
+   {
+    "magnification": 3.5,
+    "matrix_C": -0.0,
+    "matrix_magnification": 3.5,
+    "matrix_eye_relief_mm": 103.274707011,
+    "trace_eye_relief_mm": 103.274707011,
+    "beam_compression": 3.5
+   },
+   {
+    "magnification": 4.0,
+    "matrix_C": -0.0,
+    "matrix_magnification": 4.0,
+    "matrix_eye_relief_mm": 103.130041036,
+    "trace_eye_relief_mm": 103.130041036,
+    "beam_compression": 4.0
+   },
+   {
+    "magnification": 4.5,
+    "matrix_C": 0.0,
+    "matrix_magnification": 4.5,
+    "matrix_eye_relief_mm": 102.623152032,
+    "trace_eye_relief_mm": 102.623152032,
+    "beam_compression": 4.5
+   },
+   {
+    "magnification": 5.0,
+    "matrix_C": 0.0,
+    "matrix_magnification": 5.0,
+    "matrix_eye_relief_mm": 101.93577146,
+    "trace_eye_relief_mm": 101.93577146,
+    "beam_compression": 5.0
+   },
+   {
+    "magnification": 5.5,
+    "matrix_C": 0.0,
+    "matrix_magnification": 5.5,
+    "matrix_eye_relief_mm": 101.165787474,
+    "trace_eye_relief_mm": 101.165787474,
+    "beam_compression": 5.5
+   },
+   {
+    "magnification": 6.0,
+    "matrix_C": -0.0,
+    "matrix_magnification": 6.0,
+    "matrix_eye_relief_mm": 100.367029051,
+    "trace_eye_relief_mm": 100.367029051,
+    "beam_compression": 6.0
+   },
+   {
+    "magnification": 1.1,
+    "matrix_C": -0.0,
+    "matrix_magnification": 1.1,
+    "matrix_eye_relief_mm": 97.005758455,
+    "trace_eye_relief_mm": 97.005758455,
+    "beam_compression": 1.1
+   },
+   {
+    "magnification": 2.2,
+    "matrix_C": 0.0,
+    "matrix_magnification": 2.2,
+    "matrix_eye_relief_mm": 98.517106352,
+    "trace_eye_relief_mm": 98.517106352,
+    "beam_compression": 2.2
+   },
+   {
+    "magnification": 3.3,
+    "matrix_C": 0.0,
+    "matrix_magnification": 3.3,
+    "matrix_eye_relief_mm": 103.162131497,
+    "trace_eye_relief_mm": 103.162131497,
+    "beam_compression": 3.3
+   },
+   {
+    "magnification": 4.7,
+    "matrix_C": 0.0,
+    "matrix_magnification": 4.7,
+    "matrix_eye_relief_mm": 102.363053788,
+    "trace_eye_relief_mm": 102.363053788,
+    "beam_compression": 4.7
+   },
+   {
+    "magnification": 5.9,
+    "matrix_C": -0.0,
+    "matrix_magnification": 5.9,
+    "matrix_eye_relief_mm": 100.527407018,
+    "trace_eye_relief_mm": 100.527407018,
+    "beam_compression": 5.9
+   }
+  ],
+  "passed": true
+ },
+ "exit_pupil": {
+  "what": "Exit pupil = objective / magnification while the objective is the stop (thin-lens relation), against published exit pupils",
+  "model_6x_mm": 4.0,
+  "relation_24_over_6_mm": 4.0,
+  "published_6x_mm": [
+   3.8,
+   4.0
+  ],
+  "model_1x_mm": 10.4,
+  "published_1x_mm": [
+   10.4,
+   11.4
+  ],
+  "note": "At 1x no real scope shows a 24 mm exit pupil: an internal stop takes over. The model's ceiling is set to the lower published figure.",
+  "passed": true
+ },
+ "field_of_view": {
+  "what": "Field of view at 1x and 6x against three published scopes (ft at 100 yd)",
+  "model": [
+   115.015974441,
+   20.490677225
+  ],
+  "published": {
+   "vortex_razor_hd_gen2e": [
+    115.2,
+    20.5
+   ],
+   "trijicon_vcog": [
+    95.0,
+    15.9
+   ],
+   "sig_tango6t": [
+    105.8,
+    17.7
+   ]
+  },
+  "ratio_model": 5.613088,
+  "ratio_published": {
+   "vortex_razor_hd_gen2e": 5.619512195,
+   "trijicon_vcog": 5.974842767,
+   "sig_tango6t": 5.97740113
+  },
+  "note": "The model is fitted to the Razor's two figures, so agreement with it is by construction. The check is the ratio: a pure zoom gives 6.00 (VCOG 5.97, Tango6T 5.98); the Razor's 5.62 means a second stop limits its 1x field, which is what the model's first-plane stop does.",
+  "apparent_field_deg": 23.16,
+  "passed": true
+ },
+ "eye_relief": {
+  "what": "Eye relief over the zoom range against published figures",
+  "model_mm": [
+   90.798146893,
+   103.274707011
+  ],
+  "model_in": [
+   3.574730193,
+   4.065933347
+  ],
+  "model_at_1x_and_6x_mm": [
+   102.095262958,
+   100.367029051
+  ],
+  "published_in": {
+   "vortex_razor_hd_gen2e": 4.0,
+   "trijicon_vcog": "4.0 constant",
+   "sig_tango6t": [
+    3.9,
+    4.1
+   ]
+  },
+  "note": "At 1x and from 2.5x to 6x the model is within 0.1 in of 4.0 in. Between 1.25x and 2x it dips to 3.6 in, more than the 0.2 in the published scopes move: a limit of a two-group thin-lens erector.",
+  "passed": true
+ },
+ "eye_box": {
+  "what": "Scope-shadow mask: the disc-overlap formula against brute-force sampling of 400,000 rays through the eye pupil and the exit pupil",
+  "rows": [
+   {
+    "eye_offset_mm": 1.0,
+    "dz_mm": 0.0,
+    "tan_field": 0.0,
+    "exit_pupil_mm": 4.0,
+    "eye_pupil_mm": 3.0,
+    "formula": 0.83488804,
+    "sampled": 0.8349825
+   },
+   {
+    "eye_offset_mm": 2.5,
+    "dz_mm": 0.0,
+    "tan_field": 0.0,
+    "exit_pupil_mm": 4.0,
+    "eye_pupil_mm": 3.0,
+    "formula": 0.234901191,
+    "sampled": 0.235965
+   },
+   {
+    "eye_offset_mm": 0.0,
+    "dz_mm": 15.0,
+    "tan_field": 0.2,
+    "exit_pupil_mm": 4.0,
+    "eye_pupil_mm": 3.0,
+    "formula": 0.085242852,
+    "sampled": 0.08523
+   },
+   {
+    "eye_offset_mm": 3.0,
+    "dz_mm": -10.0,
+    "tan_field": 0.15,
+    "exit_pupil_mm": 10.4,
+    "eye_pupil_mm": 6.0,
+    "formula": 1.0,
+    "sampled": 1.0
+   },
+   {
+    "eye_offset_mm": 4.0,
+    "dz_mm": 20.0,
+    "tan_field": 0.1,
+    "exit_pupil_mm": 6.0,
+    "eye_pupil_mm": 3.0,
+    "formula": 0.0,
+    "sampled": 0.0
+   }
+  ],
+  "max_difference": 0.001063809,
+  "passed": true
+ },
+ "reticle": {
+  "what": "The reticle's marks are the zero table's holds (same numbers); the independent check against the ballistics runtime is in parity.json (node test.js)",
+  "marks": [
+   {
+    "distance_m": 300,
+    "m855_mrad": 0.921689232,
+    "mk262_mrad": 1.052267779
+   },
+   {
+    "distance_m": 400,
+    "m855_mrad": 2.144614661,
+    "mk262_mrad": 2.378304102
+   },
+   {
+    "distance_m": 500,
+    "m855_mrad": 3.707684978,
+    "mk262_mrad": 3.99189246
+   },
+   {
+    "distance_m": 600,
+    "m855_mrad": 5.717227006,
+    "mk262_mrad": 5.955039667
+   }
+  ],
+  "passed": true
+ },
+ "all_passed": true
+}

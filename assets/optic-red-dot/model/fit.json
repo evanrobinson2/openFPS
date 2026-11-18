@@ -1,0 +1,14 @@
+{
+ "rifle": "assets/hk416 (local --fast build of model/build.py), sights folded",
+ "socket_optic_m": [
+  0.0,
+  0.06,
+  0.03679
+ ],
+ "intersections": [],
+ "intersections_note": "pairs of (optic part, rifle part) whose surfaces cross; an empty list means the optic fits",
+ "lowest_point_of_the_optic_body_over_rail_mm": 20.0,
+ "folded_rear_sight_top_over_rail_mm": 15.96,
+ "charging_handle_top_over_rail_mm": -8.92,
+ "clearance_over_folded_rear_sight_mm": 4.04
+}

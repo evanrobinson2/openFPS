@@ -1,0 +1,190 @@
+{
+ "asset": "optic-lpvo-1-6",
+ "parts": 37,
+ "triangles": 47192,
+ "clips": {
+  "magnification": {
+   "parts": [
+    "power_ring"
+   ],
+   "frames": 61,
+   "note": "the ring angle is throw * ln(M) / ln(6): frame f is magnification 6^((f - 1) / 60); frame 1 = 1x, frame 61 = 6x (lpvo.json by_magnification[*].power_ring_deg)"
+  },
+  "elevation_turn": {
+   "parts": [
+    "elevation_turret"
+   ],
+   "frames": 101,
+   "note": "one turn = 100 clicks of 0.1 mrad; frame k+1 = k clicks up (anticlockwise from above raises the point of impact)"
+  },
+  "windage_turn": {
+   "parts": [
+    "windage_turret"
+   ],
+   "frames": 101,
+   "note": "one turn = 100 clicks of 0.1 mrad; frame k+1 = k clicks"
+  },
+  "elevation_cap_off": {
+   "parts": [
+    "elevation_cap"
+   ],
+   "frames": 24,
+   "note": "unscrew three turns, then lift clear"
+  },
+  "windage_cap_off": {
+   "parts": [
+    "windage_cap"
+   ],
+   "frames": 24,
+   "note": "unscrew three turns, then pull clear"
+  },
+  "illumination": {
+   "parts": [
+    "illumination_knob"
+   ],
+   "frames": 11,
+   "note": "frame k+1 = knob position k of lpvo.json illumination (0 = OFF .. 10)"
+  },
+  "dioptre": {
+   "parts": [
+    "dioptre_ring"
+   ],
+   "frames": 25,
+   "note": "reticle focus: one turn end to end; frame 13 is the middle"
+  },
+  "mount_clamp_open": {
+   "parts": [
+    "mount_clamp_bar",
+    "mount_clamp_nut_front",
+    "mount_clamp_nut_rear"
+   ],
+   "frames": 16,
+   "note": "two turns of each nut free the jaw"
+  }
+ },
+ "sockets": {
+  "socket_mount": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "socket_eye": [
+   0.0,
+   0.04318,
+   -0.207367
+  ],
+  "socket_ocular_lens": [
+   0.0,
+   0.04318,
+   -0.107
+  ],
+  "socket_objective": [
+   0.0,
+   0.04318,
+   0.137
+  ],
+  "socket_reticle_plane": [
+   0.0,
+   0.04318,
+   -0.0645
+  ]
+ },
+ "size_mm": {
+  "length": 257.0,
+  "width": 76.6,
+  "height": 85.4
+ },
+ "hierarchy": {
+  "scope": "optic_lpvo_1_6",
+  "main_tube": "scope",
+  "eyepiece_housing": "scope",
+  "power_ring": "scope",
+  "throw_lever": "power_ring",
+  "dioptre_ring": "scope",
+  "lens_ocular": "dioptre_ring",
+  "lens_objective": "scope",
+  "objective_retainer": "scope",
+  "turrets": "scope",
+  "elevation_turret": "turrets",
+  "elevation_cap": "turrets",
+  "windage_turret": "turrets",
+  "windage_cap": "turrets",
+  "illumination_knob": "turrets",
+  "illumination_index": "illumination_knob",
+  "illumination_battery_cap": "illumination_knob",
+  "mount": "optic_lpvo_1_6",
+  "mount_base": "mount",
+  "mount_clamp_bar": "mount",
+  "mount_cross_bolt_rear": "mount",
+  "mount_bolt_head_rear": "mount_cross_bolt_rear",
+  "mount_clamp_nut_rear": "mount",
+  "mount_cross_bolt_front": "mount",
+  "mount_bolt_head_front": "mount_cross_bolt_front",
+  "mount_clamp_nut_front": "mount",
+  "mount_arm": "mount",
+  "mount_ring_lower_rear": "mount",
+  "mount_ring_cap_rear": "mount",
+  "ring_screw_rear_fl": "mount",
+  "ring_screw_rear_fr": "mount",
+  "ring_screw_rear_rl": "mount",
+  "ring_screw_rear_rr": "mount",
+  "mount_ring_lower_front": "mount",
+  "mount_ring_cap_front": "mount",
+  "ring_screw_front_fl": "mount",
+  "ring_screw_front_fr": "mount",
+  "ring_screw_front_rl": "mount",
+  "ring_screw_front_rr": "mount",
+  "maker_panel_placeholder": "mount_ring_cap_rear",
+  "socket_mount": "optic_lpvo_1_6",
+  "socket_eye": "optic_lpvo_1_6",
+  "socket_ocular_lens": "optic_lpvo_1_6",
+  "socket_objective": "optic_lpvo_1_6",
+  "socket_reticle_plane": "optic_lpvo_1_6"
+ },
+ "triangles_by_part": {
+  "main_tube": 6048,
+  "eyepiece_housing": 3328,
+  "power_ring": 2880,
+  "throw_lever": 108,
+  "dioptre_ring": 6880,
+  "lens_ocular": 1152,
+  "lens_objective": 1152,
+  "objective_retainer": 1152,
+  "elevation_turret": 1850,
+  "elevation_cap": 3720,
+  "windage_turret": 1850,
+  "windage_cap": 3720,
+  "illumination_knob": 3248,
+  "illumination_index": 12,
+  "illumination_battery_cap": 686,
+  "mount_base": 854,
+  "mount_clamp_bar": 764,
+  "mount_cross_bolt_rear": 240,
+  "mount_bolt_head_rear": 240,
+  "mount_clamp_nut_rear": 168,
+  "mount_cross_bolt_front": 240,
+  "mount_bolt_head_front": 240,
+  "mount_clamp_nut_front": 168,
+  "mount_arm": 200,
+  "mount_ring_lower_rear": 648,
+  "mount_ring_cap_rear": 668,
+  "ring_screw_rear_fl": 444,
+  "ring_screw_rear_fr": 444,
+  "ring_screw_rear_rl": 444,
+  "ring_screw_rear_rr": 444,
+  "mount_ring_lower_front": 648,
+  "mount_ring_cap_front": 668,
+  "ring_screw_front_fl": 444,
+  "ring_screw_front_fr": 444,
+  "ring_screw_front_rl": 444,
+  "ring_screw_front_rr": 444,
+  "maker_panel_placeholder": 108
+ },
+ "mounts_on": "assets/hk416 socket_optic, with the rifle's sights folded",
+ "cross_bolts_rifle_L_mm": [
+  -84.1,
+  -24.1
+ ],
+ "axis_over_rail_mm": 43.18,
+ "built_from": "optics/lpvo.json (assets/optic-lpvo-1-6/optics/sim.py)"
+}

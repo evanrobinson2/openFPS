@@ -1,0 +1,4048 @@
+{
+ "meta": {
+  "title": "Generic 2 MOA tube red-dot sight: optical system, zero tables and rendering model",
+  "generator": "assets/optic-red-dot/optics/sim.py",
+  "credit": "carpetshark",
+  "units": "millimetres, degrees, MOA or mrad as each key says; SI in the zero tables; sockets in metres",
+  "ballistics_source": "assets/hk416/ballistics/ballistics.json (ballistics/sim.py)",
+  "class_references": "External figures of the class come from the Aimpoint CompM4 user manual, section 1.1 (135 x 51 x 57 mm, 370 g, 2 MOA, 16 positions, unlimited eye relief, 1 click = 16 mm at 100 m, +/- 2 m at 100 m). This is a generic sight: no maker's name, logo or trade dress; the optical prescription is solved here."
+ },
+ "rifle": {
+  "rail_top_mm": 36.79,
+  "socket_optic_l_mm": -60.0,
+  "rail_pitch_mm": 10.0,
+  "rail_lug_mm": 4.77,
+  "upper_lug0_l_mm": -111.48,
+  "n_upper_lugs": 10,
+  "rail_half_width_mm": 10.5,
+  "iron_sight_line_mm": 65.5,
+  "ads_eye_l_mm": -260.6,
+  "crown_l_mm": 363.3,
+  "folded_rear_sight_top_mm": 52.7,
+  "raised_rear_sight_top_mm": 69.8
+ },
+ "body": {
+  "name": "generic 2 MOA tube red-dot sight",
+  "axis_over_rail_mm": 39.0,
+  "tube_centre_l_mm": -45.0,
+  "length_mm": 130.0,
+  "ring_od_mm": 30.0,
+  "hood_od_mm": 38.0,
+  "bore_id_mm": 27.0,
+  "window_clear_mm": 24.0,
+  "rear_clear_mm": 24.0,
+  "lens_inset_mm": 24.0,
+  "rear_inset_mm": 8.0,
+  "led_distance_mm": 88.0,
+  "led_offset_mm": 13.5,
+  "led_clock_deg": 135.0,
+  "click_moa": 0.5,
+  "dot_moa": 2.0,
+  "travel_moa": 120.0,
+  "mass_kg": 0.34,
+  "axis_over_bore_mm": 75.79,
+  "eye_l_mm": -260.6
+ },
+ "frames": {
+  "asset": "metres, +Z muzzle, +Y up, +X shooter's left; origin socket_mount = the rifle's socket_optic (rail top, on the centreline)",
+  "shooter": "eye offsets and angles as the shooter sees them: right and up; right = -X of the asset frame",
+  "lens": "the collimator's frame: ex sagittal, ey tangential (+ey points away from the emitter)",
+  "lens_from_shooter": [
+   [
+    0.707106781187,
+    0.707106781187
+   ],
+   [
+    -0.707106781187,
+    0.707106781187
+   ]
+  ],
+  "shooter_from_lens": [
+   [
+    0.707106781187,
+    -0.707106781187
+   ],
+   [
+    0.707106781187,
+    0.707106781187
+   ]
+  ],
+  "centred_eye_beam_lens": [
+   0.0,
+   -4.19418984277e-14
+  ],
+  "centred_eye_beam_note": "direction of the dot for the centred eye relative to the mechanical axis (rad, lens frame); zeroing absorbs it, and every other angle here is relative to it"
+ },
+ "sockets": {
+  "socket_mount": [
+   0,
+   0,
+   0
+  ],
+  "socket_eye": [
+   0.0,
+   0.039,
+   -0.2006
+  ],
+  "socket_objective": [
+   0.0,
+   0.039,
+   0.056
+  ],
+  "socket_rear_window": [
+   0.0,
+   0.039,
+   -0.042
+  ],
+  "socket_emitter": [
+   -0.00954594154602,
+   0.029454058454,
+   -0.03599999999
+  ]
+ },
+ "optics": {
+  "design": {
+   "type": "off-axis Mangin doublet collimator: LED at the tube wall, dichroic on the cemented surface",
+   "R1_eye_side_mm": 173.718603359,
+   "R2_dichroic_mm": 185.406437653,
+   "R3_target_side_mm": 175.422189857,
+   "centre_thickness_mm": 5.0,
+   "tilt_deg": 4.13757483326,
+   "glass_index": 1.5168,
+   "led_position_mm": {
+    "behind_window_vertex": 91.99999999,
+    "off_axis": 13.5,
+    "clock_as_shooter_sees_deg": 135.0
+   },
+   "effective_focal_length_mm": 95.5957689427,
+   "emitter_diameter_um": 55.6153639675,
+   "eye_plane_behind_window_mm": 256.6,
+   "optimiser_merit": 0.0370867841316,
+   "window_see_through_power_dioptre": -0.000514965218386,
+   "window_see_through_magnification": 1.00978747999,
+   "window_line_of_sight_deviation_urad": 711.321771515,
+   "window_deviation_note": "the tilted meniscus window bends the line of sight by this constant angle (a weak wedge); zeroing absorbs it, and the parallax figures are measured from the point the centred eye's dot covers through the window",
+   "note": "R1, R2 and the emitter focus position are solved here by minimising the parallax error over a 14 mm eye disc at 50 m; the tilt puts the centred eye's dot on the mechanical axis; R3 makes the window afocal."
+  },
+  "dot": {
+   "size_moa": 2.0,
+   "size_mrad": 0.581776417331,
+   "blur_added_moa_3mm_pupil": {
+    "centre": 0.548197311642,
+    "edge_tangential_9mm": 1.51691823454,
+    "edge_sagittal_9mm": 0.452320702723
+   },
+   "covers_mm_at": {
+    "10": 5.81776417331,
+    "25": 14.5444104333,
+    "50": 29.0888208666,
+    "100": 58.1776417331,
+    "200": 116.355283466,
+    "300": 174.532925199
+   }
+  },
+  "parallax": {
+   "definition": "angle between the dot and the target point the centred eye aimed at, as the eye moves off the optical axis; POI moves opposite: poi_shift = -error * distance",
+   "frame": "lens frame: ex = sagittal, ey = tangential (+ey is away from the LED). See frames.lens_from_shooter for the shooter's right/up",
+   "parallax_free_distance_m": {
+    "sagittal": 18.7375605201,
+    "tangential": 3762.80937453
+   },
+   "beam_direction_poly": {
+    "doc": "a_x, a_y (rad) = sum c[i][j] * ex^i * ey^j, eye offsets in mm; error(e, D) = a(e) + k * e / (D * 1000 + eye_plane_behind_window_mm) per axis, D = target distance from the front window (m), k = see_through_factor (1 for a perfect 1x window)",
+    "see_through_factor": [
+     1.0247844773,
+     1.03290342989
+    ],
+    "terms": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      0,
+      4
+     ],
+     [
+      0,
+      5
+     ],
+     [
+      1,
+      0
+     ],
+     [
+      1,
+      1
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      1,
+      4
+     ],
+     [
+      2,
+      0
+     ],
+     [
+      2,
+      1
+     ],
+     [
+      2,
+      2
+     ],
+     [
+      2,
+      3
+     ],
+     [
+      3,
+      0
+     ],
+     [
+      3,
+      1
+     ],
+     [
+      3,
+      2
+     ],
+     [
+      4,
+      0
+     ],
+     [
+      4,
+      1
+     ],
+     [
+      5,
+      0
+     ]
+    ],
+    "cx": [
+     -1.75219296482e-19,
+     4.52272595603e-20,
+     4.55907365103e-21,
+     3.0634496155e-21,
+     -2.53500379228e-23,
+     -5.33687402331e-05,
+     3.71528548416e-06,
+     1.38853546059e-07,
+     6.74418805535e-10,
+     1.44453305344e-11,
+     6.9019087608e-20,
+     3.58808092869e-21,
+     -4.0290077883e-22,
+     -4.79249398633e-23,
+     1.29983586228e-07,
+     6.46821543784e-10,
+     2.57810390655e-11,
+     -1.93113515952e-21,
+     -1.93333090106e-23,
+     1.14421444405e-11
+    ],
+    "cy": [
+     -2.65758878663e-07,
+     5.69811808334e-06,
+     1.48085206185e-07,
+     8.78482540927e-10,
+     1.61301095887e-11,
+     -3.39673826984e-19,
+     -2.08384340219e-21,
+     1.87001560679e-20,
+     -2.76222972408e-22,
+     -1.96695653312e-22,
+     1.85791084536e-06,
+     1.38853490536e-07,
+     1.00809679747e-09,
+     2.88962234188e-11,
+     2.90041764008e-21,
+     2.00994104414e-22,
+     -9.64061345769e-23,
+     1.60001125025e-10,
+     1.28885796837e-11,
+     -2.95478202109e-24
+    ],
+    "max_fit_residual_rad": 2.71816317706e-08
+   },
+   "scan_mm": [
+    -11.0,
+    -10.0,
+    -9.0,
+    -8.0,
+    -7.0,
+    -6.0,
+    -5.0,
+    -4.0,
+    -3.0,
+    -2.0,
+    -1.0,
+    0.0,
+    1.0,
+    2.0,
+    3.0,
+    4.0,
+    5.0,
+    6.0,
+    7.0,
+    8.0,
+    9.0,
+    10.0,
+    11.0
+   ],
+   "beam_direction_tangential_scan_moa": [
+    1.7379966529,
+    1.48354766946,
+    1.24029495504,
+    1.01087804536,
+    0.79795897435,
+    0.604226899525,
+    0.432402846607,
+    0.285244595612,
+    0.165551731896,
+    0.0761708870333,
+    0.0200011961233,
+    -1.27767501888e-13,
+    0.0191888230713,
+    0.080659660049,
+    0.187581607748,
+    0.343207881453,
+    0.55088325915,
+    0.814052001229,
+    1.13626629819,
+    1.52119530447,
+    1.97263482304,
+    2.49451771241,
+    3.09092509652
+   ],
+   "beam_direction_sagittal_scan_moa": [
+    1.41705793808,
+    1.38389964938,
+    1.32313737472,
+    1.23766824465,
+    1.13034532781,
+    1.00398302373,
+    0.861362275054,
+    0.705235624918,
+    0.538332144175,
+    0.363362251698,
+    0.183022450307,
+    0.0,
+    -0.183022450307,
+    -0.363362251698,
+    -0.538332144175,
+    -0.705235624918,
+    -0.861362275054,
+    -1.00398302373,
+    -1.13034532781,
+    -1.23766824465,
+    -1.32313737472,
+    -1.38389964938,
+    -1.41705793808
+   ],
+   "table": [
+    {
+     "distance_m": 10,
+     "eye_3mm": {
+      "max_moa": 1.21852628446,
+      "mean_moa": 0.790060116131,
+      "max_mm_on_target": 3.54454928099
+     },
+     "eye_6mm": {
+      "max_moa": 2.87689854946,
+      "mean_moa": 1.6606005213,
+      "max_mm_on_target": 8.36855865564
+     },
+     "eye_9mm": {
+      "max_moa": 5.06826092772,
+      "mean_moa": 2.69205504089,
+      "max_mm_on_target": 14.7429734232
+     },
+     "eye_11mm": {
+      "max_moa": 6.87551865217,
+      "mean_moa": 3.50951003558,
+      "max_mm_on_target": 20.0000730438
+     },
+     "edge_to_edge_sweep_moa": {
+      "sagittal": 4.69650450939,
+      "tangential": 8.90817577246
+     }
+    },
+    {
+     "distance_m": 15,
+     "eye_3mm": {
+      "max_moa": 0.882673321093,
+      "mean_moa": 0.47291836285,
+      "max_mm_on_target": 3.85138891814
+     },
+     "eye_6mm": {
+      "max_moa": 2.20516471107,
+      "mean_moa": 1.03178743627,
+      "max_mm_on_target": 9.62184618924
+     },
+     "eye_9mm": {
+      "max_moa": 4.0606093697,
+      "mean_moa": 1.75188827041,
+      "max_mm_on_target": 17.7177507847
+     },
+     "eye_11mm": {
+      "max_moa": 5.64389695524,
+      "mean_moa": 2.35741855801,
+      "max_mm_on_target": 24.6261461281
+     },
+     "edge_to_edge_sweep_moa": {
+      "sagittal": 2.23362311869,
+      "tangential": 6.4451920218
+     }
+    },
+    {
+     "distance_m": 25,
+     "eye_3mm": {
+      "max_moa": 0.609842329349,
+      "mean_moa": 0.306440704498,
+      "max_mm_on_target": 4.43489856882
+     },
+     "eye_6mm": {
+      "max_moa": 1.65947960298,
+      "mean_moa": 0.694685675468,
+      "max_mm_on_target": 12.0680762257
+     },
+     "eye_9mm": {
+      "max_moa": 3.24203957778,
+      "mean_moa": 1.24848500995,
+      "max_mm_on_target": 23.5767771301
+     },
+     "eye_11mm": {
+      "max_moa": 4.64338329038,
+      "mean_moa": 1.79724431624,
+      "max_mm_on_target": 33.7676361872
+     },
+     "edge_to_edge_sweep_moa": {
+      "sagittal": 0.232896331658,
+      "tangential": 4.444379254
+     }
+    },
+    {
+     "distance_m": 35,
+     "eye_3mm": {
+      "max_moa": 0.491765074574,
+      "mean_moa": 0.291366263733,
+      "max_mm_on_target": 5.00670315696
+     },
+     "eye_6mm": {
+      "max_moa": 1.42331496884,
+      "mean_moa": 0.666635156272,
+      "max_mm_on_target": 14.4908939579
+     },
+     "eye_9mm": {
+      "max_moa": 2.88777417533,
+      "mean_moa": 1.27314961617,
+      "max_mm_on_target": 29.4006809912
+     },
+     "eye_11mm": {
+      "max_moa": 4.21037495128,
+      "mean_moa": 1.80916016452,
+      "max_mm_on_target": 42.8661949586
+     },
+     "edge_to_edge_sweep_moa": {
+      "sagittal": 0.632988478875,
+      "tangential": 3.5784564461
+     }
+    },
+    {
+     "distance_m": 45,
+     "eye_3mm": {
+      "max_moa": 0.425865108166,
+      "mean_moa": 0.292219606218,
+      "max_mm_on_target": 5.57456123014
+     },
+     "eye_6mm": {
+      "max_moa": 1.2915093562,
+      "mean_moa": 0.699071355513,
+      "max_mm_on_target": 16.9058179395
+     },
+     "eye_9mm": {
+      "max_moa": 2.69005540482,
+      "mean_moa": 1.31290086528,
+      "max_mm_on_target": 35.2127429063
+     },
+     "eye_11mm": {
+      "max_moa": 3.96870897491,
+      "mean_moa": 1.84434713175,
+      "max_mm_on_target": 51.9502789992
+     },
+     "edge_to_edge_sweep_moa": {
+      "sagittal": 1.11624636314,
+      "tangential": 3.09517714867
+     }
+    },
+    {
+     "distance_m": 50,
+     "eye_3mm": {
+      "max_moa": 0.402748980035,
+      "mean_moa": 0.293940411063,
+      "max_mm_on_target": 5.85774646722
+     },
+     "eye_6mm": {
+      "max_moa": 1.24527510274,
+      "mean_moa": 0.712343330679,
+      "max_mm_on_target": 18.1117921966
+     },
+     "eye_9mm": {
+      "max_moa": 2.62070038471,
+      "mean_moa": 1.32928059063,
+      "max_mm_on_target": 38.1165420179
+     },
+     "eye_11mm": {
+      "max_moa": 3.88393831682,
+      "mean_moa": 1.86013609519,
+      "max_mm_on_target": 56.4895929774
+     },
+     "edge_to_edge_sweep_moa": {
+      "sagittal": 1.28576161776,
+      "tangential": 2.92565434777
+     }
+    },
+    {
+     "distance_m": 55,
+     "eye_3mm": {
+      "max_moa": 0.383816007891,
+      "mean_moa": 0.295868689059,
+      "max_mm_on_target": 6.1406153046
+     },
+     "eye_6mm": {
+      "max_moa": 1.20740752082,
+      "mean_moa": 0.723842563653,
+      "max_mm_on_target": 19.3171335973
+     },
+     "eye_9mm": {
+      "max_moa": 2.56389602723,
+      "mean_moa": 1.34347216829,
+      "max_mm_on_target": 41.0193917412
+     },
+     "eye_11mm": {
+      "max_moa": 3.81450797167,
+      "mean_moa": 1.87416365336,
+      "max_mm_on_target": 61.027746495
+     },
+     "edge_to_edge_sweep_moa": {
+      "sagittal": 1.42460093171,
+      "tangential": 2.78680883958
+     }
+    },
+    {
+     "distance_m": 75,
+     "eye_3mm": {
+      "max_moa": 0.40064530191,
+      "mean_moa": 0.308416977113,
+      "max_mm_on_target": 8.74072456371
+     },
+     "eye_6mm": {
+      "max_moa": 1.10625285357,
+      "mean_moa": 0.757226341266,
+      "max_mm_on_target": 24.134693318
+     },
+     "eye_9mm": {
+      "max_moa": 2.41215603902,
+      "mean_moa": 1.38442922384,
+      "max_mm_on_target": 52.625081191
+     },
+     "eye_11mm": {
+      "max_moa": 3.62904050049,
+      "mean_moa": 1.91579250596,
+      "max_mm_on_target": 79.1733817772
+     },
+     "edge_to_edge_sweep_moa": {
+      "sagittal": 1.79547863514,
+      "tangential": 2.41591452977
+     }
+    },
+    {
+     "distance_m": 100,
+     "eye_3mm": {
+      "max_moa": 0.435152679904,
+      "mean_moa": 0.323908519706,
+      "max_mm_on_target": 12.6580783553
+     },
+     "eye_6mm": {
+      "max_moa": 1.03656144703,
+      "mean_moa": 0.782449713834,
+      "max_mm_on_target": 30.1523502497
+     },
+     "eye_9mm": {
+      "max_moa": 2.30761341404,
+      "mean_moa": 1.41500306347,
+      "max_mm_on_target": 67.1257532302
+     },
+     "eye_11mm": {
+      "max_moa": 3.50126101243,
+      "mean_moa": 1.94750116407,
+      "max_mm_on_target": 101.847554398
+     },
+     "edge_to_edge_sweep_moa": {
+      "sagittal": 2.05099806018,
+      "tangential": 2.16038361293
+     }
+    },
+    {
+     "distance_m": 200,
+     "eye_3mm": {
+      "max_moa": 0.487115282878,
+      "mean_moa": 0.349599089959,
+      "max_mm_on_target": 28.33921841
+     },
+     "eye_6mm": {
+      "max_moa": 0.93179810716,
+      "mean_moa": 0.823816223853,
+      "max_mm_on_target": 54.209816446
+     },
+     "eye_9mm": {
+      "max_moa": 2.15046009524,
+      "mean_moa": 1.46437758373,
+      "max_mm_on_target": 125.108696982
+     },
+     "eye_11mm": {
+      "max_moa": 3.30917694713,
+      "mean_moa": 1.99914947559,
+      "max_mm_on_target": 192.520110862
+     },
+     "edge_to_edge_sweep_moa": {
+      "sagittal": 2.43510655796,
+      "tangential": 1.77625776232
+     }
+    },
+    {
+     "distance_m": 300,
+     "eye_3mm": {
+      "max_moa": 0.504485164502,
+      "mean_moa": 0.358761842058,
+      "max_mm_on_target": 44.0246357401
+     },
+     "eye_6mm": {
+      "max_moa": 0.958119368249,
+      "mean_moa": 0.838567704098,
+      "max_mm_on_target": 83.6116880154
+     },
+     "eye_9mm": {
+      "max_moa": 2.09798491896,
+      "mean_moa": 1.48177428901,
+      "max_mm_on_target": 183.083722466
+     },
+     "eye_11mm": {
+      "max_moa": 3.24503801602,
+      "mean_moa": 2.01737944156,
+      "max_mm_on_target": 283.18298866
+     },
+     "edge_to_edge_sweep_moa": {
+      "sagittal": 2.5633644606,
+      "tangential": 1.64799404457
+     }
+    },
+    {
+     "distance_m": 600,
+     "eye_3mm": {
+      "max_moa": 0.521878041962,
+      "mean_moa": 0.368199455329,
+      "max_mm_on_target": 91.0849012609
+     },
+     "eye_6mm": {
+      "max_moa": 0.992128083831,
+      "mean_moa": 0.853808423889,
+      "max_mm_on_target": 173.159016643
+     },
+     "eye_9mm": {
+      "max_moa": 2.04546427614,
+      "mean_moa": 1.49965011701,
+      "max_mm_on_target": 357.000863505
+     },
+     "eye_11mm": {
+      "max_moa": 3.18084351022,
+      "mean_moa": 2.03609879543,
+      "max_mm_on_target": 555.16192244
+     },
+     "edge_to_edge_sweep_moa": {
+      "sagittal": 2.69173347149,
+      "tangential": 1.5196192031
+     }
+    }
+   ],
+   "sweep_note": "edge_to_edge_sweep_moa: the eye goes from -11 to +11 mm across the window; the figure is how far the dot moves on the target"
+  }
+ },
+ "window": {
+  "led_peak_nm": 650.0,
+  "led_fwhm_nm": 20.0,
+  "dichroic_peak_reflectance": 0.8,
+  "dichroic_sigma_nm": 15.0,
+  "transmission_linear_srgb": [
+   0.789090015677,
+   1.00199731107,
+   0.987063121099
+  ],
+  "luminous_transmission": 0.953726224659,
+  "front_reflection_linear_srgb": [
+   0.203954276773,
+   -0.0121788322858,
+   0.00298162946833
+  ],
+  "front_luminous_reflectance": 0.0368236218758,
+  "look": "seen through: a faint cyan-blue cast (red is taken out of the scene); seen from the front: a deep red mirror-like flash",
+  "rear_window": "plain AR-coated flat, 0.5 percent per surface, neutral",
+  "eye_side_ghost": "the eye-side surface of the doublet reflects about 0.5 percent of what is behind the shooter (bright sky behind gives a faint veil)",
+  "source": "inferred: reflectance and bandwidth typical of a single-line band reflector; the tint is computed from that spectrum with the Wyman 2013 fit of the CIE 1931 observer under a 6504 K source"
+ },
+ "brightness": {
+  "settings": [
+   {
+    "position": 0,
+    "label": "OFF",
+    "dot_luminance_cd_m2": 0.0
+   },
+   {
+    "position": 1,
+    "label": "NV1",
+    "dot_luminance_cd_m2": 0.003
+   },
+   {
+    "position": 2,
+    "label": "NV2",
+    "dot_luminance_cd_m2": 0.03
+   },
+   {
+    "position": 3,
+    "label": "NV3",
+    "dot_luminance_cd_m2": 0.3
+   },
+   {
+    "position": 4,
+    "label": "1",
+    "dot_luminance_cd_m2": 91.4494741655
+   },
+   {
+    "position": 5,
+    "label": "2",
+    "dot_luminance_cd_m2": 274.348422497
+   },
+   {
+    "position": 6,
+    "label": "3",
+    "dot_luminance_cd_m2": 823.04526749
+   },
+   {
+    "position": 7,
+    "label": "4",
+    "dot_luminance_cd_m2": 2469.13580247
+   },
+   {
+    "position": 8,
+    "label": "5",
+    "dot_luminance_cd_m2": 7407.40740741
+   },
+   {
+    "position": 9,
+    "label": "6",
+    "dot_luminance_cd_m2": 22222.2222222
+   },
+   {
+    "position": 10,
+    "label": "7",
+    "dot_luminance_cd_m2": 66666.6666667
+   },
+   {
+    "position": 11,
+    "label": "8",
+    "dot_luminance_cd_m2": 200000.0
+   }
+  ],
+  "contrast": "Weber contrast C = dot_luminance / (window_transmission * scene_luminance)",
+  "appearance": {
+   "washed_out_below": 3.0,
+   "crisp_range": [
+    8.0,
+    60.0
+   ],
+   "bloom_above": 300.0,
+   "bloom_model": "apparent diameter = dot * sqrt(1 + (C / 300)); add a halo of radius 6 * dot at 0.02 * C / 300 of the core (clamped to 1), plus two faint starburst spikes for C > 1000",
+   "astigmatism_note": "a real eye with astigmatism smears the dot into a comma; not modelled, expose as an option"
+  },
+  "versus_ambient": [
+   {
+    "ambient": "starlight",
+    "scene_luminance_cd_m2": 0.001,
+    "seen_through_window_cd_m2": 0.000953726224659,
+    "eye_pupil_mm": 7.48516147872,
+    "recommended_position": 2,
+    "contrast_at_recommended": 31.4555678814,
+    "contrast_at_max": 209703785.876
+   },
+   {
+    "ambient": "full_moon",
+    "scene_luminance_cd_m2": 0.03,
+    "seen_through_window_cd_m2": 0.0286117867398,
+    "eye_pupil_mm": 6.8128415682,
+    "recommended_position": 3,
+    "contrast_at_recommended": 10.4851892938,
+    "contrast_at_max": 6990126.19586
+   },
+   {
+    "ambient": "deep_twilight",
+    "scene_luminance_cd_m2": 1.0,
+    "seen_through_window_cd_m2": 0.953726224659,
+    "eye_pupil_mm": 5.15941314441,
+    "recommended_position": 4,
+    "contrast_at_recommended": 95.8865047443,
+    "contrast_at_max": 209703.785876
+   },
+   {
+    "ambient": "indoor_range",
+    "scene_luminance_cd_m2": 60.0,
+    "seen_through_window_cd_m2": 57.2235734795,
+    "eye_pupil_mm": 3.06605185223,
+    "recommended_position": 6,
+    "contrast_at_recommended": 14.3829757117,
+    "contrast_at_max": 3495.06309793
+   },
+   {
+    "ambient": "heavy_overcast",
+    "scene_luminance_cd_m2": 700.0,
+    "seen_through_window_cd_m2": 667.608357261,
+    "eye_pupil_mm": 2.44127403547,
+    "recommended_position": 8,
+    "contrast_at_recommended": 11.0954384061,
+    "contrast_at_max": 299.576836966
+   },
+   {
+    "ambient": "overcast_day",
+    "scene_luminance_cd_m2": 2500.0,
+    "seen_through_window_cd_m2": 2384.31556165,
+    "eye_pupil_mm": 2.27027840869,
+    "recommended_position": 9,
+    "contrast_at_recommended": 9.32016826115,
+    "contrast_at_max": 83.8815143503
+   },
+   {
+    "ambient": "sunlit_grass",
+    "scene_luminance_cd_m2": 5000.0,
+    "seen_through_window_cd_m2": 4768.63112329,
+    "eye_pupil_mm": 2.20581100241,
+    "recommended_position": 10,
+    "contrast_at_recommended": 13.9802523917,
+    "contrast_at_max": 41.9407571752
+   },
+   {
+    "ambient": "sunlit_paper_target",
+    "scene_luminance_cd_m2": 20000.0,
+    "seen_through_window_cd_m2": 19074.5244932,
+    "eye_pupil_mm": 2.11841764084,
+    "recommended_position": 11,
+    "contrast_at_recommended": 10.4851892938,
+    "contrast_at_max": 10.4851892938
+   },
+   {
+    "ambient": "sunlit_snow_or_sand",
+    "scene_luminance_cd_m2": 32000.0,
+    "seen_through_window_cd_m2": 30519.2391891,
+    "eye_pupil_mm": 2.09801615985,
+    "recommended_position": 11,
+    "contrast_at_recommended": 6.55324330862,
+    "contrast_at_max": 6.55324330862
+   }
+  ],
+  "source": "inferred: step ratio 3 per daylight position and a 2e5 cd/m^2 top setting chosen so the top position keeps contrast above 6 on sunlit snow; manufacturers publish the number of settings, not luminances"
+ },
+ "turrets": {
+  "click": "0.5 MOA",
+  "click_mrad": 0.145444104333,
+  "mm_at_100m": 14.5444104333,
+  "travel_moa": 120.0,
+  "elevation": "top, coin-slot adjuster under a screw cap; clip elevation_adjust",
+  "windage": "right side, the same; clip windage_adjust",
+  "mechanism": "the adjusters move the emitter: 13.9 um per click"
+ },
+ "eye_relief": "unlimited (a collimated dot). The design eye point 159 mm behind the rear window only fixes the head position.",
+ "reticle": {
+  "name": "2 MOA dot",
+  "units": "mrad",
+  "primitives": [
+   {
+    "type": "dot",
+    "c": [
+     0,
+     0
+    ],
+    "d": 0.581776417331,
+    "layer": "illuminated"
+   }
+  ],
+  "profile": "radial: uniform luminance to r = 0.291 mrad, then a Gaussian skirt of sigma 0.06 mrad (about the eye's point spread at a 3 mm pupil: inferred)",
+  "skirt_sigma_mrad": 0.06
+ },
+ "zero": {
+  "axis_over_bore_mm": 75.79,
+  "eye_to_muzzle_m": 0.6239,
+  "click": "0.5 MOA",
+  "click_rad": 0.000145444104333,
+  "click_moves_poi_mm_at": {
+   "10": 1.45444104333,
+   "25": 3.63610260832,
+   "50": 7.27220521664,
+   "100": 14.5444104333,
+   "200": 29.0888208666
+  },
+  "convention": "Distances are from the eye. bore_angle is the bore above the line of sight for an exact zero (POI = POA at the zero distance). clicks_up_from_centre is that angle in whole clicks from optical centre (line of sight parallel to the bore); the hold tables use the exact angle. poi_mm: + is high. hold: aim this much higher (+) to hit.",
+  "ammo": {
+   "M855": {
+    "50m": {
+     "zero_distance_m": 50.0,
+     "bore_angle_mrad": 1.88414412164,
+     "bore_angle_moa": 6.47721036987,
+     "clicks_up_from_centre": 13,
+     "rounding_moves_poi_mm_at_zero": 3.97340483108,
+     "crossings_from_eye_m": [
+      50.0,
+      185.489579796
+     ],
+     "max_ordinate_mm": 42.0764287892,
+     "max_ordinate_at_m": 119.5,
+     "within_50mm_from_to_m": [
+      15.5,
+      215.5
+     ],
+     "holds": [
+      {
+       "distance_m": 10,
+       "poi_mm": -58.7195945169,
+       "hold_mrad": 5.87195945169,
+       "hold_moa": 20.1863096432,
+       "hold_clicks_up": 40,
+       "wind_10mph_mm": 0.280151326371,
+       "wind_10mph_mrad": 0.0280151326371,
+       "tof_ms": 11.0976544004,
+       "velocity_mps": 840.2851927
+      },
+      {
+       "distance_m": 15,
+       "poi_mm": -50.1263603929,
+       "hold_mrad": 3.34175735953,
+       "hold_moa": 11.4881155715,
+       "hold_clicks_up": 23,
+       "wind_10mph_mm": 0.670198360571,
+       "wind_10mph_mrad": 0.0446798907048,
+       "tof_ms": 17.062942778,
+       "velocity_mps": 835.122668769
+      },
+      {
+       "distance_m": 20,
+       "poi_mm": -41.8723676167,
+       "hold_mrad": 2.09361838084,
+       "hold_moa": 7.19732982797,
+       "hold_clicks_up": 14,
+       "wind_10mph_mm": 1.21968292696,
+       "wind_10mph_mrad": 0.0609841463479,
+       "tof_ms": 23.0678404591,
+       "velocity_mps": 829.980761264
+      },
+      {
+       "distance_m": 25,
+       "poi_mm": -33.9760912438,
+       "hold_mrad": 1.35904364975,
+       "hold_moa": 4.67204791828,
+       "hold_clicks_up": 9,
+       "wind_10mph_mm": 1.93860582797,
+       "wind_10mph_mrad": 0.077544233119,
+       "tof_ms": 29.1130233913,
+       "velocity_mps": 824.849244503
+      },
+      {
+       "distance_m": 35,
+       "poi_mm": -19.2742777501,
+       "hold_mrad": 0.550693650003,
+       "hold_moa": 1.89314531699,
+       "hold_clicks_up": 4,
+       "wind_10mph_mm": 3.87601926909,
+       "wind_10mph_mrad": 0.110743407688,
+       "tof_ms": 41.3139259768,
+       "velocity_mps": 814.64414156
+      },
+      {
+       "distance_m": 45,
+       "poi_mm": -6.03820182705,
+       "hold_mrad": 0.134182262823,
+       "hold_moa": 0.461284640718,
+       "hold_clicks_up": 1,
+       "wind_10mph_mm": 6.51327343142,
+       "wind_10mph_mrad": 0.144739409587,
+       "tof_ms": 53.6642576264,
+       "velocity_mps": 804.510171002
+      },
+      {
+       "distance_m": 55,
+       "poi_mm": 5.66749024199,
+       "hold_mrad": -0.103045277127,
+       "hold_moa": -0.354243568688,
+       "hold_clicks_up": -1,
+       "wind_10mph_mm": 9.82926898216,
+       "wind_10mph_mrad": 0.178713981494,
+       "tof_ms": 66.1745082769,
+       "velocity_mps": 794.445732004
+      },
+      {
+       "distance_m": 75,
+       "poi_mm": 24.3902447671,
+       "hold_mrad": -0.325203263561,
+       "hold_moa": -1.11796646916,
+       "hold_clicks_up": -2,
+       "wind_10mph_mm": 18.6285661375,
+       "wind_10mph_mrad": 0.248380881833,
+       "tof_ms": 91.6638907651,
+       "velocity_mps": 774.507142362
+      },
+      {
+       "distance_m": 100,
+       "poi_mm": 38.5573145867,
+       "hold_mrad": -0.385573145867,
+       "hold_moa": -1.32550283711,
+       "hold_clicks_up": -3,
+       "wind_10mph_mm": 33.7809212372,
+       "wind_10mph_mrad": 0.337809212372,
+       "tof_ms": 124.467845508,
+       "velocity_mps": 749.986493454
+      },
+      {
+       "distance_m": 150,
+       "poi_mm": 33.4461455151,
+       "hold_mrad": -0.222974303434,
+       "hold_moa": -0.766529191599,
+       "hold_clicks_up": -2,
+       "wind_10mph_mm": 78.8280950734,
+       "wind_10mph_mrad": 0.525520633823,
+       "tof_ms": 193.371167882,
+       "velocity_mps": 702.254203522
+      },
+      {
+       "distance_m": 200,
+       "poi_mm": -21.4718867096,
+       "hold_mrad": 0.107359433548,
+       "hold_moa": 0.369074545993,
+       "hold_clicks_up": 1,
+       "wind_10mph_mm": 145.100214682,
+       "wind_10mph_mrad": 0.725501073411,
+       "tof_ms": 267.019098522,
+       "velocity_mps": 656.370764765
+      },
+      {
+       "distance_m": 250,
+       "poi_mm": -133.392636524,
+       "hold_mrad": 0.533570546094,
+       "hold_moa": 1.83428042182,
+       "hold_clicks_up": 4,
+       "wind_10mph_mm": 234.733895432,
+       "wind_10mph_mrad": 0.938935581727,
+       "tof_ms": 345.89054492,
+       "velocity_mps": 612.279519965
+      },
+      {
+       "distance_m": 300,
+       "poi_mm": -310.857370037,
+       "hold_mrad": 1.03619123346,
+       "hold_moa": 3.56216306673,
+       "hold_clicks_up": 7,
+       "wind_10mph_mm": 350.204015285,
+       "wind_10mph_mrad": 1.16734671762,
+       "tof_ms": 430.544391653,
+       "velocity_mps": 569.790926223
+      },
+      {
+       "distance_m": 350,
+       "poi_mm": -564.003435608,
+       "hold_mrad": 1.61143838745,
+       "hold_moa": 5.53971711278,
+       "hold_clicks_up": 11,
+       "wind_10mph_mm": 494.463566278,
+       "wind_10mph_mrad": 1.41275304651,
+       "tof_ms": 521.639517577,
+       "velocity_mps": 528.74361862
+      },
+      {
+       "distance_m": 400,
+       "poi_mm": -905.081262673,
+       "hold_mrad": 2.26270315668,
+       "hold_moa": 7.77860047013,
+       "hold_clicks_up": 16,
+       "wind_10mph_mm": 671.084721822,
+       "wind_10mph_mrad": 1.67771180456,
+       "tof_ms": 619.97339526,
+       "velocity_mps": 489.007494106
+      },
+      {
+       "distance_m": 450,
+       "poi_mm": -1348.96335804,
+       "hold_mrad": 2.99769635121,
+       "hold_moa": 10.3053209512,
+       "hold_clicks_up": 21,
+       "wind_10mph_mm": 884.297938425,
+       "wind_10mph_mrad": 1.96510652983,
+       "tof_ms": 726.484701216,
+       "velocity_mps": 450.600536855
+      },
+      {
+       "distance_m": 500,
+       "poi_mm": -1913.97171281,
+       "hold_mrad": 3.82794342562,
+       "hold_moa": 13.1595001502,
+       "hold_clicks_up": 26,
+       "wind_10mph_mm": 1139.11389251,
+       "wind_10mph_mrad": 2.27822778502,
+       "tof_ms": 842.310690942,
+       "velocity_mps": 413.641292433
+      },
+      {
+       "distance_m": 550,
+       "poi_mm": -2622.75597213,
+       "hold_mrad": 4.76864722206,
+       "hold_moa": 16.3934015887,
+       "hold_clicks_up": 33,
+       "wind_10mph_mm": 1441.2546315,
+       "wind_10mph_mrad": 2.62046296637,
+       "tof_ms": 968.719765167,
+       "velocity_mps": 378.367810831
+      },
+      {
+       "distance_m": 600,
+       "poi_mm": -3503.37300127,
+       "hold_mrad": 5.83895500212,
+       "hold_moa": 20.0728487033,
+       "hold_clicks_up": 40,
+       "wind_10mph_mm": 1796.90930831,
+       "wind_10mph_mrad": 2.99484884718,
+       "tof_ms": 1107.10214265,
+       "velocity_mps": 345.449035881
+      }
+     ]
+    },
+    "100m": {
+     "zero_distance_m": 100.0,
+     "bore_angle_mrad": 1.49615028221,
+     "bore_angle_moa": 5.14338580128,
+     "clicks_up_from_centre": 10,
+     "rounding_moves_poi_mm_at_zero": -24.9995209355,
+     "crossings_from_eye_m": [
+      96.0206616185,
+      100.0
+     ],
+     "max_ordinate_mm": 0.0343688002685,
+     "max_ordinate_at_m": 98.0,
+     "within_50mm_from_to_m": [
+      20.0,
+      171.5
+     ],
+     "holds": [
+      {
+       "distance_m": 10,
+       "poi_mm": -62.3574635548,
+       "hold_mrad": 6.23574635548,
+       "hold_moa": 21.436916897,
+       "hold_clicks_up": 43,
+       "wind_10mph_mm": 0.280151326371,
+       "wind_10mph_mrad": 0.0280151326371,
+       "tof_ms": 11.0976544004,
+       "velocity_mps": 840.2851927
+      },
+      {
+       "distance_m": 15,
+       "poi_mm": -55.7041986279,
+       "hold_mrad": 3.71361324186,
+       "hold_moa": 12.7664619302,
+       "hold_clicks_up": 26,
+       "wind_10mph_mm": 0.670198360571,
+       "wind_10mph_mrad": 0.0446798907048,
+       "tof_ms": 17.062942778,
+       "velocity_mps": 835.122668769
+      },
+      {
+       "distance_m": 20,
+       "poi_mm": -49.3901750489,
+       "hold_mrad": 2.46950875245,
+       "hold_moa": 8.48954573915,
+       "hold_clicks_up": 17,
+       "wind_10mph_mm": 1.21968292696,
+       "wind_10mph_mrad": 0.0609841463479,
+       "tof_ms": 23.0678404591,
+       "velocity_mps": 829.980761264
+      },
+      {
+       "distance_m": 25,
+       "poi_mm": -43.4338678731,
+       "hold_mrad": 1.73735471492,
+       "hold_moa": 5.97258556094,
+       "hold_clicks_up": 12,
+       "wind_10mph_mm": 1.93860582797,
+       "wind_10mph_mrad": 0.077544233119,
+       "tof_ms": 29.1130233913,
+       "velocity_mps": 824.849244503
+      },
+      {
+       "distance_m": 35,
+       "poi_mm": -32.6119927738,
+       "hold_mrad": 0.931771222108,
+       "hold_moa": 3.20319350991,
+       "hold_clicks_up": 6,
+       "wind_10mph_mm": 3.87601926909,
+       "wind_10mph_mrad": 0.110743407688,
+       "tof_ms": 41.3139259768,
+       "velocity_mps": 814.64414156
+      },
+      {
+       "distance_m": 45,
+       "poi_mm": -23.255855245,
+       "hold_mrad": 0.516796783223,
+       "hold_moa": 1.77661647268,
+       "hold_clicks_up": 4,
+       "wind_10mph_mm": 6.51327343142,
+       "wind_10mph_mrad": 0.144739409587,
+       "tof_ms": 53.6642576264,
+       "velocity_mps": 804.510171002
+      },
+      {
+       "distance_m": 55,
+       "poi_mm": -15.4301015703,
+       "hold_mrad": 0.280547301279,
+       "hold_moa": 0.964450579023,
+       "hold_clicks_up": 2,
+       "wind_10mph_mm": 9.82926898216,
+       "wind_10mph_mrad": 0.178713981494,
+       "tof_ms": 66.1745082769,
+       "velocity_mps": 794.445732004
+      },
+      {
+       "distance_m": 75,
+       "poi_mm": -4.46722383383,
+       "hold_mrad": 0.0595629844511,
+       "hold_moa": 0.204762457455,
+       "hold_clicks_up": 0,
+       "wind_10mph_mm": 18.6285661375,
+       "wind_10mph_mrad": 0.248380881833,
+       "tof_ms": 91.6638907651,
+       "velocity_mps": 774.507142362
+      },
+      {
+       "distance_m": 100,
+       "poi_mm": 0.0,
+       "hold_mrad": -0.0,
+       "hold_moa": -0.0,
+       "hold_clicks_up": 0,
+       "wind_10mph_mm": 33.7809212372,
+       "wind_10mph_mrad": 0.337809212372,
+       "tof_ms": 124.467845508,
+       "velocity_mps": 749.986493454
+      },
+      {
+       "distance_m": 150,
+       "poi_mm": -24.5108610432,
+       "hold_mrad": 0.163405740288,
+       "hold_moa": 0.561747556002,
+       "hold_clicks_up": 1,
+       "wind_10mph_mm": 78.8280950734,
+       "wind_10mph_mrad": 0.525520633823,
+       "tof_ms": 193.371167882,
+       "velocity_mps": 702.254203522
+      },
+      {
+       "distance_m": 200,
+       "poi_mm": -98.8285852395,
+       "hold_mrad": 0.494142926198,
+       "hold_moa": 1.69873824884,
+       "hold_clicks_up": 3,
+       "wind_10mph_mm": 145.100214682,
+       "wind_10mph_mrad": 0.725501073411,
+       "tof_ms": 267.019098522,
+       "velocity_mps": 656.370764765
+      },
+      {
+       "distance_m": 250,
+       "poi_mm": -230.149027025,
+       "hold_mrad": 0.9205961081,
+       "hold_moa": 3.16477629782,
+       "hold_clicks_up": 6,
+       "wind_10mph_mm": 234.733895432,
+       "wind_10mph_mrad": 0.938935581727,
+       "tof_ms": 345.89054492,
+       "velocity_mps": 612.279519965
+      },
+      {
+       "distance_m": 300,
+       "poi_mm": -427.01345251,
+       "hold_mrad": 1.42337817503,
+       "hold_moa": 4.89321372483,
+       "hold_clicks_up": 10,
+       "wind_10mph_mm": 350.204015285,
+       "wind_10mph_mrad": 1.16734671762,
+       "tof_ms": 430.544391653,
+       "velocity_mps": 569.790926223
+      },
+      {
+       "distance_m": 350,
+       "poi_mm": -699.559210053,
+       "hold_mrad": 1.99874060015,
+       "hold_moa": 6.8711640438,
+       "hold_clicks_up": 14,
+       "wind_10mph_mm": 494.463566278,
+       "wind_10mph_mrad": 1.41275304651,
+       "tof_ms": 521.639517577,
+       "velocity_mps": 528.74361862
+      },
+      {
+       "distance_m": 400,
+       "poi_mm": -1060.03672909,
+       "hold_mrad": 2.65009182272,
+       "hold_moa": 9.11034460585,
+       "hold_clicks_up": 18,
+       "wind_10mph_mm": 671.084721822,
+       "wind_10mph_mrad": 1.67771180456,
+       "tof_ms": 619.97339526,
+       "velocity_mps": 489.007494106
+      },
+      {
+       "distance_m": 450,
+       "poi_mm": -1523.31851643,
+       "hold_mrad": 3.38515225874,
+       "hold_moa": 11.6372962461,
+       "hold_clicks_up": 23,
+       "wind_10mph_mm": 884.297938425,
+       "wind_10mph_mrad": 1.96510652983,
+       "tof_ms": 726.484701216,
+       "velocity_mps": 450.600536855
+      },
+      {
+       "distance_m": 500,
+       "poi_mm": -2107.72656317,
+       "hold_mrad": 4.21545312633,
+       "hold_moa": 14.4916603725,
+       "hold_clicks_up": 29,
+       "wind_10mph_mm": 1139.11389251,
+       "wind_10mph_mrad": 2.27822778502,
+       "tof_ms": 842.310690942,
+       "velocity_mps": 413.641292433
+      },
+      {
+       "distance_m": 550,
+       "poi_mm": -2835.91051447,
+       "hold_mrad": 5.15620093539,
+       "hold_moa": 17.7257131152,
+       "hold_clicks_up": 35,
+       "wind_10mph_mm": 1441.2546315,
+       "wind_10mph_mrad": 2.62046296637,
+       "tof_ms": 968.719765167,
+       "velocity_mps": 378.367810831
+      },
+      {
+       "distance_m": 600,
+       "poi_mm": -3735.92723557,
+       "hold_mrad": 6.22654539262,
+       "hold_moa": 21.4052863166,
+       "hold_clicks_up": 43,
+       "wind_10mph_mm": 1796.90930831,
+       "wind_10mph_mrad": 2.99484884718,
+       "tof_ms": 1107.10214265,
+       "velocity_mps": 345.449035881
+      }
+     ]
+    },
+    "200m": {
+     "zero_distance_m": 200.0,
+     "bore_angle_mrad": 1.99183951096,
+     "bore_angle_moa": 6.84743984672,
+     "clicks_up_from_centre": 14,
+     "rounding_moves_poi_mm_at_zero": 26.5990824185,
+     "crossings_from_eye_m": [
+      45.9349868087,
+      200.0
+     ],
+     "max_ordinate_mm": 55.2199322578,
+     "max_ordinate_at_m": 125.5,
+     "within_50mm_from_to_m": [
+      14.5,
+      227.0
+     ],
+     "holds": [
+      {
+       "distance_m": 10,
+       "poi_mm": -57.7098317771,
+       "hold_mrad": 5.77098317771,
+       "hold_moa": 19.8391787834,
+       "hold_clicks_up": 40,
+       "wind_10mph_mm": 0.280151326371,
+       "wind_10mph_mrad": 0.0280151326371,
+       "tof_ms": 11.0976544004,
+       "velocity_mps": 840.2851927
+      },
+      {
+       "distance_m": 15,
+       "poi_mm": -48.5781207066,
+       "hold_mrad": 3.23854138044,
+       "hold_moa": 11.1332851726,
+       "hold_clicks_up": 22,
+       "wind_10mph_mm": 0.670198360571,
+       "wind_10mph_mrad": 0.0446798907048,
+       "tof_ms": 17.062942778,
+       "velocity_mps": 835.122668769
+      },
+      {
+       "distance_m": 20,
+       "poi_mm": -39.7856509838,
+       "hold_mrad": 1.98928254919,
+       "hold_moa": 6.83864965966,
+       "hold_clicks_up": 14,
+       "wind_10mph_mm": 1.21968292696,
+       "wind_10mph_mrad": 0.0609841463479,
+       "tof_ms": 23.0678404591,
+       "velocity_mps": 829.980761264
+      },
+      {
+       "distance_m": 25,
+       "poi_mm": -31.3508976643,
+       "hold_mrad": 1.25403590657,
+       "hold_moa": 4.31105788826,
+       "hold_clicks_up": 9,
+       "wind_10mph_mm": 1.93860582797,
+       "wind_10mph_mrad": 0.077544233119,
+       "tof_ms": 29.1130233913,
+       "velocity_mps": 824.849244503
+      },
+      {
+       "distance_m": 35,
+       "poi_mm": -15.5721302775,
+       "hold_mrad": 0.444918007927,
+       "hold_moa": 1.52951544502,
+       "hold_clicks_up": 3,
+       "wind_10mph_mm": 3.87601926909,
+       "wind_10mph_mrad": 0.110743407688,
+       "tof_ms": 41.3139259768,
+       "velocity_mps": 814.64414156
+      },
+      {
+       "distance_m": 45,
+       "poi_mm": -1.25910046127,
+       "hold_mrad": 0.0279800102504,
+       "hold_moa": 0.0961881898848,
+       "hold_clicks_up": 0,
+       "wind_10mph_mm": 6.51327343142,
+       "wind_10mph_mrad": 0.144739409587,
+       "tof_ms": 53.6642576264,
+       "velocity_mps": 804.510171002
+      },
+      {
+       "distance_m": 55,
+       "poi_mm": 11.5235455009,
+       "hold_mrad": -0.209519009108,
+       "hold_moa": -0.720273296978,
+       "hold_clicks_up": -1,
+       "wind_10mph_mm": 9.82926898216,
+       "wind_10mph_mrad": 0.178713981494,
+       "tof_ms": 66.1745082769,
+       "velocity_mps": 794.445732004
+      },
+      {
+       "distance_m": 75,
+       "poi_mm": 32.4002078123,
+       "hold_mrad": -0.432002770831,
+       "hold_moa": -1.4851161304,
+       "hold_clicks_up": -3,
+       "wind_10mph_mm": 18.6285661375,
+       "wind_10mph_mrad": 0.248380881833,
+       "tof_ms": 91.6638907651,
+       "velocity_mps": 774.507142362
+      },
+      {
+       "distance_m": 100,
+       "poi_mm": 49.2596623648,
+       "hold_mrad": -0.492596623648,
+       "hold_moa": -1.69342245225,
+       "hold_clicks_up": -3,
+       "wind_10mph_mm": 33.7809212372,
+       "wind_10mph_mrad": 0.337809212372,
+       "tof_ms": 124.467845508,
+       "velocity_mps": 749.986493454
+      },
+      {
+       "distance_m": 150,
+       "poi_mm": 49.533262759,
+       "hold_mrad": -0.330221751727,
+       "hold_moa": -1.13521876064,
+       "hold_clicks_up": -2,
+       "wind_10mph_mm": 78.8280950734,
+       "wind_10mph_mrad": 0.525520633823,
+       "tof_ms": 193.371167882,
+       "velocity_mps": 702.254203522
+      },
+      {
+       "distance_m": 200,
+       "poi_mm": -2.77555756156e-14,
+       "hold_mrad": 1.38777878078e-16,
+       "hold_moa": 4.7708320222e-16,
+       "hold_clicks_up": 0,
+       "wind_10mph_mm": 145.100214682,
+       "wind_10mph_mrad": 0.725501073411,
+       "tof_ms": 267.019098522,
+       "velocity_mps": 656.370764765
+      },
+      {
+       "distance_m": 250,
+       "poi_mm": -106.535980348,
+       "hold_mrad": 0.426143921393,
+       "hold_moa": 1.46497488966,
+       "hold_clicks_up": 3,
+       "wind_10mph_mm": 234.733895432,
+       "wind_10mph_mrad": 0.938935581727,
+       "tof_ms": 345.89054492,
+       "velocity_mps": 612.279519965
+      },
+      {
+       "distance_m": 300,
+       "poi_mm": -278.615944396,
+       "hold_mrad": 0.928719814653,
+       "hold_moa": 3.19270354379,
+       "hold_clicks_up": 6,
+       "wind_10mph_mm": 350.204015285,
+       "wind_10mph_mrad": 1.16734671762,
+       "tof_ms": 430.544391653,
+       "velocity_mps": 569.790926223
+      },
+      {
+       "distance_m": 350,
+       "poi_mm": -526.377240501,
+       "hold_mrad": 1.50393497286,
+       "hold_moa": 5.17014759642,
+       "hold_clicks_up": 10,
+       "wind_10mph_mm": 494.463566278,
+       "wind_10mph_mrad": 1.41275304651,
+       "tof_ms": 521.639517577,
+       "velocity_mps": 528.74361862
+      },
+      {
+       "distance_m": 400,
+       "poi_mm": -862.070298101,
+       "hold_mrad": 2.15517574525,
+       "hold_moa": 7.40894845871,
+       "hold_clicks_up": 15,
+       "wind_10mph_mm": 671.084721822,
+       "wind_10mph_mrad": 1.67771180456,
+       "tof_ms": 619.97339526,
+       "velocity_mps": 489.007494106
+      },
+      {
+       "distance_m": 450,
+       "poi_mm": -1300.567624,
+       "hold_mrad": 2.89015027557,
+       "hold_moa": 9.93560477691,
+       "hold_clicks_up": 20,
+       "wind_10mph_mm": 884.297938425,
+       "wind_10mph_mrad": 1.96510652983,
+       "tof_ms": 726.484701216,
+       "velocity_mps": 450.600536855
+      },
+      {
+       "distance_m": 500,
+       "poi_mm": -1860.1912093,
+       "hold_mrad": 3.72038241861,
+       "hold_moa": 12.7897326457,
+       "hold_clicks_up": 26,
+       "wind_10mph_mm": 1139.11389251,
+       "wind_10mph_mrad": 2.27822778502,
+       "tof_ms": 842.310690942,
+       "velocity_mps": 413.641292433
+      },
+      {
+       "distance_m": 550,
+       "poi_mm": -2563.59069916,
+       "hold_mrad": 4.66107399848,
+       "hold_moa": 16.0235920867,
+       "hold_clicks_up": 32,
+       "wind_10mph_mm": 1441.2546315,
+       "wind_10mph_mrad": 2.62046296637,
+       "tof_ms": 968.719765167,
+       "velocity_mps": 378.367810831
+      },
+      {
+       "distance_m": 600,
+       "poi_mm": -3438.82295884,
+       "hold_mrad": 5.73137159806,
+       "hold_moa": 19.7030042034,
+       "hold_clicks_up": 39,
+       "wind_10mph_mm": 1796.90930831,
+       "wind_10mph_mrad": 2.99484884718,
+       "tof_ms": 1107.10214265,
+       "velocity_mps": 345.449035881
+      }
+     ]
+    },
+    "25m": {
+     "zero_distance_m": 25.0,
+     "bore_angle_mrad": 3.27797214351,
+     "bore_angle_moa": 11.2688381511,
+     "clicks_up_from_centre": 23,
+     "rounding_moves_poi_mm_at_zero": 40.303401246,
+     "crossings_from_eye_m": [
+      25.0,
+      331.59948328
+     ],
+     "max_ordinate_mm": 257.798814422,
+     "max_ordinate_at_m": 189.0,
+     "within_50mm_from_to_m": [
+      9.0,
+      343.5
+     ],
+     "holds": [
+      {
+       "distance_m": 10,
+       "poi_mm": -45.6509236011,
+       "hold_mrad": 4.56509236011,
+       "hold_moa": 15.6936315193,
+       "hold_clicks_up": 31,
+       "wind_10mph_mm": 0.280151326371,
+       "wind_10mph_mrad": 0.0280151326371,
+       "tof_ms": 11.0976544004,
+       "velocity_mps": 840.2851927
+      },
+      {
+       "distance_m": 15,
+       "poi_mm": -30.0885493678,
+       "hold_mrad": 2.00590329118,
+       "hold_moa": 6.89578756178,
+       "hold_clicks_up": 14,
+       "wind_10mph_mm": 0.670198360571,
+       "wind_10mph_mrad": 0.0446798907048,
+       "tof_ms": 17.062942778,
+       "velocity_mps": 835.122668769
+      },
+      {
+       "distance_m": 20,
+       "poi_mm": -14.8654164823,
+       "hold_mrad": 0.743270824114,
+       "hold_moa": 2.55517687542,
+       "hold_clicks_up": 5,
+       "wind_10mph_mm": 1.21968292696,
+       "wind_10mph_mrad": 0.0609841463479,
+       "tof_ms": 23.0678404591,
+       "velocity_mps": 829.980761264
+      },
+      {
+       "distance_m": 25,
+       "poi_mm": 0.0,
+       "hold_mrad": -0.0,
+       "hold_moa": -0.0,
+       "hold_clicks_up": 0,
+       "wind_10mph_mm": 1.93860582797,
+       "wind_10mph_mrad": 0.077544233119,
+       "tof_ms": 29.1130233913,
+       "velocity_mps": 824.849244503
+      },
+      {
+       "distance_m": 35,
+       "poi_mm": 28.6400937123,
+       "hold_mrad": -0.81828839178,
+       "hold_moa": -2.81306827641,
+       "hold_clicks_up": -6,
+       "wind_10mph_mm": 3.87601926909,
+       "wind_10mph_mrad": 0.110743407688,
+       "tof_ms": 41.3139259768,
+       "velocity_mps": 814.64414156
+      },
+      {
+       "distance_m": 45,
+       "poi_mm": 55.814449854,
+       "hold_mrad": -1.24032110787,
+       "hold_moa": -4.2639098833,
+       "hold_clicks_up": -9,
+       "wind_10mph_mm": 6.51327343142,
+       "wind_10mph_mrad": 0.144739409587,
+       "tof_ms": 53.6642576264,
+       "velocity_mps": 804.510171002
+      },
+      {
+       "distance_m": 55,
+       "poi_mm": 81.4584221417,
+       "hold_mrad": -1.48106222076,
+       "hold_moa": -5.09151686674,
+       "hold_clicks_up": -10,
+       "wind_10mph_mm": 9.82926898216,
+       "wind_10mph_mrad": 0.178713981494,
+       "tof_ms": 66.1745082769,
+       "velocity_mps": 794.445732004
+      },
+      {
+       "distance_m": 75,
+       "poi_mm": 128.057737104,
+       "hold_mrad": -1.70743649472,
+       "hold_moa": -5.86973429605,
+       "hold_clicks_up": -12,
+       "wind_10mph_mm": 18.6285661375,
+       "wind_10mph_mrad": 0.248380881833,
+       "tof_ms": 91.6638907651,
+       "velocity_mps": 774.507142362
+      },
+      {
+       "distance_m": 100,
+       "poi_mm": 177.07050747,
+       "hold_mrad": -1.7707050747,
+       "hold_moa": -6.08723565257,
+       "hold_clicks_up": -12,
+       "wind_10mph_mm": 33.7809212372,
+       "wind_10mph_mrad": 0.337809212372,
+       "tof_ms": 124.467845508,
+       "velocity_mps": 749.986493454
+      },
+      {
+       "distance_m": 150,
+       "poi_mm": 241.650739492,
+       "hold_mrad": -1.61100492995,
+       "hold_moa": -5.53822699564,
+       "hold_clicks_up": -11,
+       "wind_10mph_mm": 78.8280950734,
+       "wind_10mph_mrad": 0.525520633823,
+       "tof_ms": 193.371167882,
+       "velocity_mps": 702.254203522
+      },
+      {
+       "distance_m": 200,
+       "poi_mm": 256.42410836,
+       "hold_mrad": -1.2821205418,
+       "hold_moa": -4.40760575233,
+       "hold_clicks_up": -9,
+       "wind_10mph_mm": 145.100214682,
+       "wind_10mph_mrad": 0.725501073411,
+       "tof_ms": 267.019098522,
+       "velocity_mps": 656.370764765
+      },
+      {
+       "distance_m": 250,
+       "poi_mm": 214.194759639,
+       "hold_mrad": -0.856779038558,
+       "hold_moa": -2.94538937308,
+       "hold_clicks_up": -6,
+       "wind_10mph_mm": 234.733895432,
+       "wind_10mph_mrad": 0.938935581727,
+       "tof_ms": 345.89054492,
+       "velocity_mps": 612.279519965
+      },
+      {
+       "distance_m": 300,
+       "poi_mm": 106.421427219,
+       "hold_mrad": -0.354738090731,
+       "hold_moa": -1.21949972588,
+       "hold_clicks_up": -2,
+       "wind_10mph_mm": 350.204015285,
+       "wind_10mph_mrad": 1.16734671762,
+       "tof_ms": 430.544391653,
+       "velocity_mps": 569.790926223
+      },
+      {
+       "distance_m": 350,
+       "poi_mm": -77.0332372585,
+       "hold_mrad": 0.220094963596,
+       "hold_moa": 0.756630750367,
+       "hold_clicks_up": 2,
+       "wind_10mph_mm": 494.463566278,
+       "wind_10mph_mrad": 1.41275304651,
+       "tof_ms": 521.639517577,
+       "velocity_mps": 528.74361862
+      },
+      {
+       "distance_m": 400,
+       "poi_mm": -348.419663231,
+       "hold_mrad": 0.871049158077,
+       "hold_moa": 2.99444643037,
+       "hold_clicks_up": 6,
+       "wind_10mph_mm": 671.084721822,
+       "wind_10mph_mrad": 1.67771180456,
+       "tof_ms": 619.97339526,
+       "velocity_mps": 489.007494106
+      },
+      {
+       "distance_m": 450,
+       "poi_mm": -722.610357507,
+       "hold_mrad": 1.60580079446,
+       "hold_moa": 5.52033649568,
+       "hold_clicks_up": 11,
+       "wind_10mph_mm": 884.297938425,
+       "wind_10mph_mrad": 1.96510652983,
+       "tof_ms": 726.484701216,
+       "velocity_mps": 450.600536855
+      },
+      {
+       "distance_m": 500,
+       "poi_mm": -1217.92731118,
+       "hold_mrad": 2.43585462236,
+       "hold_moa": 8.37385136211,
+       "hold_clicks_up": 17,
+       "wind_10mph_mm": 1139.11389251,
+       "wind_10mph_mrad": 2.27822778502,
+       "tof_ms": 842.310690942,
+       "velocity_mps": 413.641292433
+      },
+      {
+       "distance_m": 550,
+       "poi_mm": -1857.02016941,
+       "hold_mrad": 3.37640030802,
+       "hold_moa": 11.6072092558,
+       "hold_clicks_up": 23,
+       "wind_10mph_mm": 1441.2546315,
+       "wind_10mph_mrad": 2.62046296637,
+       "tof_ms": 968.719765167,
+       "velocity_mps": 378.367810831
+      },
+      {
+       "distance_m": 600,
+       "poi_mm": -2667.94579746,
+       "hold_mrad": 4.44657632909,
+       "hold_moa": 15.2862034164,
+       "hold_clicks_up": 31,
+       "wind_10mph_mm": 1796.90930831,
+       "wind_10mph_mrad": 2.99484884718,
+       "tof_ms": 1107.10214265,
+       "velocity_mps": 345.449035881
+      }
+     ]
+    }
+   },
+   "Mk262": {
+    "50m": {
+     "zero_distance_m": 50.0,
+     "bore_angle_mrad": 1.95742742466,
+     "bore_angle_moa": 6.72913980816,
+     "clicks_up_from_centre": 13,
+     "rounding_moves_poi_mm_at_zero": -39.9508555241,
+     "crossings_from_eye_m": [
+      50.0,
+      160.765498172
+     ],
+     "max_ordinate_mm": 31.6127037518,
+     "max_ordinate_at_m": 106.5,
+     "within_50mm_from_to_m": [
+      15.0,
+      192.5
+     ],
+     "holds": [
+      {
+       "distance_m": 10,
+       "poi_mm": -58.1652930462,
+       "hold_mrad": 5.81652930462,
+       "hold_moa": 19.9957548341,
+       "hold_clicks_up": 40,
+       "wind_10mph_mm": 0.26411815837,
+       "wind_10mph_mrad": 0.026411815837,
+       "tof_ms": 12.2311263567,
+       "velocity_mps": 762.665573586
+      },
+      {
+       "distance_m": 15,
+       "poi_mm": -49.3761221263,
+       "hold_mrad": 3.29174147509,
+       "hold_moa": 11.3161736262,
+       "hold_clicks_up": 23,
+       "wind_10mph_mm": 0.615829325812,
+       "wind_10mph_mrad": 0.0410552883875,
+       "tof_ms": 18.8074158806,
+       "velocity_mps": 758.775568436
+      },
+      {
+       "distance_m": 20,
+       "poi_mm": -41.0054666716,
+       "hold_mrad": 2.05027333358,
+       "hold_moa": 7.04832053173,
+       "hold_clicks_up": 14,
+       "wind_10mph_mm": 1.1164019017,
+       "wind_10mph_mrad": 0.055820095085,
+       "tof_ms": 25.4130739554,
+       "velocity_mps": 754.884532611
+      },
+      {
+       "distance_m": 25,
+       "poi_mm": -33.0733984575,
+       "hold_mrad": 1.3229359383,
+       "hold_moa": 4.54791874984,
+       "hold_clicks_up": 9,
+       "wind_10mph_mm": 1.77680926231,
+       "wind_10mph_mrad": 0.0710723704926,
+       "tof_ms": 32.0583888751,
+       "velocity_mps": 751.012074867
+      },
+      {
+       "distance_m": 35,
+       "poi_mm": -18.5108172941,
+       "hold_mrad": 0.528880494117,
+       "hold_moa": 1.81815721078,
+       "hold_clicks_up": 4,
+       "wind_10mph_mm": 3.54906162288,
+       "wind_10mph_mrad": 0.101401760654,
+       "tof_ms": 45.4408061122,
+       "velocity_mps": 743.299821521
+      },
+      {
+       "distance_m": 45,
+       "poi_mm": -5.71375965649,
+       "hold_mrad": 0.126972436811,
+       "hold_moa": 0.436499084625,
+       "hold_clicks_up": 1,
+       "wind_10mph_mm": 5.94882553101,
+       "wind_10mph_mrad": 0.132196122911,
+       "tof_ms": 58.9614045504,
+       "velocity_mps": 735.636028506
+      },
+      {
+       "distance_m": 55,
+       "poi_mm": 5.26401824398,
+       "hold_mrad": -0.0957094226178,
+       "hold_moa": -0.329024758538,
+       "hold_clicks_up": -1,
+       "wind_10mph_mm": 8.98038256027,
+       "wind_10mph_mrad": 0.163279682914,
+       "tof_ms": 72.6231223424,
+       "velocity_mps": 728.014565704
+      },
+      {
+       "distance_m": 75,
+       "poi_mm": 21.6288734376,
+       "hold_mrad": -0.288384979167,
+       "hold_moa": -0.991394530875,
+       "hold_clicks_up": -2,
+       "wind_10mph_mm": 16.9688335159,
+       "wind_10mph_mrad": 0.226251113545,
+       "tof_ms": 100.384832201,
+       "velocity_mps": 712.9088339
+      },
+      {
+       "distance_m": 100,
+       "poi_mm": 31.1841879089,
+       "hold_mrad": -0.311841879089,
+       "hold_moa": -1.07203341283,
+       "hold_clicks_up": -2,
+       "wind_10mph_mm": 30.6835012139,
+       "wind_10mph_mrad": 0.306835012139,
+       "tof_ms": 135.920979836,
+       "velocity_mps": 694.280919526
+      },
+      {
+       "distance_m": 150,
+       "poi_mm": 11.4556515218,
+       "hold_mrad": -0.0763710101455,
+       "hold_moa": -0.262544193509,
+       "hold_clicks_up": -1,
+       "wind_10mph_mm": 71.1313723217,
+       "wind_10mph_mrad": 0.474209148812,
+       "tof_ms": 209.911438211,
+       "velocity_mps": 657.916388145
+      },
+      {
+       "distance_m": 200,
+       "poi_mm": -64.9855577676,
+       "hold_mrad": 0.324927788838,
+       "hold_moa": 1.11701945682,
+       "hold_clicks_up": 2,
+       "wind_10mph_mm": 130.07155943,
+       "wind_10mph_mrad": 0.650357797151,
+       "tof_ms": 288.027618558,
+       "velocity_mps": 622.692834564
+      },
+      {
+       "distance_m": 250,
+       "poi_mm": -204.738318936,
+       "hold_mrad": 0.818953275745,
+       "hold_moa": 2.81535397912,
+       "hold_clicks_up": 6,
+       "wind_10mph_mm": 209.021317657,
+       "wind_10mph_mrad": 0.836085270628,
+       "tof_ms": 370.619440576,
+       "velocity_mps": 588.520246753
+      },
+      {
+       "distance_m": 300,
+       "poi_mm": -415.370023439,
+       "hold_mrad": 1.3845667448,
+       "hold_moa": 4.75978985586,
+       "hold_clicks_up": 10,
+       "wind_10mph_mm": 309.747367906,
+       "wind_10mph_mrad": 1.03249122635,
+       "tof_ms": 458.086054638,
+       "velocity_mps": 555.279026223
+      },
+      {
+       "distance_m": 350,
+       "poi_mm": -705.644020515,
+       "hold_mrad": 2.0161257729,
+       "hold_moa": 6.93092986529,
+       "hold_clicks_up": 14,
+       "wind_10mph_mm": 434.276245982,
+       "wind_10mph_mrad": 1.24078927423,
+       "tof_ms": 550.876347779,
+       "velocity_mps": 522.918448922
+      },
+      {
+       "distance_m": 400,
+       "poi_mm": -1085.72059755,
+       "hold_mrad": 2.71430149387,
+       "hold_moa": 9.33108119549,
+       "hold_clicks_up": 19,
+       "wind_10mph_mm": 584.94378024,
+       "wind_10mph_mrad": 1.4623594506,
+       "tof_ms": 649.519645692,
+       "velocity_mps": 491.388133776
+      },
+      {
+       "distance_m": 450,
+       "poi_mm": -1567.51634297,
+       "hold_mrad": 3.48336965104,
+       "hold_moa": 11.9749427693,
+       "hold_clicks_up": 24,
+       "wind_10mph_mm": 764.465100785,
+       "wind_10mph_mrad": 1.69881133508,
+       "tof_ms": 754.605072309,
+       "velocity_mps": 460.697739216
+      },
+      {
+       "distance_m": 500,
+       "poi_mm": -2165.06149338,
+       "hold_mrad": 4.33012298676,
+       "hold_moa": 14.8858663148,
+       "hold_clicks_up": 30,
+       "wind_10mph_mm": 975.90551194,
+       "wind_10mph_mrad": 1.95181102388,
+       "tof_ms": 866.841407658,
+       "velocity_mps": 430.87611846
+      },
+      {
+       "distance_m": 550,
+       "poi_mm": -2894.94172595,
+       "hold_mrad": 5.26353041082,
+       "hold_moa": 18.0946846727,
+       "hold_clicks_up": 36,
+       "wind_10mph_mm": 1222.74071125,
+       "wind_10mph_mrad": 2.22316492954,
+       "tof_ms": 986.987097584,
+       "velocity_mps": 402.042964355
+      },
+      {
+       "distance_m": 600,
+       "poi_mm": -3776.86519984,
+       "hold_mrad": 6.29477533306,
+       "hold_moa": 21.639843574,
+       "hold_clicks_up": 43,
+       "wind_10mph_mm": 1508.7564412,
+       "wind_10mph_mrad": 2.51459406867,
+       "tof_ms": 1115.90285174,
+       "velocity_mps": 374.357501423
+      }
+     ]
+    },
+    "100m": {
+     "zero_distance_m": 100.0,
+     "bore_angle_mrad": 1.64362774939,
+     "bore_angle_moa": 5.65037598785,
+     "clicks_up_from_centre": 11,
+     "rounding_moves_poi_mm_at_zero": -26.21827003,
+     "crossings_from_eye_m": [
+      81.9230051614,
+      100.0
+     ],
+     "max_ordinate_mm": 0.815902741568,
+     "max_ordinate_at_m": 91.0,
+     "within_50mm_from_to_m": [
+      18.0,
+      160.5
+     ],
+     "holds": [
+      {
+       "distance_m": 10,
+       "poi_mm": -61.1075101814,
+       "hold_mrad": 6.11075101814,
+       "hold_moa": 21.0072145797,
+       "hold_clicks_up": 42,
+       "wind_10mph_mm": 0.26411815837,
+       "wind_10mph_mrad": 0.026411815837,
+       "tof_ms": 12.2311263567,
+       "velocity_mps": 762.665573586
+      },
+      {
+       "distance_m": 15,
+       "poi_mm": -53.8873376379,
+       "hold_mrad": 3.59248917586,
+       "hold_moa": 12.3500680634,
+       "hold_clicks_up": 25,
+       "wind_10mph_mm": 0.615829325812,
+       "wind_10mph_mrad": 0.0410552883875,
+       "tof_ms": 18.8074158806,
+       "velocity_mps": 758.775568436
+      },
+      {
+       "distance_m": 20,
+       "poi_mm": -47.0856805594,
+       "hold_mrad": 2.35428402797,
+       "hold_moa": 8.09343231467,
+       "hold_clicks_up": 16,
+       "wind_10mph_mm": 1.1164019017,
+       "wind_10mph_mrad": 0.055820095085,
+       "tof_ms": 25.4130739554,
+       "velocity_mps": 754.884532611
+      },
+      {
+       "distance_m": 25,
+       "poi_mm": -40.7226107216,
+       "hold_mrad": 1.62890442887,
+       "hold_moa": 5.59976094025,
+       "hold_clicks_up": 11,
+       "wind_10mph_mm": 1.77680926231,
+       "wind_10mph_mrad": 0.0710723704926,
+       "tof_ms": 32.0583888751,
+       "velocity_mps": 751.012074867
+      },
+      {
+       "distance_m": 35,
+       "poi_mm": -29.2980263109,
+       "hold_mrad": 0.837086466025,
+       "hold_moa": 2.87769129545,
+       "hold_clicks_up": 6,
+       "wind_10mph_mm": 3.54906162288,
+       "wind_10mph_mrad": 0.101401760654,
+       "tof_ms": 45.4408061122,
+       "velocity_mps": 743.299821521
+      },
+      {
+       "distance_m": 45,
+       "poi_mm": -19.6389654259,
+       "hold_mrad": 0.436421453909,
+       "hold_moa": 1.50030644388,
+       "hold_clicks_up": 3,
+       "wind_10mph_mm": 5.94882553101,
+       "wind_10mph_mrad": 0.132196122911,
+       "tof_ms": 58.9614045504,
+       "velocity_mps": 735.636028506
+      },
+      {
+       "distance_m": 55,
+       "poi_mm": -11.7991842781,
+       "hold_mrad": 0.214530623238,
+       "hold_moa": 0.737501957269,
+       "hold_clicks_up": 1,
+       "wind_10mph_mm": 8.98038256027,
+       "wind_10mph_mrad": 0.163279682914,
+       "tof_ms": 72.6231223424,
+       "velocity_mps": 728.014565704
+      },
+      {
+       "distance_m": 75,
+       "poi_mm": -1.71032258974,
+       "hold_mrad": 0.0228043011966,
+       "hold_moa": 0.0783954127986,
+       "hold_clicks_up": 0,
+       "wind_10mph_mm": 16.9688335159,
+       "wind_10mph_mrad": 0.226251113545,
+       "tof_ms": 100.384832201,
+       "velocity_mps": 712.9088339
+      },
+      {
+       "distance_m": 100,
+       "poi_mm": -1.38777878078e-14,
+       "hold_mrad": 1.38777878078e-16,
+       "hold_moa": 4.7708320222e-16,
+       "hold_clicks_up": 0,
+       "wind_10mph_mm": 30.6835012139,
+       "wind_10mph_mrad": 0.306835012139,
+       "tof_ms": 135.920979836,
+       "velocity_mps": 694.280919526
+      },
+      {
+       "distance_m": 150,
+       "poi_mm": -35.4185201502,
+       "hold_mrad": 0.236123467668,
+       "hold_moa": 0.811732688481,
+       "hold_clicks_up": 2,
+       "wind_10mph_mm": 71.1313723217,
+       "wind_10mph_mrad": 0.474209148812,
+       "tof_ms": 209.911438211,
+       "velocity_mps": 657.916388145
+      },
+      {
+       "distance_m": 200,
+       "poi_mm": -127.549713203,
+       "hold_mrad": 0.637748566014,
+       "hold_moa": 2.19241807339,
+       "hold_clicks_up": 4,
+       "wind_10mph_mm": 130.07155943,
+       "wind_10mph_mrad": 0.650357797151,
+       "tof_ms": 288.027618558,
+       "velocity_mps": 622.692834564
+      },
+      {
+       "distance_m": 250,
+       "poi_mm": -282.992458135,
+       "hold_mrad": 1.13196983254,
+       "hold_moa": 3.89142563644,
+       "hold_clicks_up": 8,
+       "wind_10mph_mm": 209.021317657,
+       "wind_10mph_mrad": 0.836085270628,
+       "tof_ms": 370.619440576,
+       "velocity_mps": 588.520246753
+      },
+      {
+       "distance_m": 300,
+       "poi_mm": -509.314146401,
+       "hold_mrad": 1.69771382134,
+       "hold_moa": 5.83631020701,
+       "hold_clicks_up": 12,
+       "wind_10mph_mm": 309.747367906,
+       "wind_10mph_mrad": 1.03249122635,
+       "tof_ms": 458.086054638,
+       "velocity_mps": 555.279026223
+      },
+      {
+       "distance_m": 350,
+       "poi_mm": -815.27812724,
+       "hold_mrad": 2.32936607783,
+       "hold_moa": 8.00777071203,
+       "hold_clicks_up": 16,
+       "wind_10mph_mm": 434.276245982,
+       "wind_10mph_mrad": 1.24078927423,
+       "tof_ms": 550.876347779,
+       "velocity_mps": 522.918448922
+      },
+      {
+       "distance_m": 400,
+       "poi_mm": -1211.04468804,
+       "hold_mrad": 3.02761172009,
+       "hold_moa": 10.4081624139,
+       "hold_clicks_up": 21,
+       "wind_10mph_mm": 584.94378024,
+       "wind_10mph_mrad": 1.4623594506,
+       "tof_ms": 649.519645692,
+       "velocity_mps": 491.388133776
+      },
+      {
+       "distance_m": 450,
+       "poi_mm": -1708.53041722,
+       "hold_mrad": 3.79673426048,
+       "hold_moa": 13.0522109435,
+       "hold_clicks_up": 26,
+       "wind_10mph_mm": 764.465100785,
+       "wind_10mph_mrad": 1.69881133508,
+       "tof_ms": 754.605072309,
+       "velocity_mps": 460.697739216
+      },
+      {
+       "distance_m": 500,
+       "poi_mm": -2321.7655514,
+       "hold_mrad": 4.64353110279,
+       "hold_moa": 15.9632840537,
+       "hold_clicks_up": 32,
+       "wind_10mph_mm": 975.90551194,
+       "wind_10mph_mrad": 1.95181102388,
+       "tof_ms": 866.841407658,
+       "velocity_mps": 430.87611846
+      },
+      {
+       "distance_m": 550,
+       "poi_mm": -3067.33576773,
+       "hold_mrad": 5.57697412314,
+       "hold_moa": 19.1722247826,
+       "hold_clicks_up": 38,
+       "wind_10mph_mm": 1222.74071125,
+       "wind_10mph_mrad": 2.22316492954,
+       "tof_ms": 986.987097584,
+       "velocity_mps": 402.042964355
+      },
+      {
+       "distance_m": 600,
+       "poi_mm": -3964.94922538,
+       "hold_mrad": 6.60824870896,
+       "hold_moa": 22.7174856598,
+       "hold_clicks_up": 45,
+       "wind_10mph_mm": 1508.7564412,
+       "wind_10mph_mrad": 2.51459406867,
+       "tof_ms": 1115.90285174,
+       "velocity_mps": 374.357501423
+      }
+     ]
+    },
+    "200m": {
+     "zero_distance_m": 200.0,
+     "bore_angle_mrad": 2.28337199759,
+     "bore_angle_moa": 7.84965471121,
+     "clicks_up_from_centre": 16,
+     "rounding_moves_poi_mm_at_zero": 26.212917604,
+     "crossings_from_eye_m": [
+      39.4120526853,
+      200.0
+     ],
+     "max_ordinate_mm": 68.6602800043,
+     "max_ordinate_at_m": 122.0,
+     "within_50mm_from_to_m": [
+      12.5,
+      223.5
+     ],
+     "holds": [
+      {
+       "distance_m": 10,
+       "poi_mm": -55.1092041359,
+       "hold_mrad": 5.51092041359,
+       "hold_moa": 18.9451488559,
+       "hold_clicks_up": 38,
+       "wind_10mph_mm": 0.26411815837,
+       "wind_10mph_mrad": 0.026411815837,
+       "tof_ms": 12.2311263567,
+       "velocity_mps": 762.665573586
+      },
+      {
+       "distance_m": 15,
+       "poi_mm": -44.6903103514,
+       "hold_mrad": 2.97935402342,
+       "hold_moa": 10.2422646731,
+       "hold_clicks_up": 20,
+       "wind_10mph_mm": 0.615829325812,
+       "wind_10mph_mrad": 0.0410552883875,
+       "tof_ms": 18.8074158806,
+       "velocity_mps": 758.775568436
+      },
+      {
+       "distance_m": 20,
+       "poi_mm": -34.6899320319,
+       "hold_mrad": 1.7344966016,
+       "hold_moa": 5.96276009108,
+       "hold_clicks_up": 12,
+       "wind_10mph_mm": 1.1164019017,
+       "wind_10mph_mrad": 0.055820095085,
+       "tof_ms": 25.4130739554,
+       "velocity_mps": 754.884532611
+      },
+      {
+       "distance_m": 25,
+       "poi_mm": -25.1281409532,
+       "hold_mrad": 1.00512563813,
+       "hold_moa": 3.45536741671,
+       "hold_clicks_up": 7,
+       "wind_10mph_mm": 1.77680926231,
+       "wind_10mph_mrad": 0.0710723704926,
+       "tof_ms": 32.0583888751,
+       "velocity_mps": 751.012074867
+      },
+      {
+       "distance_m": 35,
+       "poi_mm": -7.30611406048,
+       "hold_mrad": 0.208746116014,
+       "hold_moa": 0.71761628624,
+       "hold_clicks_up": 1,
+       "wind_10mph_mm": 3.54906162288,
+       "wind_10mph_mrad": 0.101401760654,
+       "tof_ms": 45.4408061122,
+       "velocity_mps": 743.299821521
+      },
+      {
+       "distance_m": 45,
+       "poi_mm": 8.75038930646,
+       "hold_mrad": -0.194453095699,
+       "hold_moa": -0.668480501809,
+       "hold_clicks_up": -1,
+       "wind_10mph_mm": 5.94882553101,
+       "wind_10mph_mrad": 0.132196122911,
+       "tof_ms": 58.9614045504,
+       "velocity_mps": 735.636028506
+      },
+      {
+       "distance_m": 55,
+       "poi_mm": 22.9876129363,
+       "hold_mrad": -0.417956598841,
+       "hold_moa": -1.43682894799,
+       "hold_clicks_up": -3,
+       "wind_10mph_mm": 8.98038256027,
+       "wind_10mph_mrad": 0.163279682914,
+       "tof_ms": 72.6231223424,
+       "velocity_mps": 728.014565704
+      },
+      {
+       "distance_m": 75,
+       "poi_mm": 45.8713595885,
+       "hold_mrad": -0.611618127847,
+       "hold_moa": -2.10258824396,
+       "hold_clicks_up": -4,
+       "wind_10mph_mm": 16.9688335159,
+       "wind_10mph_mrad": 0.226251113545,
+       "tof_ms": 100.384832201,
+       "velocity_mps": 712.9088339
+      },
+      {
+       "distance_m": 100,
+       "poi_mm": 63.5752883831,
+       "hold_mrad": -0.635752883831,
+       "hold_moa": -2.18555742341,
+       "hold_clicks_up": -4,
+       "wind_10mph_mm": 30.6835012139,
+       "wind_10mph_mrad": 0.306835012139,
+       "tof_ms": 135.920979836,
+       "velocity_mps": 694.280919526
+      },
+      {
+       "distance_m": 150,
+       "poi_mm": 60.1439806428,
+       "hold_mrad": -0.400959870952,
+       "hold_moa": -1.37839850158,
+       "hold_clicks_up": -3,
+       "wind_10mph_mm": 71.1313723217,
+       "wind_10mph_mrad": 0.474209148812,
+       "tof_ms": 209.911438211,
+       "velocity_mps": 657.916388145
+      },
+      {
+       "distance_m": 200,
+       "poi_mm": 2.77555756156e-14,
+       "hold_mrad": -1.38777878078e-16,
+       "hold_moa": -4.7708320222e-16,
+       "hold_clicks_up": 0,
+       "wind_10mph_mm": 130.07155943,
+       "wind_10mph_mrad": 0.650357797151,
+       "tof_ms": 288.027618558,
+       "velocity_mps": 622.692834564
+      },
+      {
+       "distance_m": 250,
+       "poi_mm": -123.455532522,
+       "hold_mrad": 0.493822130088,
+       "hold_moa": 1.69763543305,
+       "hold_clicks_up": 3,
+       "wind_10mph_mm": 209.021317657,
+       "wind_10mph_mrad": 0.836085270628,
+       "tof_ms": 370.619440576,
+       "velocity_mps": 588.520246753
+      },
+      {
+       "distance_m": 300,
+       "poi_mm": -317.790008378,
+       "hold_mrad": 1.05930002793,
+       "hold_moa": 3.6416052503,
+       "hold_clicks_up": 7,
+       "wind_10mph_mm": 309.747367906,
+       "wind_10mph_mrad": 1.03249122635,
+       "tof_ms": 458.086054638,
+       "velocity_mps": 555.279026223
+      },
+      {
+       "distance_m": 350,
+       "poi_mm": -591.766776808,
+       "hold_mrad": 1.69076221945,
+       "hold_moa": 5.81241236008,
+       "hold_clicks_up": 12,
+       "wind_10mph_mm": 434.276245982,
+       "wind_10mph_mrad": 1.24078927423,
+       "tof_ms": 550.876347779,
+       "velocity_mps": 522.918448922
+      },
+      {
+       "distance_m": 400,
+       "poi_mm": -955.546125194,
+       "hold_mrad": 2.38886531298,
+       "hold_moa": 8.21231401555,
+       "hold_clicks_up": 16,
+       "wind_10mph_mm": 584.94378024,
+       "wind_10mph_mrad": 1.4623594506,
+       "tof_ms": 649.519645692,
+       "velocity_mps": 491.388133776
+      },
+      {
+       "distance_m": 450,
+       "poi_mm": -1421.04464197,
+       "hold_mrad": 3.15787698214,
+       "hold_moa": 10.8559813979,
+       "hold_clicks_up": 22,
+       "wind_10mph_mm": 764.465100785,
+       "wind_10mph_mrad": 1.69881133508,
+       "tof_ms": 754.605072309,
+       "velocity_mps": 460.697739216
+      },
+      {
+       "distance_m": 500,
+       "poi_mm": -2002.29256373,
+       "hold_mrad": 4.00458512747,
+       "hold_moa": 13.7667495903,
+       "hold_clicks_up": 28,
+       "wind_10mph_mm": 975.90551194,
+       "wind_10mph_mrad": 1.95181102388,
+       "tof_ms": 866.841407658,
+       "velocity_mps": 430.87611846
+      },
+      {
+       "distance_m": 550,
+       "poi_mm": -2715.87556766,
+       "hold_mrad": 4.93795557756,
+       "hold_moa": 16.975440841,
+       "hold_clicks_up": 34,
+       "wind_10mph_mm": 1222.74071125,
+       "wind_10mph_mrad": 2.22316492954,
+       "tof_ms": 986.987097584,
+       "velocity_mps": 402.042964355
+      },
+      {
+       "distance_m": 600,
+       "poi_mm": -3581.5018129,
+       "hold_mrad": 5.96916968816,
+       "hold_moa": 20.5204938197,
+       "hold_clicks_up": 41,
+       "wind_10mph_mm": 1508.7564412,
+       "wind_10mph_mrad": 2.51459406867,
+       "tof_ms": 1115.90285174,
+       "velocity_mps": 374.357501423
+      }
+     ]
+    },
+    "25m": {
+     "zero_distance_m": 25.0,
+     "bore_angle_mrad": 3.3142235675,
+     "bore_angle_moa": 11.3934613668,
+     "clicks_up_from_centre": 23,
+     "rounding_moves_poi_mm_at_zero": 18.575164116,
+     "crossings_from_eye_m": [
+      25.0,
+      297.436399206
+     ],
+     "max_ordinate_mm": 217.890929898,
+     "max_ordinate_at_m": 168.0,
+     "within_50mm_from_to_m": [
+      9.0,
+      310.5
+     ],
+     "holds": [
+      {
+       "distance_m": 10,
+       "poi_mm": -45.4438367313,
+       "hold_mrad": 4.54438367313,
+       "hold_moa": 15.6224402975,
+       "hold_clicks_up": 31,
+       "wind_10mph_mm": 0.26411815837,
+       "wind_10mph_mrad": 0.026411815837,
+       "tof_ms": 12.2311263567,
+       "velocity_mps": 762.665573586
+      },
+      {
+       "distance_m": 15,
+       "poi_mm": -29.8706850972,
+       "hold_mrad": 1.99137900648,
+       "hold_moa": 6.84585674894,
+       "hold_clicks_up": 14,
+       "wind_10mph_mm": 0.615829325812,
+       "wind_10mph_mrad": 0.0410552883875,
+       "tof_ms": 18.8074158806,
+       "velocity_mps": 758.775568436
+      },
+      {
+       "distance_m": 20,
+       "poi_mm": -14.7160489283,
+       "hold_mrad": 0.735802446414,
+       "hold_moa": 2.5295024841,
+       "hold_clicks_up": 5,
+       "wind_10mph_mm": 1.1164019017,
+       "wind_10mph_mrad": 0.055820095085,
+       "tof_ms": 25.4130739554,
+       "velocity_mps": 754.884532611
+      },
+      {
+       "distance_m": 25,
+       "poi_mm": 0.0,
+       "hold_mrad": -0.0,
+       "hold_moa": -0.0,
+       "hold_clicks_up": 0,
+       "wind_10mph_mm": 1.77680926231,
+       "wind_10mph_mrad": 0.0710723704926,
+       "tof_ms": 32.0583888751,
+       "velocity_mps": 751.012074867
+      },
+      {
+       "distance_m": 35,
+       "poi_mm": 28.1305425918,
+       "hold_mrad": -0.803729788336,
+       "hold_moa": -2.76301948444,
+       "hold_clicks_up": -6,
+       "wind_10mph_mm": 3.54906162288,
+       "wind_10mph_mrad": 0.101401760654,
+       "tof_ms": 45.4408061122,
+       "velocity_mps": 743.299821521
+      },
+      {
+       "distance_m": 45,
+       "poi_mm": 54.4955616578,
+       "hold_mrad": -1.21101248128,
+       "hold_moa": -4.16315424691,
+       "hold_clicks_up": -8,
+       "wind_10mph_mm": 5.94882553101,
+       "wind_10mph_mrad": 0.132196122911,
+       "tof_ms": 58.9614045504,
+       "velocity_mps": 735.636028506
+      },
+      {
+       "distance_m": 55,
+       "poi_mm": 79.0413009866,
+       "hold_mrad": -1.43711456339,
+       "hold_moa": -4.94043594955,
+       "hold_clicks_up": -10,
+       "wind_10mph_mm": 8.98038256027,
+       "wind_10mph_mrad": 0.163279682914,
+       "tof_ms": 72.6231223424,
+       "velocity_mps": 728.014565704
+      },
+      {
+       "distance_m": 75,
+       "poi_mm": 122.542079037,
+       "hold_mrad": -1.63389438716,
+       "hold_moa": -5.61691515326,
+       "hold_clicks_up": -11,
+       "wind_10mph_mm": 16.9688335159,
+       "wind_10mph_mrad": 0.226251113545,
+       "tof_ms": 100.384832201,
+       "velocity_mps": 712.9088339
+      },
+      {
+       "distance_m": 100,
+       "poi_mm": 166.017297079,
+       "hold_mrad": -1.66017297079,
+       "hold_moa": -5.70725426929,
+       "hold_clicks_up": -11,
+       "wind_10mph_mm": 30.6835012139,
+       "wind_10mph_mrad": 0.306835012139,
+       "tof_ms": 135.920979836,
+       "velocity_mps": 694.280919526
+      },
+      {
+       "distance_m": 150,
+       "poi_mm": 214.128567834,
+       "hold_mrad": -1.42752378556,
+       "hold_moa": -4.90746528403,
+       "hold_clicks_up": -10,
+       "wind_10mph_mm": 71.1313723217,
+       "wind_10mph_mrad": 0.474209148812,
+       "tof_ms": 209.911438211,
+       "velocity_mps": 657.916388145
+      },
+      {
+       "distance_m": 200,
+       "poi_mm": 205.527165687,
+       "hold_mrad": -1.02763582843,
+       "hold_moa": -3.53275175074,
+       "hold_clicks_up": -7,
+       "wind_10mph_mm": 130.07155943,
+       "wind_10mph_mrad": 0.650357797151,
+       "tof_ms": 288.027618558,
+       "velocity_mps": 622.692834564
+      },
+      {
+       "distance_m": 250,
+       "poi_mm": 133.61421166,
+       "hold_mrad": -0.53445684664,
+       "hold_moa": -1.83732729866,
+       "hold_clicks_up": -4,
+       "wind_10mph_mm": 209.021317657,
+       "wind_10mph_mrad": 0.836085270628,
+       "tof_ms": 370.619440576,
+       "velocity_mps": 588.520246753
+      },
+      {
+       "distance_m": 300,
+       "poi_mm": -9.17768570101,
+       "hold_mrad": 0.03059228567,
+       "hold_moa": 0.105168531273,
+       "hold_clicks_up": 0,
+       "wind_10mph_mm": 309.747367906,
+       "wind_10mph_mrad": 1.03249122635,
+       "tof_ms": 458.086054638,
+       "velocity_mps": 555.279026223
+      },
+      {
+       "distance_m": 350,
+       "poi_mm": -231.611875635,
+       "hold_mrad": 0.6617482161,
+       "hold_moa": 2.27492279297,
+       "hold_clicks_up": 5,
+       "wind_10mph_mm": 434.276245982,
+       "wind_10mph_mrad": 1.24078927423,
+       "tof_ms": 550.876347779,
+       "velocity_mps": 522.918448922
+      },
+      {
+       "distance_m": 400,
+       "poi_mm": -543.848645526,
+       "hold_mrad": 1.35962161381,
+       "hold_moa": 4.67403481238,
+       "hold_clicks_up": 9,
+       "wind_10mph_mm": 584.94378024,
+       "wind_10mph_mrad": 1.4623594506,
+       "tof_ms": 649.519645692,
+       "velocity_mps": 491.388133776
+      },
+      {
+       "distance_m": 450,
+       "poi_mm": -957.804583802,
+       "hold_mrad": 2.12845463067,
+       "hold_moa": 7.31708803335,
+       "hold_clicks_up": 15,
+       "wind_10mph_mm": 764.465100785,
+       "wind_10mph_mrad": 1.69881133508,
+       "tof_ms": 754.605072309,
+       "velocity_mps": 460.697739216
+      },
+      {
+       "distance_m": 500,
+       "poi_mm": -1487.50992708,
+       "hold_mrad": 2.97501985415,
+       "hold_moa": 10.2273648966,
+       "hold_clicks_up": 20,
+       "wind_10mph_mm": 975.90551194,
+       "wind_10mph_mrad": 1.95181102388,
+       "tof_ms": 866.841407658,
+       "velocity_mps": 430.87611846
+      },
+      {
+       "distance_m": 550,
+       "poi_mm": -2149.5503525,
+       "hold_mrad": 3.90827336819,
+       "hold_moa": 13.4356541508,
+       "hold_clicks_up": 27,
+       "wind_10mph_mm": 1222.74071125,
+       "wind_10mph_mrad": 2.22316492954,
+       "tof_ms": 986.987097584,
+       "velocity_mps": 402.042964355
+      },
+      {
+       "distance_m": 600,
+       "poi_mm": -2963.63401925,
+       "hold_mrad": 4.93939003208,
+       "hold_moa": 16.9803721324,
+       "hold_clicks_up": 34,
+       "wind_10mph_mm": 1508.7564412,
+       "wind_10mph_mrad": 2.51459406867,
+       "tof_ms": 1115.90285174,
+       "velocity_mps": 374.357501423
+      }
+     ]
+    }
+   },
+   "M856": {
+    "50m": {
+     "zero_distance_m": 50.0,
+     "bore_angle_mrad": 1.92104642109,
+     "bore_angle_moa": 6.60407113064,
+     "clicks_up_from_centre": 13,
+     "rounding_moves_poi_mm_at_zero": -18.1449514951,
+     "crossings_from_eye_m": [
+      50.0,
+      167.851884039
+     ],
+     "max_ordinate_mm": 35.2458240289,
+     "max_ordinate_at_m": 110.5,
+     "within_50mm_from_to_m": [
+      15.0,
+      198.0
+     ],
+     "holds": [
+      {
+       "distance_m": 10,
+       "poi_mm": -58.4365697961,
+       "hold_mrad": 5.84365697961,
+       "hold_moa": 20.0890129112,
+       "hold_clicks_up": 40,
+       "wind_10mph_mm": 0.334450294142,
+       "wind_10mph_mrad": 0.0334450294142,
+       "tof_ms": 11.6493111099,
+       "velocity_mps": 799.778335747
+      },
+      {
+       "distance_m": 15,
+       "poi_mm": -49.7332121012,
+       "hold_mrad": 3.31554747342,
+       "hold_moa": 11.3980126201,
+       "hold_clicks_up": 23,
+       "wind_10mph_mm": 0.781163386717,
+       "wind_10mph_mrad": 0.0520775591144,
+       "tof_ms": 17.9241483024,
+       "velocity_mps": 794.354470249
+      },
+      {
+       "distance_m": 20,
+       "poi_mm": -41.4186164518,
+       "hold_mrad": 2.07093082259,
+       "hold_moa": 7.11933574787,
+       "hold_clicks_up": 14,
+       "wind_10mph_mm": 1.4167603744,
+       "wind_10mph_mrad": 0.0708380187199,
+       "tof_ms": 24.2392849174,
+       "velocity_mps": 788.961789756
+      },
+      {
+       "distance_m": 25,
+       "poi_mm": -33.5036941629,
+       "hold_mrad": 1.34014776651,
+       "hold_moa": 4.60708865671,
+       "hold_clicks_up": 9,
+       "wind_10mph_mm": 2.25212091642,
+       "wind_10mph_mrad": 0.0900848366569,
+       "tof_ms": 30.5939492339,
+       "velocity_mps": 783.580518487
+      },
+      {
+       "distance_m": 35,
+       "poi_mm": -18.8629640785,
+       "hold_mrad": 0.538941830814,
+       "hold_moa": 1.85274553852,
+       "hold_clicks_up": 4,
+       "wind_10mph_mm": 4.50294441612,
+       "wind_10mph_mrad": 0.128655554746,
+       "tof_ms": 43.4423272024,
+       "velocity_mps": 772.875154119
+      },
+      {
+       "distance_m": 45,
+       "poi_mm": -5.86820280115,
+       "hold_mrad": 0.130404506692,
+       "hold_moa": 0.448297671777,
+       "hold_clicks_up": 1,
+       "wind_10mph_mm": 7.56296493357,
+       "wind_10mph_mrad": 0.168065887413,
+       "tof_ms": 56.4711403607,
+       "velocity_mps": 762.250258613
+      },
+      {
+       "distance_m": 55,
+       "poi_mm": 5.4392794915,
+       "hold_mrad": -0.0988959907545,
+       "hold_moa": -0.33997937286,
+       "hold_clicks_up": -1,
+       "wind_10mph_mm": 11.4212996828,
+       "wind_10mph_mrad": 0.207659994233,
+       "tof_ms": 69.6892917895,
+       "velocity_mps": 751.70526158
+      },
+      {
+       "distance_m": 75,
+       "poi_mm": 22.8026930414,
+       "hold_mrad": -0.304035907218,
+       "hold_moa": -1.04519845824,
+       "hold_clicks_up": -2,
+       "wind_10mph_mm": 21.6656797844,
+       "wind_10mph_mrad": 0.288875730459,
+       "tof_ms": 96.6656766955,
+       "velocity_mps": 730.864589339
+      },
+      {
+       "distance_m": 100,
+       "poi_mm": 34.1162886606,
+       "hold_mrad": -0.341162886606,
+       "hold_moa": -1.17283161174,
+       "hold_clicks_up": -2,
+       "wind_10mph_mm": 39.3569603136,
+       "wind_10mph_mrad": 0.393569603136,
+       "tof_ms": 131.495011616,
+       "velocity_mps": 705.291468411
+      },
+      {
+       "distance_m": 150,
+       "poi_mm": 18.8509337779,
+       "hold_mrad": -0.125672891853,
+       "hold_moa": -0.432031578143,
+       "hold_clicks_up": -1,
+       "wind_10mph_mm": 92.0979909724,
+       "wind_10mph_mrad": 0.613986606483,
+       "tof_ms": 205.017971943,
+       "velocity_mps": 655.744605844
+      },
+      {
+       "distance_m": 200,
+       "poi_mm": -53.5587709175,
+       "hold_mrad": 0.267793854587,
+       "hold_moa": 0.920607458844,
+       "hold_clicks_up": 2,
+       "wind_10mph_mm": 170.065829088,
+       "wind_10mph_mrad": 0.850329145442,
+       "tof_ms": 284.183957367,
+       "velocity_mps": 608.290010881
+      },
+      {
+       "distance_m": 250,
+       "poi_mm": -192.391283947,
+       "hold_mrad": 0.769565135787,
+       "hold_moa": 2.64557006046,
+       "hold_clicks_up": 5,
+       "wind_10mph_mm": 276.183943101,
+       "wind_10mph_mrad": 1.1047357724,
+       "tof_ms": 369.650559964,
+       "velocity_mps": 562.678589574
+      },
+      {
+       "distance_m": 300,
+       "poi_mm": -408.869092969,
+       "hold_mrad": 1.36289697656,
+       "hold_moa": 4.6852946801,
+       "hold_clicks_up": 9,
+       "wind_10mph_mm": 413.973326756,
+       "wind_10mph_mrad": 1.37991108919,
+       "tof_ms": 462.196574124,
+       "velocity_mps": 518.698865759
+      },
+      {
+       "distance_m": 350,
+       "poi_mm": -716.746549021,
+       "hold_mrad": 2.04784728292,
+       "hold_moa": 7.0399803839,
+       "hold_clicks_up": 14,
+       "wind_10mph_mm": 587.733506198,
+       "wind_10mph_mrad": 1.67923858914,
+       "tof_ms": 562.799214782,
+       "velocity_mps": 476.260044062
+      },
+      {
+       "distance_m": 400,
+       "poi_mm": -1133.07600144,
+       "hold_mrad": 2.83269000359,
+       "hold_moa": 9.73807091247,
+       "hold_clicks_up": 19,
+       "wind_10mph_mm": 802.653139896,
+       "wind_10mph_mrad": 2.00663284974,
+       "tof_ms": 672.606160192,
+       "velocity_mps": 435.379408757
+      },
+      {
+       "distance_m": 450,
+       "poi_mm": -1679.22697215,
+       "hold_mrad": 3.73161549367,
+       "hold_moa": 12.8283491132,
+       "hold_clicks_up": 26,
+       "wind_10mph_mm": 1064.89010623,
+       "wind_10mph_mrad": 2.3664224583,
+       "tof_ms": 792.994421723,
+       "velocity_mps": 396.285409478
+      },
+      {
+       "distance_m": 500,
+       "poi_mm": -2382.10106494,
+       "hold_mrad": 4.76420212987,
+       "hold_moa": 16.3781204873,
+       "hold_clicks_up": 33,
+       "wind_10mph_mm": 1381.38684131,
+       "wind_10mph_mrad": 2.76277368263,
+       "tof_ms": 925.522681199,
+       "velocity_mps": 359.415752304
+      },
+      {
+       "distance_m": 550,
+       "poi_mm": -3275.32780355,
+       "hold_mrad": 5.955141461,
+       "hold_moa": 20.4722683271,
+       "hold_clicks_up": 41,
+       "wind_10mph_mm": 1757.86784943,
+       "wind_10mph_mrad": 3.19612336261,
+       "tof_ms": 1071.4618076,
+       "velocity_mps": 328.831117866
+      },
+      {
+       "distance_m": 600,
+       "poi_mm": -4393.85906756,
+       "hold_mrad": 7.32309844593,
+       "hold_moa": 25.1749580346,
+       "hold_clicks_up": 50,
+       "wind_10mph_mm": 2179.84655151,
+       "wind_10mph_mrad": 3.63307758584,
+       "tof_ms": 1227.58012404,
+       "velocity_mps": 313.394010575
+      }
+     ]
+    },
+    "100m": {
+     "zero_distance_m": 100.0,
+     "bore_angle_mrad": 1.57774165606,
+     "bore_angle_moa": 5.42387628325,
+     "clicks_up_from_centre": 11,
+     "rounding_moves_poi_mm_at_zero": 13.2722796367,
+     "crossings_from_eye_m": [
+      86.476657086,
+      100.0
+     ],
+     "max_ordinate_mm": 0.441370666338,
+     "max_ordinate_at_m": 93.5,
+     "within_50mm_from_to_m": [
+      19.0,
+      163.0
+     ],
+     "holds": [
+      {
+       "distance_m": 10,
+       "poi_mm": -61.6554296036,
+       "hold_mrad": 6.16554296036,
+       "hold_moa": 21.1955754021,
+       "hold_clicks_up": 42,
+       "wind_10mph_mm": 0.334450294142,
+       "wind_10mph_mrad": 0.0334450294142,
+       "tof_ms": 11.6493111099,
+       "velocity_mps": 799.778335747
+      },
+      {
+       "distance_m": 15,
+       "poi_mm": -54.6685957339,
+       "hold_mrad": 3.64457304892,
+       "hold_moa": 12.5291192298,
+       "hold_clicks_up": 25,
+       "wind_10mph_mm": 0.781163386717,
+       "wind_10mph_mrad": 0.0520775591144,
+       "tof_ms": 17.9241483024,
+       "velocity_mps": 794.354470249
+      },
+      {
+       "distance_m": 20,
+       "poi_mm": -48.0705239096,
+       "hold_mrad": 2.40352619548,
+       "hold_moa": 8.262714417,
+       "hold_clicks_up": 17,
+       "wind_10mph_mm": 1.4167603744,
+       "wind_10mph_mrad": 0.0708380187199,
+       "tof_ms": 24.2392849174,
+       "velocity_mps": 788.961789756
+      },
+      {
+       "distance_m": 25,
+       "poi_mm": -41.8721254458,
+       "hold_mrad": 1.67488501783,
+       "hold_moa": 5.75783056149,
+       "hold_clicks_up": 12,
+       "wind_10mph_mm": 2.25212091642,
+       "wind_10mph_mrad": 0.0900848366569,
+       "tof_ms": 30.5939492339,
+       "velocity_mps": 783.580518487
+      },
+      {
+       "distance_m": 35,
+       "poi_mm": -30.6644430118,
+       "hold_mrad": 0.876126943194,
+       "hold_moa": 3.01190256976,
+       "hold_clicks_up": 6,
+       "wind_10mph_mm": 4.50294441612,
+       "wind_10mph_mrad": 0.128655554746,
+       "tof_ms": 43.4423272024,
+       "velocity_mps": 772.875154119
+      },
+      {
+       "distance_m": 45,
+       "poi_mm": -21.1027293848,
+       "hold_mrad": 0.468949541884,
+       "hold_moa": 1.61212977327,
+       "hold_clicks_up": 3,
+       "wind_10mph_mm": 7.56296493357,
+       "wind_10mph_mrad": 0.168065887413,
+       "tof_ms": 56.4711403607,
+       "velocity_mps": 762.250258613
+      },
+      {
+       "distance_m": 55,
+       "poi_mm": -13.2282947425,
+       "hold_mrad": 0.240514449864,
+       "hold_moa": 0.826827773346,
+       "hold_clicks_up": 2,
+       "wind_10mph_mm": 11.4212996828,
+       "wind_10mph_mrad": 0.207659994233,
+       "tof_ms": 69.6892917895,
+       "velocity_mps": 751.70526158
+      },
+      {
+       "distance_m": 75,
+       "poi_mm": -2.73097649333,
+       "hold_mrad": 0.0364130199111,
+       "hold_moa": 0.125178741614,
+       "hold_clicks_up": 0,
+       "wind_10mph_mm": 21.6656797844,
+       "wind_10mph_mrad": 0.288875730459,
+       "tof_ms": 96.6656766955,
+       "velocity_mps": 730.864589339
+      },
+      {
+       "distance_m": 100,
+       "poi_mm": 0.0,
+       "hold_mrad": -0.0,
+       "hold_moa": -0.0,
+       "hold_clicks_up": 0,
+       "wind_10mph_mm": 39.3569603136,
+       "wind_10mph_mrad": 0.393569603136,
+       "tof_ms": 131.495011616,
+       "velocity_mps": 705.291468411
+      },
+      {
+       "distance_m": 150,
+       "poi_mm": -32.4305931343,
+       "hold_mrad": 0.216203954229,
+       "hold_moa": 0.743254445482,
+       "hold_clicks_up": 1,
+       "wind_10mph_mm": 92.0979909724,
+       "wind_10mph_mrad": 0.613986606483,
+       "tof_ms": 205.017971943,
+       "velocity_mps": 655.744605844
+      },
+      {
+       "distance_m": 200,
+       "poi_mm": -122.005536081,
+       "hold_mrad": 0.610027680407,
+       "hold_moa": 2.09712068841,
+       "hold_clicks_up": 4,
+       "wind_10mph_mm": 170.065829088,
+       "wind_10mph_mrad": 0.850329145442,
+       "tof_ms": 284.183957367,
+       "velocity_mps": 608.290010881
+      },
+      {
+       "distance_m": 250,
+       "poi_mm": -278.003287362,
+       "hold_mrad": 1.11201314945,
+       "hold_moa": 3.82281961359,
+       "hold_clicks_up": 8,
+       "wind_10mph_mm": 276.183943101,
+       "wind_10mph_mrad": 1.1047357724,
+       "tof_ms": 369.650559964,
+       "velocity_mps": 562.678589574
+      },
+      {
+       "distance_m": 300,
+       "poi_mm": -511.646334637,
+       "hold_mrad": 1.70548778212,
+       "hold_moa": 5.86303511561,
+       "hold_clicks_up": 12,
+       "wind_10mph_mm": 413.973326756,
+       "wind_10mph_mrad": 1.37991108919,
+       "tof_ms": 462.196574124,
+       "velocity_mps": 518.698865759
+      },
+      {
+       "distance_m": 350,
+       "poi_mm": -836.68902894,
+       "hold_mrad": 2.39054008269,
+       "hold_moa": 8.21807144968,
+       "hold_clicks_up": 16,
+       "wind_10mph_mm": 587.733506198,
+       "wind_10mph_mrad": 1.67923858914,
+       "tof_ms": 562.799214782,
+       "velocity_mps": 476.260044062
+      },
+      {
+       "distance_m": 400,
+       "poi_mm": -1270.18371961,
+       "hold_mrad": 3.17545929902,
+       "hold_moa": 10.916424951,
+       "hold_clicks_up": 22,
+       "wind_10mph_mm": 802.653139896,
+       "wind_10mph_mrad": 2.00663284974,
+       "tof_ms": 672.606160192,
+       "velocity_mps": 435.379408757
+      },
+      {
+       "distance_m": 450,
+       "poi_mm": -1833.49992857,
+       "hold_mrad": 4.07444428572,
+       "hold_moa": 14.006907686,
+       "hold_clicks_up": 28,
+       "wind_10mph_mm": 1064.89010623,
+       "wind_10mph_mrad": 2.3664224583,
+       "tof_ms": 792.994421723,
+       "velocity_mps": 396.285409478
+      },
+      {
+       "distance_m": 500,
+       "poi_mm": -2553.53925961,
+       "hold_mrad": 5.10707851922,
+       "hold_moa": 17.5568426876,
+       "hold_clicks_up": 35,
+       "wind_10mph_mm": 1381.38684131,
+       "wind_10mph_mrad": 2.76277368263,
+       "tof_ms": 925.522681199,
+       "velocity_mps": 359.415752304
+      },
+      {
+       "distance_m": 550,
+       "poi_mm": -3463.93123648,
+       "hold_mrad": 6.2980567936,
+       "hold_moa": 21.6511244044,
+       "hold_clicks_up": 43,
+       "wind_10mph_mm": 1757.86784943,
+       "wind_10mph_mrad": 3.19612336261,
+       "tof_ms": 1071.4618076,
+       "velocity_mps": 328.831117866
+      },
+      {
+       "distance_m": 600,
+       "poi_mm": -4599.62773873,
+       "hold_mrad": 7.66604623122,
+       "hold_moa": 26.3539256761,
+       "hold_clicks_up": 53,
+       "wind_10mph_mm": 2179.84655151,
+       "wind_10mph_mrad": 3.63307758584,
+       "tof_ms": 1227.58012404,
+       "velocity_mps": 313.394010575
+      }
+     ]
+    },
+    "200m": {
+     "zero_distance_m": 200.0,
+     "bore_angle_mrad": 2.18967827274,
+     "bore_angle_moa": 7.52755941118,
+     "clicks_up_from_centre": 15,
+     "rounding_moves_poi_mm_at_zero": -4.80502302603,
+     "crossings_from_eye_m": [
+      41.0124017566,
+      200.0
+     ],
+     "max_ordinate_mm": 66.5440479527,
+     "max_ordinate_at_m": 123.5,
+     "within_50mm_from_to_m": [
+      13.0,
+      223.0
+     ],
+     "holds": [
+      {
+       "distance_m": 10,
+       "poi_mm": -55.9178506919,
+       "hold_mrad": 5.59178506919,
+       "hold_moa": 19.2231410645,
+       "hold_clicks_up": 38,
+       "wind_10mph_mm": 0.334450294142,
+       "wind_10mph_mrad": 0.0334450294142,
+       "tof_ms": 11.6493111099,
+       "velocity_mps": 799.778335747
+      },
+      {
+       "distance_m": 15,
+       "poi_mm": -45.8713337388,
+       "hold_mrad": 3.05808891592,
+       "hold_moa": 10.5129352955,
+       "hold_clicks_up": 21,
+       "wind_10mph_mm": 0.781163386717,
+       "wind_10mph_mrad": 0.0520775591144,
+       "tof_ms": 17.9241483024,
+       "velocity_mps": 794.354470249
+      },
+      {
+       "distance_m": 20,
+       "poi_mm": -36.213578831,
+       "hold_mrad": 1.81067894155,
+       "hold_moa": 6.22465568425,
+       "hold_clicks_up": 12,
+       "wind_10mph_mm": 1.4167603744,
+       "wind_10mph_mrad": 0.0708380187199,
+       "tof_ms": 24.2392849174,
+       "velocity_mps": 788.961789756
+      },
+      {
+       "distance_m": 25,
+       "poi_mm": -26.9554972839,
+       "hold_mrad": 1.07821989136,
+       "hold_moa": 3.7066469497,
+       "hold_clicks_up": 7,
+       "wind_10mph_mm": 2.25212091642,
+       "wind_10mph_mrad": 0.0900848366569,
+       "tof_ms": 30.5939492339,
+       "velocity_mps": 783.580518487
+      },
+      {
+       "distance_m": 35,
+       "poi_mm": -9.62844868304,
+       "hold_mrad": 0.275098533801,
+       "hold_moa": 0.945719096222,
+       "hold_clicks_up": 2,
+       "wind_10mph_mm": 4.50294441612,
+       "wind_10mph_mrad": 0.128655554746,
+       "tof_ms": 43.4423272024,
+       "velocity_mps": 772.875154119
+      },
+      {
+       "distance_m": 45,
+       "poi_mm": 6.0526311108,
+       "hold_mrad": -0.134502913573,
+       "hold_moa": -0.462386956798,
+       "hold_clicks_up": -1,
+       "wind_10mph_mm": 7.56296493357,
+       "wind_10mph_mrad": 0.168065887413,
+       "tof_ms": 56.4711403607,
+       "velocity_mps": 762.250258613
+      },
+      {
+       "distance_m": 55,
+       "poi_mm": 20.0464319199,
+       "hold_mrad": -0.364480580362,
+       "hold_moa": -1.25299193815,
+       "hold_clicks_up": -3,
+       "wind_10mph_mm": 11.4212996828,
+       "wind_10mph_mrad": 0.207659994233,
+       "tof_ms": 69.6892917895,
+       "velocity_mps": 751.70526158
+      },
+      {
+       "distance_m": 75,
+       "poi_mm": 42.7824825028,
+       "hold_mrad": -0.570433100037,
+       "hold_moa": -1.9610045476,
+       "hold_clicks_up": -4,
+       "wind_10mph_mm": 21.6656797844,
+       "wind_10mph_mrad": 0.288875730459,
+       "tof_ms": 96.6656766955,
+       "velocity_mps": 730.864589339
+      },
+      {
+       "distance_m": 100,
+       "poi_mm": 60.8118744132,
+       "hold_mrad": -0.608118744132,
+       "hold_moa": -2.09055824889,
+       "hold_clicks_up": -4,
+       "wind_10mph_mm": 39.3569603136,
+       "wind_10mph_mrad": 0.393569603136,
+       "tof_ms": 131.495011616,
+       "velocity_mps": 705.291468411
+      },
+      {
+       "distance_m": 150,
+       "poi_mm": 58.978112113,
+       "hold_mrad": -0.393187414087,
+       "hold_moa": -1.35167876309,
+       "hold_clicks_up": -3,
+       "wind_10mph_mm": 92.0979909724,
+       "wind_10mph_mrad": 0.613986606483,
+       "tof_ms": 205.017971943,
+       "velocity_mps": 655.744605844
+      },
+      {
+       "distance_m": 200,
+       "poi_mm": -2.77555756156e-14,
+       "hold_mrad": 1.38777878078e-16,
+       "hold_moa": 4.7708320222e-16,
+       "hold_clicks_up": 0,
+       "wind_10mph_mm": 170.065829088,
+       "wind_10mph_mrad": 0.850329145442,
+       "tof_ms": 284.183957367,
+       "velocity_mps": 608.290010881
+      },
+      {
+       "distance_m": 250,
+       "poi_mm": -125.400920447,
+       "hold_mrad": 0.501603681787,
+       "hold_moa": 1.72438643728,
+       "hold_clicks_up": 3,
+       "wind_10mph_mm": 276.183943101,
+       "wind_10mph_mrad": 1.1047357724,
+       "tof_ms": 369.650559964,
+       "velocity_mps": 562.678589574
+      },
+      {
+       "distance_m": 300,
+       "poi_mm": -328.447136887,
+       "hold_mrad": 1.09482378962,
+       "hold_moa": 3.76372694736,
+       "hold_clicks_up": 8,
+       "wind_10mph_mm": 413.973326756,
+       "wind_10mph_mrad": 1.37991108919,
+       "tof_ms": 462.196574124,
+       "velocity_mps": 518.698865759
+      },
+      {
+       "distance_m": 350,
+       "poi_mm": -622.893000356,
+       "hold_mrad": 1.77969428673,
+       "hold_moa": 6.11813828719,
+       "hold_clicks_up": 12,
+       "wind_10mph_mm": 587.733506198,
+       "wind_10mph_mrad": 1.67923858914,
+       "tof_ms": 562.799214782,
+       "velocity_mps": 476.260044062
+      },
+      {
+       "distance_m": 400,
+       "poi_mm": -1025.79086019,
+       "hold_mrad": 2.56447715047,
+       "hold_moa": 8.81602304278,
+       "hold_clicks_up": 18,
+       "wind_10mph_mm": 802.653139896,
+       "wind_10mph_mrad": 2.00663284974,
+       "tof_ms": 672.606160192,
+       "velocity_mps": 435.379408757
+      },
+      {
+       "distance_m": 450,
+       "poi_mm": -1558.51023832,
+       "hold_mrad": 3.46335608516,
+       "hold_moa": 11.9061411978,
+       "hold_clicks_up": 24,
+       "wind_10mph_mm": 1064.89010623,
+       "wind_10mph_mrad": 2.3664224583,
+       "tof_ms": 792.994421723,
+       "velocity_mps": 396.285409478
+      },
+      {
+       "distance_m": 500,
+       "poi_mm": -2247.95273852,
+       "hold_mrad": 4.49590547705,
+       "hold_moa": 15.4557845355,
+       "hold_clicks_up": 31,
+       "wind_10mph_mm": 1381.38684131,
+       "wind_10mph_mrad": 2.76277368263,
+       "tof_ms": 925.522681199,
+       "velocity_mps": 359.415752304
+      },
+      {
+       "distance_m": 550,
+       "poi_mm": -3127.74788456,
+       "hold_mrad": 5.68681433556,
+       "hold_moa": 19.5498276181,
+       "hold_clicks_up": 39,
+       "wind_10mph_mm": 1757.86784943,
+       "wind_10mph_mrad": 3.19612336261,
+       "tof_ms": 1071.4618076,
+       "velocity_mps": 328.831117866
+      },
+      {
+       "distance_m": 600,
+       "poi_mm": -4232.84755598,
+       "hold_mrad": 7.05474592663,
+       "hold_moa": 24.252430028,
+       "hold_clicks_up": 49,
+       "wind_10mph_mm": 2179.84655151,
+       "wind_10mph_mrad": 3.63307758584,
+       "tof_ms": 1227.58012404,
+       "velocity_mps": 313.394010575
+      }
+     ]
+    },
+    "25m": {
+     "zero_distance_m": 25.0,
+     "bore_angle_mrad": 3.29549492446,
+     "bore_angle_moa": 11.3290770347,
+     "clicks_up_from_centre": 23,
+     "rounding_moves_poi_mm_at_zero": 29.8006651378,
+     "crossings_from_eye_m": [
+      25.0,
+      300.680486992
+     ],
+     "max_ordinate_mm": 230.086186309,
+     "max_ordinate_at_m": 172.5,
+     "within_50mm_from_to_m": [
+      9.0,
+      312.5
+     ],
+     "holds": [
+      {
+       "distance_m": 10,
+       "poi_mm": -45.5496031837,
+       "hold_mrad": 4.55496031837,
+       "hold_moa": 15.6588001255,
+       "hold_clicks_up": 31,
+       "wind_10mph_mm": 0.334450294142,
+       "wind_10mph_mrad": 0.0334450294142,
+       "tof_ms": 11.6493111099,
+       "velocity_mps": 799.778335747
+      },
+      {
+       "distance_m": 15,
+       "poi_mm": -29.974002972,
+       "hold_mrad": 1.9982668648,
+       "hold_moa": 6.86953546164,
+       "hold_clicks_up": 14,
+       "wind_10mph_mm": 0.781163386717,
+       "wind_10mph_mrad": 0.0520775591144,
+       "tof_ms": 17.9241483024,
+       "velocity_mps": 794.354470249
+      },
+      {
+       "distance_m": 20,
+       "poi_mm": -14.7871648057,
+       "hold_mrad": 0.739358240287,
+       "hold_moa": 2.541726403,
+       "hold_clicks_up": 5,
+       "wind_10mph_mm": 1.4167603744,
+       "wind_10mph_mrad": 0.0708380187199,
+       "tof_ms": 24.2392849174,
+       "velocity_mps": 788.961789756
+      },
+      {
+       "distance_m": 25,
+       "poi_mm": 0.0,
+       "hold_mrad": -0.0,
+       "hold_moa": -0.0,
+       "hold_clicks_up": 0,
+       "wind_10mph_mm": 2.25212091642,
+       "wind_10mph_mrad": 0.0900848366569,
+       "tof_ms": 30.5939492339,
+       "velocity_mps": 783.580518487
+      },
+      {
+       "distance_m": 35,
+       "poi_mm": 28.385215118,
+       "hold_mrad": -0.811006146229,
+       "hold_moa": -2.78803376028,
+       "hold_clicks_up": -6,
+       "wind_10mph_mm": 4.50294441612,
+       "wind_10mph_mrad": 0.128655554746,
+       "tof_ms": 43.4423272024,
+       "velocity_mps": 772.875154119
+      },
+      {
+       "distance_m": 45,
+       "poi_mm": 55.124461429,
+       "hold_mrad": -1.22498803176,
+       "hold_moa": -4.21119865042,
+       "hold_clicks_up": -8,
+       "wind_10mph_mm": 7.56296493357,
+       "wind_10mph_mrad": 0.168065887413,
+       "tof_ms": 56.4711403607,
+       "velocity_mps": 762.250258613
+      },
+      {
+       "distance_m": 55,
+       "poi_mm": 80.1764287553,
+       "hold_mrad": -1.4577532501,
+       "hold_moa": -5.01138652812,
+       "hold_clicks_up": -10,
+       "wind_10mph_mm": 11.4212996828,
+       "wind_10mph_mrad": 0.207659994233,
+       "tof_ms": 69.6892917895,
+       "velocity_mps": 751.70526158
+      },
+      {
+       "distance_m": 75,
+       "poi_mm": 125.028812372,
+       "hold_mrad": -1.66705083163,
+       "hold_moa": -5.73089861318,
+       "hold_clicks_up": -11,
+       "wind_10mph_mm": 21.6656797844,
+       "wind_10mph_mrad": 0.288875730459,
+       "tof_ms": 96.6656766955,
+       "velocity_mps": 730.864589339
+      },
+      {
+       "distance_m": 100,
+       "poi_mm": 170.703620576,
+       "hold_mrad": -1.70703620576,
+       "hold_moa": -5.86835820395,
+       "hold_clicks_up": -12,
+       "wind_10mph_mm": 39.3569603136,
+       "wind_10mph_mrad": 0.393569603136,
+       "tof_ms": 131.495011616,
+       "velocity_mps": 705.291468411
+      },
+      {
+       "distance_m": 150,
+       "poi_mm": 224.160690861,
+       "hold_mrad": -1.49440460574,
+       "hold_moa": -5.13738460764,
+       "hold_clicks_up": -10,
+       "wind_10mph_mm": 92.0979909724,
+       "wind_10mph_mrad": 0.613986606483,
+       "tof_ms": 205.017971943,
+       "velocity_mps": 655.744605844
+      },
+      {
+       "distance_m": 200,
+       "poi_mm": 220.473411334,
+       "hold_mrad": -1.10236705667,
+       "hold_moa": -3.78965878929,
+       "hold_clicks_up": -8,
+       "wind_10mph_mm": 170.065829088,
+       "wind_10mph_mrad": 0.850329145442,
+       "tof_ms": 284.183957367,
+       "velocity_mps": 608.290010881
+      },
+      {
+       "distance_m": 250,
+       "poi_mm": 150.363323473,
+       "hold_mrad": -0.601453293892,
+       "hold_moa": -2.06764411886,
+       "hold_clicks_up": -4,
+       "wind_10mph_mm": 276.183943101,
+       "wind_10mph_mrad": 1.1047357724,
+       "tof_ms": 369.650559964,
+       "velocity_mps": 562.678589574
+      },
+      {
+       "distance_m": 300,
+       "poi_mm": 2.60793961854,
+       "hold_mrad": -0.00869313206179,
+       "hold_moa": -0.0298847866734,
+       "hold_clicks_up": 0,
+       "wind_10mph_mm": 413.973326756,
+       "wind_10mph_mrad": 1.37991108919,
+       "tof_ms": 462.196574124,
+       "velocity_mps": 518.698865759
+      },
+      {
+       "distance_m": 350,
+       "poi_mm": -236.547091264,
+       "hold_mrad": 0.675848832184,
+       "hold_moa": 2.32339714038,
+       "hold_clicks_up": 5,
+       "wind_10mph_mm": 587.733506198,
+       "wind_10mph_mrad": 1.67923858914,
+       "tof_ms": 562.799214782,
+       "velocity_mps": 476.260044062
+      },
+      {
+       "distance_m": 400,
+       "poi_mm": -584.154118511,
+       "hold_mrad": 1.46038529628,
+       "hold_moa": 5.02043483638,
+       "hold_clicks_up": 10,
+       "wind_10mph_mm": 802.653139896,
+       "wind_10mph_mrad": 2.00663284974,
+       "tof_ms": 672.606160192,
+       "velocity_mps": 435.379408757
+      },
+      {
+       "distance_m": 450,
+       "poi_mm": -1061.58266406,
+       "hold_mrad": 2.35907258679,
+       "hold_moa": 8.1098941673,
+       "hold_clicks_up": 16,
+       "wind_10mph_mm": 1064.89010623,
+       "wind_10mph_mrad": 2.3664224583,
+       "tof_ms": 792.994421723,
+       "velocity_mps": 396.285409478
+      },
+      {
+       "distance_m": 500,
+       "poi_mm": -1695.73433167,
+       "hold_mrad": 3.39146866335,
+       "hold_moa": 11.6590104456,
+       "hold_clicks_up": 23,
+       "wind_10mph_mm": 1381.38684131,
+       "wind_10mph_mrad": 2.76277368263,
+       "tof_ms": 925.522681199,
+       "velocity_mps": 359.415752304
+      },
+      {
+       "distance_m": 550,
+       "poi_mm": -2520.23864512,
+       "hold_mrad": 4.58225208204,
+       "hold_moa": 15.752622298,
+       "hold_clicks_up": 32,
+       "wind_10mph_mm": 1757.86784943,
+       "wind_10mph_mrad": 3.19612336261,
+       "tof_ms": 1071.4618076,
+       "velocity_mps": 328.831117866
+      },
+      {
+       "distance_m": 600,
+       "poi_mm": -3570.04748396,
+       "hold_mrad": 5.95007913993,
+       "hold_moa": 20.4548653492,
+       "hold_clicks_up": 41,
+       "wind_10mph_mm": 2179.84655151,
+       "wind_10mph_mrad": 3.63307758584,
+       "tof_ms": 1227.58012404,
+       "velocity_mps": 313.394010575
+      }
+     ]
+    }
+   }
+  },
+  "default": "50m"
+ },
+ "rendering": {
+  "frame": "Asset frame (metres, +Z muzzle, +Y up, +X shooter's left), origin socket_mount. The optical axis is the line through socket_eye and socket_objective.",
+  "render_target": false,
+  "steps": [
+   "1. Draw the world as usual. The housing, mount and caps are ordinary opaque geometry.",
+   "2. On pixels of the front window seen through the rear window (materials lens_front and lens_rear): multiply the scene by window.transmission_linear_srgb.",
+   "3. Dot direction: d = optical axis + zero offset + a(eye offset), with a from optics.parallax.beam_direction_poly rotated by frames.lens_from_shooter (OpticRedDot.dotDirection does this). The dot is at infinity: draw a disc of angular diameter dot.size_mrad around d. It has a fixed angular size and does not scale with how big the window is on screen.",
+   "4. The dot exists only on window pixels: when the line from the eye along d misses the front or rear clear aperture the dot is gone. That is the whole \"eye box\" of a red dot.",
+   "5. Dot radiance = led colour * brightness.settings[position].dot_luminance_cd_m2 / exposure. Bloom and wash-out follow brightness.appearance from the Weber contrast.",
+   "6. Optional: 0.5 percent environment reflection on the front surface tinted window.front_reflection_linear_srgb, a 0.5 percent ghost of the scene behind the shooter, and a dark ring in the outer 6 percent of the window radius (the tube wall seen through the edge of the doublet)."
+  ],
+  "parameters": {
+   "dot_moa": 2.0,
+   "led_colour_linear_srgb": [
+    1.0,
+    0.045,
+    0.012
+   ],
+   "window_clear_mm": 24.0,
+   "rear_clear_mm": 24.0,
+   "tint": [
+    0.789090015677,
+    1.00199731107,
+    0.987063121099
+   ],
+   "magnification": 1.0,
+   "distortion_k1": 0.0
+  },
+  "parallax_shortcut": "error (rad) = e * (1/D - 1/D0) per lens axis, e = eye offset (m), D0 = optics.parallax.parallax_free_distance_m. The polynomial adds the aberration terms, which dominate beyond about 6 mm of eye offset.",
+  "source": "led colour: inferred, a 650 nm LED in linear sRGB primaries (out of gamut, clipped)"
+ },
+ "parity_samples": {
+  "doc": "exact ray-trace values for optic-red-dot.js to reproduce: beam direction a (rad) and parallax error (rad, shooter right/up) per distance (m)",
+  "rows": [
+   {
+    "eye_right_mm": 0,
+    "eye_up_mm": 0,
+    "beam_lens": [
+     0.0,
+     -3.71660597499e-17
+    ],
+    "beam_shooter": [
+     2.62803728791e-17,
+     -2.62803728791e-17
+    ],
+    "errors": {
+     "10": [
+      2.62803728791e-17,
+      -2.62803728791e-17
+     ],
+     "25": [
+      2.62803728791e-17,
+      -2.62803728791e-17
+     ],
+     "50": [
+      2.62803728791e-17,
+      -2.62803728791e-17
+     ],
+     "100": [
+      2.62803728791e-17,
+      -2.62803728791e-17
+     ],
+     "300": [
+      2.62803728791e-17,
+      -2.62803728791e-17
+     ]
+    }
+   },
+   {
+    "eye_right_mm": 3,
+    "eye_up_mm": 0,
+    "beam_lens": [
+     -0.000127391998164,
+     3.18701748577e-05
+    ],
+    "beam_shooter": [
+     -0.00011261536253,
+     -6.75441290113e-05
+    ],
+    "errors": {
+     "10": [
+      0.000186531503253,
+      -6.79943467462e-05
+     ],
+     "25": [
+      9.48487004831e-06,
+      -6.79918873224e-05
+     ],
+     "50": [
+      -5.07518172285e-05,
+      -6.7991003963e-05
+     ],
+     "100": [
+      -8.11044685276e-05,
+      -6.79905498834e-05
+     ],
+     "300": [
+      -0.000101427176522,
+      -6.79902424955e-05
+     ]
+    }
+   },
+   {
+    "eye_right_mm": 0,
+    "eye_up_mm": 3,
+    "beam_lens": [
+     -9.38961251044e-05,
+     3.62245069578e-05
+    ],
+    "beam_shooter": [
+     -9.20091813035e-05,
+     -4.07799922734e-05
+    ],
+    "errors": {
+     "10": [
+      -9.25308078619e-05,
+      0.000258578955091
+     ],
+     "25": [
+      -9.2525945227e-05,
+      8.15251299871e-05
+     ],
+     "50": [
+      -9.25242254856e-05,
+      2.12859399493e-05
+     ],
+     "100": [
+      -9.25233463603e-05,
+      -9.06798320182e-06
+     ],
+     "300": [
+      -9.25227530333e-05,
+      -2.93915467886e-05
+     ]
+    }
+   },
+   {
+    "eye_right_mm": -6,
+    "eye_up_mm": 2,
+    "beam_lens": [
+     7.55034675534e-05,
+     0.000230105306334
+    ],
+    "beam_shooter": [
+     -0.000109320008586,
+     0.000216098036406
+    ],
+    "errors": {
+     "10": [
+      -0.000708657979182,
+      0.000416848574411
+     ],
+     "25": [
+      -0.000354531625745,
+      0.000298796357282
+     ],
+     "50": [
+      -0.00023404670511,
+      0.000258631153263
+     ],
+     "100": [
+      -0.000173335531572,
+      0.000238392275087
+     ],
+     "300": [
+      -0.000132686165231,
+      0.000224841258299
+     ]
+    }
+   },
+   {
+    "eye_right_mm": 5,
+    "eye_up_mm": -5,
+    "beam_lens": [
+     3.2373920769e-20,
+     0.000236343525669
+    ],
+    "beam_shooter": [
+     -0.00016712010969,
+     0.00016712010969
+    ],
+    "errors": {
+     "10": [
+      0.000331823309629,
+      -0.000331823309629
+     ],
+     "25": [
+      3.6747690883e-05,
+      -3.6747690883e-05
+     ],
+     "50": [
+      -6.36461162004e-05,
+      6.36461162004e-05
+     ],
+     "100": [
+      -0.000114233535548,
+      0.000114233535548
+     ],
+     "300": [
+      -0.000148104494382,
+      0.000148104494382
+     ]
+    }
+   },
+   {
+    "eye_right_mm": 0,
+    "eye_up_mm": 9,
+    "beam_lens": [
+     -0.000117174060298,
+     0.000382242080669
+    ],
+    "beam_shooter": [
+     -0.000353140539912,
+     0.00018743139468
+    ],
+    "errors": {
+     "10": [
+      -0.000354922041701,
+      0.00108604749472
+     ],
+     "25": [
+      -0.000354900144775,
+      0.000554845898633
+     ],
+     "50": [
+      -0.000354892441219,
+      0.0003741143203
+     ],
+     "100": [
+      -0.000354888510713,
+      0.000283045432305
+     ],
+     "300": [
+      -0.000354885860768,
+      0.000222069954236
+     ]
+    }
+   },
+   {
+    "eye_right_mm": 9,
+    "eye_up_mm": 0,
+    "beam_lens": [
+     -0.000422440226491,
+     0.000236504148918
+    ],
+    "beam_shooter": [
+     -0.000465944036277,
+     -0.000131476661319
+    ],
+    "errors": {
+     "10": [
+      0.000430762722894,
+      -0.000132615345005
+     ],
+     "25": [
+      -0.000100373839747,
+      -0.000132615138757
+     ],
+     "50": [
+      -0.00028108278561,
+      -0.000132614984346
+     ],
+     "100": [
+      -0.000372140172056,
+      -0.000132614890321
+     ],
+     "300": [
+      -0.000433107912807,
+      -0.00013261482129
+     ]
+    }
+   },
+   {
+    "eye_right_mm": -7,
+    "eye_up_mm": -7,
+    "beam_lens": [
+     0.000401132534265,
+     0.000183609608353
+    ],
+    "beam_shooter": [
+     0.000153811935976,
+     0.000413475134291
+    ],
+    "errors": {
+     "10": [
+      -0.00054359572499,
+      -0.000283166490874
+     ],
+     "25": [
+      -0.000130456435189,
+      0.000129946645292
+     ],
+     "50": [
+      1.01064204839e-05,
+      0.000270500399693
+     ],
+     "100": [
+      8.09346402551e-05,
+      0.000341323994407
+     ],
+     "300": [
+      0.000128357896546,
+      0.000388744139368
+     ]
+    }
+   },
+   {
+    "eye_right_mm": 0,
+    "eye_up_mm": -11,
+    "beam_lens": [
+     0.000516746049891,
+     0.000330027740921
+    ],
+    "beam_shooter": [
+     0.000132029782444,
+     0.000598759489614
+    ],
+    "errors": {
+     "10": [
+      0.00013333573468,
+      -0.000496889379953
+     ],
+     "25": [
+      0.000133338407132,
+      0.000152281107417
+     ],
+     "50": [
+      0.000133339236001,
+      0.000373148872319
+     ],
+     "100": [
+      0.000133339638176,
+      0.000484441881454
+     ],
+     "300": [
+      0.000133339901651,
+      0.000558958443872
+     ]
+    }
+   },
+   {
+    "eye_right_mm": 11,
+    "eye_up_mm": 0,
+    "beam_lens": [
+     -0.000516746049891,
+     0.000330027740921
+    ],
+    "beam_shooter": [
+     -0.000598759489614,
+     -0.000132029782445
+    ],
+    "errors": {
+     "10": [
+      0.000496889379953,
+      -0.00013333573468
+     ],
+     "25": [
+      -0.000152281107417,
+      -0.000133338407132
+     ],
+     "50": [
+      -0.000373148872319,
+      -0.000133339236001
+     ],
+     "100": [
+      -0.000484441881454,
+      -0.000133339638176
+     ],
+     "300": [
+      -0.000558958443872,
+      -0.000133339901651
+     ]
+    }
+   }
+  ]
+ },
+ "lens_trace": {
+  "doc": "the numbers the runtime needs for its own exact trace (lens frame, mm; window vertex at the origin, +z toward the target)",
+  "R1": 173.718603359,
+  "R2": 185.406437653,
+  "R3": 175.422189857,
+  "t1": 2.5,
+  "t2": 2.5,
+  "n": 1.5168,
+  "tilt_rad": 0.0722143038881,
+  "led": [
+   0.0,
+   -13.5,
+   -91.99999999
+  ],
+  "eye_z": -256.6
+ }
+}

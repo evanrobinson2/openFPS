@@ -1,0 +1,96 @@
+{
+ "js_vs_python": {
+  "what": "largest |JS - Python| over the parity samples and the per-magnification table",
+  "cam_mm": 4.80142e-10,
+  "eye_relief_mm": 4.73591e-10,
+  "exit_pupil_mm": 3.63637e-10,
+  "field_tangent": 4.98938e-10,
+  "vignetting_fraction": 3.40426e-10,
+  "eye_box_mask": 2.08883e-9
+ },
+ "shade": {
+  "centre_6x": 1,
+  "half_field_6x": 0.979333
+ },
+ "reticle_vs_ballistics_runtime": {
+  "what": "BDC marks (bar = M855, leg tips = Mk 262, 200 m zero) against HK416Ballistics.poi() with the optic mounted (sightHeight 0.07997 m, eyeToMuzzle 0.6307 m)",
+  "rows": [
+   {
+    "ammo": "M855",
+    "distance_m": 300,
+    "reticle_mark_mrad": 0.921689,
+    "ballistics_runtime_mrad": 0.921717,
+    "difference_mrad": -0.0000277333,
+    "miss_mm": -0.00831999
+   },
+   {
+    "ammo": "M855",
+    "distance_m": 400,
+    "reticle_mark_mrad": 2.14461,
+    "ballistics_runtime_mrad": 2.14464,
+    "difference_mrad": -0.0000225346,
+    "miss_mm": -0.00901384
+   },
+   {
+    "ammo": "M855",
+    "distance_m": 500,
+    "reticle_mark_mrad": 3.70768,
+    "ballistics_runtime_mrad": 3.70772,
+    "difference_mrad": -0.000037133,
+    "miss_mm": -0.0185665
+   },
+   {
+    "ammo": "M855",
+    "distance_m": 600,
+    "reticle_mark_mrad": 5.71723,
+    "ballistics_runtime_mrad": 5.71726,
+    "difference_mrad": -0.0000308695,
+    "miss_mm": -0.0185217
+   },
+   {
+    "ammo": "Mk262",
+    "distance_m": 300,
+    "reticle_mark_mrad": 1.05227,
+    "ballistics_runtime_mrad": 1.05228,
+    "difference_mrad": -0.00000956419,
+    "miss_mm": -0.00286926
+   },
+   {
+    "ammo": "Mk262",
+    "distance_m": 400,
+    "reticle_mark_mrad": 2.3783,
+    "ballistics_runtime_mrad": 2.37832,
+    "difference_mrad": -0.0000126676,
+    "miss_mm": -0.00506705
+   },
+   {
+    "ammo": "Mk262",
+    "distance_m": 500,
+    "reticle_mark_mrad": 3.99189,
+    "ballistics_runtime_mrad": 3.99191,
+    "difference_mrad": -0.0000215554,
+    "miss_mm": -0.0107777
+   },
+   {
+    "ammo": "Mk262",
+    "distance_m": 600,
+    "reticle_mark_mrad": 5.95504,
+    "ballistics_runtime_mrad": 5.95506,
+    "difference_mrad": -0.0000179473,
+    "miss_mm": -0.0107684
+   }
+  ],
+  "max_difference_mrad": 0.000037133
+ },
+ "zero_tables_vs_ballistics_runtime": {
+  "what": "every zero angle and every hold-table row, both loads and M856, against the runtime",
+  "max_zero_angle_difference_mrad": 0.0000815996,
+  "max_hold_difference_mrad": 0.00063894
+ },
+ "speed": {
+  "shade_ns_per_pixel": 91.5957,
+  "state_ms": 0.306363
+ },
+ "failures": 0,
+ "passed": true
+}
