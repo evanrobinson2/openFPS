@@ -1,0 +1,1534 @@
+{
+ "asset": "shotgun-590",
+ "frame": "mm; X = shooter's left, Y = up, Z = muzzle; origin on the bore axis at the receiver front face",
+ "ruler": {
+  "mm_per_px": 0.9562901744719925,
+  "source": "refs-local/commons-atf-mossberg-590.jpg (Wikimedia Commons File:Mossberg 590.jpg, public domain, ATF)"
+ },
+ "parts": {
+  "receiver": {
+   "group": "receiver_group",
+   "material": "Alloy",
+   "source": [
+    "P05",
+    "P07",
+    "P23",
+    "L05"
+   ],
+   "basis": "traced",
+   "triangles": 3480,
+   "bbox_mm": {
+    "x": [
+     -20.0,
+     20.0
+    ],
+    "y": [
+     -41.6,
+     23.6
+    ],
+    "z": [
+     -209.4,
+     -0.0
+    ]
+   },
+   "volume_cm3": 140.19,
+   "mass_g": 378.5
+  },
+  "trigger_housing_pin": {
+   "group": "receiver_group",
+   "material": "SteelDark",
+   "source": [
+    "P09"
+   ],
+   "basis": "traced",
+   "triangles": 236,
+   "bbox_mm": {
+    "x": [
+     -20.3,
+     20.3
+    ],
+    "y": [
+     -30.8,
+     -26.4
+    ],
+    "z": [
+     -174.6,
+     -170.2
+    ]
+   },
+   "volume_cm3": 0.61,
+   "mass_g": 4.8
+  },
+  "receiver_side_plug_r": {
+   "group": "receiver_group",
+   "material": "SteelDark",
+   "source": [
+    "P11"
+   ],
+   "basis": "traced",
+   "triangles": 236,
+   "bbox_mm": {
+    "x": [
+     -20.2,
+     -18.0
+    ],
+    "y": [
+     -12.4,
+     -6.4
+    ],
+    "z": [
+     -164.3,
+     -158.3
+    ]
+   },
+   "volume_cm3": 0.06,
+   "mass_g": 0.5
+  },
+  "receiver_side_plug_l": {
+   "group": "receiver_group",
+   "material": "SteelDark",
+   "source": [
+    "L04"
+   ],
+   "basis": "traced",
+   "triangles": 236,
+   "bbox_mm": {
+    "x": [
+     18.0,
+     20.2
+    ],
+    "y": [
+     -12.4,
+     -6.4
+    ],
+    "z": [
+     -164.3,
+     -158.3
+    ]
+   },
+   "volume_cm3": 0.06,
+   "mass_g": 0.5
+  },
+  "elevator_stud_r": {
+   "group": "elevator_group",
+   "material": "SteelDark",
+   "source": [
+    "P10",
+    "M04"
+   ],
+   "basis": "traced",
+   "triangles": 236,
+   "bbox_mm": {
+    "x": [
+     -20.1,
+     -15.0
+    ],
+    "y": [
+     -34.0,
+     -27.6
+    ],
+    "z": [
+     -81.6,
+     -75.2
+    ]
+   },
+   "volume_cm3": 0.16,
+   "mass_g": 1.3
+  },
+  "elevator_stud_l": {
+   "group": "elevator_group",
+   "material": "SteelDark",
+   "source": [
+    "P10",
+    "M04"
+   ],
+   "basis": "inferred",
+   "triangles": 236,
+   "bbox_mm": {
+    "x": [
+     15.0,
+     20.1
+    ],
+    "y": [
+     -34.0,
+     -27.6
+    ],
+    "z": [
+     -81.6,
+     -75.2
+    ]
+   },
+   "volume_cm3": 0.16,
+   "mass_g": 1.3
+  },
+  "receiver_top_screw_1": {
+   "group": "receiver_group",
+   "material": "SteelDark",
+   "source": [
+    "P12"
+   ],
+   "basis": "traced",
+   "triangles": 236,
+   "bbox_mm": {
+    "x": [
+     -2.3,
+     2.3
+    ],
+    "y": [
+     21.6,
+     23.9
+    ],
+    "z": [
+     -127.6,
+     -123.0
+    ]
+   },
+   "volume_cm3": 0.04,
+   "mass_g": 0.3
+  },
+  "receiver_top_screw_2": {
+   "group": "receiver_group",
+   "material": "SteelDark",
+   "source": [
+    "P12"
+   ],
+   "basis": "traced",
+   "triangles": 236,
+   "bbox_mm": {
+    "x": [
+     -2.3,
+     2.3
+    ],
+    "y": [
+     21.6,
+     23.9
+    ],
+    "z": [
+     -66.4,
+     -61.8
+    ]
+   },
+   "volume_cm3": 0.04,
+   "mass_g": 0.3
+  },
+  "ejector_screw": {
+   "group": "receiver_group",
+   "material": "SteelDark",
+   "source": [
+    "L02"
+   ],
+   "basis": "traced",
+   "triangles": 236,
+   "bbox_mm": {
+    "x": [
+     18.0,
+     20.3
+    ],
+    "y": [
+     5.5,
+     9.5
+    ],
+    "z": [
+     -57.0,
+     -53.0
+    ]
+   },
+   "volume_cm3": 0.03,
+   "mass_g": 0.2
+  },
+  "ejector": {
+   "group": "receiver_group",
+   "material": "SteelDark",
+   "source": [
+    "L02",
+    "M06"
+   ],
+   "basis": "manual",
+   "triangles": 108,
+   "bbox_mm": {
+    "x": [
+     15.0,
+     16.6
+    ],
+    "y": [
+     5.5,
+     9.5
+    ],
+    "z": [
+     -104.0,
+     -25.0
+    ]
+   },
+   "volume_cm3": 0.5,
+   "mass_g": 3.9
+  },
+  "safety_button": {
+   "group": "receiver_group",
+   "material": "Polymer",
+   "source": [
+    "P06",
+    "M01"
+   ],
+   "basis": "traced",
+   "triangles": 756,
+   "bbox_mm": {
+    "x": [
+     -6.0,
+     6.0
+    ],
+    "y": [
+     9.5,
+     16.0
+    ],
+    "z": [
+     -192.2,
+     -171.2
+    ]
+   },
+   "volume_cm3": 0.5,
+   "mass_g": 0.6
+  },
+  "safety_red_dot": {
+   "group": "receiver_group",
+   "material": "PaintRed",
+   "source": [
+    "M01"
+   ],
+   "basis": "manual",
+   "triangles": 76,
+   "bbox_mm": {
+    "x": [
+     -1.6,
+     1.6
+    ],
+    "y": [
+     10.2,
+     11.4
+    ],
+    "z": [
+     -190.3,
+     -187.1
+    ]
+   },
+   "volume_cm3": 0.01,
+   "mass_g": 0.0
+  },
+  "cartridge_stop": {
+   "group": "receiver_group",
+   "material": "SteelDark",
+   "source": [
+    "M03"
+   ],
+   "basis": "manual",
+   "triangles": 216,
+   "bbox_mm": {
+    "x": [
+     -17.0,
+     -12.8
+    ],
+    "y": [
+     -30.4,
+     -23.4
+    ],
+    "z": [
+     -100.0,
+     -6.0
+    ]
+   },
+   "volume_cm3": 1.11,
+   "mass_g": 8.7
+  },
+  "cartridge_interrupter": {
+   "group": "receiver_group",
+   "material": "SteelDark",
+   "source": [
+    "M03"
+   ],
+   "basis": "manual",
+   "triangles": 216,
+   "bbox_mm": {
+    "x": [
+     12.8,
+     17.0
+    ],
+    "y": [
+     -30.4,
+     -23.4
+    ],
+    "z": [
+     -100.0,
+     -6.0
+    ]
+   },
+   "volume_cm3": 1.11,
+   "mass_g": 8.7
+  },
+  "stock": {
+   "group": "receiver_group",
+   "material": "Polymer",
+   "source": [
+    "P01",
+    "P23"
+   ],
+   "basis": "traced",
+   "triangles": 5326,
+   "bbox_mm": {
+    "x": [
+     -21.5,
+     21.5
+    ],
+    "y": [
+     -154.8,
+     2.8
+    ],
+    "z": [
+     -502.4,
+     -199.6
+    ]
+   },
+   "volume_cm3": 840.6,
+   "mass_g": 353.1
+  },
+  "recoil_pad": {
+   "group": "receiver_group",
+   "material": "Rubber",
+   "source": [
+    "P02"
+   ],
+   "basis": "traced",
+   "triangles": 724,
+   "bbox_mm": {
+    "x": [
+     -22.0,
+     22.0
+    ],
+    "y": [
+     -164.5,
+     -35.0
+    ],
+    "z": [
+     -524.0,
+     -479.7
+    ]
+   },
+   "volume_cm3": 126.25,
+   "mass_g": 138.9
+  },
+  "rear_swivel_stud": {
+   "group": "receiver_group",
+   "material": "SteelDark",
+   "source": [
+    "P04"
+   ],
+   "basis": "traced",
+   "triangles": 472,
+   "bbox_mm": {
+    "x": [
+     -3.2,
+     3.2
+    ],
+    "y": [
+     -140.3,
+     -126.2
+    ],
+    "z": [
+     -427.2,
+     -420.0
+    ]
+   },
+   "volume_cm3": 0.44,
+   "mass_g": 3.5
+  },
+  "trigger_housing": {
+   "group": "trigger_housing_group",
+   "material": "Polymer",
+   "source": [
+    "P13",
+    "M07"
+   ],
+   "basis": "traced",
+   "triangles": 428,
+   "bbox_mm": {
+    "x": [
+     -19.4,
+     19.4
+    ],
+    "y": [
+     -59.9,
+     -19.6
+    ],
+    "z": [
+     -201.8,
+     -102.3
+    ]
+   },
+   "volume_cm3": 76.61,
+   "mass_g": 88.1
+  },
+  "trigger_guard": {
+   "group": "trigger_housing_group",
+   "material": "Polymer",
+   "source": [
+    "P13"
+   ],
+   "basis": "traced",
+   "triangles": 332,
+   "bbox_mm": {
+    "x": [
+     -6.0,
+     6.0
+    ],
+    "y": [
+     -69.2,
+     -40.2
+    ],
+    "z": [
+     -172.1,
+     -108.3
+    ]
+   },
+   "volume_cm3": 3.96,
+   "mass_g": 4.6
+  },
+  "trigger": {
+   "group": "trigger_housing_group",
+   "material": "SteelDark",
+   "source": [
+    "P14"
+   ],
+   "basis": "traced",
+   "triangles": 156,
+   "bbox_mm": {
+    "x": [
+     -3.2,
+     3.2
+    ],
+    "y": [
+     -64.6,
+     -41.9
+    ],
+    "z": [
+     -163.5,
+     -153.0
+    ]
+   },
+   "volume_cm3": 0.55,
+   "mass_g": 4.3
+  },
+  "action_lock_lever": {
+   "group": "trigger_housing_group",
+   "material": "SteelDark",
+   "source": [
+    "L01",
+    "M02"
+   ],
+   "basis": "traced",
+   "triangles": 108,
+   "bbox_mm": {
+    "x": [
+     7.0,
+     19.0
+    ],
+    "y": [
+     -46.7,
+     -39.5
+    ],
+    "z": [
+     -183.0,
+     -177.0
+    ]
+   },
+   "volume_cm3": 0.52,
+   "mass_g": 4.1
+  },
+  "barrel": {
+   "group": "barrel_assembly",
+   "material": "SteelParkerized",
+   "source": [
+    "P15"
+   ],
+   "basis": "traced",
+   "triangles": 2304,
+   "bbox_mm": {
+    "x": [
+     -16.4,
+     16.4
+    ],
+    "y": [
+     -16.4,
+     16.4
+    ],
+    "z": [
+     -21.0,
+     516.4
+    ]
+   },
+   "volume_cm3": 98.21,
+   "mass_g": 770.9
+  },
+  "barrel_ring": {
+   "group": "barrel_assembly",
+   "material": "SteelParkerized",
+   "source": [
+    "P21"
+   ],
+   "basis": "traced",
+   "triangles": 1080,
+   "bbox_mm": {
+    "x": [
+     -15.7,
+     15.7
+    ],
+    "y": [
+     -44.1,
+     -8.8
+    ],
+    "z": [
+     449.5,
+     489.6
+    ]
+   },
+   "volume_cm3": 12.07,
+   "mass_g": 94.7
+  },
+  "lug_band": {
+   "group": "barrel_assembly",
+   "material": "SteelParkerized",
+   "source": [
+    "P20"
+   ],
+   "basis": "traced",
+   "triangles": 1268,
+   "bbox_mm": {
+    "x": [
+     -13.8,
+     13.8
+    ],
+    "y": [
+     -55.3,
+     -8.8
+    ],
+    "z": [
+     346.2,
+     390.2
+    ]
+   },
+   "volume_cm3": 9.46,
+   "mass_g": 74.3
+  },
+  "front_bead": {
+   "group": "barrel_assembly",
+   "material": "Brass",
+   "source": [
+    "P16"
+   ],
+   "basis": "traced",
+   "triangles": 324,
+   "bbox_mm": {
+    "x": [
+     -1.5,
+     1.5
+    ],
+    "y": [
+     10.3,
+     13.5
+    ],
+    "z": [
+     501.8,
+     504.8
+    ]
+   },
+   "volume_cm3": 0.02,
+   "mass_g": 0.1
+  },
+  "magazine_tube": {
+   "group": "receiver_group",
+   "material": "SteelParkerized",
+   "source": [
+    "P17"
+   ],
+   "basis": "traced",
+   "triangles": 320,
+   "bbox_mm": {
+    "x": [
+     -12.2,
+     12.2
+    ],
+    "y": [
+     -40.6,
+     -16.1
+    ],
+    "z": [
+     -12.0,
+     483.9
+    ]
+   },
+   "volume_cm3": 32.95,
+   "mass_g": 258.7
+  },
+  "magazine_follower": {
+   "group": "receiver_group",
+   "material": "Polymer",
+   "source": [
+    "M08"
+   ],
+   "basis": "manual",
+   "triangles": 556,
+   "bbox_mm": {
+    "x": [
+     -11.0,
+     11.0
+    ],
+    "y": [
+     -39.3,
+     -17.4
+    ],
+    "z": [
+     -10.0,
+     12.0
+    ]
+   },
+   "volume_cm3": 8.19,
+   "mass_g": 9.4
+  },
+  "magazine_cap": {
+   "group": "magazine_cap_group",
+   "material": "SteelParkerized",
+   "source": [
+    "P22"
+   ],
+   "basis": "traced",
+   "triangles": 636,
+   "bbox_mm": {
+    "x": [
+     -12.9,
+     12.9
+    ],
+    "y": [
+     -41.3,
+     -15.5
+    ],
+    "z": [
+     489.6,
+     504.0
+    ]
+   },
+   "volume_cm3": 6.96,
+   "mass_g": 54.7
+  },
+  "front_swivel_stud": {
+   "group": "magazine_cap_group",
+   "material": "SteelDark",
+   "source": [
+    "P22"
+   ],
+   "basis": "traced",
+   "triangles": 416,
+   "bbox_mm": {
+    "x": [
+     -5.5,
+     5.5
+    ],
+    "y": [
+     -33.9,
+     -22.9
+    ],
+    "z": [
+     503.0,
+     511.6
+    ]
+   },
+   "volume_cm3": 0.78,
+   "mass_g": 6.1
+  },
+  "forend": {
+   "group": "slide_assembly",
+   "material": "Polymer",
+   "source": [
+    "P19"
+   ],
+   "basis": "traced",
+   "triangles": 6974,
+   "bbox_mm": {
+    "x": [
+     -23.4,
+     23.4
+    ],
+    "y": [
+     -51.8,
+     -11.6
+    ],
+    "z": [
+     100.4,
+     310.8
+    ]
+   },
+   "volume_cm3": 182.24,
+   "mass_g": 209.6
+  },
+  "action_slide_tube": {
+   "group": "slide_assembly",
+   "material": "SteelDark",
+   "source": [
+    "M10"
+   ],
+   "basis": "manual",
+   "triangles": 288,
+   "bbox_mm": {
+    "x": [
+     -13.7,
+     13.7
+    ],
+    "y": [
+     -42.1,
+     -14.6
+    ],
+    "z": [
+     97.4,
+     308.8
+    ]
+   },
+   "volume_cm3": 20.85,
+   "mass_g": 163.7
+  },
+  "action_bar_right": {
+   "group": "slide_assembly",
+   "material": "SteelDark",
+   "source": [
+    "P18"
+   ],
+   "basis": "traced",
+   "triangles": 216,
+   "bbox_mm": {
+    "x": [
+     -15.4,
+     -9.6
+    ],
+    "y": [
+     -22.8,
+     -14.7
+    ],
+    "z": [
+     -114.0,
+     104.4
+    ]
+   },
+   "volume_cm3": 5.14,
+   "mass_g": 40.4
+  },
+  "action_bar_left": {
+   "group": "slide_assembly",
+   "material": "SteelDark",
+   "source": [
+    "P18"
+   ],
+   "basis": "inferred",
+   "triangles": 216,
+   "bbox_mm": {
+    "x": [
+     9.6,
+     15.4
+    ],
+    "y": [
+     -22.8,
+     -14.7
+    ],
+    "z": [
+     -114.0,
+     104.4
+    ]
+   },
+   "volume_cm3": 5.14,
+   "mass_g": 40.4
+  },
+  "bolt": {
+   "group": "bolt_group",
+   "material": "SteelDark",
+   "source": [
+    "P07",
+    "M06"
+   ],
+   "basis": "manual",
+   "triangles": 232,
+   "bbox_mm": {
+    "x": [
+     -7.9,
+     7.9
+    ],
+    "y": [
+     -12.4,
+     -9.5
+    ],
+    "z": [
+     -108.0,
+     -21.0
+    ]
+   },
+   "volume_cm3": 2.67,
+   "mass_g": 21.0
+  },
+  "extractor": {
+   "group": "bolt_group",
+   "material": "SteelParkerized",
+   "source": [
+    "P08"
+   ],
+   "basis": "traced",
+   "triangles": 108,
+   "bbox_mm": {
+    "x": [
+     -12.9,
+     -10.4
+    ],
+    "y": [
+     -5.6,
+     0.1
+    ],
+    "z": [
+     -40.2,
+     -20.4
+    ]
+   },
+   "volume_cm3": 0.28,
+   "mass_g": 2.2
+  },
+  "bolt_lock": {
+   "group": "bolt_group",
+   "material": "SteelDark",
+   "source": [
+    "M05"
+   ],
+   "basis": "manual",
+   "triangles": 108,
+   "bbox_mm": {
+    "x": [
+     -5.0,
+     5.0
+    ],
+    "y": [
+     8.9,
+     14.8
+    ],
+    "z": [
+     -74.0,
+     -29.0
+    ]
+   },
+   "volume_cm3": 2.65,
+   "mass_g": 20.8
+  },
+  "bolt_slide": {
+   "group": "bolt_slide_group",
+   "material": "SteelDark",
+   "source": [
+    "M05"
+   ],
+   "basis": "manual",
+   "triangles": 216,
+   "bbox_mm": {
+    "x": [
+     -12.8,
+     12.8
+    ],
+    "y": [
+     -19.0,
+     -9.5
+    ],
+    "z": [
+     -120.0,
+     -42.0
+    ]
+   },
+   "volume_cm3": 10.13,
+   "mass_g": 79.5
+  },
+  "elevator": {
+   "group": "elevator_group",
+   "material": "SteelDark",
+   "source": [
+    "M04",
+    "L05"
+   ],
+   "basis": "manual",
+   "triangles": 324,
+   "bbox_mm": {
+    "x": [
+     -10.0,
+     10.0
+    ],
+    "y": [
+     -33.8,
+     -27.8
+    ],
+    "z": [
+     -82.4,
+     -8.4
+    ]
+   },
+   "volume_cm3": 2.63,
+   "mass_g": 20.7
+  },
+  "shell_head": {
+   "group": "shell_template",
+   "material": "Brass",
+   "source": [
+    "M08"
+   ],
+   "basis": "inferred",
+   "triangles": 668,
+   "bbox_mm": {
+    "x": [
+     -11.1,
+     11.1
+    ],
+    "y": [
+     -11.1,
+     11.1
+    ],
+    "z": [
+     -21.0,
+     -5.0
+    ]
+   },
+   "volume_cm3": 5.32,
+   "mass_g": 45.2
+  },
+  "shell_hull": {
+   "group": "shell_template",
+   "material": "ShellHull",
+   "source": [
+    "M08"
+   ],
+   "basis": "inferred",
+   "triangles": 500,
+   "bbox_mm": {
+    "x": [
+     -10.1,
+     10.1
+    ],
+    "y": [
+     -10.1,
+     10.1
+    ],
+    "z": [
+     -5.0,
+     38.0
+    ]
+   },
+   "volume_cm3": 13.58,
+   "mass_g": 12.9
+  }
+ },
+ "sockets": {
+  "socket_muzzle": [
+   0.0,
+   0.0,
+   516.4
+  ],
+  "socket_ads_eye": [
+   0.0,
+   26.0,
+   -330.0
+  ],
+  "socket_hand_right": [
+   0.0,
+   -70.0,
+   -262.0
+  ],
+  "socket_trigger_finger": [
+   0.0,
+   -54.4,
+   -158.7
+  ],
+  "socket_hand_left": [
+   0.0,
+   -51.4,
+   205.6
+  ],
+  "socket_shoulder": [
+   0.0,
+   -105.1,
+   -520.2
+  ],
+  "socket_eject": [
+   -20.0,
+   -3.9,
+   -55.0
+  ],
+  "socket_load": [
+   0.0,
+   -41.6,
+   -59.0
+  ],
+  "socket_chamber": [
+   0.0,
+   0.0,
+   -21.0
+  ],
+  "socket_lifter": [
+   0.0,
+   -28.4,
+   -67.0
+  ],
+  "socket_magazine_mouth": [
+   0.0,
+   -28.4,
+   -12.0
+  ],
+  "socket_sling_front": [
+   0.0,
+   -28.4,
+   508.1
+  ],
+  "socket_bayonet_lug": [
+   0.0,
+   -55.3,
+   373.9
+  ],
+  "socket_sling_rear": [
+   0.0,
+   -136.7,
+   -423.6
+  ]
+ },
+ "clips": {
+  "pump_stroke": [
+   "bolt_group",
+   "bolt_lock",
+   "bolt_slide_group",
+   "elevator_group",
+   "slide_assembly"
+  ],
+  "pump_back": [
+   "bolt_group",
+   "bolt_lock",
+   "bolt_slide_group",
+   "elevator_group",
+   "slide_assembly"
+  ],
+  "pump_forward": [
+   "bolt_group",
+   "bolt_lock",
+   "bolt_slide_group",
+   "elevator_group",
+   "slide_assembly"
+  ],
+  "trigger_pull": [
+   "trigger"
+  ],
+  "safety_to_fire": [
+   "safety_button"
+  ],
+  "safety_to_safe": [
+   "safety_button"
+  ],
+  "action_release": [
+   "action_lock_lever"
+  ],
+  "shell_insert": [
+   "elevator_group",
+   "magazine_follower"
+  ],
+  "dry_fire": [
+   "trigger"
+  ],
+  "takedown": [
+   "barrel_assembly",
+   "bolt_group",
+   "bolt_lock",
+   "bolt_slide_group",
+   "cartridge_interrupter",
+   "cartridge_stop",
+   "elevator_group",
+   "magazine_cap_group",
+   "slide_assembly",
+   "trigger_housing_group",
+   "trigger_housing_pin"
+  ]
+ },
+ "hierarchy": {
+  "shotgun_590": null,
+  "receiver_group": "shotgun_590",
+  "barrel_assembly": "shotgun_590",
+  "magazine_cap_group": "shotgun_590",
+  "slide_assembly": "shotgun_590",
+  "bolt_group": "shotgun_590",
+  "bolt_slide_group": "shotgun_590",
+  "trigger_housing_group": "receiver_group",
+  "elevator_group": "receiver_group",
+  "shell_template": "shotgun_590",
+  "receiver": "receiver_group",
+  "trigger_housing_pin": "receiver_group",
+  "receiver_side_plug_r": "receiver_group",
+  "receiver_side_plug_l": "receiver_group",
+  "elevator_stud_r": "elevator_group",
+  "elevator_stud_l": "elevator_group",
+  "receiver_top_screw_1": "receiver_group",
+  "receiver_top_screw_2": "receiver_group",
+  "ejector_screw": "receiver_group",
+  "ejector": "receiver_group",
+  "safety_button": "receiver_group",
+  "safety_red_dot": "receiver_group",
+  "cartridge_stop": "receiver_group",
+  "cartridge_interrupter": "receiver_group",
+  "stock": "receiver_group",
+  "recoil_pad": "receiver_group",
+  "rear_swivel_stud": "receiver_group",
+  "trigger_housing": "trigger_housing_group",
+  "trigger_guard": "trigger_housing_group",
+  "trigger": "trigger_housing_group",
+  "action_lock_lever": "trigger_housing_group",
+  "barrel": "barrel_assembly",
+  "barrel_ring": "barrel_assembly",
+  "lug_band": "barrel_assembly",
+  "front_bead": "barrel_assembly",
+  "magazine_tube": "receiver_group",
+  "magazine_follower": "receiver_group",
+  "magazine_cap": "magazine_cap_group",
+  "front_swivel_stud": "magazine_cap_group",
+  "forend": "slide_assembly",
+  "action_slide_tube": "slide_assembly",
+  "action_bar_right": "slide_assembly",
+  "action_bar_left": "slide_assembly",
+  "bolt": "bolt_group",
+  "extractor": "bolt_group",
+  "bolt_lock": "bolt_group",
+  "bolt_slide": "bolt_slide_group",
+  "elevator": "elevator_group",
+  "shell_head": "shell_template",
+  "shell_hull": "shell_template",
+  "socket_muzzle": "barrel_assembly",
+  "socket_ads_eye": "receiver_group",
+  "socket_hand_right": "receiver_group",
+  "socket_trigger_finger": "receiver_group",
+  "socket_hand_left": "slide_assembly",
+  "socket_shoulder": "receiver_group",
+  "socket_eject": "receiver_group",
+  "socket_load": "receiver_group",
+  "socket_chamber": "barrel_assembly",
+  "socket_lifter": "elevator_group",
+  "socket_magazine_mouth": "receiver_group",
+  "socket_sling_front": "magazine_cap_group",
+  "socket_bayonet_lug": "barrel_assembly",
+  "socket_sling_rear": "receiver_group"
+ },
+ "totals": {
+  "parts": 40,
+  "triangles": 31040,
+  "mass_g_from_volumes": 2873.0
+ },
+ "params": {
+  "muzzle": 516.396694214876,
+  "breech": -21.038383838383837,
+  "barrel_r": 10.8,
+  "bore_r": 9.25,
+  "barrel_top": [
+   [
+    577,
+    38
+   ],
+   [
+    588,
+    38
+   ],
+   [
+    588,
+    39
+   ],
+   [
+    665,
+    39.3
+   ],
+   [
+    689,
+    40
+   ],
+   [
+    737,
+    42
+   ],
+   [
+    773,
+    43
+   ],
+   [
+    809,
+    44.3
+   ]
+  ],
+  "tube_y": -28.36994184266909,
+  "tube_r": 12.25,
+  "tube_z": [
+   -12.0,
+   483.8828282828282
+  ],
+  "tube_wall": 0.9,
+  "recv_top": 23.5566146311601,
+  "recv_bot": -41.56674625038258,
+  "recv_half": 20.0,
+  "recv_top_pts": [
+   [
+    352,
+    56
+   ],
+   [
+    358,
+    53
+   ],
+   [
+    368,
+    47.6
+   ],
+   [
+    376,
+    44.2
+   ],
+   [
+    389,
+    41.5
+   ],
+   [
+    400,
+    38.5
+   ],
+   [
+    405,
+    34.5
+   ],
+   [
+    409,
+    30.5
+   ],
+   [
+    569,
+    30.5
+   ],
+   [
+    577,
+    38
+   ]
+  ],
+  "safety_top": [
+   [
+    376,
+    42
+   ],
+   [
+    398,
+    38
+   ]
+  ],
+  "recv_rear": [
+   -209.42754820936636,
+   -199.86464646464643
+  ],
+  "port": [
+   -88.9349862258953,
+   -21.038383838383837,
+   -14.886250382614,
+   7.108423630241828
+  ],
+  "load_port": [
+   -97.0,
+   -21.0,
+   11.0
+  ],
+  "safety": [
+   -192.2143250688705,
+   -171.17594123048664,
+   7.0
+  ],
+  "housing_pin": [
+   -172.41911845730027,
+   -28.56119987756349,
+   2.2
+  ],
+  "side_plug": [
+   -161.32615243342514,
+   -9.435396388123639,
+   3.0
+  ],
+  "stud_hole": [
+   -78.41579430670339,
+   -30.76066727884907,
+   3.2
+  ],
+  "top_screws": [
+   -125.27401285583102,
+   -64.0714416896235
+  ],
+  "ejector_screw": [
+   -55.0,
+   7.5
+  ],
+  "guard": [
+   [
+    397,
+    98
+   ],
+   [
+    398,
+    108
+   ],
+   [
+    400,
+    116
+   ],
+   [
+    404,
+    122
+   ],
+   [
+    410,
+    127.5
+   ],
+   [
+    441,
+    127.5
+   ],
+   [
+    450,
+    124
+   ],
+   [
+    456,
+    118
+   ],
+   [
+    460.5,
+    110
+   ],
+   [
+    464,
+    98
+   ]
+  ],
+  "guard_wall": 3.6,
+  "guard_half": 6.0,
+  "housing": [
+   -201.7772268135904,
+   -102.32304866850319,
+   -45.77442301805935,
+   -39.08039179675541
+  ],
+  "trigger": [
+   [
+    406,
+    99
+   ],
+   [
+    409.8,
+    99
+   ],
+   [
+    410.8,
+    108
+   ],
+   [
+    413.2,
+    116
+   ],
+   [
+    417.2,
+    122
+   ],
+   [
+    414,
+    122.8
+   ],
+   [
+    409,
+    116
+   ],
+   [
+    406.6,
+    108
+   ]
+  ],
+  "trigger_pivot": [
+   409,
+   95
+  ],
+  "lock_lever": [
+   -183.0,
+   -177.0,
+   -46.73071319253135,
+   -40.99297214569939
+  ],
+  "forend": [
+   100.41046831955921,
+   310.7943067033976
+  ],
+  "forend_r": 23.0,
+  "ribs": [
+   151.09384756657482,
+   261.067217630854,
+   19
+  ],
+  "forend_top": -11.6,
+  "bar": [
+   -22.823458830731536,
+   -14.694992347719598,
+   12.6,
+   15.4
+  ],
+  "stroke": 100.0,
+  "lost_motion": 9.5,
+  "lug_band": [
+   357.6525252525252,
+   390.16639118457294,
+   -55.33732476277928,
+   13.8,
+   346.1770431588613
+  ],
+  "ring": [
+   459.0192837465564,
+   489.62056932966016,
+   15.7,
+   449.45638200183646
+  ],
+  "cap": [
+   489.62056932966016,
+   503.96492194674005,
+   511.615243342516,
+   12.9
+  ],
+  "bead": [
+   503.2955188246096,
+   1.5
+  ],
+  "pad_joint": [
+   [
+    -500.1397612488521,
+    -46.73071319253135
+   ],
+   [
+    -480.05766758494025,
+    -152.8789225589225
+   ]
+  ],
+  "stud": [
+   -423.63654729109265,
+   -135.18755433119065
+  ],
+  "stock_front": -196.0,
+  "butt_half": 22.0,
+  "wrist_half": 18.5,
+  "bolt": [
+   -108.0,
+   12.4
+  ],
+  "bolt_slide": [
+   -120.0,
+   -42.0
+  ],
+  "elevator_len": 70.0,
+  "elevator_lift": 22.0
+ },
+ "shell": {
+  "rim_r": 11.15,
+  "body_r": 10.15,
+  "head": 16.0,
+  "length": 59.0
+ }
+}

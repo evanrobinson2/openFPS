@@ -1,0 +1,4 @@
+# build outputs and local references (never committed)
+model/build/
+refs-local/
+__pycache__/
