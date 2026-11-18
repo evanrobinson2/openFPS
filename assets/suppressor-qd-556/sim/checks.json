@@ -1,0 +1,219 @@
+{
+ "note": "sim = this simulation; published = the named source. status says whether the figure was calibrated to, predicted, or only bounded.",
+ "sound_peak_reduction_1m_side": {
+  "sim_dB": 22.5,
+  "suppressed_dB": 141.5,
+  "published": "20 to 25 dB",
+  "source": "Lobarinas, Scott, Spankovich and Le Prell (2016), Int. J. Audiology 55 (S1): nine AR-15 rifles, 14 suppressors, 1 m left of the muzzle per MIL-STD-1474D; range as summarised in Murphy et al., \"Developing a method to assess noise reduction of firearm suppressors for small-caliber weapons\" (NIOSH/CDC stacks 221679)",
+  "status": "calibration target (clip_factor solved for the 22.5 dB midpoint); with clip_factor = 1 the model gives 15.4 dB"
+ },
+ "sound_peak_reduction_shooter_ear": {
+  "sim_dB": 20.5,
+  "bare_dB": 157.5,
+  "suppressed_dB": 137.0,
+  "published": "17 to 24 dB",
+  "source": "Murphy, Flamme, Campbell, Zechmann, Tasko, Lankford, Meinke, Finan and Stewart (2018), Int. J. Audiology 57 (S1): peak reduction at the shooter's ear, several firearms (abstract)",
+  "status": "calibration target (dipole_share solved for the 20.5 dB midpoint); an omnidirectional source gives 14.9 dB, the full compact dipole 50.0 dB"
+ },
+ "sound_peak_reduction_behind": {
+  "sim_dB": 19.03,
+  "published": "20 to 28 dB",
+  "source": "Murphy et al. (2018): instructor position about 1 m behind the shooter (abstract)",
+  "status": "prediction once the two sound parameters are set; the bare reference here is the HK416 directivity law extrapolated to 180 degrees"
+ },
+ "suppressed_level_at_ear": {
+  "sim_dB": 137.0,
+  "published": "most suppressed AR-15 conditions 140 to 150 dB at the ear; above 140 dB at the right ear",
+  "source": "Lobarinas et al. (2016), abstract and the Student Academy of Audiology summary",
+  "status": "follows from the ear calibration; the model has no ejection-port or gas-vent source, which is what the paper blames for the right ear, so it sits below the measured band"
+ },
+ "supersonic_crack": {
+  "sim": "N-wave entries untouched: 149.0 dB at the down-range listener, bare and suppressed",
+  "unchanged": true,
+  "muzzle_blast_downrange_dB": {
+   "bare": 134.87,
+   "suppressed": 111.03
+  },
+  "published": "a suppressor does not affect the ballistic shock of a supersonic bullet",
+  "source": "physics (Whitham 1952 N-wave depends on the bullet alone); assets/hk416/sound section 2",
+  "status": "by construction"
+ },
+ "first_round_pop": {
+  "sim_dB_side": 2.03,
+  "sim_dB_ear": 1.51,
+  "sim_dB_swell_after_the_pop": 9.51,
+  "sim_dB_positive_impulse": 0.93,
+  "o2_burnt_mg": 26.8,
+  "o2_available_mg": 29.5,
+  "published": "no controlled 5.56 figure found; trade sources give 5 to 10 dB in general and \"little difference\" on short 5.56 rifles",
+  "source": "The Truth About Guns, \"The science of silence\" (general estimate); RECOIL, best 5.56 suppressors (5.56 remark). Neither is a measurement report",
+  "status": "prediction, unverified"
+ },
+ "heat_per_shot": {
+  "sim_K_cold": 6.52,
+  "sim_K_warm": 6.08,
+  "sim_J_cold": 1970.0,
+  "published": "7 to 10 F (3.9 to 5.6 K) per round, rule of thumb; 100 rounds raise the core about 750 F (4.2 K per round)",
+  "source": "retailer rule of thumb (Silencer Central and others, no method given); Small Arms Defense Journal (100-round burst figure, as found by search; article not read in full)",
+  "status": "prediction with an inferred Stanton number (not fitted)"
+ },
+ "heat_strings": {
+  "semi_30_in_30s": {
+   "shots": 30,
+   "duration_s": 29.0,
+   "T_end_K": 461.6,
+   "rise_K": 168.4,
+   "rise_F": 303.0,
+   "first_shot_rise_K": 6.52,
+   "last_shot_rise_K": 5.38
+  },
+  "auto_30": {
+   "shots": 30,
+   "duration_s": 2.11,
+   "T_end_K": 464.6,
+   "rise_K": 171.4,
+   "rise_F": 309.0,
+   "first_shot_rise_K": 6.52,
+   "last_shot_rise_K": 5.35
+  },
+  "rapid_70_in_35s": {
+   "shots": 70,
+   "duration_s": 34.5,
+   "T_end_K": 647.9,
+   "rise_K": 354.7,
+   "rise_F": 639.0,
+   "first_shot_rise_K": 6.52,
+   "last_shot_rise_K": 4.52
+  },
+  "rapid_100_in_50s": {
+   "shots": 100,
+   "duration_s": 49.5,
+   "T_end_K": 756.5,
+   "rise_K": 463.3,
+   "rise_F": 834.0,
+   "first_shot_rise_K": 6.52,
+   "last_shot_rise_K": 4.01
+  },
+  "sustained_210_in_10min": {
+   "shots": 210,
+   "duration_s": 597.14,
+   "T_end_K": 731.2,
+   "rise_K": 438.0,
+   "rise_F": 788.0,
+   "first_shot_rise_K": 6.52,
+   "last_shot_rise_K": 4.18
+  }
+ },
+ "heat_100_rounds": {
+  "sim_rise_F": 834.0,
+  "published": "about 750 F above ambient",
+  "source": "Small Arms Defense Journal, as above",
+  "status": "prediction"
+ },
+ "back_pressure": {
+  "bore_MPa_at_unlock": {
+   "bare": 3.2368902964224473,
+   "suppressed": 7.687090199826376
+  },
+  "peak_carrier_change_pct": 0.8,
+  "carrier_at_eject_change_pct": 6.0,
+  "cyclic_rate_change_pct": 3.2,
+  "cyclic_rpm": {
+   "shipped": 799.9786672354019,
+   "bare_with_thrust": 799.9146757677792,
+   "suppressed": 825.2413831043849,
+   "suppressed_without_residual_thrust": 736.9739848182755
+  },
+  "gas_to_face_mg": {
+   "bare": 6.13,
+   "suppressed": 171.06,
+   "ratio": 27.9
+  },
+  "published": "M4A1 (direct impingement) with a suppressor: about 25 % more bolt carrier speed; patents cite 20 to 30 % more rate of fire. No HK416 figure found; the manual gives 700 to 900 rpm for the bare rifle",
+  "source": "NDIA 2016 Armament Systems Forum briefing 18366 (Davis), slide figure; US patents 10151544 and 11578931 (inventors' statements)",
+  "status": "prediction. The HK416 short-stroke piston vents after 3 mm, so the gas system itself adds little; residual bore pressure first grips the case harder (slower without the thrust term), then pushes on the case head"
+ },
+ "recoil": {
+  "impulse_Ns": {
+   "bare": 5.4770225844265,
+   "suppressed": 5.084308364781715
+  },
+  "impulse_change_pct": -7.2,
+  "free_recoil_mps": {
+   "bare": 1.3329332159714042,
+   "suppressed": 1.07684175892867
+  },
+  "status": "prediction; the same blowdown scale as the HK416 action is applied to the exit thrust"
+ },
+ "blast_scaling_cross_check": {
+  "peak_enthalpy_flux_MW": {
+   "bare": 8.753,
+   "suppressed": 0.4341
+  },
+  "reduction_if_blast_like_dB": 14.4,
+  "note": "Fansler and Schmidt scale peak overpressure with (energy efflux rate)^0.55. Applied to the can it gives the reduction the exit flow would have if it started as abruptly as a bare muzzle: a lower bound on the reduction.",
+  "source": "Fansler and Schmidt (1983), BRL-TR-2504 (exponent recalled, not re-read)",
+  "status": "bound"
+ },
+ "bare_equivalence": {
+  "bore_pressure": [
+   {
+    "t_ms": 0.0,
+    "action_MPa": 126.426,
+    "core_MPa": 126.426
+   },
+   {
+    "t_ms": 0.5,
+    "action_MPa": 48.62,
+    "core_MPa": 47.845
+   },
+   {
+    "t_ms": 1.0,
+    "action_MPa": 22.043,
+    "core_MPa": 21.696
+   },
+   {
+    "t_ms": 2.0,
+    "action_MPa": 5.749,
+    "core_MPa": 5.729
+   },
+   {
+    "t_ms": 4.0,
+    "action_MPa": 0.645,
+    "core_MPa": 0.662
+   }
+  ],
+  "blowdown_impulse_raw_Ns": {
+   "action": 2.2561,
+   "core": 2.2365
+  },
+  "cyclic_rpm": {
+   "action_json": 800.9,
+   "action_rerun": 800.0,
+   "with_core_blowdown": 794.5
+  },
+  "status": "consistency check of core.py against assets/hk416/action"
+ },
+ "conservation": {
+  "mass_error_bare": 7.2e-15,
+  "mass_error_suppressed": 4.52e-15,
+  "energy_bare_J": {
+   "initial": 4444.1,
+   "enthalpy_out": 4432.2,
+   "left_in_bore": 4.2,
+   "unaccounted": 7.7,
+   "note": "the unaccounted part is the enthalpy of the 6.1 mg breech leak, which is not tallied"
+  },
+  "status": "numerical check"
+ },
+ "geometry": {
+  "mass_g": 612.0,
+  "mass_oz": 21.6,
+  "length_mm": 174.0,
+  "diameter_mm": 38.1,
+  "gas_volume_cm3": 105.8,
+  "published": "fielded 5.56 QD cans: about 6 to 7 in long, 1.5 in diameter, 14 to 22 oz",
+  "source": "makers' published specifications in general (class figures, recalled; no single product)",
+  "status": "inside the class by design"
+ }
+}

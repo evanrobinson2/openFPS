@@ -361,3 +361,12 @@ Noted only; the clips are not rebuilt.
   The brass ground model is a point mass with a randomised cylinder bounce, not a rigid-body cylinder.
 - One ammunition (M855 at the manual's figures), one temperature, a full magazine, a clean gun. Magazine weight is not
   reduced as rounds are fired.
+
+## Optional input: residual bore pressure on the case head
+
+`run(..., over={'residual_thrust': 1.0, 'case_seal_len': 0.006})` adds one force to the carrier group: once the lugs
+are clear, the pressure still in the bore pushes on the case head (`case_head_area`) for as long as the case neck
+seals the chamber (`case_seal_len` of travel, default 6 mm). It is off unless passed, so `action.json` and every
+figure above are unchanged. It exists for muzzle devices that hold pressure in the bore: `assets/suppressor-qd-556`
+passes it together with its own blowdown tables, and re-solves `port_d` so that the bare rifle still runs at 800 rpm
+with the term on (1.156 mm). With the term on and the shipped port the bare rifle runs at 826 rpm.

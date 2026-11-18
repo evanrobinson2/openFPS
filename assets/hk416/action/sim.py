@@ -383,6 +383,11 @@ def run(IB, FT, stance, n_shots=1, t_end=0.2, rec_dt=5e-5, stop_after_shots=Fals
                  * math.radians(q['bolt_angle']) * dsmooth((x - x_d) / q['cam_len']) / q['cam_len']
         if first and v > 0:
             if x_u < x < x_u + 1e-3: F -= q['case_mu'] * max(Pb - PATM, 0.0) * q['case_wall_area']
+            # Optional input for muzzle devices that raise the residual bore pressure (assets/suppressor-qd-556):
+            # the pressure still in the bore pushes on the case head once the lugs are clear, for as long as the case
+            # seals the chamber. Off unless `over` passes 'residual_thrust' (0..1), so the shipped numbers do not change.
+            if q.get('residual_thrust') and x_u < x < x_u + q.get('case_seal_len', 6e-3):
+                F += q['residual_thrust'] * max(Pb - PATM, 0.0) * q['case_head_area']
             if 0 < x < q['cock_x'] and not cocked:                 # cocking the hammer
                 u = x / q['cock_x']; ph = math.radians(h_rest - (h_rest + oc) * smooth(u))
                 F -= (tc_ - (tc_ - tf_) * ph / fall) * math.radians(h_rest + oc) * dsmooth(u) / q['cock_x']
