@@ -1,8 +1,8 @@
 """The bottom entrance: a chassis that lowers out of the hold on four telescopic rams.
 
 The moving part is a cage: the belly armour plate, a truss under a grating deck, corner posts, guard rails and a top
-frame (the harness the rams pull on). It rides down 1.70 m until the belly plate sits on the ground, then the forward
-gate folds out as a ramp. Stowed, its deck is flush with the hold floor and its belly plate closes the hull.
+frame (the harness the rams pull on). It rides down 1.70 m until the belly plate sits on the ground, then the ramp
+slides out of its drawer under the deck, drops a sill flap, rises into the flap's slot until it is flush with the deck, and tilts down. Stowed, its deck is flush with the hold floor and its belly plate closes the hull.
 Rest pose is stowed; the clip 'lift_lower' takes it down."""
 import math
 import numpy as np
@@ -14,7 +14,7 @@ S0, S1, HW = Lf['s0'], Lf['s1'], Lf['half_w']
 ZD = spec.Z_LOWER                 # deck level, stowed
 TOP = ZD + 1.95                   # top frame
 RAM_S = (S0 + 0.34, S1 - 0.34); RAM_Y = 1.02
-RAMP_LEN = 1.92
+RAMP_LEN = 2.60
 
 def chassis(H):
     mb = MB(); bolts = MB()
@@ -32,7 +32,8 @@ def chassis(H):
     zb = float(H.P[i0, j1, 2]) + 0.10                      # top of the belly plate on the centreline
     y_in = HW - 0.06; s_a, s_b = S0 + 0.05, S1 - 0.05
     # deck frame: perimeter channel and cross beams, 0.12 deep
-    for (a0, a1, b0, b1) in ((s_a, s_b, -y_in, -y_in + 0.08), (s_a, s_b, y_in - 0.08, y_in), (s_a, s_a + 0.08, -y_in, y_in), (s_b - 0.08, s_b, -y_in, y_in)):
+    # (no forward beam: the ramp comes up into that slot to sit flush with the deck)
+    for (a0, a1, b0, b1) in ((s_a, s_b, -y_in, -y_in + 0.08), (s_a, s_b, y_in - 0.08, y_in), (s_b - 0.08, s_b, -y_in, y_in)):
         mb.box(a0, a1, b0, b1, ZD - 0.14, ZD - 0.02, st)
     nx = 7
     for k in range(1, nx):
@@ -55,7 +56,7 @@ def chassis(H):
     for k in range(int((s_b - s_a - 0.2) / 0.09)):
         s = s_a + 0.12 + k * 0.09
         mb.box(s - 0.012, s + 0.012, -y_in + 0.12, y_in - 0.12, ZD - 0.006, ZD, 'deck_plate')
-    for (a0, a1, b0, b1) in ((s_a, s_b, -y_in, -y_in + 0.08), (s_a, s_b, y_in - 0.08, y_in), (s_a, s_a + 0.08, -y_in + 0.08, y_in - 0.08), (s_b - 0.08, s_b, -y_in + 0.08, y_in - 0.08)):
+    for (a0, a1, b0, b1) in ((s_a, s_b, -y_in, -y_in + 0.08), (s_a, s_b, y_in - 0.08, y_in), (s_b - 0.08, s_b, -y_in + 0.08, y_in - 0.08)):
         mb.box(a0, a1, b0, b1, ZD - 0.02, ZD, 'hazard_yellow')
     bolts.bolt_line((s_a + 0.04, -y_in + 0.04, ZD), (s_b - 0.04, -y_in + 0.04, ZD), (0, 0, 1), pitch=0.22, r=0.013, h=0.008)
     bolts.bolt_line((s_a + 0.04, y_in - 0.04, ZD), (s_b - 0.04, y_in - 0.04, ZD), (0, 0, 1), pitch=0.22, r=0.013, h=0.008)
@@ -92,10 +93,12 @@ def chassis(H):
 
 RAMP_Z = ZD - 0.165               # top of the ramp while it is stored in its drawer under the deck
 RAMP_S = S0 + 0.12                # forward end of the stored ramp
-RAMP_SLIDE = RAMP_LEN - 0.06
+SILL_S = S0 + 0.13                # forward edge of the deck grating; the slot ahead of it is closed by a sill flap
+RAMP_SLIDE = RAMP_S + RAMP_LEN - (SILL_S - 0.01)    # out until its hinge end is under the slot
+RAMP_RISE = ZD - RAMP_Z           # then the hinge end climbs the horn slots until the ramp is flush with the deck
 
 def ramp():
-    """The ramp: stored flat in a drawer under the deck, it slides forward and its far end drops to the ground."""
+    """The ramp: stored flat in a drawer under the deck, it slides forward, rises flush with the deck and its far end drops to the ground."""
     mb = MB(); w = HW - 0.22; s0, s1 = RAMP_S, RAMP_S + RAMP_LEN
     mb.box(s0, s1, -w, w, RAMP_Z - 0.045, RAMP_Z, 'deck_plate')
     for k in range(1, 13):
@@ -109,14 +112,14 @@ def ramp():
     return mb
 
 def ramp_guides():
-    """Drawer rails for the ramp and the forward gate bars (part of the cage). The ramp meets the deck with one 0.165 m step."""
+    """Drawer rails for the ramp and the horns its hinge pins climb to come flush with the deck."""
     mb = MB(); w = HW - 0.22
-    for y in (-w - 0.05, w + 0.05):
-        mb.box(S0 + 0.06, S1 - 0.6, y - 0.012, y + 0.012, RAMP_Z - 0.10, RAMP_Z + 0.035, 'structure_steel')
-        mb.box(S0 + 0.06, S1 - 0.6, y - 0.04 * (1 if y > 0 else -1) - 0.02, y + 0.02 - 0.04 * (1 if y > 0 else -1), RAMP_Z - 0.10, RAMP_Z - 0.08, 'structure_steel')
-    for sy in (-1, 1):                                                                                           # forward gate: two swing bars
-        mb.cyl((S0 + 0.09, sy * (HW - 0.10), ZD + 1.05), (S0 + 0.09, sy * 0.04, ZD + 1.05), 0.02, 'hazard_yellow', n=8)
-        mb.cyl((S0 + 0.09, sy * (HW - 0.10), ZD + 0.55), (S0 + 0.09, sy * 0.04, ZD + 0.55), 0.02, 'hazard_yellow', n=8)
+    for sy in (-1, 1):                                                                                           # lift horns the hinge pins climb
+        y = sy * (w + 0.058)
+        mb.box(S0 + 0.05, S0 + 0.17, y - 0.012, y + 0.012, RAMP_Z - 0.12, ZD - 0.004, 'structure_steel')
+        mb.box(S0 + 0.075, S0 + 0.125, y - 0.014, y + 0.014, RAMP_Z - 0.06, ZD - 0.03, 'machinery_dark')          # the slot
+        for z in (RAMP_Z - 0.09, ZD - 0.02):
+            mb.bolt((S0 + 0.155, y + sy * 0.012, z), (0, sy, 0), r=0.009, h=0.006)
     return mb
 
 def build(H):
@@ -124,6 +127,19 @@ def build(H):
     mb, bolts = chassis(H)
     mb.merge(bolts); mb.merge(ramp_guides())
     finish('lift_cage', mb, parent, pivot=(0.5 * (S0 + S1), 0, ZD), group='lift_chassis')
+    sill = MB(); w = HW - 0.22                                        # sill flap: closes the slot when the ramp is stowed
+    sill.box(S0 + 0.05, SILL_S - 0.004, -w - 0.04, w + 0.04, ZD - 0.014, ZD, 'hazard_yellow')
+    sill.cyl((SILL_S - 0.004, -w - 0.04, ZD - 0.012), (SILL_S - 0.004, w + 0.04, ZD - 0.012), 0.008, 'machinery_bare', n=8)
+    finish('lift_ramp_sill', sill, 'lift_cage', pivot=(SILL_S - 0.004, 0, ZD - 0.012), group='lift_chassis')
+    key('lift_lower', 'lift_ramp_sill', 0, rot=(0, 0, 0)); smooth_keys('lift_lower', 'lift_ramp_sill', 96, 104, rot=(0, -math.pi / 2, 0))
+    for sy, sn in ((1, 'stbd'), (-1, 'port')):                        # forward gate: a pair of swing bars that become the ramp's handrails
+        g = MB(); yh = sy * (HW - 0.10)
+        g.cyl((S0 + 0.09, yh, ZD + 0.50), (S0 + 0.09, yh, ZD + 1.10), 0.024, 'machinery_bare', n=10)
+        for z in (ZD + 0.55, ZD + 1.05):
+            g.cyl((S0 + 0.09, yh, z), (S0 + 0.09, sy * 0.04, z), 0.02, 'hazard_yellow', n=8)
+        g.cyl((S0 + 0.09, sy * 0.06, ZD + 0.55), (S0 + 0.09, sy * 0.06, ZD + 1.05), 0.014, 'machinery_bare', n=8)
+        finish(f'lift_gate_{sn}', g, 'lift_cage', pivot=(S0 + 0.09, yh, ZD + 0.8), group='lift_chassis')
+        key('lift_lower', f'lift_gate_{sn}', 0, rot=(0, 0, 0)); smooth_keys('lift_lower', f'lift_gate_{sn}', 124, 138, rot=(0, 0, -sy * math.pi / 2))
     finish('lift_ramp', ramp(), 'lift_cage', pivot=(RAMP_S + RAMP_LEN - 0.02, 0, RAMP_Z - 0.03), group='lift_chassis')
     # rams: fixed barrel in the hold ceiling, a middle stage, and a rod pinned to the cage
     fixed = MB(); zc = spec.Z_MAIN - spec.DECK_T
@@ -148,9 +164,10 @@ def build(H):
         fixed.box(a0, a1, b0, b1, ZD, ZD + 0.006, 'hazard_yellow')
     finish('lift_rams_fixed', fixed, parent, group='lift_chassis')
     smooth_keys('lift_lower', 'lift_cage', 0, 96, loc=(0, 0, -Lf['travel']))
-    drop = (RAMP_Z - 0.06 - Lf['travel']) - spec.Z_GROUND           # how far the toe has to fall once the cage is down
+    drop = (ZD - 0.06 - Lf['travel']) - spec.Z_GROUND           # how far the toe has to fall once the cage is down
     ang = -math.asin(min(drop / RAMP_LEN, 0.9))
     key('lift_lower', 'lift_ramp', 0, loc=(0, 0, 0), rot=(0, 0, 0))
-    smooth_keys('lift_lower', 'lift_ramp', 96, 120, loc=(-RAMP_SLIDE, 0, 0), rot=(0, 0, 0))
-    smooth_keys('lift_lower', 'lift_ramp', 120, 138, loc=(-RAMP_SLIDE, 0, 0), rot=(0, ang, 0), loc0=(-RAMP_SLIDE, 0, 0))
+    smooth_keys('lift_lower', 'lift_ramp', 96, 118, loc=(-RAMP_SLIDE, 0, 0), rot=(0, 0, 0))
+    smooth_keys('lift_lower', 'lift_ramp', 118, 124, loc=(-RAMP_SLIDE, 0, RAMP_RISE), rot=(0, 0, 0), loc0=(-RAMP_SLIDE, 0, 0))
+    smooth_keys('lift_lower', 'lift_ramp', 124, 138, loc=(-RAMP_SLIDE, 0, RAMP_RISE), rot=(0, ang, 0), loc0=(-RAMP_SLIDE, 0, RAMP_RISE))
     return dict(clip='lift_lower', frames=138, travel=Lf['travel'], deck=(S1 - S0 - 0.1, 2 * HW - 0.12))

@@ -20,6 +20,9 @@ PERSP = {
     'three_quarter_low': dict(eye=(-9.0, -15.0, -3.2), target=(13.0, 0.0, -1.2), lens=35),
     'rear_quarter': dict(eye=(41.0, -15.0, 5.0), target=(18.0, 0.0, -0.5), lens=50),
     'cockpit': dict(eye=(4.6, 0.0, 1.50), target=(1.2, 0.0, 0.85), lens=16),
+    'pilot_eye': dict(eye=(2.83, -0.72, 1.32), target=(1.2, -0.35, 0.72), lens=14),
+    'cockpit_panel': dict(eye=(3.25, 0.0, 1.22), target=(1.95, 0.0, 0.55), lens=20),
+    'cockpit_seat': dict(eye=(4.0, 0.25, 1.25), target=(2.85, -0.72, 0.72), lens=22),
     'cockpit_side': dict(eye=(5.6, -1.2, 1.55), target=(2.6, 0.6, 0.7), lens=18),
     'nose': dict(eye=(-7.5, -6.5, 1.8), target=(3.0, 0.0, -0.2), lens=45),
     'engines': dict(eye=(36.0, -11.0, 3.5), target=(25.5, -1.5, 0.2), lens=40),
@@ -31,6 +34,7 @@ PERSP = {
     'mission_bay': dict(eye=(14.2, 0.2, 1.8), target=(19.5, -0.2, 0.8), lens=15),
     'engineering': dict(eye=(21.5, -0.4, 1.8), target=(24.3, 0.3, 1.0), lens=14),
     'under_lift': dict(eye=(3.2, -6.0, -3.3), target=(10.8, 0.0, -3.6), lens=26),
+    'ramp_top': dict(eye=(12.4, -0.35, -2.75), target=(8.6, 0.0, -4.5), lens=16),
     'hold': dict(eye=(13.55, -1.0, -0.75), target=(10.6, 0.3, -1.9), lens=14),
 }
 

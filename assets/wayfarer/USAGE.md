@@ -12,14 +12,14 @@ to places inside, hide modules, slide a cutaway through the hull and run every m
 ## Status
 
 This is the **structure stage**: the whole ship exists at true size with real walls, decks, doors and mechanisms, in
-a first pass of detail. It is not finished art.
+a first pass of detail. The cockpit has had its full-detail pass; the rest has not. It is not finished art.
 
 | Part | State |
 |---|---|
-| Geometry (`model/`) | A recipe in Blender Python. 138 named objects in eight modules, 1,514 armour plates, 409,000 triangles of which 178,000 are fasteners. It writes `out/wayfarer.glb`, a build output that is never committed. |
+| Geometry (`model/`) | A recipe in Blender Python. 146 named objects in eight modules, 1,514 armour plates, 432,000 triangles of which 181,000 are fasteners. It writes `out/wayfarer.glb`, a build output that is never committed. |
 | Mechanisms | 11 keyed clips: landing gear, lift chassis with its ramp, lander bay doors and cradle, crew hatch, seven sliding doors. Kinematic only: the linkages are solved by geometry, not by forces. |
 | Sockets | 14 named points for the game: eyes, thresholds, muzzles, exhausts, ground. |
-| Checks (`model/tools/checks.py`) | 29 checks pass: the envelope, standing headroom on both decks, door and hatch sizes, the lift and lander fitting their openings, clip lengths. |
+| Checks (`model/tools/checks.py`) | 30 checks pass: the envelope, standing headroom on both decks, door and hatch sizes, the lift and lander fitting their openings, clip lengths. |
 | Materials | Flat colours by role (30 named materials). No textures, wear or decals yet. |
 | Lander | A stub of the right size (5.6 x 2.2 x 1.7 m) hanging in the cradle. A real lander is a later asset. |
 | Simulation | **None yet.** No mass, thrust, flight, gear loads or sound. This is the main gap against the repository's simulation-grade rule and is the next layer after detail. |
@@ -32,7 +32,7 @@ Needs a Python that `bpy` (Blender as a module) installs on, and `numpy`. Built 
 ```
 pip install bpy numpy
 cd assets/wayfarer/model
-python3 build.py --glb             # work/wayfarer.blend, out/wayfarer.glb (14 MB, every bolt)
+python3 build.py --glb             # work/wayfarer.blend, out/wayfarer.glb (15 MB, every bolt)
 python3 build.py --glb --lod 1 --tag wayfarer_lod1   # out/wayfarer_lod1.glb (7 MB, no fasteners)
 python3 build.py --only engines    # one module, for working on it
 python3 tools/checks.py            # sizes, clearances and clips
@@ -74,10 +74,10 @@ Each module is one file in `model/modules/` and one node under the root `wayfare
 | Node | What is in it |
 |---|---|
 | `fuselage` | Armour plates, substructure shell, lining, ring frames and longerons, both decks, seven bulkheads, ceilings and light strips, opening coamings. |
-| `cockpit` | Canopy glazing and frame, instrument panel, pedestal, consoles, sticks, pedals, overhead panel, four seats, two rear stations. |
+| `cockpit` | Canopy glazing and frame, instrument panel with displays and standby gauges, mode panel, pedestal with keypads and throttle quadrant, side consoles, pedals, overhead panel, two flight seats, two rear stations. The side sticks (`stick_pilot`, `stick_copilot`) and throttles (`throttle_port`, `throttle_stbd`) are their own nodes, pivoted where they turn, for the game to drive. |
 | `engines` | Two main pods, two upper pods with cowls, the centre nozzle and thrust plate, pylons and plumbing. |
 | `landing_gear` | Four legs, each `gear_<pos>_leg` > `_piston` > `_pad`, with an actuator and two doors, in four wells. |
-| `lift_chassis` | `lift_cage` (belly plate, truss, deck, posts, rails, control pedestal), `lift_ramp`, four telescopic rams. |
+| `lift_chassis` | `lift_cage` (belly plate, truss, deck, posts, rails, control pedestal), `lift_ramp`, `lift_ramp_sill`, `lift_gate_port`, `lift_gate_stbd`, four telescopic rams. |
 | `lander_bay` | Two belly doors, `lander_cradle` on four jack screws, `lander_stub`, guard rails. |
 | `gadgets` | Nose sensors, chin turret (`chin_turret_ring` > `chin_turret_yaw` > `chin_gun_cradle`), ventral gun pod, keel tanks, dorsal arrays, equipment bay fits, thrusters, nav lights. |
 | `interior` | Viewport glazing, crew hatch, sliding doors, ladder, bunks, lockers, galley, jump seats, racks, reactor, pump skids, switchboard, avionics racks. |
@@ -91,7 +91,7 @@ Objects ending in `_bolts` hold the fasteners, one per module, so they can be hi
 | Clip | Frames | What moves |
 |---|---|---|
 | `gear_retract` | 84 | Legs fold into their wells (front pair aft, rear pair forward), pistons extend to clear, doors close. Play it backwards to lower the gear. |
-| `lift_lower` | 138 | The cage descends 1.70 m on four rams until its belly plate is on the ground, then the ramp slides forward and tilts down. One 0.165 m step from the ramp to the deck. |
+| `lift_lower` | 138 | The cage descends 1.70 m on four rams until its belly plate is on the ground. A sill flap drops, the ramp slides forward out of its drawer, rises into the flap's slot until it is flush with the deck, and tilts down to the ground. The two gate bars swing forward to become its handrails. |
 | `lander_bay_open` | 132 | The belly doors swing 100 degrees, then the cradle lowers the lander 1.45 m, clear of the belly. |
 | `crew_hatch_open` | 54 | The port side hatch swings out and its step drops. |
 | `door_<bulkhead>_<deck>_open` | 24 | Seven sliding doors. Main deck doors are one leaf; lower deck doors part in the middle. |
