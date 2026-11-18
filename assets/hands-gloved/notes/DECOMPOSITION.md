@@ -35,6 +35,13 @@ nearer the camera and reads larger.
 | R1-W02 | E4-G6 | Magazine | Scale reference (about 370 px front to back). | seen |
 | R1-L01 | whole | Light | Overcast, soft, from above; snow fill from below. No hard shadows. | seen |
 
+Version 2 reading for the comparison (`checks/compare.py`), in this crop's pixels: magazine release button centre
+(865, 213); right-side selector pivot (575, 163); magazine well's bottom rear corner (848, 498); ejection port cover
+hinge, rear end (808, 18) and front end (1160, 42). Knuckles on the outline of the back of the hand: index (765, 335),
+middle (843, 470), ring (852, 620), little (818, 790); middle of the back of the hand (520, 500). Version 1's points
+for R1 lie about 95 px to the left of these, as if read off a differently cut crop (an inference from the two sets
+of readings); that would explain why its camera fit failed.
+
 ## R2 crop: x 880 to 1480, y 440 to 760 (shown 1600 x 853, cells 200 x 213 px)
 
 View: right profile, almost square to the rifle, camera at about rifle height. The shooter stands. Scale: top rail to
@@ -69,6 +76,12 @@ rifle gives little scale here.
 | R3-S03 | H2-H4 | Leather edge | Leather trim down the outer edge of the hand. | seen |
 | R3-W01 | E1-F1 | Magazine release | Round ribbed button, the index finger's target. | seen |
 | R3-L01 | whole | Light | Overcast, soft. | seen |
+
+Version 2 reading for the comparison, in this crop's pixels: index finger axis from (650, 215) to (955, 245); the
+three dark gaps between the wrapped fingers from (665, 295) to (800, 330), (680, 455) to (790, 470) and (650, 580) to
+(800, 585); tip of the index finger (960, 250); centre of the magazine release (938, 128); one finger to the next,
+145 px. The index finger lies within a few degrees of the direction of the other three fingers, and its tip sits
+0.8 of a finger breadth below the button.
 
 ## Coverage and what the references cannot give
 

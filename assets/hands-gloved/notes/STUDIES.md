@@ -20,8 +20,17 @@ fingers are 21.7 to 24.5 mm at the middle joint).
 | Joint ranges | Bain 2015, Hume 1990, Cooney 1981, AAOS 1965, Kapandji | measured (several recalled, see `NOTES.md`) |
 
 Construction: a skeleton of 21 bones per hand (forearm, hand, four metacarpals, twelve finger phalanges, three thumb
-segments), each finger a chain MCP (flexion and spread), PIP, DIP; the thumb a chain CMC (three axes), MCP, IP; the
-ring and little metacarpals flex a little at their bases so the palm can cup.
+segments), each finger a chain MCP (flexion and spread), PIP, DIP; the thumb a chain CMC (three axes), MCP, IP.
+
+The folding palm (version 2, CR-1 item 1):
+
+| Part | Built from | Status |
+|---|---|---|
+| Ring and little metacarpals flex at their bases: -3 to 17 and -4 to 23 degrees | El-Shennawy et al. 2001: arcs of 20 and 27 degrees (abstract read) | measured; where the flat hand sits in the arc (15 % in) is inferred |
+| Index and middle metacarpals rigid | the same paper: 11 and 7 degrees | omitted (small) |
+| Thumb base: 53 / 42 / 17 degrees of flexion, abduction and rotation, half each way from the rest pose | Cooney et al. 1981 (abstract read) | measured; the rest pose as the middle of the range is inferred |
+| The thenar part of the palm's skin follows the thumb metacarpal, hinged along the thenar crease | Kawanishi et al. 2018: in opposition the metacarpal abducts, rotates and flexes on the trapezium (directions only) | observed direction; the crease line and the blend width are inferred |
+| The base of the thumb itself (the trapezium) does not move against the wrist | anatomy | this is why the thumb cannot come round behind the grip (see `NOTES.md`) |
 
 ## Study 2: the glove (from R1)
 
@@ -58,13 +67,23 @@ Rules, each with its evidence:
    the shoulder position, which is **inferred**.
 5. The thumb goes round the left side of the grip and rests below the selector. **inferred** (never visible).
 
-What the solver does with them (`grips/solve.py`): the palm is placed by matching three of its pads to points on
-the grip (the middle and little knuckle pads on the right side at the front edge, the web at the top of the back),
-lowered 8 mm and turned 10 degrees, then backed off until nothing is inside the rifle (rule 1); middle, ring and little
-fingers search their joints for the pose that puts their pads on the grip (rule 2); the index pad is placed on a named
-point, beside the magazine release or on the trigger face (rule 3); the thumb pad is placed on the left of the grip
-(rule 5); the elbow swivel is chosen to keep the wrist inside its range (rule 4). `NOTES.md` says how far the result
-is from the references.
+What the solver does with them in version 2 (`grips/solve.py`, `fit_palm`): the hand's pose, the elbow swivel and
+the ring and little metacarpal joints are searched together so that the middle finger's knuckle pad sits hard under
+the trigger guard on the right side of the grip (rule 2), nothing of the palm is inside the rifle, the hand rises
+about 12 degrees toward the muzzle and the wrist stays inside its range (rule 4); then the middle, ring and little
+fingers close round the front of the grip, choosing the more closed of two poses that touch (rule 2); the index pad
+is placed on the receiver below the magazine release, or on the middle of the trigger blade's face (rule 3); the
+thumb pad is sent to the left side of the grip (rule 5). `NOTES.md` says how far the result is from the references,
+and why the web of the hand ends beside the receiver's rear and not under it.
+
+6. Stance (version 2, **inferred**): the arms are solved for the stock extended 75 mm and the firing elbow raised
+   outboard, because with the stock collapsed a level hand seated on the grip needs more wrist extension than a wrist
+   has (numbers in `NOTES.md`).
+7. Where the hand sits along the grip: the middle finger's knuckle pad 15 mm behind the grip's front edge, the
+   furthest forward at which this hand's middle finger still closes under the trigger guard. R1 has the index knuckle
+   about 24 mm ahead of that, R3 about 5 mm ahead. **observed, not matched**: see `NOTES.md`.
+8. To press the magazine release the hand slides 9 mm forward on the grip (grip `fire_reach`) and back. **inferred**:
+   no reference shows the press, and this hand cannot reach the button from the firing grip without moving.
 
 ## Study 4: the support grip (R2)
 
@@ -76,8 +95,10 @@ is from the references.
 4. The hand is centred about 100 mm ahead of the receiver (R2-S06); the rifle's `socket_hand_left` is 110 mm ahead.
    **observed**
 
-Solver: the hand's pose is searched; each candidate is pushed up under the handguard until it touches, with the
-far-palm pad held 100 mm ahead of the receiver; four fingers close on the handguard; the thumb pad is placed on the top rail.
+Solver (version 2): the hand's pose is searched; each candidate is pushed up under the handguard until it touches;
+four fingers close on the handguard; the search pulls the four fingertips toward the places R2 has them (read off the
+photograph and scaled by the handguard's 68.0 mm height, `R2_TIPS`); the thumb tip is sent to where R2 shows it
+above the top rail. Version 1 held the far-palm pad 100 mm ahead of the receiver instead.
 
 ## Study 5: the magazine grip (R1-S01, R3-S01, R3-S02)
 

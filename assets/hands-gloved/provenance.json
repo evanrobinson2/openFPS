@@ -2,11 +2,36 @@
   "asset": "hands-gloved",
   "credit": "carpetshark",
   "modelled_by": [
-    { "part": "hand recipe: proportions, skeleton, joint limits, glove shells, skinning (model/)", "model": "Claude Fable 5.2", "date": "2026-11-17" },
-    { "part": "grip solver and grips (grips/)", "model": "Claude Fable 5.2", "date": "2026-11-17" },
-    { "part": "hand clips synced to the HK416 clips (clips/, hands-gloved.json)", "model": "Claude Fable 5.2", "date": "2026-11-17" },
-    { "part": "runtime module and sample (hands-gloved.js, sample/)", "model": "Claude Fable 5.2", "date": "2026-11-17" },
-    { "part": "checks and reference decomposition (checks/, notes/)", "model": "Claude Fable 5.2", "date": "2026-11-17" }
+    {
+      "part": "hand recipe: proportions, skeleton, joint limits, glove shells, skinning (model/)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    },
+    {
+      "part": "grip solver and grips (grips/)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    },
+    {
+      "part": "hand clips synced to the HK416 clips (clips/, hands-gloved.json)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    },
+    {
+      "part": "runtime module and sample (hands-gloved.js, sample/)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    },
+    {
+      "part": "checks and reference decomposition (checks/, notes/)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    },
+    {
+      "part": "version 2 (CR-1): folding palm, firing and support grips re-solved against the references, contact check (model/, grips/, clips/, checks/, notes/)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    }
   ],
-  "status": "Version 1. Structural checks pass (joint limits, interpenetration under 1.0 mm, runtime parity). The matched comparison with the references shows clear differences in the firing grip; references and result await owner review (notes/NOTES.md)."
+  "status": "Version 2 (CR-1). Structural checks pass (joint limits, interpenetration 0.57 mm against a 1.0 mm tolerance, runtime parity, finger proportions). The trigger, magazine release and bolt catch are touched; the thumb does not reach the selector. The matched comparison with the references still shows clear differences in the firing grip; the result awaits owner review (notes/NOTES.md)."
 }

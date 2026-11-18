@@ -21,9 +21,11 @@ the HK416 pattern (so the model's rifle is the right ruler), and the licence is 
 each hand in two positions. No reference shows the left side of the rifle, so the firing hand's thumb is never seen:
 that part of the grip is an inference (see `notes/NOTES.md`).
 
-**Selection status: chosen by the modeller, not yet by the owner.** The brief delegated the choice of references and
-puts owner review last. If the owner picks different references, the decomposition, studies, grips and comparisons
-must be redone from them (rule 7: a new version).
+**Selection status: approved by the owner.** The owner approved R1, R2 and R3 (and the CR-1 rework) in the project
+thread, message `cmsg_01K1vC6sgxYrGKq5a7aX428P3KySEwyFdWgdFJWbWQTJbj`, 2026-11-18 02:49 UTC ("appprove"). The modeller
+of version 2 read that message itself. The approval covers these three references and CR-1 as recorded in
+`notes/NOTES.md`; it is not an approval of the result. If the owner later picks different references, the
+decomposition, studies, grips and comparisons must be redone from them (rule 7: a new version).
 
 ## Notes on use
 
