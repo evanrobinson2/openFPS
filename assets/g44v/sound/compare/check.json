@@ -1,0 +1,105 @@
+{
+ "note": "levels of the synthesised shots, and the two published figures used. One constant is calibrated (the rifle anchor); the pistol levels follow from the simulated muzzle conditions.",
+ "calibration": {
+  "anchor": "about 140 dB peak for a .22 calibre rifle (cited in a firearm suppressor study, PMC8588962). Its measuring position is not stated; taken here as the shooter's ear",
+  "rifle_level_at_ear_db": 140.0
+ },
+ "prediction_1m_90deg_db": {
+  "cci_standard_velocity": 153.16,
+  "cci_mini_mag": 154.41,
+  "cci_quiet_22": 150.4
+ },
+ "bracket_check": {
+  "published": "Flamme et al.: instantaneous peak levels 1 m to the shooter's left ranged from 149 to 167 dB across 15 recreational firearms (as summarised in CDC stacks 211059)",
+  "bracket_db": [
+   149.0,
+   167.0
+  ],
+  "inside": {
+   "cci_standard_velocity": true,
+   "cci_mini_mag": true,
+   "cci_quiet_22": true
+  },
+  "comment": "a .22 pistol should sit near the bottom of the bracket; CCI Quiet-22 falls just below or near its lower edge, as a reduced load should"
+ },
+ "subsonic": {
+  "note": "all three loads leave the 102 mm barrel below the speed of sound (ballistics.json), so there is no ballistic crack in any shot",
+  "supersonic": {
+   "cci_standard_velocity": false,
+   "cci_mini_mag": false,
+   "cci_quiet_22": false
+  }
+ },
+ "mechanical_peak_db_at_ear": {
+  "trigger": 100.2,
+  "dry_fire": 113.8,
+  "slide_rack": 121.6,
+  "slide_lock_open": 111.4,
+  "slide_release": 123.5,
+  "magazine_out": 104.0,
+  "magazine_in": 110.1,
+  "case_ground": 94.8
+ },
+ "levels": {
+  "cci_standard_velocity": {
+   "shooter": {
+    "peak_pa": 733.237,
+    "peak_db": 151.28,
+    "peak_db_over_ground": 151.28,
+    "sel_db": 109.56
+   },
+   "bystander": {
+    "peak_pa": 219.04,
+    "peak_db": 140.79,
+    "peak_db_over_ground": 140.79,
+    "sel_db": 99.67
+   },
+   "downrange": {
+    "peak_pa": 45.348,
+    "peak_db": 127.11,
+    "peak_db_over_ground": 127.09,
+    "sel_db": 86.01
+   }
+  },
+  "cci_mini_mag": {
+   "shooter": {
+    "peak_pa": 826.544,
+    "peak_db": 152.32,
+    "peak_db_over_ground": 152.32,
+    "sel_db": 111.11
+   },
+   "bystander": {
+    "peak_pa": 251.473,
+    "peak_db": 141.99,
+    "peak_db_over_ground": 141.99,
+    "sel_db": 101.44
+   },
+   "downrange": {
+    "peak_pa": 51.98,
+    "peak_db": 128.3,
+    "peak_db_over_ground": 128.3,
+    "sel_db": 87.62
+   }
+  },
+  "cci_quiet_22": {
+   "shooter": {
+    "peak_pa": 488.472,
+    "peak_db": 147.76,
+    "peak_db_over_ground": 147.76,
+    "sel_db": 105.59
+   },
+   "bystander": {
+    "peak_pa": 175.778,
+    "peak_db": 138.88,
+    "peak_db_over_ground": 138.88,
+    "sel_db": 96.23
+   },
+   "downrange": {
+    "peak_pa": 31.355,
+    "peak_db": 123.91,
+    "peak_db_over_ground": 123.9,
+    "sel_db": 82.05
+   }
+  }
+ }
+}

@@ -1,0 +1,317 @@
+{
+ "inventory": {
+  "manual_items": 38,
+  "modelled": 38,
+  "missing": [],
+  "objects": {
+   "1": [
+    "p01_slide",
+    "p01_slide_guide_rail_l",
+    "p01_slide_guide_rail_r"
+   ],
+   "2": [
+    "p02_barrel"
+   ],
+   "3": [
+    "p03_recoil_spring_assembly",
+    "p03_recoil_spring"
+   ],
+   "4": [
+    "p04_firing_pin"
+   ],
+   "5": [
+    "p05_spacer_sleeve"
+   ],
+   "6": [
+    "p06_firing_pin_spring"
+   ],
+   "7": [
+    "p07_spring_cups"
+   ],
+   "8": [
+    "p08_firing_pin_safety"
+   ],
+   "9": [
+    "p09_firing_pin_safety_spring"
+   ],
+   "10": [
+    "p10_extractor"
+   ],
+   "11": [
+    "p11_extractor_depressor_plunger"
+   ],
+   "12": [
+    "p12_extractor_depressor_plunger_spring"
+   ],
+   "13": [
+    "p13_spring_loaded_bearing"
+   ],
+   "14": [
+    "p14_slide_cover_plate"
+   ],
+   "15": [
+    "p15_rear_sight",
+    "p15_rear_sight_outline"
+   ],
+   "16a": [
+    "p16a_front_sight",
+    "p16a_front_sight_dot"
+   ],
+   "16b": [
+    "p16b_front_sight_screw"
+   ],
+   "17": [
+    "p17_frame",
+    "p17_frame_guide_rear_l",
+    "p17_frame_guide_front_l",
+    "p17_frame_guide_rear_r",
+    "p17_frame_guide_front_r",
+    "p17_frame_grip_texture_l",
+    "p17_frame_grip_texture_r",
+    "p17_frame_grip_texture_front",
+    "p17_frame_grip_texture_back"
+   ],
+   "17c": [
+    "p17c_beavertail_backstrap_m"
+   ],
+   "17d": [
+    "p17d_beavertail_backstrap_l"
+   ],
+   "18": [
+    "p18_magazine_catch_spring"
+   ],
+   "19": [
+    "p19_magazine_catch"
+   ],
+   "20": [
+    "p20_slide_lock_spring"
+   ],
+   "21": [
+    "p21_slide_lock"
+   ],
+   "22": [
+    "p22_locking_block"
+   ],
+   "23": [
+    "p23_trigger_mechanism_housing"
+   ],
+   "24": [
+    "p24_connector"
+   ],
+   "26": [
+    "p26_trigger",
+    "p26_trigger_safety",
+    "p26_trigger_bar"
+   ],
+   "27": [
+    "p27_slide_stop_lever"
+   ],
+   "28": [
+    "p28_trigger_pin"
+   ],
+   "29": [
+    "p29_trigger_housing_pin"
+   ],
+   "31": [
+    "p31_magazine_tube"
+   ],
+   "32": [
+    "p32_follower"
+   ],
+   "33": [
+    "p33_magazine_spring"
+   ],
+   "34": [
+    "p34_magazine_insert"
+   ],
+   "35": [
+    "p35_magazine_floor_plate"
+   ],
+   "48": [
+    "p48_loading_assist_right"
+   ],
+   "49": [
+    "p49_loading_assist_left"
+   ]
+  },
+  "open_meshes": [],
+  "note": "items 25 and 30 are blank in the manual list"
+ },
+ "dimensions": [
+  {
+   "dim": "1 length overall",
+   "model_mm": 184.71,
+   "published_mm": 185.0,
+   "diff_mm": -0.29,
+   "diff_pct": -0.16
+  },
+  {
+   "dim": "2 slide length",
+   "model_mm": 173.64,
+   "published_mm": 174.0,
+   "diff_mm": -0.36,
+   "diff_pct": -0.21
+  },
+  {
+   "dim": "3 width overall",
+   "model_mm": 32.3,
+   "published_mm": 32.0,
+   "diff_mm": 0.3,
+   "diff_pct": 0.94
+  },
+  {
+   "dim": "4 slide width",
+   "model_mm": 25.74,
+   "published_mm": 25.5,
+   "diff_mm": 0.24,
+   "diff_pct": 0.94
+  },
+  {
+   "dim": "5 height incl. magazine",
+   "model_mm": 125.66,
+   "published_mm": 128.0,
+   "diff_mm": -2.34,
+   "diff_pct": -1.83
+  },
+  {
+   "dim": "6 line of sight (adjustable polymer)",
+   "model_mm": 157.7,
+   "published_mm": 158.0,
+   "diff_mm": -0.3,
+   "diff_pct": -0.19
+  },
+  {
+   "dim": "7 trigger distance",
+   "model_mm": 68.69,
+   "published_mm": 70.0,
+   "diff_mm": -1.31,
+   "diff_pct": -1.87
+  },
+  {
+   "dim": "barrel length",
+   "model_mm": 101.25,
+   "published_mm": 102.0,
+   "diff_mm": -0.75,
+   "diff_pct": -0.74
+  }
+ ],
+ "dimensions_note": "published = the maker's specification table for this model (the table manual p. 9 points to; values in notes/MANUAL_NOTES.md). \"Technical data are rounded and do not reflect tolerances\" (maker's note).",
+ "mass": {
+  "raw_model_g": {
+   "slide": 125.6,
+   "barrel_and_spring": 144.7,
+   "frame": 159.1,
+   "magazine": 31.6
+  },
+  "raw_without_magazine_g": 429.4,
+  "published_without_magazine_g": 358.0,
+  "published_empty_magazine_g": 57.0,
+  "scale_to_published": 0.834,
+  "normalised_g": {
+   "slide": 104.7,
+   "barrel_and_spring": 120.7,
+   "frame": 132.7
+  },
+  "note": "volumes of the modelled solids x nominal densities (steel 7.85, glass-filled polymer 1.38, slide body 2.6 as a steel-reinforced polymer guess). Internal cavities of the real parts are not known, so the raw total is not expected to match; the split between slide, barrel and frame after scaling to 358 g is what the action simulation uses."
+ },
+ "clips": {
+  "rest_pose": {
+   "pairs_tested": "all",
+   "intersecting": []
+  },
+  "trigger_safety": {
+   "frames": 20,
+   "moving_nodes": [
+    "p26_trigger_safety"
+   ],
+   "intersecting": []
+  },
+  "trigger_pull": {
+   "frames": 30,
+   "moving_nodes": [
+    "p04_firing_pin",
+    "p06_firing_pin_spring",
+    "p08_firing_pin_safety",
+    "p09_firing_pin_safety_spring",
+    "p26_trigger",
+    "p26_trigger_bar",
+    "p26_trigger_safety"
+   ],
+   "intersecting": []
+  },
+  "slide_cycle": {
+   "frames": 24,
+   "moving_nodes": [
+    "p01_slide",
+    "p03_recoil_spring",
+    "p04_firing_pin",
+    "p06_firing_pin_spring"
+   ],
+   "intersecting": []
+  },
+  "slide_lock_open": {
+   "frames": 24,
+   "moving_nodes": [
+    "p01_slide",
+    "p03_recoil_spring",
+    "p27_slide_stop_lever",
+    "p32_follower",
+    "p33_magazine_spring"
+   ],
+   "intersecting": []
+  },
+  "slide_release": {
+   "frames": 16,
+   "moving_nodes": [
+    "p01_slide",
+    "p03_recoil_spring",
+    "p27_slide_stop_lever"
+   ],
+   "intersecting": []
+  },
+  "magazine_out": {
+   "frames": 30,
+   "moving_nodes": [
+    "p19_magazine_catch",
+    "p31_magazine_tube",
+    "p32_follower",
+    "p33_magazine_spring"
+   ],
+   "intersecting": []
+  },
+  "magazine_in": {
+   "frames": 30,
+   "moving_nodes": [
+    "p19_magazine_catch",
+    "p31_magazine_tube",
+    "p32_follower",
+    "p33_magazine_spring"
+   ],
+   "intersecting": []
+  },
+  "field_strip": {
+   "frames": 150,
+   "moving_nodes": [
+    "p01_slide",
+    "p02_barrel",
+    "p03_recoil_spring",
+    "p03_recoil_spring_assembly",
+    "p04_firing_pin",
+    "p06_firing_pin_spring",
+    "p08_firing_pin_safety",
+    "p09_firing_pin_safety_spring",
+    "p20_slide_lock_spring",
+    "p21_slide_lock",
+    "p26_trigger",
+    "p26_trigger_bar",
+    "p26_trigger_safety",
+    "p31_magazine_tube",
+    "p32_follower",
+    "p33_magazine_spring"
+   ],
+   "intersecting": []
+  },
+  "method": "triangle-triangle overlap (mathutils BVHTree.overlap) of the world-space meshes at every frame at 30 fps; plus a ray-parity test for one part lying wholly inside the solid of another (reported with triangle_pairs -1); pairs declared in inventory.json \"attached\" are skipped; accessories (detached backstraps) excluded",
+  "total_intersecting_pairs": 0
+ }
+}

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>G44 V sample</title>
+<style>
+  :root { --bg: #f4f4f1; --fg: #1c1c1a; --mut: #666; --line: #cfcfc8; --panel: #fff; --acc: #b4500a; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #161615; --fg: #e9e9e4; --mut: #9a9a92; --line: #3a3a36; --panel: #1f1f1d; --acc: #f08a3c; } }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.45 system-ui, sans-serif; }
+  main { max-width: 980px; margin: 0 auto; padding: 16px; }
+  h1 { font-size: 20px; margin: 0 0 4px; } p { margin: 6px 0; color: var(--mut); }
+  canvas { width: 100%; height: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; display: block; }
+  .row { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; margin: 10px 0; }
+  button, select { font: inherit; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); }
+  button.fire { background: var(--acc); color: #fff; border-color: var(--acc); }
+  table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; } td, th { padding: 3px 8px; border-bottom: 1px solid var(--line); text-align: right; } th:first-child, td:first-child { text-align: left; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; } @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
+  code { font-size: 13px; }
+</style>
+</head>
+<body>
+<main>
+<h1>G44 V: sample</h1>
+<p>A .22 LR blowback pistol simulated from physics and published numbers: the slide cycle and recoil (<code>action/</code>), the bullet (<code>ballistics/</code>) and the sound (<code>sound/</code>), synthesised here in the page. The drawing is the recipe's traced side outlines moved by the action simulation in slow motion; the 3D model is built locally from <code>model/build.py</code>. Credit: carpetshark.</p>
+<div class="row">
+  <label>Ammunition <select id="ammo"></select></label>
+  <label>Hold <select id="stance"><option value="two_hand">two hands</option><option value="one_hand">one hand</option></select></label>
+  <label>Surroundings <select id="overlay"><option value="">open air</option><option value="outdoor_berm">outdoor range, berm</option><option value="indoor_range">indoor range</option></select></label>
+  <label><input type="checkbox" id="hpd"> earmuffs</label>
+  <label><input type="checkbox" id="last"> last round</label>
+  <button class="fire" id="fire">Fire</button>
+  <button id="rack">Rack the slide (sound)</button>
+</div>
+<canvas id="cv" width="960" height="560"></canvas>
+<p id="status">Loading the simulation tables...</p>
+<div class="grid">
+  <div><h3>This shot</h3><table id="shot"></table></div>
+  <div><h3>Point of impact, 25 m zero</h3><table id="poi"></table></div>
+</div>
+<p>Serve the repository over http (the modules fetch JSON): <code>python3 -m http.server 8777</code>, then open <code>/assets/g44v/sample/</code>.</p>
+</main>
+<script src="../action/g44v-action.js"></script>
+<script src="../ballistics/g44v-ballistics.js"></script>
+<script type="module">
+import G44VSound from '../sound/g44v-sound.js';
+const $ = (id) => document.getElementById(id), A = window.G44VAction, B = window.G44VBallistics;
+const O = (await (await fetch('../model/outlines.json')).json()).mm;
+await A.load('../action/action.json');
+const D = A.data, cv = $('cv'), g = cv.getContext('2d'), SLOW = 60;
+for (const k of A.ammo()) { const o = document.createElement('option'); o.value = k; o.textContent = D.loads[k].label; $('ammo').appendChild(o); }
+let ac = null, S = null, t0 = null, shotOpts = null;
+const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function poly(pts, dx, fill, stroke) { g.beginPath(); pts.forEach(([l, z], i) => { const x = 820 - (l + dx) * 4, y = 110 - z * 4; i ? g.lineTo(x, y) : g.moveTo(x, y); }); g.closePath(); if (fill) { g.fillStyle = fill; g.fill(); } g.strokeStyle = stroke; g.lineWidth = 1.5; g.stroke(); }
+function draw(s) {
+  g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, cv.width, cv.height);
+  const fg = css('--fg'), mut = css('--mut'), acc = css('--acc'), r = s.recoil, px = 820, py = 110 + D.params.bore_height.value * 4000;
+  g.translate(px, py); g.rotate(-r.pitch); g.translate(-px + -r.pos[2] * 4000, -py);          // muzzle is to the left: + pitch lifts it
+  const m = D.mechanics.muzzle_mm || 174.3;
+  g.fillStyle = mut; g.fillRect(820 - m * 4, 110 - 6.5 * 4, (m - 73) * 4, 13 * 4);            // barrel (fixed to the frame)
+  poly(O.frame, 0, css('--panel'), fg); poly(O.floor_plate, 0, css('--panel'), fg); poly(O.guard_hole, 0, css('--bg'), fg); poly(O.trigger, 0, mut, fg);
+  poly(O.slide, -s.slideMm, css('--panel'), s.slideHeldOpen ? acc : fg); poly(O.front_sight, -s.slideMm, fg, fg); poly(O.rear_sight, -s.slideMm, fg, fg);
+  g.fillStyle = acc; g.fillRect(820 - (19 + 4 - s.strikerMm - s.slideMm) * 4, 110 + 9.2 * 4, 16, 10);                 // firing pin lug under the slide
+  g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = fg; g.font = '14px system-ui';
+  g.fillText('t = ' + (s.shotTime * 1e3).toFixed(2) + ' ms    slide ' + s.slideMm.toFixed(1) + ' mm    chamber ' + s.chamberPressureMPa.toFixed(0) + ' MPa    muzzle rise ' + r.pitchDeg.toFixed(2) + ' deg', 16, 26);
+  g.fillStyle = mut; g.fillText('slow motion x' + SLOW + (s.slideHeldOpen ? '    slide locked open' : ''), 16, 46);
+}
+function row(tb, a, b) { const tr = tb.insertRow(); tr.insertCell().textContent = a; tr.insertCell().textContent = b; }
+function tables() {
+  const k = $('ammo').value, L = D.loads[k], tb = $('shot'); tb.innerHTML = '';
+  row(tb, 'Muzzle velocity, 102 mm barrel', L.pistol.muzzle_velocity_mps.toFixed(0) + ' m/s (' + L.pistol.muzzle_velocity_fps.toFixed(0) + ' fps)');
+  row(tb, 'Peak chamber pressure', L.pistol.p_max_MPa.toFixed(0) + ' MPa'); row(tb, 'Slide peak speed', L.slide_peak_speed_mps.toFixed(2) + ' m/s');
+  row(tb, 'Slide travel', L.max_travel_mm.toFixed(1) + ' of ' + D.mechanics.full_travel_mm + ' mm'); row(tb, 'Outcome', L.outcome);
+  row(tb, 'Back in battery', L.cycle_time_ms.toFixed(1) + ' ms'); row(tb, 'Muzzle rise, ' + $('stance').value.replace('_', ' '), L.recoil[$('stance').value].peak_pitch_deg.toFixed(2) + ' deg');
+  if (S) { const b = S.shot(k), i = S.info(b); row(tb, 'Peak level at the ear', i.peak_db_spl.toFixed(1) + ' dB'); }
+  const tp = $('poi'); tp.innerHTML = '<tr><th>Range</th><th>Path</th><th>Velocity</th><th>Energy</th><th>Time</th></tr>';
+  for (const d of [10, 25, 50, 75, 100]) { const p = B.poi(k, 25, d), tr = tp.insertRow(); [d + ' m', (p.y * 1e3).toFixed(0) + ' mm', p.v.toFixed(0) + ' m/s', p.energy.toFixed(0) + ' J', (p.tof * 1e3).toFixed(0) + ' ms'].forEach((x) => tr.insertCell().textContent = x); }
+}
+async function audio() { if (!ac) { ac = new AudioContext({ sampleRate: 48000 }); S = await G44VSound.build(ac); } await ac.resume(); return S; }
+function play(buf) { const ch = S.chain({ overlay: $('overlay').value || null, hpd: $('hpd').checked, ear: true }); ch.output.connect(ac.destination); const src = ac.createBufferSource(); src.buffer = buf; src.connect(ch.input); src.start(); }
+$('fire').onclick = async () => { await audio(); play(S.shot($('ammo').value, { ground: !$('overlay').value })); shotOpts = { ammo: $('ammo').value, stance: $('stance').value, lastRound: $('last').checked }; t0 = performance.now(); tables(); };
+$('rack').onclick = async () => { await audio(); play(S.mech($('last').checked ? 'slide_lock_open' : 'slide_rack')); };
+$('ammo').onchange = $('stance').onchange = tables;
+function frame() { const t = t0 == null ? 0 : (performance.now() - t0) / 1000 / SLOW; draw(A.sample(Math.min(t, 0.2), shotOpts || { ammo: $('ammo').value })); requestAnimationFrame(frame); }
+tables(); frame(); $('status').textContent = 'Ready. Press Fire: the sound plays at full speed, the mechanism replays ' + SLOW + ' times slower.';
+</script>
+</body>
+</html>

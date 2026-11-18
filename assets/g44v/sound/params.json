@@ -1,0 +1,907 @@
+{
+ "meta": {
+  "title": "G44 V simulated sound",
+  "credit": "carpetshark",
+  "generator": "sim.py",
+  "units": "pascals at the listener; times in seconds from the trigger break"
+ },
+ "fs": 48000,
+ "c0": 343.0,
+ "sources": {
+  "anchor_rifle_db": {
+   "value": 140.0,
+   "status": "published",
+   "source": "about 140 dB peak for a .22 calibre rifle (cited in a firearm suppressor study, PMC8588962). Its measuring position is not stated; taken here as the shooter's ear"
+  },
+  "bracket_1m_left_db": {
+   "value": [
+    149.0,
+    167.0
+   ],
+   "status": "published",
+   "source": "Flamme et al.: instantaneous peak levels 1 m to the shooter's left ranged from 149 to 167 dB across 15 recreational firearms (as summarised in CDC stacks 211059)"
+  },
+  "efflux_exponent": {
+   "value": 0.55,
+   "status": "inferred",
+   "source": "peak overpressure ~ (muzzle energy efflux rate)^0.55, from the blast scaling length ~ sqrt(efflux) and peak ~ length^1.1 (Fansler and Schmidt muzzle blast scaling, recalled, not re-read)"
+  },
+  "decay_exponent": {
+   "value": 1.1,
+   "status": "inferred",
+   "source": "peak ~ r^-1.1: weak-shock decay, same scaling"
+  },
+  "directivity_db": {
+   "value": 6.0,
+   "status": "inferred",
+   "source": "level(theta) = level(90 deg) + 6 cos(theta) dB: louder ahead of the muzzle, quieter behind. Typical of small arms, not measured for this pistol"
+  },
+  "t_pos_ref": {
+   "value": 0.00025,
+   "status": "inferred",
+   "source": "positive phase of the standard-velocity blast at 1 m; small-arms values are 0.2 to 0.5 ms"
+  },
+  "friedlander_b": {
+   "value": 1.5,
+   "status": "inferred",
+   "source": "decay constant of the Friedlander wave"
+  },
+  "rise_time": {
+   "value": 4e-05,
+   "status": "inferred",
+   "source": "shock rise seen through a 48 kHz system"
+  },
+  "ground_reflection": {
+   "value": 0.75,
+   "status": "inferred",
+   "source": "pressure reflection coefficient of range ground (grass over soil), broadband"
+  },
+  "air_lp": {
+   "value": 300000.0,
+   "status": "inferred",
+   "source": "air absorption as a one-pole low-pass with corner 3e5 / r Hz (a rough fit to ISO 9613-1 at 20 C, 50 % RH)"
+  },
+  "radiation_efficiency": {
+   "value": 0.002,
+   "status": "inferred",
+   "source": "share of a mechanical impact's lost energy that leaves as sound"
+  },
+  "rifle_ear": {
+   "value": [
+    0.75,
+    170.0
+   ],
+   "status": "inferred",
+   "source": "ear of a rifle shooter: 0.75 m from the muzzle of a 24 in barrel, 170 deg off the line of fire"
+  }
+ },
+ "friedlander_b": 1.5,
+ "rise": 4e-05,
+ "loads": {
+  "cci_standard_velocity": {
+   "label": "CCI Standard Velocity 40 gr LRN (part 35)",
+   "t_blast": 0.003256,
+   "efflux_W": 1035675,
+   "peak_pa_1m_90": 910.499,
+   "peak_db_1m_90": 153.16,
+   "supersonic": false,
+   "mech": [
+    {
+     "t": 0.00255,
+     "modes": [
+      {
+       "f": 4200.0,
+       "tau": 0.0012,
+       "a": 2.518626
+      },
+      {
+       "f": 7100.0,
+       "tau": 0.0008,
+       "a": 2.885449
+      },
+      {
+       "f": 11500.0,
+       "tau": 0.0005,
+       "a": 3.084675
+      }
+     ],
+     "noise": {
+      "a": 2.607026,
+      "tau": 0.0006,
+      "lp": 0.35
+     }
+    },
+    {
+     "t": 0.01021,
+     "modes": [
+      {
+       "f": 1900.0,
+       "tau": 0.003,
+       "a": 3.73501
+      },
+      {
+       "f": 3300.0,
+       "tau": 0.0022,
+       "a": 4.361552
+      },
+      {
+       "f": 5100.0,
+       "tau": 0.0014,
+       "a": 4.682083
+      },
+      {
+       "f": 7900.0,
+       "tau": 0.0009,
+       "a": 5.282102
+      }
+     ],
+     "noise": {
+      "a": 7.058506,
+      "tau": 0.0006,
+      "lp": 0.35
+     }
+    },
+    {
+     "t": 0.02153,
+     "modes": [
+      {
+       "f": 2600.0,
+       "tau": 0.0035,
+       "a": 4.815256
+      },
+      {
+       "f": 4300.0,
+       "tau": 0.0024,
+       "a": 5.814974
+      },
+      {
+       "f": 6800.0,
+       "tau": 0.0015,
+       "a": 6.714554
+      },
+      {
+       "f": 9800.0,
+       "tau": 0.0008,
+       "a": 7.12186
+      }
+     ],
+     "noise": {
+      "a": 9.8291,
+      "tau": 0.0006,
+      "lp": 0.35
+     }
+    }
+   ],
+   "t_pos": 0.00025
+  },
+  "cci_mini_mag": {
+   "label": "CCI Mini-Mag 40 gr CPRN (part 30)",
+   "t_blast": 0.003211,
+   "efflux_W": 1343788,
+   "peak_pa_1m_90": 1050.724,
+   "peak_db_1m_90": 154.41,
+   "supersonic": false,
+   "mech": [
+    {
+     "t": 0.00255,
+     "modes": [
+      {
+       "f": 4200.0,
+       "tau": 0.0012,
+       "a": 2.518626
+      },
+      {
+       "f": 7100.0,
+       "tau": 0.0008,
+       "a": 2.885449
+      },
+      {
+       "f": 11500.0,
+       "tau": 0.0005,
+       "a": 3.084675
+      }
+     ],
+     "noise": {
+      "a": 2.607026,
+      "tau": 0.0006,
+      "lp": 0.35
+     }
+    },
+    {
+     "t": 0.00903,
+     "modes": [
+      {
+       "f": 1900.0,
+       "tau": 0.003,
+       "a": 5.103253
+      },
+      {
+       "f": 3300.0,
+       "tau": 0.0022,
+       "a": 5.959316
+      },
+      {
+       "f": 5100.0,
+       "tau": 0.0014,
+       "a": 6.397266
+      },
+      {
+       "f": 7900.0,
+       "tau": 0.0009,
+       "a": 7.21709
+      }
+     ],
+     "noise": {
+      "a": 9.644242,
+      "tau": 0.0006,
+      "lp": 0.35
+     }
+    },
+    {
+     "t": 0.01971,
+     "modes": [
+      {
+       "f": 2600.0,
+       "tau": 0.0035,
+       "a": 4.881365
+      },
+      {
+       "f": 4300.0,
+       "tau": 0.0024,
+       "a": 5.894808
+      },
+      {
+       "f": 6800.0,
+       "tau": 0.0015,
+       "a": 6.806738
+      },
+      {
+       "f": 9800.0,
+       "tau": 0.0008,
+       "a": 7.219636
+      }
+     ],
+     "noise": {
+      "a": 9.964044,
+      "tau": 0.0006,
+      "lp": 0.35
+     }
+    }
+   ],
+   "t_pos": 0.0002848
+  },
+  "cci_quiet_22": {
+   "label": "CCI Quiet-22 40 gr LRN (part 960)",
+   "t_blast": 0.003519,
+   "efflux_W": 580457,
+   "peak_pa_1m_90": 662.186,
+   "peak_db_1m_90": 150.4,
+   "supersonic": false,
+   "mech": [
+    {
+     "t": 0.00255,
+     "modes": [
+      {
+       "f": 4200.0,
+       "tau": 0.0012,
+       "a": 2.518626
+      },
+      {
+       "f": 7100.0,
+       "tau": 0.0008,
+       "a": 2.885449
+      },
+      {
+       "f": 11500.0,
+       "tau": 0.0005,
+       "a": 3.084675
+      }
+     ],
+     "noise": {
+      "a": 2.607026,
+      "tau": 0.0006,
+      "lp": 0.35
+     }
+    },
+    {
+     "t": 0.02719,
+     "modes": [
+      {
+       "f": 2600.0,
+       "tau": 0.0035,
+       "a": 3.818482
+      },
+      {
+       "f": 4300.0,
+       "tau": 0.0024,
+       "a": 4.611256
+      },
+      {
+       "f": 6800.0,
+       "tau": 0.0015,
+       "a": 5.324619
+      },
+      {
+       "f": 9800.0,
+       "tau": 0.0008,
+       "a": 5.647612
+      }
+     ],
+     "noise": {
+      "a": 7.794445,
+      "tau": 0.0006,
+      "lp": 0.35
+     }
+    }
+   ],
+   "t_pos": 0.0001872
+  }
+ },
+ "perspectives": {
+  "shooter": {
+   "r": 0.627,
+   "theta_deg": 172.53,
+   "note": "the shooter's right ear: at the eye socket of the model, 8 cm to the side",
+   "direct": {
+    "delay": 0.0018281,
+    "gain": 0.84243,
+    "mech_gain": 1.594826,
+    "lp": 0.927051
+   },
+   "ground": {
+    "delay": 0.0089806,
+    "gain": 0.189257,
+    "mech_gain": 0.243479,
+    "lp": 0.927051
+   }
+  },
+  "bystander": {
+   "r": 3.0166,
+   "theta_deg": 95.71,
+   "note": "3 m to the shooter's left, level with the pistol",
+   "direct": {
+    "delay": 0.0087948,
+    "gain": 0.277136,
+    "mech_gain": 0.331497,
+    "lp": 0.927051
+   },
+   "ground": {
+    "delay": 0.0126074,
+    "gain": 0.142803,
+    "mech_gain": 0.173436,
+    "lp": 0.927051
+   }
+  },
+  "downrange": {
+   "r": 25.0799,
+   "theta_deg": 4.57,
+   "note": "25 m downrange, 2 m beside the line of fire",
+   "direct": {
+    "delay": 0.0731192,
+    "gain": 0.057516,
+    "mech_gain": 0.039873,
+    "lp": 0.791078
+   },
+   "ground": {
+    "delay": 0.0736404,
+    "gain": 0.042593,
+    "mech_gain": 0.029693,
+    "lp": 0.788749
+   }
+  }
+ },
+ "clips": {
+  "trigger": [
+   {
+    "t": 0.0,
+    "modes": [
+     {
+      "f": 3100.0,
+      "tau": 0.001,
+      "a": 0.606707
+     },
+     {
+      "f": 6400.0,
+      "tau": 0.0006,
+      "a": 0.783256
+     }
+    ],
+    "noise": {
+     "a": 0.512761,
+     "tau": 0.0006,
+     "lp": 0.35
+    }
+   }
+  ],
+  "dry_fire": [
+   {
+    "t": 0.0,
+    "modes": [
+     {
+      "f": 3100.0,
+      "tau": 0.001,
+      "a": 0.606707
+     },
+     {
+      "f": 6400.0,
+      "tau": 0.0006,
+      "a": 0.783256
+     }
+    ],
+    "noise": {
+     "a": 0.512761,
+     "tau": 0.0006,
+     "lp": 0.35
+    }
+   },
+   {
+    "t": 0.00255,
+    "modes": [
+     {
+      "f": 4200.0,
+      "tau": 0.0012,
+      "a": 2.518626
+     },
+     {
+      "f": 7100.0,
+      "tau": 0.0008,
+      "a": 2.885449
+     },
+     {
+      "f": 11500.0,
+      "tau": 0.0005,
+      "a": 3.084675
+     }
+    ],
+    "noise": {
+     "a": 2.607026,
+     "tau": 0.0006,
+     "lp": 0.35
+    }
+   }
+  ],
+  "slide_rack": [
+   {
+    "t": 0.0,
+    "modes": [
+     {
+      "f": 1900.0,
+      "tau": 0.003,
+      "a": 1.472359
+     },
+     {
+      "f": 3300.0,
+      "tau": 0.0022,
+      "a": 1.719345
+     },
+     {
+      "f": 5100.0,
+      "tau": 0.0014,
+      "a": 1.8457
+     },
+     {
+      "f": 7900.0,
+      "tau": 0.0009,
+      "a": 2.08223
+     }
+    ],
+    "noise": {
+     "a": 2.782497,
+     "tau": 0.0006,
+     "lp": 0.35
+    }
+   },
+   {
+    "t": 0.075782,
+    "modes": [
+     {
+      "f": 2600.0,
+      "tau": 0.0035,
+      "a": 4.916494
+     },
+     {
+      "f": 4300.0,
+      "tau": 0.0024,
+      "a": 5.937231
+     },
+     {
+      "f": 6800.0,
+      "tau": 0.0015,
+      "a": 6.855724
+     },
+     {
+      "f": 9800.0,
+      "tau": 0.0008,
+      "a": 7.271593
+     }
+    ],
+    "noise": {
+     "a": 10.035752,
+     "tau": 0.0006,
+     "lp": 0.35
+    }
+   }
+  ],
+  "slide_lock_open": [
+   {
+    "t": 0.0,
+    "modes": [
+     {
+      "f": 1900.0,
+      "tau": 0.003,
+      "a": 1.472359
+     },
+     {
+      "f": 3300.0,
+      "tau": 0.0022,
+      "a": 1.719345
+     },
+     {
+      "f": 5100.0,
+      "tau": 0.0014,
+      "a": 1.8457
+     },
+     {
+      "f": 7900.0,
+      "tau": 0.0009,
+      "a": 2.08223
+     }
+    ],
+    "noise": {
+     "a": 2.782497,
+     "tau": 0.0006,
+     "lp": 0.35
+    }
+   },
+   {
+    "t": 0.05,
+    "modes": [
+     {
+      "f": 1900.0,
+      "tau": 0.003,
+      "a": 0.606707
+     },
+     {
+      "f": 3300.0,
+      "tau": 0.0022,
+      "a": 0.708481
+     },
+     {
+      "f": 5100.0,
+      "tau": 0.0014,
+      "a": 0.760548
+     },
+     {
+      "f": 7900.0,
+      "tau": 0.0009,
+      "a": 0.858013
+     }
+    ],
+    "noise": {
+     "a": 1.146569,
+     "tau": 0.0006,
+     "lp": 0.35
+    }
+   }
+  ],
+  "slide_release": [
+   {
+    "t": 0.0,
+    "modes": [
+     {
+      "f": 3100.0,
+      "tau": 0.001,
+      "a": 0.959288
+     },
+     {
+      "f": 6400.0,
+      "tau": 0.0006,
+      "a": 1.238436
+     }
+    ],
+    "noise": {
+     "a": 0.810747,
+     "tau": 0.0006,
+     "lp": 0.35
+    }
+   },
+   {
+    "t": 0.015632,
+    "modes": [
+     {
+      "f": 2600.0,
+      "tau": 0.0035,
+      "a": 4.63266
+     },
+     {
+      "f": 4300.0,
+      "tau": 0.0024,
+      "a": 5.594468
+     },
+     {
+      "f": 6800.0,
+      "tau": 0.0015,
+      "a": 6.459935
+     },
+     {
+      "f": 9800.0,
+      "tau": 0.0008,
+      "a": 6.851796
+     }
+    ],
+    "noise": {
+     "a": 9.456377,
+     "tau": 0.0006,
+     "lp": 0.35
+    }
+   }
+  ],
+  "magazine_out": [
+   {
+    "t": 0.0,
+    "modes": [
+     {
+      "f": 3100.0,
+      "tau": 0.001,
+      "a": 0.959288
+     },
+     {
+      "f": 6400.0,
+      "tau": 0.0006,
+      "a": 1.238436
+     }
+    ],
+    "noise": {
+     "a": 0.810747,
+     "tau": 0.0006,
+     "lp": 0.35
+    }
+   },
+   {
+    "t": 0.03,
+    "modes": [
+     {
+      "f": 900.0,
+      "tau": 0.005,
+      "a": 0.507608
+     },
+     {
+      "f": 1700.0,
+      "tau": 0.0035,
+      "a": 0.606707
+     },
+     {
+      "f": 3900.0,
+      "tau": 0.0015,
+      "a": 0.858013
+     }
+    ],
+    "noise": {
+     "a": 1.146569,
+     "tau": 0.0006,
+     "lp": 0.35
+    }
+   }
+  ],
+  "magazine_in": [
+   {
+    "t": 0.0,
+    "modes": [
+     {
+      "f": 900.0,
+      "tau": 0.005,
+      "a": 0.802598
+     },
+     {
+      "f": 1700.0,
+      "tau": 0.0035,
+      "a": 0.959288
+     },
+     {
+      "f": 3900.0,
+      "tau": 0.0015,
+      "a": 1.356638
+     }
+    ],
+    "noise": {
+     "a": 1.812884,
+     "tau": 0.0006,
+     "lp": 0.35
+    }
+   },
+   {
+    "t": 0.012,
+    "modes": [
+     {
+      "f": 3100.0,
+      "tau": 0.001,
+      "a": 0.959288
+     },
+     {
+      "f": 6400.0,
+      "tau": 0.0006,
+      "a": 1.238436
+     }
+    ],
+    "noise": {
+     "a": 0.810747,
+     "tau": 0.0006,
+     "lp": 0.35
+    }
+   }
+  ],
+  "case_ground": [
+   {
+    "t": 0.0,
+    "modes": [
+     {
+      "f": 6200.0,
+      "tau": 0.006,
+      "a": 0.251381
+     },
+     {
+      "f": 9800.0,
+      "tau": 0.0035,
+      "a": 0.329135
+     }
+    ],
+    "noise": {
+     "a": 0.520408,
+     "tau": 0.0006,
+     "lp": 0.35
+    }
+   },
+   {
+    "t": 0.11,
+    "modes": [
+     {
+      "f": 6200.0,
+      "tau": 0.006,
+      "a": 0.087081
+     },
+     {
+      "f": 9800.0,
+      "tau": 0.0035,
+      "a": 0.114016
+     }
+    ],
+    "noise": {
+     "a": 0.180275,
+     "tau": 0.0006,
+     "lp": 0.35
+    }
+   }
+  ]
+ },
+ "clip_notes": "hand speeds (1.5 m/s rack) and small click energies are inferred; closing speeds follow from the recoil spring loads in action.json",
+ "overlays": {
+  "outdoor_berm": {
+   "note": "open range, earth berm 25 m downrange: ground reflection and one diffuse return from the berm",
+   "taps": [
+    {
+     "delay": 0.010412,
+     "gain": 0.5
+    },
+    {
+     "delay": 0.145773,
+     "gain": 0.012
+    }
+   ],
+   "tail": {
+    "t0": 0.145773,
+    "rt60": 0.35,
+    "level": 0.006,
+    "lp": 0.25
+   }
+  },
+  "indoor_range": {
+   "note": "indoor range lane hall 6 x 3 x 28 m, mean absorption 0.35 (baffles and backstop): image sources to second order, then a Sabine tail",
+   "taps": [
+    {
+     "delay": 0.0,
+     "gain": 0.65
+    },
+    {
+     "delay": 0.0,
+     "gain": 0.80623
+    },
+    {
+     "delay": 0.0,
+     "gain": 0.65
+    },
+    {
+     "delay": 0.0,
+     "gain": 0.65
+    },
+    {
+     "delay": 0.0,
+     "gain": 0.80623
+    },
+    {
+     "delay": 0.0,
+     "gain": 0.65
+    },
+    {
+     "delay": 0.020418,
+     "gain": 0.05203
+    },
+    {
+     "delay": 0.020418,
+     "gain": 0.05203
+    },
+    {
+     "delay": 0.069944,
+     "gain": 0.0161
+    },
+    {
+     "delay": 0.069944,
+     "gain": 0.0161
+    },
+    {
+     "delay": 0.069944,
+     "gain": 0.01997
+    },
+    {
+     "delay": 0.069944,
+     "gain": 0.01997
+    },
+    {
+     "delay": 0.069944,
+     "gain": 0.0161
+    },
+    {
+     "delay": 0.069944,
+     "gain": 0.0161
+    },
+    {
+     "delay": 0.080538,
+     "gain": 0.01403
+    },
+    {
+     "delay": 0.080538,
+     "gain": 0.0174
+    },
+    {
+     "delay": 0.080538,
+     "gain": 0.01403
+    },
+    {
+     "delay": 0.0838,
+     "gain": 0.01349
+    },
+    {
+     "delay": 0.0838,
+     "gain": 0.01674
+    },
+    {
+     "delay": 0.0838,
+     "gain": 0.01349
+    },
+    {
+     "delay": 0.152781,
+     "gain": 0.00747
+    },
+    {
+     "delay": 0.152781,
+     "gain": 0.00747
+    },
+    {
+     "delay": 0.164479,
+     "gain": 0.00695
+    },
+    {
+     "delay": 0.167742,
+     "gain": 0.00681
+    }
+   ],
+   "tail": {
+    "t0": 0.03,
+    "rt60": 0.429,
+    "level": 0.05,
+    "lp": 0.4
+   }
+  }
+ },
+ "dur_shot": 0.2,
+ "dur_clip": 0.3
+}
