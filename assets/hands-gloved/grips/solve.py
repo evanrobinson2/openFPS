@@ -11,6 +11,8 @@ Method (a grasp planner, not a hand-set pose):
      inside its range.  Afterwards each pad is cut back to the least compression that still clears the rifle (relax).  (b) Magazine, bolt-catch and charging grips: a stated frame or pad fit, backed off along a
      stated direction until nothing is inside the rifle.  (c) Support hand: an evolution-strategy search of the hand's
      pose in which each candidate is pushed against the rifle until it touches, pulled toward where R2 has the fingertips.
+     (d) The selector hold (fire_select; CR-3): fire_indexed moved by a search for the smallest move from which the
+     thumb reaches the lever at safe, half way and at fire (solve_select).
   2. Close the digits against the rifle's signed distance field: a wrapping finger searches its four joints for the
      pose whose three palmar pads are nearest the surface with nothing inside it; a digit with a job (trigger finger,
      thumb on a control) is placed on its target point by a search on its own joints.
@@ -68,7 +70,7 @@ class Solver:
         for g, shells, stride in (('base', ('palm', 'web', 'cuff'), 1), ('thumb', ('thumb',), 1)) + tuple((f, ('finger_' + f,), 1) for f in hl.FING):
             V = np.vstack([h.shells[s]['V'][::stride] for s in shells]); Wt = np.vstack([h.shells[s]['W'][::stride] for s in shells])
             self.grp[g] = (np.c_[V, np.ones(len(V))], Wt, np.concatenate([np.c_[h.shells[s]['D'][:, ::stride], np.zeros((len(hl.PADS), len(h.shells[s]['V'][::stride]), 1))] for s in shells], axis=1))
-        self.rng = np.random.default_rng(416); self.motion = None; self.mir = False; self.skip = ()
+        self.rng = np.random.default_rng(416); self.motion = None; self.mir = False; self.skip = (); self.keepout = None      # keepout (CR-3): a box (lo, hi; asset frame, mm) no finger may enter, counted like the rifle by pen()
     # ---- geometry helpers (canonical-left world)
     def world(self, side, p): p = np.asarray(p, float); return p * [-1, 1, 1] if side == 'R' else p
     def skin(self, q, H): return self.h.skin_mats(self.h.fk(q, H))
@@ -80,6 +82,8 @@ class Solver:
     def pen(self, g, S, skip=None):
         v = np.maximum(0.0, MARGIN - self.sdf(self.pts(g, S), skip)).sum()
         if g == 'thumb': v += np.maximum(0.0, MARGIN - self.sdf(self.pts('base', S), skip)).sum()      # CR-1: the thenar part of the palm moves with the thumb
+        if self.keepout is not None and g in hl.FING:      # CR-3: depth of every finger vertex inside the box
+            P_ = self.pts(g, S) * ([-1.0, 1.0, 1.0] if self.mir else [1.0, 1.0, 1.0]); d = np.minimum(P_ - self.keepout[0], self.keepout[1] - P_).min(1); v += np.maximum(0.0, d).sum()
         return v
     def lm(self, S, name):
         if name == 'web_mid':        # CR-1: the middle of the web between thumb and index; it moves with both, unlike the landmark 'web'
@@ -385,16 +389,95 @@ def spec_catch_ready(**kw):
                 touch=dict(middle_pad=0.6, index_pad=0.6, ring_pad=0.6, palm_centre=0.5))
 def spec_charge_grip(**kw):
     """Support hand at the charging handle: palm toward the shooter, index fingertip hooked in front of the handle's
-    left wing and latch, the other fingers curled (no reference: inferred).  Moves with the handle."""
+    left wing and latch, the other fingers curled (no reference: inferred).  Moves with the handle.
+    CR-3: version 3's frame turned 24 degrees about the bore's direction and then 20 degrees about the vertical, both
+    through the hooking point, and moved 8 mm back: the hand arrives flatter and from further forward, its wrist 45 mm
+    higher, 25 mm further left and 34 mm further forward, so its curled fingers pass above the firing hand's thumb
+    instead of through it while the wrist stays far enough from the left shoulder for the elbow to fold through the
+    whole 75 mm draw (a hand turned 28 degrees without the second turn cleared the thumb but came within 157 mm of the
+    shoulder, against the 170 mm a fully folded elbow leaves).  The index pad's point is on the wing's front face
+    (version 3 had it 3.5 mm beyond the wing's tip, and the finger never touched)."""
     q = base_q(mc4_flex=2, mc5_flex=4)
     for f in ('middle', 'ring', 'little'): q[DIGIT_IDX[f]] = (80, 0, 95, 55)
     q[DIGIT_IDX['thumb']] = (5, -5, 0, 20, 30)
     return dict(side='L', attach='charging_handle', q0=q, q_open=q,
-                frame=dict(dorsal=(0.28, 0.05, 0.96), distal=(-0.70, 0.71, 0.0), wrist=(111.9, -89.2, -153.2)), retreat=(1.0, 0.0, 0.4),
+                frame=dict(dorsal=(-0.107, 0.16, 0.983), distal=(-0.872, 0.364, -0.317), wrist=(136.9, -44.4, -119.6)), retreat=(1.0, 0.0, 0.4),
                 digits=dict(middle=('pose', (80, 0, 95, 55)), ring=('pose', (80, 0, 95, 55)), little=('pose', (80, 0, 95, 55)), thumb=('pose', (5, -5, 0, 20, 30)),
-                            index=('ik', 'index_pad', (25.5, 23.0, -169.6), dict(w_touch=1.0, prior=(25, -5, 60, 45)))),
+                            index=('ik', 'index_pad', (21.0, 23.0, -170.2), dict(w_touch=1.0, prior=(10, 0, 30, 30)))),      # the wing's front face is at z -170.75 and its tip at x 22
                 touch=dict(index_pad=2.0))
-SPECS = dict(fire_indexed=spec_fire_indexed, fire=spec_fire, fire_reach=spec_fire_reach, support=spec_support, mag_grip=spec_mag_grip, catch_ready=spec_catch_ready, charge_grip=spec_charge_grip)
+# ------------------------------------------------------------------ CR-3: the hold from which the firing thumb works the selector
+TRIGGER_GUARD = (np.array([-5.5, -82.0, -138.0]), np.array([5.5, -48.0, -86.0]))      # the window of the trigger guard: between the bow's inner faces, from the bow up to the receiver's underside (rifle geometry)
+# Where the search starts: the hand's move from fire_indexed (mm along the asset axes of the x-mirrored world, then degrees as a rotation vector in the
+# hand's own axes).  It is the smallest move, of the 1,827 hand poses that checks/selector_scan.py found clear of the rifle and inside the arm's range
+# out of 24,000 tried, from which a thumb pose touches the lever at both ends of its travel (107 do).  A scan result, not a measurement.
+SELECT_SEED = (-24.3, 0.3, 1.0, 36.0, 28.9, -16.0)
+SELECT_THUMB = ((-11.9, -2.1, 7.8, 21.7, 61.9), (-8.0, -5.0, 7.0, 32.0, 50.0), (-5.6, -7.2, 7.0, 41.5, 37.3))      # thumb starts for the lever at safe, half way and at fire (same scan, polished)
+SELECT_FRAMES = (1, 4, 6)      # frames of the rifle's safety_to_fire clip the hold is solved against: lever at 0, 58 and 90 degrees
+def lever_points(r, frame, clip='safety_to_fire', per_tri=30):
+    """Points sampled on the left selector lever's triangles where the rifle clip has it, in the x-mirrored world."""
+    V = r.z['V_selector_lever_l'].astype(float); T = r.z['T_selector_lever_l']; M = r.motion(clip, float(frame))['selector_lever_l']
+    W = ((V @ M[:3, :3].T + M[:3, 3]) * [-1, 1, 1])[T]; w = np.random.default_rng(0).dirichlet([1, 1, 1], size=(len(T), per_tri)); return np.einsum('tsk,tkj->tsj', w, W).reshape(-1, 3), W
+def arm_pen(S, side, H, margin):
+    """Smallest total excursion of wrist, forearm and elbow beyond `margin` degrees inside their limits, over the elbow swivels (0 = some swivel fits)."""
+    best = 1e9
+    for sw in np.arange(SWIVEL[0], SWIVEL[1] + 0.1, 10.0):
+        F, a = hl.forearm_and_wrist(H, S.world(side, SHOULDER[side]), pole_of(sw))
+        best = min(best, sum(max(0.0, hl.LIMITS[k][0] + margin - a[k], a[k] - hl.LIMITS[k][1] + margin) for k in ('wrist_flex', 'wrist_dev', 'pronation', 'elbow_flex')))
+    return best
+def spec_fire_select(**kw):
+    """Firing hand turned on the grip so that its thumb reaches the left selector lever (no reference: inferred).
+    CR-3.  From fire_indexed no thumb pose comes nearer the lever than 10.5 mm, and no small move of the hand nearer than
+    7.8 mm (checks/selector_reach.json).  This hold is fire_indexed moved as far as the reach needs: a search over the
+    hand's pose and the thumb's joints at three positions of the lever (safe, 58 degrees, fire) for the smallest move
+    with the thumb's glove within reach of the lever at all three, nothing inside the rifle, no finger in the trigger
+    guard, the trigger finger as straight as in fire_indexed, and the arm inside its range for some elbow swivel.  The
+    three other fingers then close on the grip where they can.  The elbow has to come in under the rifle for it (see
+    notes/NOTES.md): this is a hold for the moment of working the lever, not a firing grip."""
+    return dict(side='R', attach='socket_hand_right', select=True)
+def solve_select(S, base, iters=2500, verbose=True):
+    from scipy.spatial import cKDTree
+    t0 = time.time(); S.mir = True; S.skip = (); S.keepout = TRIGGER_GUARD; h = S.h; r = S.r; H0 = base['H']; q0 = np.array(base['q'], float)
+    K = []; MO = []; TR = []
+    for f in SELECT_FRAMES: pts_, tris = lever_points(r, f); K.append(cKDTree(pts_)); MO.append(r.motion('safety_to_fire', float(f))); TR.append(tris)
+    ti = np.array(DIGIT_IDX['thumb']); lo_t = hl.LO[ti] + 0.5; hi_t = hl.HI[ti] - 0.5; n = len(SELECT_FRAMES)
+    qb = q0.copy(); qb[hl.PAD_IDX] = [hl.limit_of(hl.ANGLES[i])[1] for i in hl.PAD_IDX]      # pads pressed to their limits while searching; cut back afterwards (relax)
+    for f in ('middle', 'ring', 'little'): qb[DIGIT_IDX[f]] = (8, 0, 8, 5)                     # the three fingers open while searching; closed afterwards
+    def Hx(x): Hh = H0 @ hl.M4(hl.rotvec(np.radians(x[3:6]))); Hh[:3, 3] += x[:3]; return Hh
+    def terms(x):
+        Hh = Hx(x); v = {}; gaps = []
+        for k in range(n):
+            c = qb.copy(); c[ti] = x[6 + 5 * k:11 + 5 * k]; S.motion = MO[k]; Sk = S.skin(c, Hh); gp = float(K[k].query(h.pose_shell('thumb', Sk))[0].min()); gaps.append(gp)
+            v['gap%d' % k] = 10.0 * max(0.0, gp - MARGIN - 0.1); v['pen%d' % k] = 40.0 * (S.pen('thumb', Sk) + S.pen('index', Sk))
+        v['arm'] = 3.0 * arm_pen(S, 'R', Hh, 3.0); v['stay'] = 0.05 * (np.linalg.norm(x[:3]) + np.linalg.norm(x[3:6])); v['thumb'] = 0.01 * np.abs(np.diff(x[6:].reshape(n, 5), axis=0)).sum()
+        return v, gaps
+    fun = lambda x: sum(terms(x)[0].values())
+    lo = np.r_[[-60.0] * 3, [-70.0] * 3, np.tile(lo_t, n)]; hi = np.r_[[60.0] * 3, [70.0] * 3, np.tile(hi_t, n)]; x0 = np.r_[SELECT_SEED, np.ravel(SELECT_THUMB)]
+    best = None
+    for k in range(2):      # two runs of the search; the better is kept
+        x, fx = es_min(fun, x0, np.r_[[0.8] * 3, [1.0] * 3, [2.0] * (5 * n)], lo, hi, iters, np.random.default_rng(416 + k))
+        x, fx = es_min(fun, x, np.r_[[0.3] * 3, [0.4] * 3, [0.8] * (5 * n)], lo, hi, iters, np.random.default_rng(516 + k))
+        x, fx = es_min(fun, x, np.r_[[0.1] * 3, [0.15] * 3, [0.3] * (5 * n)], lo, hi, iters // 2, np.random.default_rng(616 + k))
+        if verbose: print('   run %d: %.2f' % (k, fx), flush=True)
+        if best is None or fx < best[1]: best = (x, fx)
+    x, fx = best
+    v, gaps = terms(x); Hh = Hx(x); q = qb.copy(); q[ti] = x[6:11]; S.motion = MO[0]
+    if verbose: print('   select search %.2f' % fx, {k: round(float(u), 2) for k, u in v.items()}, 'x', np.round(x[:6], 2).tolist(), round(time.time() - t0, 1), 's', flush=True)
+    dig = {}
+    for f in ('middle', 'ring', 'little'):      # close on the grip where they can, clear of the trigger guard
+        q, free = S.wrap(f, q, Hh, iters=220, curl=0.06); dig[f] = 0.0 if free else 30.0
+    q = S.relax(q, Hh); S.motion = None
+    thumbs = {int(f): x[6 + 5 * k:11 + 5 * k].copy() for k, f in enumerate(SELECT_FRAMES)}; exact = {}
+    for k, f in enumerate(SELECT_FRAMES):
+        c = q.copy(); c[ti] = thumbs[int(f)]; S.motion = MO[k]; Sk = S.skin(c, Hh); T = TR[k]
+        exact[int(f)] = (round(float(tri_dist(h.pose_shell('thumb', Sk), T[:, 0][None], T[:, 1][None], T[:, 2][None]).min()), 2), round(float(sum(S.pen(g_, Sk) for g_ in S.grp)), 2))
+    S.motion = MO[0]; Sk = S.skin(q, Hh); d = dict(q=q, H=Hh, side='R', attach='socket_hand_right', x=x[:6].copy(), thumb_frames=thumbs, score=float(fx), terms={k: round(float(u), 2) for k, u in v.items()},
+                                                  digits=dict(dig, index=0.0, thumb=float(max(e[0] for e in exact.values()))), gaps={'thumb_glove_to_lever_frame_%d' % f: e[0] for f, e in exact.items()},
+                                                  inside_rifle={'frame_%d' % f: e[1] for f, e in exact.items()}, min_sdf=min(float(S.sdf(S.pts(g_, Sk)).min()) for g_ in S.grp),
+                                                  move_mm=round(float(np.linalg.norm(x[:3])), 1), turn_deg=round(float(np.linalg.norm(x[3:6])), 1), seconds=round(time.time() - t0, 1))
+    S.motion = None; S.keepout = None; d['F'], d['wrist'], d['limit_violation_deg'] = S.best_swivel('R', Hh)
+    if verbose: print('  select: wrist moved %.1f mm, hand turned %.1f deg; thumb glove to lever (mm), inside rifle: %s; fingers %s; arm %s viol %.1f  %.0f s' % (d['move_mm'], d['turn_deg'], exact, dig, {k: round(float(u)) for k, u in d['wrist'].items()}, d['limit_violation_deg'], d['seconds']), flush=True)
+    return d
+SPECS = dict(fire_indexed=spec_fire_indexed, fire=spec_fire, fire_reach=spec_fire_reach, support=spec_support, mag_grip=spec_mag_grip, catch_ready=spec_catch_ready, charge_grip=spec_charge_grip, fire_select=spec_fire_select)
 
 def real_matrix(side, M): return hl.mirror_mats(M) if side == 'R' else M
 RAW = os.path.join(HERE, 'refs-local', 'build', 'grips_raw.npz')
@@ -406,6 +489,7 @@ if __name__ == '__main__':
     for name, fn in SPECS.items():
         if sel and not any(name == s or (s.endswith('*') and name.startswith(s[:-1])) for s in sel): continue
         print(name, flush=True); spec = fn(**kw); st = spec.get('state'); motion = S.r.motion(*st) if st else None
+        if spec.get('select'): g = solve_select(S, res['fire_indexed']); g['state'] = None; res[name] = g; np.savez(RAW, g=np.array(res, dtype=object)); continue
         if 'fit' in spec and 'seed' in spec['fit']: sd = res[spec['fit']['seed']]; spec['fit']['seed_pose'] = (sd['H'], sd['q'], sd['wrist']['swivel'])
         st0 = res.get(spec.get('start')); g = S.solve(spec, iters=IT, motion=motion, H_fixed=st0['H'] if st0 else None, q_fixed=st0['q'] if st0 else None); g.pop('S'); g['state'] = st; res[name] = g
         np.savez(RAW, g=np.array(res, dtype=object))
