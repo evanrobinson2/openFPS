@@ -33,6 +33,7 @@
     <label>Shell <select id="shell"><option value="buck00">00 buck, 9 pellets</option><option value="slug">1 oz slug</option></select></label>
     <label>Stance <select id="stance"><option value="shoulder">Shoulder</option><option value="hip">Hip</option></select></label>
     <label>Target at <select id="range"><option>7</option><option selected>15</option><option>25</option><option>40</option></select></label>
+    <label>Sound <select id="mode"><option value="cinematic">Cinematic (default)</option><option value="realistic">Realistic (simulation)</option></select></label>
     <label>Volume <input type="range" id="vol" min="0" max="1" step="0.01" value="0.25"></label>
     <label>Slow motion <select id="slow"><option value="1">Real time</option><option value="4">4×</option><option value="12">12×</option></select></label>
   </div>
@@ -62,7 +63,8 @@ function audio() { if (!AC) { AC = new (window.AudioContext || window.webkitAudi
 $('vol').oninput = () => { if (master) master.gain.value = +$('vol').value; };
 // The shot is about 50 dB louder than the rack in the simulation. For a page, play every sound normalised and set a mix by hand.
 const MIX = { shot: 1.0, pump: 0.22, dry_fire: 0.12, shell_insert: 0.08, safety: 0.04 };
-function play(name, mix) { const ac = audio(); S.play(ac, name, { normalize: true, gain: mix, destination: master }); }
+// Sound mode: 'cinematic' (the default) is the designed sound with its own mix; 'realistic' is the simulated sound, normalised and mixed by MIX.
+function play(name, mix) { const ac = audio(); S.play(ac, name, $('mode').value === 'realistic' ? { mode: 'realistic', normalize: true, gain: mix, destination: master } : { destination: master }); }
 function log(evts) { if (!evts.length) return; const el = $('log'); el.textContent += evts.map((e) => e.type + (e.why ? ' (' + e.why + ')' : '') + (e.load ? ' ' + e.load : '')).join(' → ') + '\n'; el.scrollTop = el.scrollHeight; }
 function state() {
   const sh = (s) => s ? s.load + (s.fired ? ' (fired)' : '') : 'empty';

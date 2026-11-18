@@ -14,7 +14,7 @@ and recoil drawn from the model's own part boxes, pellet holes on a target, a do
 |---|---|
 | Action and recoil (`action/`) | Ready. The mechanism passes the manual's function test, loading and unloading procedures; recoil matches the SAAMI momentum balance. Shooter coupling and stroke timing are tuning. |
 | Ballistics (`ballistics/`) | Ready. The slug matches the maker's published table within 0.55 % in velocity and 0.04 in in path. The buckshot pattern is calibrated to a published rule of thumb, not to a measured pattern of this load. |
-| Sound (`sound/`) | Version 3. Thirty-three synthesised sounds; levels, duration, spectrum and B-duration checked against published 12 gauge measurements; the JavaScript matches the Python to rounding. Not checked by listening. |
+| Sound (`sound/`) | Cinematic mode is the default (designed sound, measured, **not yet heard by the owner**); the physical simulation is mode `'realistic'`. Version 3. Thirty-three synthesised sounds; levels, duration, spectrum and B-duration checked against published 12 gauge measurements; the JavaScript matches the Python to rounding. Not checked by listening. |
 | Geometry (`model/`) | Ready as a recipe: 40 named parts, 10 clips, 14 sockets, one level of detail, flat materials. Right-side silhouette against the reference: IoU 0.974. **Open:** the photo cannot satisfy both the published overall length (used) and the published barrel length; widths and internal shapes are inferred. See `notes/NOTES.md`. |
 
 ## Run the sample
@@ -57,6 +57,33 @@ const p = A.pose(gun.slide, s.forward);                    // slideZ, boltZ, bol
 ```
 
 Full APIs: `action/README.md`, `ballistics/README.md`, `sound/README.md`.
+
+### Sound: cinematic by default
+
+Since 2026-11-17 `S.play()` plays a **designed, game-style sound** (mode `'cinematic'`): for a shot, a crack, a dense
+broadband body, a deep falling thump, a long tail that follows the surroundings and a compressed bus; for the pump, a
+two-stroke rack with the action's own event times, close and forward in the mix. It is the heaviest gun of the set by
+design. The owner's defect report on the simulated shot was "like I punched a bucket": the cinematic shot has no
+resonant filter and no decaying tone, and the receiver, barrel and stock modes stay out of it (they remain in the
+pump). The physical simulation is unchanged and plays with `{ mode: 'realistic' }`; `render()` and `buffer()` always
+return it. The same object as the other guns is also available:
+
+```js
+const G = await Shotgun590Sound.build(audioCtx);          // or { mode: 'realistic' }
+const chain = await G.chain({ overlay: 'range' });        // 'range' (default), 'room', 'covered', 'field'; null = no tail
+chain.output.connect(audioCtx.destination);
+chain.fire({ key: 'buck00' });                            // or 'slug'
+chain.mech('pump');                                       // the rack on its own; also 'pump_back', 'pump_forward', 'shell_insert', 'dry_fire', ...
+chain.fire({ pump: true });                               // the shot, then the rack 0.45 s later
+await chain.set({ distance: 50, bearing: 'side' });       // heard 50 m away
+await chain.set({ hpd: true });                           // earmuffs
+await chain.set({ mode: 'realistic' });                   // the physical simulation
+```
+
+With `S.play(ac, name)` the old names choose the cinematic sound: `shot_slug_shooter_room` is the slug in the room,
+`shot_buck00_range_front_50m` the buckshot 50 m away, `pump` the rack. `normalize` is ignored in cinematic mode (the mix
+is designed); `gain`, `when` and `destination` work as before, and `pump: true` adds the rack.
+Design, full API, measurements and limits: [`shared/cinematic-sound/README.md`](../../shared/cinematic-sound/README.md).
 
 ### Sound: which shot to play
 

@@ -71,3 +71,35 @@ no energy between 10 and 50 ms and only 10 to 16 % between 2 and 10 ms. Benches,
 fill that, but their presence and place at the recorded range are unknown, and I did not invent them.
 
 **Results** are in `sound/README.md` (version 3 table) and `sound/compare/checks.json` (`outdoor_range`).
+
+## Sound change request 3 (2026-11-17, from the owner, through the coordinating session): cinematic sound, and "I punched a bucket"
+
+**Request.** The owner, on the physical shots of all three guns: "like a click on a keyboard or a crackle"; an FPS
+needs designed sound because the sound at the shooter's ear cannot be reproduced on speakers; "don't copy the mp3,
+we're simulating". On this gun: "yours sounds like I punched a bucket". He pointed to a VR game's pump shotgun as
+the kind of result he wants: genre direction only, not heard, not looked up, not imitated. Wanted: the heaviest gun
+of the set, a deep boom, a dense broadband blast, a long tail, nothing hollow or ringing on the shot, and the pump
+as a featured two-stroke rack that also works on its own.
+
+**Diagnosis of the bucket (an inference: nobody measured what the owner heard).** The simulated shot carries 24
+structural modes (196 Hz to 5.9 kHz, decaying for up to 90 ms) that start at the hammer fall and at shot exit, and its
+surroundings add early reflections from 4.2 ms on. Normalised and played on speakers, with the blast itself too short
+to hear, what remains is those tones and that comb. The same narrow-peak measure used for the cinematic shot (one
+render, since the simulated shot has no seed to vary) gives, in the first 100 ms: 3.6 dB at 1166 Hz for the default
+shot, 4.1 dB at 801 Hz in the room (that band takes 326 ms to fall 20 dB, the band below it 163 ms), and 4.4 dB at
+1386 Hz in the free field, with 7.0 dB at 1200 Hz in the free field's tail.
+
+**What changed.**
+
+| | Before | Now |
+|---|---|---|
+| Default of `play()` | the simulated sound | the cinematic sound (`shared/cinematic-sound/`); `{ mode: 'realistic' }` plays the simulated one |
+| Modes on the shot | 24, from the hammer fall | none in the cinematic shot; they stay in the pump and in `realistic` |
+| Body | the blast wave and reflections | broadband noise, no resonant filter, two decay rates (48 and 142 ms) |
+| Low end | none below 250 Hz to speak of (40 to 120 Hz at -25 dB of the total) | a thump falling from 151 Hz through 47 Hz with harmonics (40 to 120 Hz at -4.5 dB) |
+| Tail | 133 ms to -40 dB | 1207 ms outdoors, 1433 ms in the room |
+| Pump | the simulated rack | the same rack plus weight, clack and sliding noise on the action's events; 19.5 dB between the strokes |
+| API | `load`, `render`, `buffer`, `play` | the same, plus `build()` returning the object the other guns return |
+
+**Unchanged.** `params.json`, `sim.py`, `render()`, `buffer()`: all 33 simulated sounds are bit-identical to commit
+aa037ac. **Not done:** no listening test; the cinematic constants are design choices, not physics.

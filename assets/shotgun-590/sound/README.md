@@ -22,6 +22,38 @@ Needs Python 3 with numpy and matplotlib (scipy is used if present), and node fo
 | `verify_js.py`, `verify_js.mjs` | the parity check |
 | `compare/` | `checks.json` (model against published figures), `bands.json` and `bands_v1.json` (band envelopes of this version and the last), `levels.json`, `js_parity.json`, `waveforms.png` (simulation only) |
 
+## Cinematic mode (the default since 2026-11-17)
+
+Two owner reports led here. On every gun's physical shot: "like a click on a keyboard or a crackle", and the decision
+that a game needs designed sound. On this gun's: "yours sounds like I punched a bucket", read as narrow resonances
+between 200 Hz and 1 kHz, modes ringing on the shot, and too little broadband weight. The owner named a VR game's pump
+shotgun as the kind of result he wants; that is genre direction only: nobody here listened to it or looked it up.
+
+`Shotgun590Sound.play()` and `Shotgun590Sound.build()` now default to the shared designed synthesis in
+[`shared/cinematic-sound/`](../../../shared/cinematic-sound/README.md), sized by this gun's simulation: muzzle energy
+2569 J (slug 3417 J), gas energy 4128 J (6376 J), 18.5 mm bore, 508 mm barrel, 1.75 g charge, the physical blast and jet
+as the crack, the pump's nine action events as the rack. It is the largest gun of the set by design (size 0.93; thump
+falling from 151 Hz through 47 Hz; thump decay 135 ms; roar 142 ms; the longest tail).
+
+- **Nothing in the shot rings.** The body is broadband noise with 6 dB/octave skirts, the thump is a sine whose pitch never
+  settles, with second and third harmonics, and echoes are smears of noise. The simulated shot's 24 receiver, barrel,
+  magazine-tube and stock modes are not in the cinematic shot (`adapter.physical` keeps the blast wave and the jet only).
+- **Narrow-peak check** (1/12-octave bands against the 1/3-octave smoothed spectrum, 150 Hz to 2 kHz, eight seeds, limit
+  4 dB set beforehand): 1.35 dB in the first 100 ms and 3.54 dB in the tail outdoors; 0.99 and 2.46 dB in the room. The
+  worst band falls 20 dB in 515 ms against 519 and 524 ms for its neighbours (first 100 ms) and 192 against 217 and 333 ms
+  (tail): no band outlasts its neighbours.
+- **The shot, outdoors, on the page's chain:** 0.4 % of the energy in the first 2 ms, 56 % between 50 and 300 ms, crest
+  6.4 dB, level down 20 dB after 571 ms, audible tail 1207 ms, 40 to 120 Hz at -4.5 dB and 120 to 300 Hz at -6.2 dB of the
+  total, peak -2.2 dBFS, no clipped sample. Loudest of the three guns by 5.6 dB (HK416) and 7.8 dB (G44 V).
+- **The pump** is the simulated rack (its modes belong here) at 60 % plus designed weight on each of the action's events:
+  a clack whose brightness follows the contact time, a thud for the slide's two stops (0.635 kg at 1.1 and 1.0 m/s), and
+  sliding noise on both strokes. Back stroke at 0.150 s and forward stroke at 0.330 s (the action's times), 19.5 dB of
+  gap between them, 5.2 dB under the shot in the mix. `pump_back` and `pump_forward` are the two halves.
+- Mode `'realistic'` is everything described below, unchanged: all 33 sounds bit-identical to the merged commit, and
+  `play(..., { mode: 'realistic' })` identical sample for sample in the browser.
+- `CINE_SIM` in `shotgun590-sound.js` holds the values copied from `action/` and `ballistics/`; `node
+  shared/cinematic-sound/check.mjs` fails if they drift. The slug's length (25 mm) is a guess, used only to size its crack.
+
 ## Version 3: the outdoor range
 
 Version 2 made a room the default shot. Version 3 adds an outdoor range and makes it the default; the room shot is

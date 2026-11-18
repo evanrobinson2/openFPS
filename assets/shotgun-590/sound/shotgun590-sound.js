@@ -100,12 +100,104 @@
     for (var i = 0; i < y.length; i++) ch[i] = y[i] * k;
     return buf;
   }
-  function play(ac, name, opts) {
+  function playRealistic(ac, name, opts) {
     var o = opts || {}, src = ac.createBufferSource(), g = ac.createGain();
     src.buffer = buffer(ac, name, o); g.gain.value = o.gain != null ? o.gain : 1; src.connect(g); g.connect(o.destination || ac.destination); src.start(o.when || 0);
     return src;
   }
-  var api = { use: use, load: load, names: function () { return Object.keys(need().sounds); }, info: info, render: render, renderSound: renderSound, buffer: buffer, play: play, fullScalePa: 0,
+
+  /* ---- cinematic mode (the default since 2026-11-17): the designed sound of shared/cinematic-sound/cinematic-sound.js, sized by this gun's simulation.
+   * The realistic sounds above are unchanged and are what mode 'realistic' plays. */
+  var SELF_URL = (typeof document !== 'undefined' && document.currentScript && document.currentScript.src) || null;
+  var CS_URL = SELF_URL ? new URL('../../../shared/cinematic-sound/cinematic-sound.js', SELF_URL).href : null, csWait = null;
+  function cinematicLib() {            // the shared module: already loaded, or required (Node), or fetched once by a script tag
+    var g = typeof globalThis !== 'undefined' ? globalThis : this;
+    if (g.OpenFPSCinematicSound) return g.OpenFPSCinematicSound;
+    if (typeof module === 'object' && module.exports && typeof require === 'function') return require('../../../shared/cinematic-sound/cinematic-sound.js');
+    return null;
+  }
+  function cinematicReady() {
+    if (cinematicLib()) return Promise.resolve(cinematicLib());
+    if (!csWait) csWait = new Promise(function (res, rej) { if (!CS_URL) return rej(new Error('Shotgun590Sound: load shared/cinematic-sound/cinematic-sound.js first')); var el = document.createElement('script'); el.src = CS_URL; el.onload = function () { res(cinematicLib()); }; el.onerror = function () { rej(new Error('Shotgun590Sound: could not load ' + CS_URL)); }; document.head.appendChild(el); });
+    return csWait;
+  }
+  if (CS_URL) cinematicReady().catch(function () {});
+  /* Simulation values the design reads. Copied from action/action.json and ballistics/ballistics.json (the sound module does not load them);
+   * shared/cinematic-sound/check.mjs fails if they drift. supersonic_to_m: where the ballistics table falls below 343.2 m/s.
+   * bullet_len_mm: a pellet's diameter; for the slug 25 mm is a guess (the maker does not publish it). */
+  var CINE_SIM = {
+    buck00: { muzzle_energy_J: 2568.7, muzzle_velocity: 403.86, bore_mm: 18.5, barrel_mm: 508, bullet_diam_mm: 8.382, bullet_len_mm: 8.382, supersonic_to_m: 18.6 },
+    slug: { muzzle_energy_J: 3417.4, muzzle_velocity: 490.73, bore_mm: 18.5, barrel_mm: 508, bullet_diam_mm: 18.5, bullet_len_mm: 25, supersonic_to_m: 94.1 }
+  };
+  var OVERLAYS = { range: 'outdoor', covered: 'outdoor', field: 'outdoor', room: 'indoor' };          // design label: which kind of tail each of the simulation's surroundings gets
+  function soundName(load, listener, env) { return 'shot_' + load + '_' + (listener || 'shooter') + (env && env !== 'range' ? '_' + env : ''); }
+  function parseName(name) {
+    var m = /^shot_(buck00|slug)_(shooter|bystander)(?:_(room|covered|field|free))?$/.exec(name);
+    if (m) return { key: m[1], overlay: m[3] === 'free' ? null : (m[3] || 'range'), distance: m[2] === 'bystander' ? 5 : 0, bearing: 'side' };
+    m = /^shot_(buck00|slug)_range_(side|front)_(\d+)m$/.exec(name);
+    if (m) return { key: m[1], overlay: 'range', distance: +m[3], bearing: m[2] };
+    return null;
+  }
+  function adapter(ac) {
+    var d = need(), fs = d.fs, pumpMax = 0.6349 * 1.114;
+    return {
+      id: 'shotgun-590', fs: fs, defaultKey: 'buck00', defaultOverlay: 'range', pumpClip: 'pump', builtSuppressed: null,
+      sim: function (key) { var s = d.shot_source[key], c = CINE_SIM[key]; return { muzzle_energy_J: c.muzzle_energy_J, gas_energy_J: s.gas_energy_J, gas_mass_g: s.charge_kg * 1000, bore_mm: c.bore_mm, barrel_mm: c.barrel_mm, muzzle_velocity: c.muzzle_velocity, cyclic_period_s: null, bullet_diam_mm: c.bullet_diam_mm, bullet_len_mm: c.bullet_len_mm, supersonic_to_m: c.supersonic_to_m }; },
+      times: function (key) { return { base: key, times: [0] }; },
+      perspective: function (p) { return p === 'bystander' ? { distance: 5, bearing: 'side' } : p === 'shooter' ? { distance: 0, bearing: 'front' } : null; },
+      /* the physical blast alone: the blast wave and the gas jet of the free-field shot. The receiver, barrel and stock modes of the
+       * simulated shot are left out on purpose: in the cinematic shot they read as a struck box. They stay in the pump and in 'realistic'. */
+      physical: function (key) { var s = info(soundName(key, 'shooter', 'free')), comps = s.components.filter(function (c) { return c.kind === 'friedlander' || c.kind === 'jet'; }); return { blast: renderSound({ duration: s.duration, components: comps }, fs, d.filters), mech: null }; },
+      suppression: function () { return 0; },
+      mechClip: function (name) {
+        var s = info(name), ev = (s.events || []).map(function (e) { return { t: e.t, w: e.mass_kg * e.speed / pumpMax, ms: e.contact_ms, name: e.event }; }), slides = [], at = function (n) { for (var i = 0; i < ev.length; i++) if (ev[i].name === n) return ev[i].t; return null; };
+        var rs = at('rear_stop'), lk = at('locked'), un = at('unlock');
+        if (rs !== null) slides.push({ t0: Math.max(0, (un === null ? rs - 0.11 : un) - 0.03), t1: rs, w: 1 });                 // the forend coming back
+        if (lk !== null) slides.push({ t0: rs !== null ? rs + 0.02 : Math.max(0, lk - 0.16), t1: lk, w: 1 });                      // and going forward (0.02 s dwell: action.json stroke_dwell)
+        return { phys: render(name), events: ev, slides: slides };
+      },
+      env: function (ov) {
+        if (!ov || ov === 'dry' || ov === 'free' || !OVERLAYS[ov]) return null;
+        var su = info(soundName('buck00', 'shooter', ov)).surroundings || {}, slaps = [];
+        if (su.berm_arrives_ms) slaps.push({ t: su.berm_arrives_ms / 1000, db: su.berm_energy_db_re_direct });
+        if (su.trees_first_ms) slaps.push({ t: su.trees_first_ms / 1000, db: su.trees_energy_db_re_direct });
+        var rt = su.t60_s ? (su.t60_s[0] + su.t60_s[1] + su.t60_s[2]) / 3 : su.scattered_decay_ms ? 6.908 * su.scattered_decay_ms / 1000 : 0;
+        return { kind: OVERLAYS[ov], rt60: rt, slaps: slaps };
+      },
+      realShot: function (key, o) { o = o || {}; var p = parseName(key); if (p) return buffer(ac, key, { normalize: true }); var ov = 'overlay' in o && o.overlay !== undefined ? o.overlay : 'range'; return buffer(ac, soundName(key, o.perspective === 'bystander' ? 'bystander' : 'shooter', ov === null || ov === 'dry' ? 'free' : ov), { normalize: true }); },
+      realMech: function (name) { return buffer(ac, name, { normalize: true }); },
+      realChain: function (o, cx) { var a = cx.createGain(), b = cx.createGain(); if (o.hpd) { var lo = cx.createBiquadFilter(), hi = cx.createBiquadFilter(); lo.type = 'lowshelf'; lo.frequency.value = 250; lo.gain.value = -15; hi.type = 'highshelf'; hi.frequency.value = 1000; hi.gain.value = -18; a.connect(lo); lo.connect(hi); hi.connect(b); b.gain.value = 4; } else a.connect(b); return { input: a, output: b }; },
+      hpd: null
+    };
+  }
+  /* The same object every openFPS gun returns: S.build(ctx, { mode: 'cinematic' | 'realistic', params: url or parsed json }) -> Promise of
+   * { mode, setMode(m), shot(load, o), mech(clip, o), chain(o), info(buffer), design(load), loads, overlays, clips, defaultOverlay }.
+   * See README.md ("Cinematic mode") for chain.fire(), chain.mech(), chain.set(). */
+  function build(ac, opts) {
+    opts = opts || {};
+    var p = opts.params ? (typeof opts.params === 'string' ? load(opts.params) : Promise.resolve(use(opts.params))) : D ? Promise.resolve(api) : load(SELF_URL ? new URL('params.json', SELF_URL).href : 'params.json');
+    return Promise.all([p, cinematicReady()]).then(function (r) { return gunFor(ac, opts.mode); });
+  }
+  var guns = typeof WeakMap === 'function' ? new WeakMap() : null;
+  function gunFor(ac, mode) {
+    var CS = cinematicLib(), A = adapter(ac), G = CS.makeGun(ac, A, { mode: mode });
+    G.loads = Object.keys(need().shot_source); G.overlays = Object.keys(OVERLAYS); G.clips = ['pump', 'pump_back', 'pump_forward', 'dry_fire', 'shell_insert', 'safety', 'action_release']; G.defaultOverlay = 'range'; G.params = need(); G.raw = api;
+    return G;
+  }
+  /* play(): cinematic by default. Shot names are mapped onto the cinematic shot (load, surroundings, listener distance); the other names are
+   * the cinematic mechanical clips. { mode: 'realistic' } plays the simulated sound exactly as before. */
+  function play(ac, name, opts) {
+    var o = opts || {}, CS = cinematicLib();
+    if (o.mode === 'realistic' || !CS || !guns) return playRealistic(ac, name, o);
+    var st = guns.get(ac); if (!st) { st = { gun: gunFor(ac), chains: new Map() }; guns.set(ac, st); }
+    var dest = o.destination || ac.destination, ch = null; st.chains.forEach(function (c, d2) { if (d2 === dest) ch = c; });
+    if (!ch) { ch = st.gun.chain({ overlay: 'range' }); ch.output.connect(dest); st.chains.set(dest, ch); }
+    var p = parseName(name), when = o.when || ac.currentTime;
+    if (!p) return ch.mech(name, { when: when, gain: o.gain }).source;
+    if (ch.opts.overlay !== p.overlay || (ch.opts.distance || 0) !== p.distance || ch.opts.bearing !== p.bearing || !!ch.opts.hpd !== !!o.hpd) ch.set({ overlay: p.overlay, distance: p.distance, bearing: p.bearing, hpd: !!o.hpd });
+    return ch.fire({ key: p.key, when: when, gain: o.gain, pump: o.pump }).source;
+  }
+  var api = { use: use, load: load, names: function () { return Object.keys(need().sounds); }, info: info, render: render, renderSound: renderSound, buffer: buffer, play: play, playRealistic: playRealistic, build: build, cinematicReady: cinematicReady, CINE_SIM: CINE_SIM, fullScalePa: 0,
               get data() { return D; } };
   return api;
 });

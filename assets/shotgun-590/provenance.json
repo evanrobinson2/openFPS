@@ -26,6 +26,11 @@
       "part": "sample page, notes and manual summary (sample/, notes/)",
       "model": "Claude Fable 5.2",
       "date": "2026-11-17"
+    },
+    {
+      "part": "cinematic sound mode (sound/shotgun590-sound.js adapter; shared/cinematic-sound/)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
     }
   ],
   "reviewed_by": [],
