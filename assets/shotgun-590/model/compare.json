@@ -1,0 +1,135 @@
+{
+ "method": "silhouettes in the photo pixel grid; photo mask = luminance < 200, model mask = render alpha > 0.5; mm = px * 0.9563",
+ "iou": 0.9737,
+ "photo_px": 77691,
+ "model_px": 77033,
+ "only_photo_px": 1361,
+ "only_model_px": 703,
+ "length_mm": {
+  "photo": 1041.4,
+  "model": 1040.4
+ },
+ "top_edge_mm": {
+  "mean_abs": 0.28,
+  "p95_abs": 0.96,
+  "max_abs": 4.78,
+  "worst_photo_x": 374
+ },
+ "bottom_edge_mm": {
+  "mean_abs": 1.01,
+  "p95_abs": 2.87,
+  "max_abs": 25.82,
+  "worst_photo_x": 29
+ },
+ "regions": [
+  {
+   "region": "butt and pad",
+   "photo_x": [
+    20,
+    130
+   ],
+   "iou": 0.983,
+   "photo_px": 11730,
+   "model_px": 11748,
+   "only_photo_px": 92,
+   "only_model_px": 110
+  },
+  {
+   "region": "stock",
+   "photo_x": [
+    130,
+    300
+   ],
+   "iou": 0.987,
+   "photo_px": 15441,
+   "model_px": 15322,
+   "only_photo_px": 158,
+   "only_model_px": 39
+  },
+  {
+   "region": "wrist",
+   "photo_x": [
+    300,
+    365
+   ],
+   "iou": 0.974,
+   "photo_px": 3926,
+   "model_px": 3886,
+   "only_photo_px": 71,
+   "only_model_px": 31
+  },
+  {
+   "region": "receiver rear, trigger guard",
+   "photo_x": [
+    365,
+    470
+   ],
+   "iou": 0.925,
+   "photo_px": 7506,
+   "model_px": 7319,
+   "only_photo_px": 384,
+   "only_model_px": 197
+  },
+  {
+   "region": "receiver front, port",
+   "photo_x": [
+    470,
+    580
+   ],
+   "iou": 0.983,
+   "photo_px": 7453,
+   "model_px": 7446,
+   "only_photo_px": 69,
+   "only_model_px": 62
+  },
+  {
+   "region": "barrel root, action bars",
+   "photo_x": [
+    580,
+    683
+   ],
+   "iou": 0.98,
+   "photo_px": 6024,
+   "model_px": 6087,
+   "only_photo_px": 29,
+   "only_model_px": 92
+  },
+  {
+   "region": "forend",
+   "photo_x": [
+    683,
+    905
+   ],
+   "iou": 0.98,
+   "photo_px": 14500,
+   "model_px": 14385,
+   "only_photo_px": 201,
+   "only_model_px": 86
+  },
+  {
+   "region": "barrel, tube, lug band",
+   "photo_x": [
+    905,
+    1055
+   ],
+   "iou": 0.971,
+   "photo_px": 7984,
+   "model_px": 7805,
+   "only_photo_px": 207,
+   "only_model_px": 28
+  },
+  {
+   "region": "ring, cap, muzzle",
+   "photo_x": [
+    1055,
+    1125
+   ],
+   "iou": 0.935,
+   "photo_px": 3127,
+   "model_px": 3035,
+   "only_photo_px": 150,
+   "only_model_px": 58
+  }
+ ],
+ "not_measured": "interior detail, materials, colour and lighting are compared by eye only (notes/COMPARE.md); nothing lateral can be compared: there is no top or front reference"
+}
