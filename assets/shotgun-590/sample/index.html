@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shotgun 590 sample</title>
+<style>
+  :root { --fg:#e9eef2; --dim:#9aa6b0; --acc:#ffb347; --acc2:#6cc3ff; --bg:#0d1014; --panel:#161b21; --line:#2a323b; }
+  html,body { margin:0; background:var(--bg); color:var(--fg); font:14px/1.45 ui-monospace,Menlo,monospace; }
+  main { max-width:1040px; margin:0 auto; padding:20px 16px 48px; }
+  h1 { font-size:20px; margin:0 0 4px; } h2 { font-size:15px; margin:22px 0 6px; } p { color:var(--dim); margin:4px 0 12px; }
+  .row { display:flex; flex-wrap:wrap; gap:10px 12px; align-items:end; background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:12px; }
+  label { display:grid; gap:4px; color:var(--dim); font-size:12px; }
+  select,button,input[type=range] { font:inherit; color:var(--fg); background:#0f1318; border:1px solid var(--line); border-radius:6px; padding:6px 8px; }
+  button { cursor:pointer; } button.go { border-color:var(--acc); color:var(--acc); } button:disabled { opacity:.4; cursor:default; }
+  canvas { width:100%; display:block; background:#07090c; border:1px solid var(--line); border-radius:8px; margin-top:10px; }
+  table { border-collapse:collapse; width:100%; margin-top:8px; font-size:13px; } th,td { border-bottom:1px solid var(--line); padding:5px 8px; text-align:right; } th:first-child,td:first-child { text-align:left; }
+  .wrap { overflow-x:auto; } #status,#state { color:var(--dim); margin-top:8px; } #log { color:var(--dim); font-size:12px; height:5.8em; overflow:auto; background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:8px; margin-top:10px; white-space:pre-wrap; }
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:12px; } @media (max-width:760px) { .two { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Pump shotgun, 12 gauge: simulation sample</h1>
+  <p>Everything on this page is computed from the asset's simulations: the mechanism and recoil come from <code>action/shotgun590-action.js</code>, the pellets and the slug from <code>ballistics/shotgun590-ballistics.js</code>, and the sound is synthesised by <code>sound/shotgun590-sound.js</code>. No recordings, no mesh files. Nothing plays until you press a button; start with the volume low.</p>
+
+  <div class="row">
+    <button id="load">Load a shell</button>
+    <button class="go" id="fire">Pull the trigger</button>
+    <button id="pump">Pump</button>
+    <button id="safety">Safety</button>
+    <button id="unload">Unload</button>
+    <label>Shell <select id="shell"><option value="buck00">00 buck, 9 pellets</option><option value="slug">1 oz slug</option></select></label>
+    <label>Stance <select id="stance"><option value="shoulder">Shoulder</option><option value="hip">Hip</option></select></label>
+    <label>Target at <select id="range"><option>7</option><option selected>15</option><option>25</option><option>40</option></select></label>
+    <label>Volume <input type="range" id="vol" min="0" max="1" step="0.01" value="0.25"></label>
+    <label>Slow motion <select id="slow"><option value="1">Real time</option><option value="4">4×</option><option value="12">12×</option></select></label>
+  </div>
+  <div id="status">Loading the simulations…</div>
+  <div id="state"></div>
+
+  <h2>Mechanism and recoil</h2>
+  <canvas id="gun" width="1000" height="300"></canvas>
+  <div id="log"></div>
+
+  <div class="two">
+    <div><h2>Target (yards as selected; 18 × 30 in plate)</h2><canvas id="target" width="480" height="480"></canvas></div>
+    <div><h2>Recoil of the last shot</h2><canvas id="plot" width="480" height="480"></canvas></div>
+  </div>
+
+  <h2>Downrange, level bore</h2>
+  <div class="wrap"><table id="tab"></table></div>
+</main>
+<script src="../action/shotgun590-action.js"></script>
+<script src="../ballistics/shotgun590-ballistics.js"></script>
+<script src="../sound/shotgun590-sound.js"></script>
+<script>
+const $ = (id) => document.getElementById(id);
+const A = window.Shotgun590Action, B = window.Shotgun590Ballistics, S = window.Shotgun590Sound;
+let AC = null, master = null, gun = null, INV = null, anim = null, shotT0 = null, lastLoad = 'buck00', holes = [], seed = 1;
+function audio() { if (!AC) { AC = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 48000 }); master = AC.createGain(); master.gain.value = +$('vol').value; master.connect(AC.destination); } AC.resume(); return AC; }
+$('vol').oninput = () => { if (master) master.gain.value = +$('vol').value; };
+// The shot is about 50 dB louder than the rack in the simulation. For a page, play every sound normalised and set a mix by hand.
+const MIX = { shot: 1.0, pump: 0.22, dry_fire: 0.12, shell_insert: 0.08, safety: 0.04 };
+function play(name, mix) { const ac = audio(); S.play(ac, name, { normalize: true, gain: mix, destination: master }); }
+function log(evts) { if (!evts.length) return; const el = $('log'); el.textContent += evts.map((e) => e.type + (e.why ? ' (' + e.why + ')' : '') + (e.load ? ' ' + e.load : '')).join(' → ') + '\n'; el.scrollTop = el.scrollHeight; }
+function state() {
+  const sh = (s) => s ? s.load + (s.fired ? ' (fired)' : '') : 'empty';
+  $('state').textContent = `chamber: ${sh(gun.chamber)}   magazine: ${gun.tube.length} of ${gun.capacity}   safety: ${gun.safety ? 'ON (safe)' : 'OFF (fire)'}   hammer: ${gun.hammerCocked ? 'cocked' : 'down'}   action: ${gun.slide === 0 ? (gun.actionLocked ? 'closed, locked' : 'closed, free') : 'open'}`;
+}
+
+// ---------------------------------------------------------------- the gun, drawn from the model's own part boxes (model/inventory.json)
+function drawGun(pose, rec) {
+  const c = $('gun').getContext('2d'), W = 1000, H = 300; c.clearRect(0, 0, W, H);
+  const px = 0.86, ox = 500, oy = 78, P = INV.parts;
+  const piv = rec ? rec.pivot : [0, 0, 0];
+  c.save(); c.translate(ox + (piv[2] + (rec ? rec.pos[2] : 0)) * 1e3 * px, oy - piv[1] * 1e3 * px); c.rotate(-(rec ? rec.pitch : 0)); c.translate(-piv[2] * 1e3 * px, piv[1] * 1e3 * px);
+  const box = (n, dz, col, fill) => { const b = P[n].bbox_mm; c.beginPath(); c.rect((b.z[0] + dz) * px, -b.y[1] * px, (b.z[1] - b.z[0]) * px, (b.y[1] - b.y[0]) * px); if (fill) { c.fillStyle = col; c.fill(); } else { c.strokeStyle = col; c.stroke(); } };
+  c.lineWidth = 1.5;
+  for (const n of ['stock', 'recoil_pad', 'receiver', 'barrel', 'magazine_tube', 'magazine_cap', 'trigger_guard', 'barrel_ring', 'lug_band']) box(n, 0, '#3a4652');
+  const sz = pose.slideZ * 1e3, bz = pose.boltZ * 1e3;
+  box('forend', sz, '#ffb347', true); box('action_bar_right', sz, '#b37d33', true); box('bolt_slide', sz, '#3f7fa8', true); box('bolt', bz, '#6cc3ff', true);
+  // shells: chambered, on the elevator, in the magazine
+  const L = INV.shell.length, r = INV.shell.body_r, ty = INV.params.tube_y, br = INV.params.breech;
+  const shell = (z, y, col) => { c.fillStyle = col; c.fillRect(z * px, (-y - r) * px, L * px, 2 * r * px); c.fillStyle = '#d0a040'; c.fillRect(z * px, (-y - r) * px, 14 * px, 2 * r * px); };
+  const col = (s) => s.load === 'slug' ? '#2f8f4f' : '#b8322e';
+  if (gun.chamber) shell(br + (gun.slide > 0 ? bz : 0), 0, gun.chamber.fired ? '#5a5a5a' : col(gun.chamber));
+  if (gun.lifter) shell(-8 - L, ty * (1 - (pose.elevator / (A.data.cycle.kinematics.elevator_deg_raised * Math.PI / 180) || 0)), col(gun.lifter));
+  gun.tube.forEach((s, i) => shell(INV.params.tube_z[0] + 4 + i * (L + 1), ty, col(s)));
+  if (rec && rec.flash) { c.fillStyle = `rgba(255,150,60,${rec.flash})`; c.beginPath(); c.arc(INV.params.muzzle * px + 14, 0, 12 + 30 * rec.flash, 0, 7); c.fill(); }
+  c.restore();
+  c.fillStyle = '#9aa6b0'; c.font = '12px ui-monospace,Menlo,monospace';
+  c.fillText(`slide ${pose.slideMm.toFixed(1)} mm   bolt ${pose.boltMm.toFixed(1)} mm   bolt lock ${(pose.boltLock * 180 / Math.PI).toFixed(1)}°   elevator ${(pose.elevator * 180 / Math.PI).toFixed(1)}°`, 12, H - 30);
+  if (rec) c.fillText(`recoil ${(-rec.pos[2] * 1e3).toFixed(1)} mm back, muzzle ${rec.pitchDeg.toFixed(2)}° up, ${rec.shoulderForce.toFixed(0)} N into the shooter`, 12, H - 12);
+}
+function drawTarget() {
+  const c = $('target').getContext('2d'), W = 480, yd = +$('range').value, span = Math.max(40, yd * 2.2), k = W / span; c.clearRect(0, 0, W, W);
+  c.strokeStyle = '#2a323b'; for (let i = -Math.floor(span / 20) * 10; i <= span / 2; i += 10) { c.beginPath(); c.moveTo(W / 2 + i * k, 0); c.lineTo(W / 2 + i * k, W); c.moveTo(0, W / 2 + i * k); c.lineTo(W, W / 2 + i * k); c.stroke(); }
+  c.strokeStyle = '#6cc3ff'; c.strokeRect(W / 2 - 9 * k, W / 2 - 15 * k, 18 * k, 30 * k);
+  for (const h of holes) { c.fillStyle = h.load === 'slug' ? '#7ee0a0' : '#ffb347'; c.beginPath(); c.arc(W / 2 - h.x * k, W / 2 - h.y * k, Math.max(2.5, (h.load === 'slug' ? 0.36 : 0.165) * k), 0, 7); c.fill(); }
+  c.fillStyle = '#9aa6b0'; c.font = '12px ui-monospace,Menlo,monospace'; c.fillText(`${yd} yd, 10 in grid, aimed along the bore at the plate's centre`, 10, 16);
+  if (holes.length) { const last = holes.filter((h) => h.shot === holes[holes.length - 1].shot); if (last.length > 1) c.fillText(`last pattern: ${(B.extremeSpread(last.map((h) => [h.x, h.y]))).toFixed(1)} in across, ${last.filter((h) => Math.abs(h.x) < 9 && Math.abs(h.y) < 15).length} of ${last.length} on the plate`, 10, W - 10); }
+}
+function drawPlot() {
+  const c = $('plot').getContext('2d'), W = 480; c.clearRect(0, 0, W, W); const st = $('stance').value, n = 800;
+  c.strokeStyle = '#2a323b'; c.beginPath(); c.moveTo(0, W - 30); c.lineTo(W, W - 30); c.stroke();
+  const line = (f, sc, col) => { c.strokeStyle = col; c.beginPath(); for (let i = 0; i <= n; i += 2) { const r = A.recoil(i / 1000, lastLoad, st), x = i / n * W, y = W - 30 - f(r) * sc; i ? c.lineTo(x, y) : c.moveTo(x, y); } c.stroke(); };
+  line((r) => -r.pos[2] * 1e3, 4, '#ffb347'); line((r) => r.pitchDeg, 70, '#6cc3ff');
+  c.fillStyle = '#ffb347'; c.font = '12px ui-monospace,Menlo,monospace'; c.fillText('gun moves back (mm × 4 px)', 10, 16); c.fillStyle = '#6cc3ff'; c.fillText('muzzle rises (degrees × 70 px)', 10, 32);
+  const fr = A.data.shots[lastLoad].free_recoil; c.fillStyle = '#9aa6b0'; c.fillText(`${lastLoad}, ${st}: free recoil ${fr.energy_J} J at ${fr.gun_speed} m/s`, 10, 48); c.fillText('0.8 s', W - 44, W - 10);
+}
+function table() {
+  const r = [5, 10, 15, 25, 40, 50, 75, 100]; let h = '<tr><th>Load</th>' + r.map((d) => `<th>${d} m</th>`).join('') + '</tr>';
+  for (const k of ['buck00', 'slug']) { const t = B.table(k, r);
+    h += `<tr><td>${B.loads[k].name}: m/s</td>` + t.map((x) => `<td>${x.v.toFixed(0)}</td>`).join('') + '</tr>';
+    h += `<tr><td>energy of each ${k === 'slug' ? 'slug' : 'pellet'}, J</td>` + t.map((x) => `<td>${x.energy.toFixed(0)}</td>`).join('') + '</tr>';
+    h += '<tr><td>drop, mm</td>' + t.map((x) => `<td>${(x.drop * 1e3).toFixed(0)}</td>`).join('') + '</tr>'; }
+  $('tab').innerHTML = h;
+}
+
+// ---------------------------------------------------------------- actions
+let lastPose = null;
+// advance the stroke by wall-clock time; called by every frame and before every button acts, so the mechanism never depends on the frame rate
+function tick() {
+  const now = performance.now(), slow = +$('slow').value; lastPose = A.pose(gun.slide);
+  if (anim) {
+    const t = (now - anim.t0) / 1000 / slow, s = A.stroke(t);
+    let ev = [];
+    if (!anim.rear && (s.forward || s.x === 1)) { anim.rear = true; ev = gun.setSlide(1); }        // never skip the rear of the stroke, however late this runs
+    ev = ev.concat(gun.setSlide(s.done ? 0 : s.x)); if (ev.length) { log(ev); state(); }
+    lastPose = A.pose(gun.slide, s.forward, anim.feeding); if (s.done) anim = null;
+  }
+  return !!anim;
+}
+function frame() {
+  const slow = +$('slow').value; let rec = null, busy = tick();
+  if (shotT0 != null) {
+    const t = (performance.now() - shotT0) / 1000 / slow; rec = A.recoil(t, lastLoad, $('stance').value); const q = A.shot(t, lastLoad); rec.flash = Math.min(1, q.pressureMPa / 20) || (t > 0.008 && t < 0.03 ? 1 - (t - 0.008) / 0.022 : 0);
+    if (t > 0.8) shotT0 = null; else busy = true;
+  }
+  drawGun(lastPose, rec);
+  if (busy) requestAnimationFrame(frame); else frame.running = false;
+}
+function kick() { if (!frame.running) { frame.running = true; requestAnimationFrame(frame); } }
+
+$('load').onclick = () => {
+  let e; if (tick()) return;
+  if (!gun.chamber && !gun.lifter && gun.tube.length === 0 && gun.slide === 0) {       // manual p8: the first shell goes through the ejection port
+    gun.holdActionLock(true); e = gun.setSlide(1); gun.holdActionLock(false); e = e.concat(gun.loadThroughPort($('shell').value)); log(e);
+    anim = { t0: performance.now() - (A.data.cycle.profile.back_s + A.data.cycle.profile.dwell_s) * 1000 * +$('slow').value, feeding: true, rear: true }; play('pump_forward', MIX.pump);
+  } else { e = gun.insertShell($('shell').value); log(e); if (e[0].type === 'shell_inserted') play('shell_insert', MIX.shell_insert); }
+  state(); kick();
+};
+$('fire').onclick = () => {
+  tick(); const e = gun.pullTrigger(); gun.releaseTrigger(); log(e); const last = e[e.length - 1];
+  if (last.type === 'fire') {
+    lastLoad = last.load; shotT0 = performance.now(); play('shot_' + last.load + '_shooter', MIX.shot);
+    const yd = +$('range').value, hits = B.pattern(last.load, yd * 0.9144, { rng: B.rng(seed++) }); const id = seed;
+    for (const h of hits) holes.push({ x: h[0] / 0.0254, y: h[1] / 0.0254, load: last.load, shot: id });
+    drawTarget(); drawPlot();
+  } else if (last.type === 'click') play('dry_fire', MIX.dry_fire);
+  state(); kick();
+};
+$('pump').onclick = () => {
+  if (tick()) return;
+  if (!gun.canOpen()) { gun.holdActionLock(true); log([{ type: 'action_lock_lever', why: 'pressed to open a cocked action' }]); }
+  anim = { t0: performance.now(), feeding: gun.tube.length > 0 || !!gun.lifter }; play('pump', MIX.pump); kick(); setTimeout(() => gun.holdActionLock(false), 400 * +$('slow').value);
+};
+$('safety').onclick = () => { log(gun.setSafety(!gun.safety)); play('safety', MIX.safety); state(); };
+$('unload').onclick = () => { tick(); const e = gun.releaseFromMagazine(); log(e); state(); kick(); };
+$('range').onchange = () => { holes = []; drawTarget(); }; $('stance').onchange = drawPlot;
+
+Promise.all([A.load('../action/action.json'), B.load('../ballistics/ballistics.json'), S.load('../sound/params.json'), fetch('../model/inventory.json').then((r) => r.json())]).then((r) => {
+  INV = r[3]; gun = A.create(); state(); table(); drawTarget(); drawPlot(); drawGun(A.pose(0), null);
+  $('status').textContent = 'Ready. The gun starts empty with the safety on: load a shell (the first goes through the ejection port, the rest into the magazine), move the safety, pull the trigger, pump.';
+}).catch((e) => { $('status').textContent = 'Could not load: ' + e.message + ' (serve the repository over http, see USAGE.md)'; });
+</script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+{
+  "asset": "shotgun-590",
+  "credit": "carpetshark",
+  "modelled_by": [
+    {
+      "part": "model (model/build.py, reference trace, decomposition, comparison tools)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    },
+    {
+      "part": "action and recoil simulation (action/)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    },
+    {
+      "part": "ballistics simulation (ballistics/)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    },
+    {
+      "part": "sound simulation (sound/)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    },
+    {
+      "part": "sample page, notes and manual summary (sample/, notes/)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    }
+  ],
+  "reviewed_by": [],
+  "references": "notes/REFERENCES.md",
+  "status": "Simulation-grade action, recoil, ballistics and sound; parametric geometry recipe (Blender Python) traced from one public-domain profile photo. Not yet reviewed by the owner. Open question on barrel length against overall length: notes/NOTES.md."
+}
