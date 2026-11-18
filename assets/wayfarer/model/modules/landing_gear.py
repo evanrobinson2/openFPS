@@ -47,6 +47,36 @@ def build_wells(parent):
             ya = yc - sd * 0.24
             mb.box(s + fold * 1.9 - 0.08, s + fold * 1.9 + 0.08, ya - 0.07, ya + 0.07, ZT + 0.20, WELL_TOP, 'structure_steel')
             mb.box(w0 + 0.3, w1 - 0.3, sd * (WELL_Y + 0.03), sd * (WELL_Y + 0.07), WELL_TOP - 0.10, WELL_TOP - 0.05, 'light_panel')
+            # hydraulics on the well ceiling: accumulator, valve block, lines to the actuator anchor and along the wall
+            zc = WELL_TOP; ya2 = sd * 2.05
+            mb.cyl((s + fold * 0.45, ya2, zc - 0.10), (s + fold * 1.15, ya2, zc - 0.10), 0.085, 'machinery_bare', n=16)
+            mb.sphere((s + fold * 0.45, ya2, zc - 0.10), 0.085, 'machinery_bare', n=14); mb.sphere((s + fold * 1.15, ya2, zc - 0.10), 0.085, 'machinery_bare', n=14)
+            mb.cyl((s + fold * 0.76, ya2, zc - 0.10), (s + fold * 0.84, ya2, zc - 0.10), 0.088, 'hazard_yellow', n=16)
+            for f in (0.58, 1.02):
+                mb.box(s + fold * f - 0.02, s + fold * f + 0.02, ya2 - 0.095, ya2 + 0.095, zc - 0.195, zc, 'structure_steel')
+                bolts.bolt((s + fold * f, ya2 - 0.08, zc - 0.195), (0, 0, -1), r=0.009, h=0.006); bolts.bolt((s + fold * f, ya2 + 0.08, zc - 0.195), (0, 0, -1), r=0.009, h=0.006)
+            mb.box(s + fold * 1.30, s + fold * 1.55, ya2 - 0.10, ya2 + 0.10, zc - 0.13, zc, 'machinery_dark')                   # valve block
+            for q in range(3):
+                sv = s + fold * (1.35 + 0.075 * q)
+                mb.cyl((sv, ya2 - 0.05, zc - 0.13), (sv, ya2 - 0.05, zc - 0.175), 0.022, 'machinery_bare', n=8)                  # solenoids
+                mb.cyl((sv, ya2 + 0.05, zc - 0.13), (sv, ya2 + 0.05, zc - 0.16), 0.014, 'copper_pipe', n=6)
+            mb.pipe([(s + fold * 1.235, ya2, zc - 0.10), (s + fold * 1.30, ya2, zc - 0.07)], 0.016, 'copper_pipe', n=6)
+            mb.pipe([(s + fold * 1.55, ya2 - sd * 0.05, zc - 0.05), (s + fold * 1.75, ya2 - sd * 0.05, zc - 0.05), (s + fold * 1.9, ya + sd * 0.09, zc - 0.06), (s + fold * 1.9, ya + sd * 0.09, ZT + 0.22)], 0.014, 'copper_pipe', n=6)
+            for q, (zz, mm) in enumerate(((zc - 0.20, 'copper_pipe'), (zc - 0.25, 'machinery_bare'), (zc - 0.30, 'cable_black'))):
+                yw = sd * (WELL_Y + 0.035)
+                mb.pipe([(w0 + 0.12, yw, zz), (w1 - 0.12, yw, zz)], 0.013, mm, n=6)
+            for sc in np.arange(w0 + 0.35, w1 - 0.2, 0.55):
+                mb.box(sc - 0.02, sc + 0.02, sd * WELL_Y, sd * (WELL_Y + 0.055), zc - 0.325, zc - 0.175, 'structure_steel')
+            mb.pipe([(s + fold * 1.42, ya2 - sd * 0.10, zc - 0.03), (s + fold * 1.42, sd * (WELL_Y + 0.035), zc - 0.03), (s + fold * 1.42, sd * (WELL_Y + 0.035), zc - 0.20)], 0.013, 'copper_pipe', n=6)
+            # uplock: a jaw on the ceiling that catches the roller on the leg when it is stowed
+            su = s + fold * 1.40; yu = yc + 0.04
+            for dy in (-0.062, 0.062):
+                mb.box(su - 0.07, su + 0.07, yu + dy - 0.012, yu + dy + 0.012, ZT + 0.17, zc, 'structure_steel')
+            mb.box(su - 0.07, su + 0.07, yu - 0.075, yu + 0.075, zc - 0.07, zc, 'structure_steel')
+            mb.cyl((su - fold * 0.05, yu - 0.075, ZT + 0.26), (su - fold * 0.05, yu + 0.075, ZT + 0.26), 0.016, 'machinery_bare', n=8)
+            mb.box(su + fold * 0.07, su + fold * 0.20, yu - 0.03, yu + 0.03, zc - 0.10, zc - 0.03, 'machinery_dark')              # release ram
+            bolts.bolt_circle((su, yu, zc - 0.07), (0, 0, -1), 0.055, 4, r=0.009, h=0.006)
+            mb.box(s + fold * 0.5, s + fold * 0.9, sd * (WELL_Y + 0.001), sd * (WELL_Y + 0.004), zc - 0.60, zc - 0.45, 'placard_white')   # servicing placard
     finish('gear_wells', mb, parent, group='landing_gear'); finish('gear_well_bolts', bolts, parent, sharp=60, group='fasteners')
 
 def leg_parts(s, y, fold):
@@ -72,6 +102,20 @@ def leg_parts(s, y, fold):
     leg.cyl((A[0], y - 0.10, A[2]), (A[0], y + 0.10, A[2]), 0.034, 'machinery_bare', n=10)
     leg.cyl((K[0], y - 0.10, K[2]), (K[0], y + 0.10, K[2]), 0.030, 'machinery_bare', n=10)
     leg.box(s + k * 0.10, s + k * 0.19, y - 0.09, y + 0.09, ZT - 1.56, ZT - 1.44, st)
+    # uplock roller on the side that faces up when the leg is stowed
+    leg.box(s + fold * 0.12, s + fold * 0.21, y + 0.012, y + 0.068, ZT - 1.445, ZT - 1.355, st)
+    leg.cyl((s + fold * 0.20, y - 0.005, ZT - 1.40), (s + fold * 0.20, y + 0.085, ZT - 1.40), 0.026, 'machinery_bare', n=10)
+    # landing light on the forward face, electrical conduit, line clamps, wiper ring, servicing placard
+    leg.cyl((s - 0.12, y, ZT - 0.46), (s - 0.20, y, ZT - 0.46), 0.062, dk, n=14)
+    leg.cyl((s - 0.20, y, ZT - 0.46), (s - 0.206, y, ZT - 0.46), 0.052, 'light_panel', n=14)
+    leg.pipe([(s + fold * 0.13, y + 0.07, ZT - 0.20), (s + fold * 0.142, y + 0.07, ZT - 0.60), (s + fold * 0.142, y + 0.07, ZT - 1.30)], 0.009, 'cable_black', n=6)
+    for zz in (ZT - 0.40, ZT - 0.80, ZT - 1.20):
+        leg.box(s + fold * 0.118, s + fold * 0.165, y - 0.095, y + 0.095, zz - 0.015, zz + 0.015, st) if fold > 0 else leg.box(s - 0.165, s - 0.118, y - 0.095, y + 0.095, zz - 0.015, zz + 0.015, st)
+    leg.lathe((s, y, ZT - 1.58), (0, 0, -1), [(0, 0.105), (0.025, 0.105), (0.025, 0.09)], 'rubber_black', n=24, cap0=False, cap1=False)
+    sdo = 1 if y > 0 else -1
+    leg.box(s - 0.05, s + 0.05, y + sdo * 0.122, y + sdo * 0.128, ZT - 1.08, ZT - 0.94, 'placard_white')
+    for a_ in range(4):                                                                            # grease points on the head
+        leg.bolt((s + (-0.09 + 0.06 * a_), y, ZT + 0.11), (0, 0, 1), r=0.008, h=0.01, washer=False)
     # actuator lug on the inboard side
     sd = 1 if y > 0 else -1
     leg.box(s + fold * 0.06, s + fold * 0.22, y - sd * 0.30, y - sd * 0.12, ZT - 0.78, ZT - 0.62, st)
@@ -80,6 +124,8 @@ def leg_parts(s, y, fold):
     pis.cyl((B[0], y - 0.10, B[2]), (B[0], y + 0.10, B[2]), 0.034, 'machinery_bare', n=10)
     pis.box(s - 0.11, s + 0.11, y - 0.10, y + 0.10, ZT - 2.50, ZT - 2.36, st) if False else pis.lathe((s, y, ZT - 2.34), (0, 0, -1), [(0, 0.088), (0, 0.12), (0.16, 0.12), (0.22, 0.10)], st, n=20, cap0=False, cap1=False)
     pis.sphere((s, y, ZT - 2.68), 0.125, 'machinery_bare', n=14)                                   # ball joint
+    for zz in (ZT - 1.80, ZT - 1.95, ZT - 2.10):                                                   # stroke marks
+        pis.lathe((s, y, zz), (0, 0, -1), [(0, 0.0892), (0.02, 0.0892)], 'hazard_yellow', n=24, cap0=False, cap1=False)
     # pad
     z0 = ZT - 2.74; R_ = G['pad_r']
     pad.lathe((s, y, z0), (0, 0, -1), [(0, 0.16), (0.05, 0.17), (0.13, R_ * 0.92), (0.19, R_), (0.24, R_), (0.26, R_ * 0.96)], 'armour_gunmetal_b', n=28, cap0=True, cap1=True)
@@ -88,6 +134,11 @@ def leg_parts(s, y, fold):
         t = 2 * math.pi * a / 8; c, sn = math.cos(t), math.sin(t)
         pad.prism([(s + c * 0.17, y + sn * 0.17, z0 - 0.05), (s + c * R_ * 0.9, y + sn * R_ * 0.9, z0 - 0.19), (s + c * R_ * 0.9, y + sn * R_ * 0.9, z0 - 0.13)], (-sn * 0.025, c * 0.025, 0), st)   # gusset
         pad.bolt((s + c * R_ * 0.82, y + sn * R_ * 0.82, z0 - 0.165), (c * 0.25, sn * 0.25, 1), r=0.013, h=0.009)
+    for a in range(4):                                                                             # centring springs from the pad to the piston collar
+        tq = math.pi / 4 + a * math.pi / 2; c, sn = math.cos(tq), math.sin(tq)
+        pad.cyl((s + c * 0.30, y + sn * 0.30, z0 - 0.10), (s + c * 0.115, y + sn * 0.115, z0 + 0.22), 0.012, 'machinery_bare', n=6)
+        pad.cyl((s + c * 0.30, y + sn * 0.30, z0 - 0.115), (s + c * 0.30, y + sn * 0.30, z0 - 0.085), 0.024, st, n=8)
+    pad.tube((s + R_ * 0.99, y - 0.02, z0 - 0.215), (s + R_ * 0.99, y + 0.02, z0 - 0.215), 0.04, 0.022, 'hazard_yellow', n=10)   # tie-down ring
     for a in range(5):                                                                             # tread bars
         x = -R_ * 0.7 + a * R_ * 0.35; hw = math.sqrt(max(R_ * R_ * 0.9 - x * x, 0.0))
         pad.box(s + x - 0.03, s + x + 0.03, y - hw, y + hw, z0 - 0.275, z0 - 0.26, 'rubber_black')

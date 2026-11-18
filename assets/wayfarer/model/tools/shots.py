@@ -30,6 +30,8 @@ PERSP = {
     'engine_aft': dict(eye=(33.5, -4.5, 1.6), target=(28.6, -1.5, 0.2), lens=30),
     'engine_gap': dict(eye=(27.6, -7.2, 1.9), target=(26.0, -2.6, 0.5), lens=30),
     'intake': dict(eye=(17.5, -9.5, 1.2), target=(25.0, -2.6, 0.2), lens=45),
+    'gear_well': dict(eye=(8.2, -1.95, -3.3), target=(6.7, -1.85, -1.35), lens=13),
+    'gear_leg': dict(eye=(4.2, -3.6, -3.3), target=(6.0, -1.8, -3.2), lens=28),
     'gear': dict(eye=(1.5, -6.5, -3.4), target=(7.5, -1.0, -3.0), lens=30),
     'lander_bay': dict(eye=(13.9, -1.62, -0.55), target=(17.6, 0.2, -1.6), lens=14),
     'under_bay': dict(eye=(24.5, -7.5, -3.9), target=(17.2, 0.0, -3.0), lens=28),
