@@ -1,0 +1,41 @@
+{
+ "note": "hk416-heat.js against sim.py on the runtime grid: largest absolute difference over all samples",
+ "cases": {
+  "manual_250_in_3min": {
+   "samples": 61,
+   "shots": 250,
+   "sim_seconds": 600,
+   "wall_ms": 76,
+   "max_temperature_difference_K": 1.7109869077103212e-10,
+   "worst_temperature_probe": "muzzle_outer",
+   "max_relative_difference_other_probes": 3.4655137951463574e-12,
+   "max_relative_difference_effects": 5.017714540399286e-12,
+   "max_field_difference_K": 6.730260793119669e-11,
+   "energy_relative_difference": 3.246684126576422e-13,
+   "python_peaks_C": {
+    "chamber_wall": 220.49491228319323,
+    "barrel_max_outer": 524.3784317272736,
+    "handguard_hand": 117.6134928767679
+   }
+  },
+  "auto_mag_dumps_hot_windy": {
+   "samples": 49,
+   "shots": 120,
+   "sim_seconds": 240,
+   "wall_ms": 26,
+   "max_temperature_difference_K": 2.347633198951371e-10,
+   "worst_temperature_probe": "muzzle_outer",
+   "max_relative_difference_other_probes": 2.6477604017063364e-10,
+   "max_relative_difference_effects": 4.739664224853559e-12,
+   "max_field_difference_K": 5.076117304270156e-11,
+   "energy_relative_difference": 3.0720532774235933e-13,
+   "python_peaks_C": {
+    "chamber_wall": 246.19684855308805,
+    "barrel_max_outer": 443.5938208716634,
+    "handguard_hand": 71.32173782188333
+   }
+  }
+ },
+ "step_microseconds": 3.25,
+ "passed": true
+}
