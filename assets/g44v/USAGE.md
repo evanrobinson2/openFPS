@@ -113,7 +113,7 @@ Order matters: model, action, ballistics, sound. Each build is deterministic.
   construction; surfaces inside the outline (grip texture on the straps, finger and thumb reliefs, the frame's moulded
   contours, the rounded slide nose in plan) are simplified or missing. The list is in `notes/NOTES.md`.
 - **Internals are functional reconstructions, not measured parts.** The manual shows them only in a small exploded
-  drawing and a few photographs; 30 of 57 objects are marked inferred. They sit on the right axes, move the right way and
+  drawing and a few photographs; 26 of 57 objects are marked inferred, and several marked measured have only their position measured. They sit on the right axes, move the right way and
   do not collide, but their shapes are not the maker's.
 - No maker's names or logos: plain placeholder panels on the slide, barrel hood, grip and magazine. No cartridges are
   modelled; the magazine is shown empty.
