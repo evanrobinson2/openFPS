@@ -40,12 +40,14 @@ oal = max(zs) - min(zs); lop = trig - butt_mid          # photo pixels: trigger 
 barrel = P['muzzle'] - P['breech']; mass = INV['totals']['mass_g_from_volumes'] / 1e3
 def row(name, model, pub, unit, tol, note): return dict(what=name, model=round(model, 2), published=pub, unit=unit, difference_pct=round(100 * (model - pub) / pub, 1), within_tolerance=abs(model - pub) / pub <= tol, tolerance_pct=tol * 100, note=note)
 res['published_dimensions'] = [
-    row('overall length', oal / IN, 41.0, 'in', 0.005, 'the ruler: the photo was scaled to this figure, so this is a calibration, not a check'),
-    row('length of pull (trigger face to the middle of the butt)', lop / IN, 13.87, 'in', 0.03, 'independent of the ruler\'s anchor points'),
-    row('barrel (ejection port front edge to muzzle)', barrel / IN, 20.0, 'in', 0.03, 'NOT met: see notes/NOTES.md, "The ruler". The photo cannot give both 41 in overall and 20 in of barrel'),
+    row('overall length', oal / IN, 41.0, 'in', 0.03, 'NOT met: see notes/NOTES.md, "The ruler". The photo cannot give both 41 in overall and 20 in of barrel'),
+    row('length of pull (trigger face to the middle of the butt)', lop / IN, 13.87, 'in', 0.03, 'independent of the ruler\'s anchor points; not met with the barrel ruler'),
+    row('barrel (ejection port front edge to muzzle)', barrel / IN, 20.0, 'in', 0.005, 'the ruler since change request 1: the photo is scaled to this figure, so this is a calibration, not a check'),
     row('weight (mesh volumes x densities)', mass / 0.45359237, 7.25, 'lb', 0.15, 'solid parts, guessed hollow-stock density, no springs or small internals: a plausibility figure only'),
     row('magazine tube inside diameter vs a 12 gauge rim (22.45 mm max)', P['tube_r'] * 2 - 2 * P['tube_wall'], 22.45, 'mm', 0.05, 'the tube\'s inside must clear the rim: model inside diameter over rim diameter'),
 ]
+res['published_dimensions'][-1]['within_tolerance'] = bool(res['published_dimensions'][-1]['model'] >= 22.45)      # the rim must pass: a hard bound, not a tolerance
+res['published_dimensions'][-1]['note'] = 'the tube\'s inside must clear the rim. NOT met with the barrel ruler: the traced tube is 23.2 mm outside'
 res['published_dimensions_summary'] = dict(met=[r['what'] for r in res['published_dimensions'] if r['within_tolerance']], not_met=[r['what'] for r in res['published_dimensions'] if not r['within_tolerance']])
 # ---- the exported GLB: frame, nodes, clips, no images
 glb = os.path.join(HERE, 'masters', 'shotgun590.glb')

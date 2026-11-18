@@ -30,7 +30,7 @@ PARAMS = dict(
     p_start=P(5.0e6, 'Pa', 'guess', 'pressure at which the payload starts to move'),
     gas_velocity_factor=P(1.5, '-', 'published', 'SAAMI "Gun Recoil Formulae" (2018): propellant gas leaves at 1.5 x muzzle velocity for shotguns of average barrel length'),
     lock_time=P(0.006, 's', 'guess', 'sear release to ignition; the manual gives no figure'),
-    stroke=P(MP['stroke'] * 1e-3, 'm', 'inferred', 'the forend\'s rear is 100.4 mm from the receiver face in the profile photo; 97.5 mm used so the bolt stays inside the receiver (model/build.py)'),
+    stroke=P(MP['stroke'] * 1e-3, 'm', 'inferred', 'the forend\'s rear is 94.9 mm from the receiver face in the profile photo; 92 mm used so the bolt stays inside the receiver (model/build.py)'),
     lost_motion=P(MP['lost_motion'] * 1e-3, 'm', 'guess', 'slide travel that unlocks the bolt before the bolt moves'),
     hull_fired_len=P(2.75 * IN, 'm', 'published', 'a 2 3/4 in shell is 2 3/4 in long after firing (the nominal length)'),
     shell_loaded_len=P(MODEL['shell']['length'] * 1e-3, 'm', 'guess', 'typical loaded length of a 2 3/4 in shell'),
@@ -142,8 +142,8 @@ def cycle():
         ('unlock', lm, 'the bolt lock is down: the bolt starts to move', 'inferred'),
         ('hammer_cocked', lm + 0.030, 'the bolt slide has pushed the hammer back onto the sear', 'guess'),
         ('extracted', lm + hull, 'the fired hull\'s mouth is out of the chamber (hull length of bolt travel)', 'derived'),
-        ('eject', lm + hull + 0.005, 'the hull meets the ejector and leaves through the port (manual p9)', 'inferred'),
-        ('shell_released', S - 0.008, 'the cartridge stop lets the next shell onto the elevator (manual p10: "completely rearward")', 'manual'),
+        ('eject', lm + hull + 0.002, 'the hull meets the ejector and leaves through the port (manual p9)', 'inferred'),
+        ('shell_released', S - 0.006, 'the cartridge stop lets the next shell onto the elevator (manual p10: "completely rearward")', 'manual'),
         ('rear_stop', S, 'the slide stops at the rear', 'traced'),
     ]
     pick = S - ((breech - lifter_head) - 0.0)                                           # slide travel at which the bolt face is at the shell head, less the lost motion

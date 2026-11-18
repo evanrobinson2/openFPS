@@ -2,56 +2,56 @@
  "note": "peak levels of every synthesised sound, dB re 20 uPa, at the listener of that sound",
  "levels": {
   "shot_buck00_shooter": {
-   "peak_pa": 1635.7099,
-   "peak_db": 158.3,
+   "peak_pa": 1654.0774,
+   "peak_db": 158.4,
    "duration": 0.45,
    "components": 12
   },
   "shot_buck00_bystander": {
-   "peak_pa": 722.2976,
+   "peak_pa": 722.4155,
    "peak_db": 151.2,
    "duration": 0.45,
    "components": 12
   },
   "shot_slug_shooter": {
-   "peak_pa": 1865.9594,
-   "peak_db": 159.4,
+   "peak_pa": 2036.137,
+   "peak_db": 160.2,
    "duration": 0.45,
    "components": 12
   },
   "shot_slug_bystander": {
-   "peak_pa": 822.9199,
+   "peak_pa": 823.0366,
    "peak_db": 152.3,
    "duration": 0.45,
    "components": 12
   },
   "pump": {
-   "peak_pa": 4.1024,
-   "peak_db": 106.2,
+   "peak_pa": 3.8069,
+   "peak_db": 105.6,
    "duration": 0.54,
    "components": 38
   },
   "pump_back": {
-   "peak_pa": 4.1024,
-   "peak_db": 106.2,
+   "peak_pa": 3.8069,
+   "peak_db": 105.6,
    "duration": 0.36,
    "components": 19
   },
   "pump_forward": {
-   "peak_pa": 3.7659,
-   "peak_db": 105.5,
+   "peak_pa": 3.5472,
+   "peak_db": 105.0,
    "duration": 0.38,
    "components": 19
   },
   "dry_fire": {
-   "peak_pa": 1.7155,
-   "peak_db": 98.7,
+   "peak_pa": 1.6946,
+   "peak_db": 98.6,
    "duration": 0.12,
    "components": 5
   },
   "shell_insert": {
-   "peak_pa": 0.6796,
-   "peak_db": 90.6,
+   "peak_pa": 0.6956,
+   "peak_db": 90.8,
    "duration": 0.26,
    "components": 7
   },
@@ -73,7 +73,7 @@
   "method": "the blast coefficient and the front-to-back figure are generic guesses set once; this compares the result with the published range for 12 gauge shotguns (a 20 in barrel sits between the two published barrels)",
   "rows": {
    "buck00": {
-    "peak_db_at_shooter": 158.3,
+    "peak_db_at_shooter": 158.4,
     "published_range_db": [
      151.5,
      161.5
@@ -81,7 +81,7 @@
     "passed": true
    },
    "slug": {
-    "peak_db_at_shooter": 159.4,
+    "peak_db_at_shooter": 160.2,
     "published_range_db": [
      151.5,
      161.5

@@ -41,8 +41,8 @@ thumb for a cylinder bore (R. Mann, Shooting Illustrated, 2012). `spreadScale` m
 reports loads patterning at half the rule.
 
 **Sights.** `aim(lineOfSight, 'bead_flat')` returns the bore direction for a shooter who sees the bead resting on the
-receiver's flat top. From the model's traced geometry the bore then points 15.1 mrad above the line of sight, so shots
-land high: 0.21 m at 15 m and 0.42 m at 30 m for the slug. This is an inference from a bead that is 2 px tall in the
+receiver's flat top. From the model's traced geometry the bore then points 14.9 mrad above the line of sight, so shots
+land high: 0.21 m at 15 m and 0.41 m at 30 m for the slug. This is an inference from a bead that is 2 px tall in the
 photo (about 1.5 mrad of doubt), not a published figure; `aim(los, 'bore')` aims along the bore.
 
 ## Results (level bore)
