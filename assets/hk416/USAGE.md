@@ -53,6 +53,36 @@ const hits = shot.trace(targets);                     // or shot.advance(dt, tar
 
 Full APIs: `sound/README.md`, `action/README.md`, `ballistics/README.md`.
 
+## Barrel and handguard heat (`heat/`)
+
+State: ready. A thermal model of the barrel, gas block, piston, flash hider, barrel nut, upper receiver and handguard
+under any firing schedule, with the heat per shot computed from the interior ballistics in `action/`. It answers what
+a game needs: how hot each part is, how strong the heat shimmer over the sights is, whether the handguard can be held,
+whether a chambered round is at risk of cooking off, and how far the point of impact has moved. The sample page has a
+live demo under "Barrel and handguard heat".
+
+```html
+<script src="assets/hk416/heat/hk416-heat.js"></script>             <!-- window.HK416Heat -->
+<script>
+await HK416Heat.load('assets/hk416/heat/heat.json');
+const gun = HK416Heat.create({ ambientC: 25, wind: 0 });   // wind in m/s across the barrel
+gun.fire();                    // once per shot, when it is fired
+gun.advance(dt);               // every frame, seconds
+const s = gun.state();
+// s.barrelMaxC, s.chamberC, s.gasBlockC, s.handguardHandC ...       temperatures, deg C
+// s.mirage  { strength 0..1, heightM, riseMps, jitterMoa, steadyMoa } heat shimmer for a renderer
+// s.comfort { level 0..5, name, surfaceC, contactC }                  handguard against ISO 13732-1 burn thresholds
+// s.cookoff { risk, chamberC, caseC, damage 0..1, timeS }             the chambered round
+// s.poi     { bowMoa, mvDelta }                                       impact shift; pass 850 + mvDelta to HK416Ballistics.fire
+const p = gun.profile();       // temperatures along the barrel: p.zMm, p.outerC, p.boreC, p.handguardZMm, p.handguardC
+</script>
+```
+
+`zMm` is this asset's +Z in millimetres (0 at the upper receiver's front face). Precomputed runs of seven firing
+schedules, including the manual's 250 rounds in 3 minutes, are in `heat.json` (`HK416Heat.schedule(id)`). Sources,
+checks against published M4A1 measurements, the JS-vs-Python parity test and the limits are in `heat/README.md`.
+Rebuild: `python3 heat/sim.py` (5 to 15 minutes; numpy and matplotlib), then `node heat/test_heat.js`.
+
 ## Frame and units
 
 Metres and seconds. +Z towards the muzzle, +Y up, +X to the shooter's left; the origin is on the bore axis at the
