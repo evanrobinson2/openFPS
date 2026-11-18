@@ -1,7 +1,20 @@
 # Notes: decisions, inferences, results, limits
 
-Version 1, 2026-11-17, modelled by Claude Fable 5.2. Credit: carpetshark. No change requests yet (rule 7: each one
-will be recorded here as a new version).
+Version 1, 2026-11-17, modelled by Claude Fable 5.2. Credit: carpetshark.
+
+## Change requests (rule 7)
+
+| No. | Date | Request | State |
+|---|---|---|---|
+| CR-1 | 2026-11-17 | Relayed by the coordinating session as the owner's review of version 1: references R1 to R3 approved; make version 2 with (1) a folding palm: carpometacarpal flexion of the 4th and 5th metacarpals and thumb opposition, limits from named sources, skinning so the palm wraps the grip; (2) the firing grip re-solved against R1 and R3 (web high under the tang, index level in `fire_indexed`, trigger pad centred) with a numerical comparison for both; (3) the support grip brought onto R2 (close the 41 mm mean fingertip error and the 28 mm forward offset); (4) the index touching the magazine release in `mag_release` and `mag_out` and the thumb touching the selector in both safety clips, contact within 1 mm with interpenetration still at most 1.0 mm, revising the stance if it stops a reach; (5) the little-finger length row fixed or justified from a second source; (6) if time allows, clips for `stock_extend`, `stock_collapse`, `sights_up`, `sights_down` and a hand-against-hand interpenetration measurement. | **Recorded, not started.** Version 1 below is unchanged. The approval was relayed by another session; the modeller did not see the owner's message. |
+
+Starting points for CR-1, from what version 1 measured: the rigid palm is in `model/handlib.py` (`Hand.__init__`, the
+`palm` shell and its weights); a thenar segment needs a new bone between `hand` and `thumb_01` or palm weights on
+`thumb_01`, plus a wider `mc4_flex` / `mc5_flex` range with a source. The firing hand's placement is
+`spec_fire_indexed` in `grips/solve.py` (three contact points, `drop`, `yaw`, `pitch`); the support hand's anchor is
+`palm_distal` in `spec_support` (R2 puts the fingertips' mean 90 mm ahead of the receiver and 33 to 46 mm above the
+bore). The controls' target points are `CONTROL` in `clips/make.py`. After any change to `handlib.py` every grip must
+be re-solved and every check re-run (`USAGE.md`, Rebuild).
 
 ## Where this stands against the reference-to-3D order
 
