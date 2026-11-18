@@ -3,9 +3,9 @@
   "credit": "carpetshark",
   "modelled_by": [
     {
-      "part": "model (model/build.py)",
-      "model": "Claude Fable 5.2",
-      "date": "2026-11-17"
+      "part": "model v2 (model/build.py), rebuilt from HK's technical drawing and maintenance manual",
+      "model": "Claude Opus 5.5",
+      "date": "2026-11-18"
     },
     {
       "part": "sound simulation (sound/)",
@@ -30,5 +30,46 @@
       "date": "2026-11-17"
     }
   ],
-  "status": "Simulation-grade sound, action and ballistics; parametric geometry recipe (Blender Python)."
+  "status": "Simulation-grade sound, action and ballistics; parametric geometry recipe (Blender Python) v2, measured on HK's technical drawing.",
+  "history": [
+    {
+      "version": 1,
+      "part": "model v1, traced from a studio photo (notes/v1-photo/)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    }
+  ],
+  "sources": [
+    {
+      "key": "HKTD",
+      "title": "Heckler & Koch, HK416 Cal. 5.56 mm x 45 technical data, Ident-No. 968 071, V003.12.08",
+      "used": "p. 12 dimensioned vector drawing (side and top view) and dimension table: every outline and position"
+    },
+    {
+      "key": "HKA5",
+      "title": "Heckler & Koch, HK416 A5 technical data sheet, Id. 975584, V002.03.13",
+      "used": "per-barrel dimensions for --barrel"
+    },
+    {
+      "key": "HKMM",
+      "title": "Heckler & Koch GmbH, Rifle HK416 Calibre 5.56 mm x 45 Maintenance Manual (10/14.5/16.5/20 in)",
+      "used": "Fig. 1a component breakdown (97 parts), disassembly figures for hidden faces"
+    },
+    {
+      "key": "HKUS",
+      "title": "Heckler & Koch USA, Maintenance Manual for HK416 Enhanced Carbine & Rifle System (2013)",
+      "used": "specifications and tolerances; mechanism simulation"
+    },
+    {
+      "key": "HKOM",
+      "title": "Heckler & Koch, HK416 operator's manuals",
+      "used": "controls"
+    },
+    {
+      "key": "1913",
+      "title": "MIL-STD-1913 Picatinny rail",
+      "used": "rail section and pitch"
+    }
+  ],
+  "sources_location": "Public HK documents, https://s3.amazonaws.com/hk-manuals/files/ (cited, never committed)"
 }
