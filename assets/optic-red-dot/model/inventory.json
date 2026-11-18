@@ -1,0 +1,292 @@
+[
+ {
+  "part": "housing_body",
+  "parent": "housing",
+  "material": "anodized",
+  "what": "one-piece tube housing: rear bell (emitter and adjusters), 30 mm ring section, front sun shade",
+  "dims_mm": {
+   "length": 130.0,
+   "hood_od": 38.0,
+   "ring_section_od": 30.0,
+   "bore_id": 27.0,
+   "axis_over_rail": 39.0
+  },
+  "source": "length, diameters and axis height: reddot.json body (class figures and the recalled 39 mm mount height); the lengths of the bell and hood are inferred"
+ },
+ {
+  "part": "window_element_rear",
+  "parent": "housing",
+  "material": "lens_front",
+  "what": "eye-side element of the window doublet; its front (cemented) surface carries the red band-reflecting coating",
+  "dims_mm": {
+   "R1": 173.718603359,
+   "R2": 185.406437653,
+   "diameter": 27.0,
+   "tilt_deg": 4.13757483326
+  },
+  "source": "solved in optics/sim.py (design_reddot)"
+ },
+ {
+  "part": "window_element_front",
+  "parent": "housing",
+  "material": "lens_front",
+  "what": "target-side element of the window doublet; its outer radius makes the window zero-power",
+  "dims_mm": {
+   "R2": 185.406437653,
+   "R3": 175.422189857,
+   "centre_thickness_of_pair": 5.0
+  },
+  "source": "solved in optics/sim.py"
+ },
+ {
+  "part": "window_retainer",
+  "parent": "housing",
+  "material": "anodized",
+  "what": "threaded ring holding the doublet; its bore is the clear aperture",
+  "dims_mm": {
+   "clear_aperture": 24.0
+  },
+  "source": "clear aperture: reddot.json body (inferred for the class)"
+ },
+ {
+  "part": "rear_window",
+  "parent": "housing",
+  "material": "lens_rear",
+  "what": "flat rear window (seals the housing)",
+  "dims_mm": {
+   "thickness": 2.0,
+   "diameter": 27.0
+  },
+  "source": "inferred"
+ },
+ {
+  "part": "rear_window_retainer",
+  "parent": "housing",
+  "material": "anodized",
+  "what": "ring holding the rear window",
+  "dims_mm": {
+   "clear_aperture": 24.0
+  },
+  "source": "inferred"
+ },
+ {
+  "part": "emitter_carrier",
+  "parent": "housing",
+  "material": "anodized",
+  "what": "carrier of the LED; the two adjusters push it across the focal plane",
+  "dims_mm": {
+   "off_axis": 13.5,
+   "behind_window": 91.99999999
+  },
+  "source": "solved in optics/sim.py; clock position 4:30 is my choice"
+ },
+ {
+  "part": "emitter_led",
+  "parent": "emitter_carrier",
+  "material": "emitter",
+  "what": "the LED; its emitting aperture is 56 um, which the collimator turns into a 2 MOA dot (drawn 1 mm wide here so it can be seen)",
+  "dims_mm": {
+   "emitter_diameter_um": 55.6153639675
+  },
+  "source": "emitter diameter = focal length x 2 MOA, optics/sim.py"
+ },
+ {
+  "part": "elevation_adjuster",
+  "parent": "controls",
+  "material": "steel",
+  "what": "elevation adjuster, coin slot; 0.5 MOA per click",
+  "dims_mm": {
+   "diameter": 8.4,
+   "click_moa": 0.5
+  },
+  "source": "click value: class figure (reddot.json body); shape inferred"
+ },
+ {
+  "part": "elevation_cap",
+  "parent": "controls",
+  "material": "anodized",
+  "what": "screw cap over the elevation adjuster",
+  "dims_mm": {
+   "diameter": 17.2,
+   "height": 9.0
+  },
+  "source": "inferred"
+ },
+ {
+  "part": "windage_adjuster",
+  "parent": "controls",
+  "material": "steel",
+  "what": "windage adjuster, coin slot; 0.5 MOA per click",
+  "dims_mm": {
+   "diameter": 8.4
+  },
+  "source": "as the elevation adjuster"
+ },
+ {
+  "part": "windage_cap",
+  "parent": "controls",
+  "material": "anodized",
+  "what": "screw cap over the windage adjuster",
+  "dims_mm": {
+   "diameter": 17.2,
+   "height": 9.0
+  },
+  "source": "inferred"
+ },
+ {
+  "part": "brightness_knob",
+  "parent": "controls",
+  "material": "rubber",
+  "what": "rotary brightness switch: OFF, 3 night-vision and 8 daylight positions, 30 degrees apart",
+  "dims_mm": {
+   "diameter": 27.0,
+   "height": 10.0,
+   "positions": 12,
+   "step_deg": 30
+  },
+  "source": "positions and luminances: optics/reddot.json brightness (inferred; the class has 16 positions); shape inferred"
+ },
+ {
+  "part": "brightness_index",
+  "parent": "brightness_knob",
+  "material": "placeholder_panel",
+  "what": "index mark on the knob",
+  "dims_mm": {},
+  "source": "inferred"
+ },
+ {
+  "part": "battery_cap",
+  "parent": "brightness_knob",
+  "material": "anodized",
+  "what": "battery cap with a coin slot, in the middle of the knob",
+  "dims_mm": {
+   "diameter": 19.0,
+   "cell": "20 mm coin cell"
+  },
+  "source": "inferred"
+ },
+ {
+  "part": "mount_base",
+  "parent": "mount",
+  "material": "anodized",
+  "what": "rail clamp body with the fixed jaw on the right; it sits on the rail top and against the right flank",
+  "dims_mm": {
+   "length": 30.0,
+   "rail_top_half_width": 7.8,
+   "rail_half_width": 10.6
+  },
+  "source": "rail section: assets/hk416/model/build.py (rail_half_top, rail_half, rail_flank); the rest inferred"
+ },
+ {
+  "part": "mount_clamp_jaw",
+  "parent": "mount",
+  "material": "anodized",
+  "what": "moving jaw on the left flank of the rail",
+  "dims_mm": {
+   "length": 24.0
+  },
+  "source": "inferred"
+ },
+ {
+  "part": "mount_cross_bolt",
+  "parent": "mount",
+  "material": "steel",
+  "what": "cross-bolt lying in a rail slot: clamps the jaw and stops the mount moving under recoil",
+  "dims_mm": {
+   "diameter": 4.8,
+   "slot_centre_rifle_L": -44.09500000000001
+  },
+  "source": "slot position: rail pitch 10.0 mm and lug 4.77 mm from assets/hk416/model/build.py"
+ },
+ {
+  "part": "mount_bolt_head",
+  "parent": "mount_cross_bolt",
+  "material": "steel",
+  "what": "head of the cross-bolt",
+  "dims_mm": {},
+  "source": "inferred"
+ },
+ {
+  "part": "mount_clamp_nut",
+  "parent": "mount",
+  "material": "steel",
+  "what": "hex nut that closes the clamp",
+  "dims_mm": {
+   "across_corners": 10.4
+  },
+  "source": "inferred"
+ },
+ {
+  "part": "mount_ring_lower",
+  "parent": "mount",
+  "material": "anodized",
+  "what": "pedestal and lower half of the 30 mm ring; it sets the optical axis 39.0 mm above the rail",
+  "dims_mm": {
+   "ring_id": 30.0,
+   "width": 22.0,
+   "axis_over_rail": 39.0
+  },
+  "source": "axis height: reddot.json body (39 mm, recalled class figure); shape inferred"
+ },
+ {
+  "part": "mount_ring_cap",
+  "parent": "mount",
+  "material": "anodized",
+  "what": "upper half of the ring",
+  "dims_mm": {
+   "ring_od": 38.0
+  },
+  "source": "inferred"
+ },
+ {
+  "part": "ring_screw_fl",
+  "parent": "mount",
+  "material": "steel",
+  "what": "ring screw, socket head",
+  "dims_mm": {
+   "head_diameter": 5.2
+  },
+  "source": "inferred"
+ },
+ {
+  "part": "ring_screw_fr",
+  "parent": "mount",
+  "material": "steel",
+  "what": "ring screw, socket head",
+  "dims_mm": {
+   "head_diameter": 5.2
+  },
+  "source": "inferred"
+ },
+ {
+  "part": "ring_screw_rl",
+  "parent": "mount",
+  "material": "steel",
+  "what": "ring screw, socket head",
+  "dims_mm": {
+   "head_diameter": 5.2
+  },
+  "source": "inferred"
+ },
+ {
+  "part": "ring_screw_rr",
+  "parent": "mount",
+  "material": "steel",
+  "what": "ring screw, socket head",
+  "dims_mm": {
+   "head_diameter": 5.2
+  },
+  "source": "inferred"
+ },
+ {
+  "part": "maker_panel_placeholder",
+  "parent": "mount_ring_cap",
+  "material": "placeholder_panel",
+  "what": "plain panel where a maker's mark would be; deliberately blank",
+  "dims_mm": {
+   "length": 12,
+   "width": 10
+  },
+  "source": "MODELING_RULES.md rule 2"
+ }
+]

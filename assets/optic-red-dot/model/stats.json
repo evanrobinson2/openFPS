@@ -1,0 +1,152 @@
+{
+ "asset": "optic-red-dot",
+ "parts": 27,
+ "triangles": 26476,
+ "clips": {
+  "brightness": {
+   "parts": [
+    "brightness_knob"
+   ],
+   "frames": 12,
+   "note": "frame k+1 = switch position k of reddot.json brightness.settings (0 = OFF .. 11); 30 degrees per position"
+  },
+  "elevation_adjust": {
+   "parts": [
+    "elevation_adjuster"
+   ],
+   "frames": 25,
+   "note": "one turn in 24 clicks (15 degrees each), clockwise seen from above = dot and POI down; frame k+1 = k clicks"
+  },
+  "windage_adjust": {
+   "parts": [
+    "windage_adjuster"
+   ],
+   "frames": 25,
+   "note": "one turn in 24 clicks; frame k+1 = k clicks"
+  },
+  "elevation_cap_off": {
+   "parts": [
+    "elevation_cap"
+   ],
+   "frames": 24,
+   "note": "unscrew three turns, then lift clear"
+  },
+  "windage_cap_off": {
+   "parts": [
+    "windage_cap"
+   ],
+   "frames": 24,
+   "note": "unscrew three turns, then pull clear"
+  },
+  "mount_clamp_open": {
+   "parts": [
+    "mount_clamp_jaw",
+    "mount_clamp_nut"
+   ],
+   "frames": 16,
+   "note": "two turns of the nut free the jaw"
+  }
+ },
+ "sockets": {
+  "socket_mount": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "socket_eye": [
+   0.0,
+   0.039,
+   -0.2006
+  ],
+  "socket_objective": [
+   0.0,
+   0.039,
+   0.056
+  ],
+  "socket_rear_window": [
+   0.0,
+   0.039,
+   -0.042
+  ],
+  "socket_emitter": [
+   -0.009546,
+   0.029454,
+   -0.036
+  ]
+ },
+ "size_mm": {
+  "length": 130.5,
+  "width": 65.6,
+  "height": 76.2
+ },
+ "hierarchy": {
+  "housing": "optic_red_dot",
+  "housing_body": "housing",
+  "window_element_rear": "housing",
+  "window_element_front": "housing",
+  "window_retainer": "housing",
+  "rear_window": "housing",
+  "rear_window_retainer": "housing",
+  "emitter_carrier": "housing",
+  "emitter_led": "emitter_carrier",
+  "controls": "housing",
+  "elevation_adjuster": "controls",
+  "elevation_cap": "controls",
+  "windage_adjuster": "controls",
+  "windage_cap": "controls",
+  "brightness_knob": "controls",
+  "brightness_index": "brightness_knob",
+  "battery_cap": "brightness_knob",
+  "mount": "optic_red_dot",
+  "mount_base": "mount",
+  "mount_clamp_jaw": "mount",
+  "mount_cross_bolt": "mount",
+  "mount_bolt_head": "mount_cross_bolt",
+  "mount_clamp_nut": "mount",
+  "mount_ring_lower": "mount",
+  "mount_ring_cap": "mount",
+  "ring_screw_fl": "mount",
+  "ring_screw_fr": "mount",
+  "ring_screw_rl": "mount",
+  "ring_screw_rr": "mount",
+  "maker_panel_placeholder": "mount_ring_cap",
+  "socket_mount": "optic_red_dot",
+  "socket_eye": "optic_red_dot",
+  "socket_objective": "optic_red_dot",
+  "socket_rear_window": "optic_red_dot",
+  "socket_emitter": "optic_red_dot"
+ },
+ "triangles_by_part": {
+  "housing_body": 5856,
+  "window_element_rear": 1152,
+  "window_element_front": 1152,
+  "window_retainer": 1152,
+  "rear_window": 192,
+  "rear_window_retainer": 1152,
+  "emitter_carrier": 192,
+  "emitter_led": 48,
+  "elevation_adjuster": 530,
+  "elevation_cap": 2784,
+  "windage_adjuster": 530,
+  "windage_cap": 2784,
+  "brightness_knob": 3480,
+  "brightness_index": 12,
+  "battery_cap": 686,
+  "mount_base": 526,
+  "mount_clamp_jaw": 464,
+  "mount_cross_bolt": 240,
+  "mount_bolt_head": 240,
+  "mount_clamp_nut": 168,
+  "mount_ring_lower": 584,
+  "mount_ring_cap": 668,
+  "ring_screw_fl": 444,
+  "ring_screw_fr": 444,
+  "ring_screw_rl": 444,
+  "ring_screw_rr": 444,
+  "maker_panel_placeholder": 108
+ },
+ "mounts_on": "assets/hk416 socket_optic",
+ "cross_bolt_rifle_L_mm": -44.1,
+ "axis_over_rail_mm": 39.0,
+ "built_from": "optics/reddot.json (assets/optic-red-dot/optics/sim.py)"
+}

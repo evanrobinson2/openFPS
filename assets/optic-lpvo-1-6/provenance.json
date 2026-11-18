@@ -1,0 +1,27 @@
+{
+  "asset": "optic-lpvo-1-6",
+  "credit": "carpetshark",
+  "modelled_by": [
+    {
+      "part": "model (model/build.py, model/kit.py)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    },
+    {
+      "part": "optical simulation and reticle (optics/sim.py)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    },
+    {
+      "part": "browser runtime and checks (optics/optic-lpvo.js, optics/test.js)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    },
+    {
+      "part": "sample page (sample/index.html)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-17"
+    }
+  ],
+  "status": "Simulation-grade optics (thin-lens zoom, pupils, eye box, scope shadow, original BDC reticle, zero tables, picture-in-picture rendering model) with a browser runtime; parametric geometry recipe (Blender Python). Generic scope: the shape is a proposal from class dimensions, not a reconstruction of a reference, and awaits owner review."
+}

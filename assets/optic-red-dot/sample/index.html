@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Red-dot sight sample</title>
+<style>
+  :root { --fg:#e9eef2; --dim:#9aa6b0; --acc:#ffb347; --acc2:#6cc3ff; --bg:#0d1014; --panel:#161b21; --line:#2a323b; }
+  html,body { margin:0; background:var(--bg); color:var(--fg); font:14px/1.45 ui-monospace,Menlo,monospace; }
+  main { max-width:1080px; margin:0 auto; padding:20px 16px 48px; }
+  h1 { font-size:20px; margin:0 0 4px; } h2 { font-size:15px; margin:22px 0 6px; } p { color:var(--dim); margin:4px 0 12px; }
+  .cols { display:grid; grid-template-columns:minmax(0,600px) minmax(0,1fr); gap:16px; align-items:start; }
+  @media (max-width:860px) { .cols { grid-template-columns:1fr; } }
+  .panel { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:12px; display:grid; gap:10px; }
+  label { display:grid; gap:3px; color:var(--dim); font-size:12px; } label b { color:var(--fg); font-weight:normal; }
+  select,button,input[type=range] { font:inherit; color:var(--fg); background:#0f1318; border:1px solid var(--line); border-radius:6px; padding:6px 8px; }
+  input[type=range] { padding:0; width:100%; }
+  button { cursor:pointer; } button.go { border-color:var(--acc); color:var(--acc); }
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  #inset { max-width:360px; justify-self:center; cursor:default; }
+  canvas { width:100%; display:block; background:#07090c; border:1px solid var(--line); border-radius:8px; touch-action:none; cursor:crosshair; }
+  table { border-collapse:collapse; width:100%; font-size:13px; } th,td { border-bottom:1px solid var(--line); padding:4px 8px; text-align:right; } th:first-child,td:first-child { text-align:left; }
+  .wrap { overflow-x:auto; } #status { color:var(--dim); margin:8px 0; } .hit { color:var(--acc); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Generic 2 MOA red-dot sight: simulation sample</h1>
+  <p>The sight picture, drawn from <code>optics/optic-red-dot.js</code>. The dot's direction comes from the ray trace of the sight's collimator, so it drifts off the target as your eye leaves the optical axis (parallax), by an amount that depends on how far away the target is. Its brightness is a luminance set by the switch; how it looks depends on the scene behind it. Shots are flown by the rifle's <code>ballistics/hk416-ballistics.js</code> with the sight mounted. Drag on the picture to move your eye. The small picture is the middle of the big one, enlarged. On the big picture the dot is drawn at least 3 pixels wide so it can be seen; its true size is in the small one.</p>
+  <div id="status">Loading…</div>
+  <div class="cols">
+    <canvas id="view" width="600" height="600"></canvas>
+    <div class="panel">
+      <canvas id="inset" width="360" height="360" title="the middle of the picture, enlarged: 6 MOA rings on the target"></canvas>
+      <div class="two">
+        <label>Eye sideways <b id="vex"></b><input type="range" id="ex" min="-14" max="14" step="0.1" value="0"></label>
+        <label>Eye up <b id="vey"></b><input type="range" id="ey" min="-14" max="14" step="0.1" value="0"></label>
+      </div>
+      <label>Eye distance from the design eye point <b id="vez"></b><input type="range" id="ez" min="-120" max="250" step="5" value="0"></label>
+      <div class="two">
+        <label>Brightness switch <b id="vbr"></b><input type="range" id="br" min="0" max="11" step="1" value="8"></label>
+        <label>Light <select id="light"></select></label>
+      </div>
+      <div class="two">
+        <label>Target at <select id="tgt"></select></label>
+        <label>Load <select id="ammo"><option>M855</option><option>Mk262</option></select></label>
+      </div>
+      <div class="two">
+        <button id="centre">Centre the eye</button>
+        <button class="go" id="fire">Fire (dot held on the centre)</button>
+      </div>
+      <div class="wrap"><table id="read"></table></div>
+      <div id="shot" class="hit"></div>
+    </div>
+  </div>
+
+  <h2>Parallax: largest dot error for an eye this far off the axis (MOA)</h2>
+  <div class="wrap"><table id="par"></table></div>
+  <h2>Brightness against the scene</h2>
+  <div class="wrap"><table id="bri"></table></div>
+  <h2>Zero table, 50 m zero, against the ballistics runtime (point of impact, mm)</h2>
+  <div class="wrap"><table id="zero"></table></div>
+  <p>The page draws the two apertures of the tube (rear window and front window) and the world around the housing; the mount and the adjusters are not drawn. The target board is 0.5 m wide with a 10 cm black centre.</p>
+</main>
+<script src="../../hk416/ballistics/hk416-ballistics.js"></script>
+<script src="../optics/optic-red-dot.js"></script>
+<script>
+const $ = (id) => document.getElementById(id);
+const R = window.OpticRedDot, B = window.HK416Ballistics;
+const cv = $('view');
+const TARGETS = [10, 15, 25, 50, 100, 200, 300], EYE_H = 1.5;
+let S = { ex: 0, ey: 0, ez: 0, br: 8, lum: 5000, tgt: 25, ammo: 'M855' }, hits = [];
+
+// colour of the scene along a ray from the eye: tx, ty = tangents right / up from the optical axis; ox, oy = eye offset in metres
+function scene(tx, ty, ox, oy, lum, out) {
+  let r, g, b;
+  if (ty >= 0) { const k = Math.min(1, ty * 6); r = 0.74 - 0.30 * k; g = 0.82 - 0.22 * k; b = 0.90 - 0.08 * k; }
+  else {
+    const d = EYE_H / -ty, x = tx * d, haze = 1 - Math.exp(-d / 2500), n = (Math.sin(x * 1.7) * Math.sin(d * 0.23) + Math.sin(x * 0.31 + d * 0.11)) * 0.03;
+    r = 0.30 + n; g = 0.38 + n; b = 0.20 + n * 0.5;
+    if (d > 320) { r = 0.36; g = 0.31; b = 0.22; }
+    r += (0.74 - r) * haze; g += (0.82 - g) * haze; b += (0.90 - b) * haze;
+  }
+  const D = S.tgt, x = tx * D + ox, y = ty * D + oy;                  // the board stands on the optical axis
+  if (Math.abs(x) <= 0.25 && Math.abs(y) <= 0.25) {
+    const rr = Math.hypot(x, y); r = g = b = 0.92;
+    if (rr < 0.05) r = g = b = 0.08; else if (Math.abs(rr - 0.10) < 0.002 + D * 2e-5 || Math.abs(rr - 0.15) < 0.002 + D * 2e-5 || Math.abs(rr - 0.20) < 0.002 + D * 2e-5) r = g = b = 0.25;
+    for (const h of hits) if (h.D === D && Math.hypot(x - h.x, y - h.y) < Math.max(0.004, D * 0.00012)) { r = 0.1; g = 0.75; b = 1.0; }
+  } else if (Math.abs(x) <= 0.02 && y < -0.25 && y > -EYE_H) { r = 0.35; g = 0.27; b = 0.2; }
+  const e = Math.min(1.6, 0.35 + 0.3 * Math.log10(lum + 1));
+  out[0] = r * e; out[1] = g * e; out[2] = b * e;
+}
+
+function draw() { drawView($('view'), 0.17); drawView($('inset'), 0.0105); readout(); }
+function drawView(canvas, SPAN) {
+  const N = canvas.width, ctx = canvas.getContext('2d'), img = ctx.createImageData(N, N), px = img.data, c = [0, 0, 0];
+  const P = R.sightPicture({ x: S.ex, y: S.ey, z: S.ez }), tint = P.tint, body = R.data.body;
+  const back = (body.tube_centre_l_mm - body.length_mm / 2) - body.eye_l_mm + S.ez, rim = { x: -S.ex / back, y: -S.ey / back, r: body.hood_od_mm / 2 / back };
+  const to8 = (v) => Math.max(0, Math.min(255, Math.pow(Math.max(0, v), 1 / 2.2) * 255)), ox = S.ex / 1000, oy = S.ey / 1000;
+  for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) {
+    const ax = (i + 0.5 - N / 2) / (N / 2) * SPAN, ay = (N / 2 - j - 0.5) / (N / 2) * SPAN, k = (j * N + i) * 4;
+    const dRim = Math.hypot(ax - rim.x, ay - rim.y), dRear = Math.hypot(ax - P.rear.x, ay - P.rear.y), dFront = Math.hypot(ax - P.front.x, ay - P.front.y);
+    if (dRim > rim.r) { scene(ax, ay, ox, oy, S.lum, c); px[k] = to8(c[0]); px[k + 1] = to8(c[1]); px[k + 2] = to8(c[2]); }                    // the world past the housing
+    else if (dRear > P.rear.r) { const v = 16 + 20 * Math.max(0, (ay - rim.y) / rim.r); px[k] = px[k + 1] = px[k + 2] = v; }                    // rear face of the housing
+    else if (dFront > P.front.r) { const v = 6 + 14 * (dFront - P.front.r) / (P.rear.r); px[k] = px[k + 1] = px[k + 2] = v; }                   // inside of the tube
+    else {                                                                                                                                      // through the window
+      scene(ax, ay, ox, oy, S.lum, c); const edge = dFront > P.front.r * 0.94 ? 0.6 : 1;
+      px[k] = to8(c[0] * tint[0] * edge); px[k + 1] = to8(c[1] * tint[1] * edge); px[k + 2] = to8(c[2] * tint[2] * edge);
+    }
+    px[k + 3] = 255;
+  }
+  ctx.putImageData(img, 0, 0);
+  // the dot: fixed angular size, drawn only where both apertures are open
+  const d = R.dot(S.br, S.lum), s = N / 2 / SPAN, X = (t) => N / 2 + t * s, Y = (t) => N / 2 - t * s;
+  if (d.look !== 'off' && d.look !== 'invisible') {
+    ctx.save();
+    ctx.beginPath(); ctx.arc(X(P.rear.x), Y(P.rear.y), P.rear.r * s, 0, 7); ctx.clip();
+    ctx.beginPath(); ctx.arc(X(P.front.x), Y(P.front.y), P.front.r * s, 0, 7); ctx.clip();
+    const rad = Math.max(1.6, d.apparentMoa / 2 * R.MOA * s), a = Math.min(1, d.contrast / 8), cx = X(P.dot.x), cy = Y(P.dot.y);
+    ctx.globalCompositeOperation = 'lighter';
+    if (d.halo > 0.002) { const g = ctx.createRadialGradient(cx, cy, rad, cx, cy, rad * 6); g.addColorStop(0, 'rgba(255,40,16,' + Math.min(0.8, d.halo * 6) + ')'); g.addColorStop(1, 'rgba(255,40,16,0)'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, rad * 6, 0, 7); ctx.fill(); }
+    const g2 = ctx.createRadialGradient(cx, cy, rad * 0.8, cx, cy, rad * 1.25); g2.addColorStop(0, 'rgba(255,' + (d.contrast > 60 ? 120 : 45) + ',' + (d.contrast > 60 ? 90 : 20) + ',' + a + ')'); g2.addColorStop(1, 'rgba(255,40,16,0)');
+    ctx.fillStyle = g2; ctx.beginPath(); ctx.arc(cx, cy, rad * 1.25, 0, 7); ctx.fill();
+    ctx.restore();
+  }
+}
+
+function readout() {
+  const D = S.tgt, p = R.parallax(S.ex, S.ey, D), pe = R.parallax(S.ex, S.ey, D, { exact: true }), d = R.dot(S.br, S.lum), P = R.sightPicture({ x: S.ex, y: S.ey, z: S.ez }), J = R.data;
+  const rows = [['Eye off the axis', Math.hypot(S.ex, S.ey).toFixed(1) + ' mm'], ['Dot is', P.visible ? 'in the window' : 'out of the window (not visible)'],
+    ['Dot off the aiming point', p.moa.toFixed(2) + ' MOA (ray trace: ' + pe.moa.toFixed(2) + ')'], ['If you put it back on the centre, the shot moves', Math.hypot(p.poiShiftMm[0], p.poiShiftMm[1]).toFixed(1) + ' mm at ' + D + ' m'],
+    ['Parallax-free distance', J.optics.parallax.parallax_free_distance_m.sagittal.toFixed(0) + ' m across the emitter plane, ' + J.optics.parallax.parallax_free_distance_m.tangential.toFixed(0) + ' m in it'],
+    ['Dot covers', (J.body.dot_moa * R.MOA * D * 1000).toFixed(0) + ' mm at ' + D + ' m'], ['Dot luminance (' + d.label + ')', d.luminance.toPrecision(3) + ' cd/m²'],
+    ['Contrast against the scene', d.contrast.toPrecision(3) + ' (' + d.look.replace('_', ' ') + ')'], ['Apparent dot size', d.apparentMoa.toFixed(1) + ' MOA'],
+    ['Crisp setting for this light', J.brightness.settings[R.recommend(S.lum)].label], ['Eye pupil in this light', R.eyePupil(S.lum).toFixed(1) + ' mm']];
+  $('read').innerHTML = rows.map((r) => '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td></tr>').join('');
+  $('vex').textContent = S.ex.toFixed(1) + ' mm'; $('vey').textContent = S.ey.toFixed(1) + ' mm'; $('vez').textContent = (S.ez >= 0 ? '+' : '') + S.ez + ' mm'; $('vbr').textContent = d.label;
+}
+
+function fire() {
+  const D = S.tgt, poi = B.poi(S.ammo, 50, D), p = R.parallax(S.ex, S.ey, D);
+  const h = { D, x: p.poiShiftMm[0] / 1000, y: poi + p.poiShiftMm[1] / 1000 }; hits.push(h); if (hits.length > 12) hits.shift();
+  $('shot').textContent = S.ammo + ', 50 m zero, target at ' + D + ' m: bullet path ' + (poi * 1000).toFixed(0) + ' mm, parallax ' + p.poiShiftMm[0].toFixed(1) + ' mm right and ' + p.poiShiftMm[1].toFixed(1) + ' mm up. Impact ' +
+    (h.x * 1000).toFixed(0) + ' mm right, ' + (h.y * 1000).toFixed(0) + ' mm up of the centre (blue mark).';
+  draw();
+}
+
+function tables() {
+  const J = R.data;
+  $('par').innerHTML = '<tr><th>Target at</th><th>3 mm</th><th>6 mm</th><th>9 mm</th><th>11 mm</th><th>Edge-to-edge sweep, across / in the emitter plane</th></tr>' +
+    J.optics.parallax.table.map((r) => '<tr><td>' + r.distance_m + ' m</td>' + [3, 6, 9, 11].map((e) => '<td>' + r['eye_' + e + 'mm'].max_moa.toFixed(2) + '</td>').join('') +
+      '<td>' + r.edge_to_edge_sweep_moa.sagittal.toFixed(1) + ' / ' + r.edge_to_edge_sweep_moa.tangential.toFixed(1) + '</td></tr>').join('');
+  $('bri').innerHTML = '<tr><th>Scene</th><th>Luminance (cd/m²)</th><th>Eye pupil (mm)</th><th>Crisp setting</th><th>Contrast there</th><th>Contrast at the top setting</th></tr>' +
+    J.brightness.versus_ambient.map((r) => '<tr><td>' + r.ambient.replace(/_/g, ' ') + '</td><td>' + r.scene_luminance_cd_m2 + '</td><td>' + r.eye_pupil_mm.toFixed(1) + '</td><td>' + J.brightness.settings[r.recommended_position].label +
+      '</td><td>' + r.contrast_at_recommended.toPrecision(3) + '</td><td>' + r.contrast_at_max.toPrecision(3) + '</td></tr>').join('');
+  const Z = J.zero.ammo.M855['50m'], K = J.zero.ammo.Mk262['50m']; let h = '<tr><th>Distance</th><th>M855 table</th><th>M855 runtime</th><th>Mk 262 table</th><th>Mk 262 runtime</th><th>M855 hold (clicks up)</th></tr>';
+  Z.holds.forEach((r, i) => { if (r.distance_m > 300) return; h += '<tr><td>' + r.distance_m + ' m</td><td>' + r.poi_mm.toFixed(0) + '</td><td>' + (B.poi('M855', 50, r.distance_m) * 1000).toFixed(0) + '</td><td>' + K.holds[i].poi_mm.toFixed(0) +
+    '</td><td>' + (B.poi('Mk262', 50, r.distance_m) * 1000).toFixed(0) + '</td><td>' + r.hold_clicks_up + '</td></tr>'; });
+  $('zero').innerHTML = h;
+}
+
+async function main() {
+  await R.load('../optics/reddot.json');
+  R.mountTo(B); B.configure({ spinDrift: false });
+  $('tgt').innerHTML = TARGETS.map((d) => '<option value="' + d + '"' + (d === 25 ? ' selected' : '') + '>' + d + ' m</option>').join('');
+  $('light').innerHTML = R.data.brightness.versus_ambient.map((r) => '<option value="' + r.scene_luminance_cd_m2 + '"' + (r.ambient === 'sunlit_grass' ? ' selected' : '') + '>' + r.ambient.replace(/_/g, ' ') + '</option>').join('');
+  const sync = () => { S.ex = +$('ex').value; S.ey = +$('ey').value; S.ez = +$('ez').value; S.br = +$('br').value; S.lum = +$('light').value; S.tgt = +$('tgt').value; S.ammo = $('ammo').value; draw(); };
+  for (const id of ['ex', 'ey', 'ez', 'br']) $(id).oninput = sync;
+  for (const id of ['light', 'tgt', 'ammo']) $(id).onchange = sync;
+  $('fire').onclick = fire;
+  $('centre').onclick = () => { $('ex').value = $('ey').value = $('ez').value = 0; sync(); };
+  let drag = null;
+  cv.onpointerdown = (e) => { drag = { x: e.clientX, y: e.clientY, ex: S.ex, ey: S.ey }; cv.setPointerCapture(e.pointerId); };
+  cv.onpointermove = (e) => { if (!drag) return; $('ex').value = Math.max(-14, Math.min(14, drag.ex + (e.clientX - drag.x) * 0.08)); $('ey').value = Math.max(-14, Math.min(14, drag.ey - (e.clientY - drag.y) * 0.08)); sync(); };
+  cv.onpointerup = () => { drag = null; };
+  $('br').value = R.recommend(+$('light').value);
+  tables(); sync();
+  $('status').textContent = 'Ready. ' + R.data.body.name + '; collimator focal length ' + R.data.optics.design.effective_focal_length_mm.toFixed(1) + ' mm, emitter ' + R.data.optics.design.emitter_diameter_um.toFixed(0) + ' µm.';
+  window.sample = { S, draw, fire, sync };
+}
+main().catch((e) => { $('status').textContent = 'Failed: ' + e.message; console.error(e); });
+</script>
+</body>
+</html>

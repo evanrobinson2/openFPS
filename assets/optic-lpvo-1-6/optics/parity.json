@@ -88,8 +88,8 @@
   "max_hold_difference_mrad": 0.00063894
  },
  "speed": {
-  "shade_ns_per_pixel": 51.3819,
-  "state_ms": 0.263071
+  "shade_ns_per_pixel": 91.5957,
+  "state_ms": 0.306363
  },
  "failures": 0,
  "passed": true

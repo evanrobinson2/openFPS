@@ -1,0 +1,375 @@
+[
+ {
+  "part": "main_tube",
+  "parent": "scope",
+  "material": "anodized",
+  "what": "one-piece main tube: 30 mm tube, turret saddle with three bosses, objective end",
+  "dims_mm": {
+   "tube_od": 30.0,
+   "front_face_l": 147.0,
+   "saddle_od": 41.0,
+   "objective_end_od": 33.0,
+   "axis_over_rail": 43.18
+  },
+  "source": "tube 30 mm and overall length 257 mm: published class figures (lpvo.json published); saddle and flare inferred"
+ },
+ {
+  "part": "eyepiece_housing",
+  "parent": "scope",
+  "material": "anodized",
+  "what": "eyepiece housing; the power ring turns on its front, the dioptre ring on its rear",
+  "dims_mm": {
+   "od": 43.0,
+   "rear_face_l": -110.0
+  },
+  "source": "inferred from the ocular diameter"
+ },
+ {
+  "part": "power_ring",
+  "parent": "scope",
+  "material": "anodized",
+  "what": "power (magnification) ring: half a turn from 1x to 6x",
+  "dims_mm": {
+   "od": 45.0,
+   "throw_deg": 180.0
+  },
+  "source": "throw: lpvo.json body (inferred); shape inferred"
+ },
+ {
+  "part": "throw_lever",
+  "parent": "power_ring",
+  "material": "anodized",
+  "what": "throw lever on the power ring; it points left at 1x and comes over the top to the right at 6x",
+  "dims_mm": {
+   "height": 12.0
+  },
+  "source": "inferred"
+ },
+ {
+  "part": "dioptre_ring",
+  "parent": "scope",
+  "material": "rubber",
+  "what": "dioptre (reticle focus) ring: the rear of the eyepiece, holding the eye lens",
+  "dims_mm": {
+   "od": 46.0,
+   "clear_aperture": 42.0
+  },
+  "source": "ocular diameters: lpvo.json body (inferred for the class)"
+ },
+ {
+  "part": "lens_ocular",
+  "parent": "dioptre_ring",
+  "material": "lens_ocular",
+  "what": "eye lens (the last surface of the eyepiece); the picture-in-picture shader runs on this material",
+  "dims_mm": {
+   "diameter": 42.0,
+   "inset": 3.0
+  },
+  "source": "lpvo.json body"
+ },
+ {
+  "part": "lens_objective",
+  "parent": "scope",
+  "material": "lens_objective",
+  "what": "objective lens",
+  "dims_mm": {
+   "clear_aperture": 24.0,
+   "inset": 10.0
+  },
+  "source": "24 mm objective: the brief; inset inferred"
+ },
+ {
+  "part": "objective_retainer",
+  "parent": "scope",
+  "material": "anodized",
+  "what": "ring holding the objective; its bore is the 24 mm clear aperture",
+  "dims_mm": {
+   "clear_aperture": 24.0
+  },
+  "source": "the brief"
+ },
+ {
+  "part": "elevation_turret",
+  "parent": "turrets",
+  "material": "steel",
+  "what": "elevation turret: 0.1 mrad clicks, 100 per turn",
+  "dims_mm": {
+   "diameter": 22.0,
+   "click_mrad": 0.1,
+   "clicks_per_turn": 100
+  },
+  "source": "click value: class figure (lpvo.json body); shape inferred"
+ },
+ {
+  "part": "elevation_cap",
+  "parent": "turrets",
+  "material": "anodized",
+  "what": "screw cap over the elevation turret (low profile, capped)",
+  "dims_mm": {
+   "diameter": 29.0,
+   "height": 13.0
+  },
+  "source": "inferred"
+ },
+ {
+  "part": "windage_turret",
+  "parent": "turrets",
+  "material": "steel",
+  "what": "windage turret: 0.1 mrad clicks",
+  "dims_mm": {
+   "diameter": 22.0
+  },
+  "source": "as the elevation turret"
+ },
+ {
+  "part": "windage_cap",
+  "parent": "turrets",
+  "material": "anodized",
+  "what": "screw cap over the windage turret",
+  "dims_mm": {
+   "diameter": 29.0,
+   "height": 13.0
+  },
+  "source": "inferred"
+ },
+ {
+  "part": "illumination_knob",
+  "parent": "turrets",
+  "material": "rubber",
+  "what": "reticle illumination knob: OFF and 10 brightness positions, 30 degrees apart",
+  "dims_mm": {
+   "diameter": 26.0,
+   "height": 14.0,
+   "positions": 11
+  },
+  "source": "positions and luminances: lpvo.json illumination (inferred); shape inferred"
+ },
+ {
+  "part": "illumination_index",
+  "parent": "illumination_knob",
+  "material": "placeholder_panel",
+  "what": "index mark on the knob",
+  "dims_mm": {},
+  "source": "inferred"
+ },
+ {
+  "part": "illumination_battery_cap",
+  "parent": "illumination_knob",
+  "material": "anodized",
+  "what": "battery cap with a coin slot",
+  "dims_mm": {
+   "diameter": 19.0
+  },
+  "source": "inferred"
+ },
+ {
+  "part": "mount_base",
+  "parent": "mount",
+  "material": "anodized",
+  "what": "rail clamp body with the fixed jaw on the right; it lies on the receiver rail ahead of the folded rear sight",
+  "dims_mm": {
+   "length": 80.0,
+   "rifle_L": [
+    -94.0,
+    -14.0
+   ]
+  },
+  "source": "rail section and lug positions: assets/hk416/model/build.py; the rest inferred"
+ },
+ {
+  "part": "mount_clamp_bar",
+  "parent": "mount",
+  "material": "anodized",
+  "what": "moving jaw on the left flank of the rail",
+  "dims_mm": {
+   "length": 76.0
+  },
+  "source": "inferred"
+ },
+ {
+  "part": "mount_cross_bolt_rear",
+  "parent": "mount",
+  "material": "steel",
+  "what": "cross-bolt lying in a rail slot: clamps the jaw and stops the mount moving under recoil",
+  "dims_mm": {
+   "diameter": 4.8,
+   "slot_centre_rifle_L": -84.1
+  },
+  "source": "slot position: rail pitch 10.0 mm and lug 4.77 mm from assets/hk416/model/build.py"
+ },
+ {
+  "part": "mount_bolt_head_rear",
+  "parent": "mount_cross_bolt_rear",
+  "material": "steel",
+  "what": "head of the cross-bolt",
+  "dims_mm": {},
+  "source": "inferred"
+ },
+ {
+  "part": "mount_clamp_nut_rear",
+  "parent": "mount",
+  "material": "steel",
+  "what": "hex nut that closes the clamp",
+  "dims_mm": {},
+  "source": "inferred"
+ },
+ {
+  "part": "mount_cross_bolt_front",
+  "parent": "mount",
+  "material": "steel",
+  "what": "cross-bolt lying in a rail slot: clamps the jaw and stops the mount moving under recoil",
+  "dims_mm": {
+   "diameter": 4.8,
+   "slot_centre_rifle_L": -24.1
+  },
+  "source": "slot position: rail pitch 10.0 mm and lug 4.77 mm from assets/hk416/model/build.py"
+ },
+ {
+  "part": "mount_bolt_head_front",
+  "parent": "mount_cross_bolt_front",
+  "material": "steel",
+  "what": "head of the cross-bolt",
+  "dims_mm": {},
+  "source": "inferred"
+ },
+ {
+  "part": "mount_clamp_nut_front",
+  "parent": "mount",
+  "material": "steel",
+  "what": "hex nut that closes the clamp",
+  "dims_mm": {},
+  "source": "inferred"
+ },
+ {
+  "part": "mount_arm",
+  "parent": "mount",
+  "material": "anodized",
+  "what": "the one-piece body of the mount: two ring pedestals, the front one cantilevered 26 mm ahead of the base",
+  "dims_mm": {
+   "ring_centres_l": [
+    -20.0,
+    62.0
+   ],
+   "cantilever": 26.0,
+   "axis_over_rail": 43.18
+  },
+  "source": "axis height: a 1.70 in mount (lpvo.json body); shape inferred"
+ },
+ {
+  "part": "mount_ring_lower_rear",
+  "parent": "mount",
+  "material": "anodized",
+  "what": "lower half of a 30 mm ring",
+  "dims_mm": {
+   "ring_id": 30.0,
+   "width": 20.0
+  },
+  "source": "inferred"
+ },
+ {
+  "part": "mount_ring_cap_rear",
+  "parent": "mount",
+  "material": "anodized",
+  "what": "upper half of a 30 mm ring",
+  "dims_mm": {
+   "ring_od": 39.0
+  },
+  "source": "inferred"
+ },
+ {
+  "part": "ring_screw_rear_fl",
+  "parent": "mount",
+  "material": "steel",
+  "what": "ring screw, socket head",
+  "dims_mm": {},
+  "source": "inferred"
+ },
+ {
+  "part": "ring_screw_rear_fr",
+  "parent": "mount",
+  "material": "steel",
+  "what": "ring screw, socket head",
+  "dims_mm": {},
+  "source": "inferred"
+ },
+ {
+  "part": "ring_screw_rear_rl",
+  "parent": "mount",
+  "material": "steel",
+  "what": "ring screw, socket head",
+  "dims_mm": {},
+  "source": "inferred"
+ },
+ {
+  "part": "ring_screw_rear_rr",
+  "parent": "mount",
+  "material": "steel",
+  "what": "ring screw, socket head",
+  "dims_mm": {},
+  "source": "inferred"
+ },
+ {
+  "part": "mount_ring_lower_front",
+  "parent": "mount",
+  "material": "anodized",
+  "what": "lower half of a 30 mm ring",
+  "dims_mm": {
+   "ring_id": 30.0,
+   "width": 20.0
+  },
+  "source": "inferred"
+ },
+ {
+  "part": "mount_ring_cap_front",
+  "parent": "mount",
+  "material": "anodized",
+  "what": "upper half of a 30 mm ring",
+  "dims_mm": {
+   "ring_od": 39.0
+  },
+  "source": "inferred"
+ },
+ {
+  "part": "ring_screw_front_fl",
+  "parent": "mount",
+  "material": "steel",
+  "what": "ring screw, socket head",
+  "dims_mm": {},
+  "source": "inferred"
+ },
+ {
+  "part": "ring_screw_front_fr",
+  "parent": "mount",
+  "material": "steel",
+  "what": "ring screw, socket head",
+  "dims_mm": {},
+  "source": "inferred"
+ },
+ {
+  "part": "ring_screw_front_rl",
+  "parent": "mount",
+  "material": "steel",
+  "what": "ring screw, socket head",
+  "dims_mm": {},
+  "source": "inferred"
+ },
+ {
+  "part": "ring_screw_front_rr",
+  "parent": "mount",
+  "material": "steel",
+  "what": "ring screw, socket head",
+  "dims_mm": {},
+  "source": "inferred"
+ },
+ {
+  "part": "maker_panel_placeholder",
+  "parent": "mount_ring_cap_rear",
+  "material": "placeholder_panel",
+  "what": "plain panel where a maker's mark would be; deliberately blank",
+  "dims_mm": {
+   "length": 12,
+   "width": 10
+  },
+  "source": "MODELING_RULES.md rule 2"
+ }
+]

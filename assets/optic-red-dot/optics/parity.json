@@ -69,8 +69,8 @@
   "max_poi_difference_mm": 0.0751667
  },
  "speed": {
-  "polynomial_ns": 243.763,
-  "exact_trace_us": 6.5029
+  "polynomial_ns": 453.621,
+  "exact_trace_us": 10.6857
  },
  "failures": 0,
  "passed": true

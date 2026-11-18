@@ -656,7 +656,7 @@ if __name__ == '__main__':
     phi = math.radians(REDDOT['led_clock_deg']); c, s = math.cos(phi), math.sin(phi)
     lens_from_shooter = [[-c, s], [-s, -c]]            # [ex, ey] = M @ [right, up]
     so, rt, H = RIFLE['socket_optic_l_mm'], RIFLE['rail_top_mm'], REDDOT['axis_over_rail_mm']
-    P3 = lambda L, right=0.0, up=0.0: [-right / 1000, (H + up) / 1000, (L - so) / 1000]
+    P3 = lambda L, right=0.0, up=0.0: [0.0 - right / 1000, (H + up) / 1000, (L - so) / 1000]
     wl = window_l_mm(); led_right, led_up = -o.led[1] * s, -o.led[1] * c
     front_l = REDDOT['tube_centre_l_mm'] + REDDOT['length_mm'] / 2; rear_l = front_l - REDDOT['length_mm']
     sockets = dict(socket_mount=[0, 0, 0], socket_eye=P3(REDDOT['eye_l_mm']), socket_objective=P3(wl), socket_rear_window=P3(rear_l + REDDOT['rear_inset_mm']),
