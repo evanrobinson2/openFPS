@@ -91,7 +91,7 @@ async function soundFor() {
   const st = $('state').value, key = st === 'live' ? 'live/' + $('tw').value + '/' + $('o2').value : st;
   if (!soundCache.has(key)) {
     const ac = st === 'live' ? Q.acoustics(shot) : st;                    // a live shot's own pulse parameters, or the baked state
-    soundCache.set(key, await HK416Sound.build(AC, { params: Q.soundParams(hkParams, ac) }));
+    soundCache.set(key, await HK416Sound.build(AC, { params: Q.soundParams(hkParams, ac), mode: 'realistic' }));
   }
   return soundCache.get(key);
 }
@@ -269,7 +269,7 @@ $('semi').onclick = () => fire('single'); $('auto').onclick = () => fire('auto1s
   try {
     await Q.load('../sim/suppressor.json'); D = Q.data; M = D.model;
     [hkParams, hkAction] = await Promise.all([fetch('../../hk416/sound/params.json').then((r) => r.json()), fetch('../../hk416/action/action.json').then((r) => r.json())]);
-    S0 = await HK416Sound.build(AC, { params: hkParams });
+    S0 = await HK416Sound.build(AC, { params: hkParams, mode: 'realistic' });
     for (const [k, v] of Object.entries(S0.overlays)) { const o = document.createElement('option'); o.value = k; o.textContent = v.title; $('env').appendChild(o); }
     A.use(Q.actionData(hkAction));                                       // the HK416 action now plays the suppressed cycle
     refresh(); drawLevels(); drawAction(); drawHeat();

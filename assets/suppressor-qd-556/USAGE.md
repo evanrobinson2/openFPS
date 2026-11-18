@@ -62,6 +62,11 @@ const f = Q.flashInput('subsequent');            // f.scale.primary, f.scale.sec
 </script>
 ```
 
+With the HK416's default cinematic sound the same patched tables switch the can on and off on a chain:
+`await chain.set({ suppressor: Q.soundParams(hkParams, 'subsequent') })`, `null` to take it off (crack, thump and tail
+change, the bullet's crack stays: `shared/cinematic-sound/README.md`). The example above builds a whole suppressed
+rifle and works in both modes; add `mode: 'realistic'` to `build()` for the physical levels this page talks about.
+
 Full API, physics, sources, checks and limits: [`sim/README.md`](sim/README.md).
 
 ## Fitting it to the rifle

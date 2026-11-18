@@ -296,11 +296,16 @@
           if ('r' in h) delete h.r;
           sec.push(h);
           e.P = e.P * ratio; e.T = A.pop_T; e.t = e.t + dt;
+          if ('bm' in e) e.bm = e.bm * ratio;                 // HK416 sound v2: the gas-volume body of the blast follows the pop (the swell is the 'sec' entry)
           if ('r' in e) e.r = e.r + (r1 - r0);
         }
         pp.sec[key] = sec;
         var jl = pp.jet[key];
-        for (i = 0; i < jl.length; i++) { jl[i].rms = jl[i].rms * k_rms * (r0 / r1); jl[i].tau = jl[i].tau * k_tau; jl[i].t = jl[i].t + dt; }
+        for (i = 0; i < jl.length; i++) {
+          if ('g' in jl[i]) jl[i].g = jl[i].g * k_rms * (r0 / r1);   // HK416 sound v2: a gain on the shared jet envelope (its length is not changed)
+          else { jl[i].rms = jl[i].rms * k_rms * (r0 / r1); jl[i].tau = jl[i].tau * k_tau; }
+          jl[i].t = jl[i].t + dt;
+        }
       }
     }
     if (mech) {

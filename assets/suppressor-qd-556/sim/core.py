@@ -310,10 +310,13 @@ def sound_overlay(cfg, params, ac, bare_jet, mech=None):
                 if 'r' in h: del h['r']
                 sec.append(h)
                 e['P'] = e['P'] * ratio; e['T'] = A['pop_T']; e['t'] = e['t'] + dt
+                if 'bm' in e: e['bm'] = e['bm'] * ratio            # HK416 sound v2: the gas-volume body follows the pop
                 if 'r' in e: e['r'] = e['r'] + (r1 - r0)
             pp['sec'][key] = sec                                   # the bare rifle's afterburn pulse is gone; the hump takes its slot
             for e in pp['jet'][key]:
-                e['rms'] = e['rms'] * k_rms * (r0 / r1); e['tau'] = e['tau'] * k_tau; e['t'] = e['t'] + dt
+                if 'g' in e: e['g'] = e['g'] * k_rms * (r0 / r1)       # HK416 sound v2: a gain on the shared jet envelope
+                else: e['rms'] = e['rms'] * k_rms * (r0 / r1); e['tau'] = e['tau'] * k_tau
+                e['t'] = e['t'] + dt
     if mech is not None:
         for ev in P['cycle']:
             if ev[0] in mech and ev[1] > 0.0: ev[1] = ev[1] * mech[ev[0]]
