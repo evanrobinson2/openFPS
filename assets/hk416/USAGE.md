@@ -82,3 +82,9 @@ Sockets include `socket_optic`, `socket_muzzle`, `socket_ads_eye` and `socket_ha
 `notes/MANUAL_NOTES.md` summarises the facts used from HK's maintenance manual, with page numbers.
 `notes/REFERENCES.md` cites the reference images used to measure the shape. Neither the manual nor the images are in
 this repository.
+
+## Attachments
+
+| Asset | Fits | What it changes |
+|---|---|---|
+| [`assets/suppressor-qd-556/`](../suppressor-qd-556/USAGE.md) | `socket_muzzle` | Generic QD suppressor: a patch for `sound/params.json`, an overlay for `action/action.json`, can heating, flash scales. |
