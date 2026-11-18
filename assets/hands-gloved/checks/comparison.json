@@ -17,10 +17,10 @@
       250
      ],
      "model": [
-      1106.8,
-      300.6
+      1087.4,
+      300.5
      ],
-     "error_mm": 15.7
+     "error_mm": 18.9
     },
     "ring_tip": {
      "photo": [
@@ -28,10 +28,10 @@
       200
      ],
      "model": [
-      1171.4,
-      279.5
+      1142.5,
+      280.5
      ],
-     "error_mm": 22.4
+     "error_mm": 26.5
     },
     "middle_tip": {
      "photo": [
@@ -39,10 +39,10 @@
       215
      ],
      "model": [
-      1279.3,
-      275.2
+      1233.5,
+      285.8
      ],
-     "error_mm": 17.0
+     "error_mm": 26.1
     },
     "index_tip": {
      "photo": [
@@ -50,10 +50,10 @@
       322
      ],
      "model": [
-      1459.9,
-      339.1
+      1378.2,
+      344.5
      ],
-     "error_mm": 10.1
+     "error_mm": 13.5
     },
     "thumb_tip": {
      "photo": [
@@ -61,19 +61,41 @@
       120
      ],
      "model": [
-      1367.0,
-      198.4
+      1323.7,
+      200.0
      ],
-     "error_mm": 26.8
+     "error_mm": 21.7
     }
    },
-   "mean_error_mm": 18.4,
-   "max_error_mm": 26.8,
+   "mean_error_mm": 21.3,
+   "max_error_mm": 26.5,
+   "hand_hidden_by_a_sleeve": {
+    "fire_indexedR": 0.019,
+    "supportL": 0.0
+   },
    "hand_centre_along_bore_mm": {
     "photo": 89.5,
-    "model": 85.7
+    "model": 74.3
    },
-   "note": "The glove in R2 is a thick cold-weather glove (24.7 mm per finger against the model's 23.3 mm); its thumb tip stands about 10 mm higher over the rail than a thin glove would."
+   "note": "The glove in R2 is a thick cold-weather glove (24.7 mm per finger against the model's 23.3 mm); its thumb tip stands about 10 mm higher over the rail than a thin glove would.",
+   "render_camera": {
+    "eye": [
+     -900.0,
+     -12.912290076335877,
+     -32.18320610687023
+    ],
+    "target": [
+     0.0,
+     -12.912290076335877,
+     -32.18320610687023
+    ],
+    "up": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "ortho_mm": 415.2671755725191
+   }
   },
   "R1": {
    "grip": "fire",
@@ -100,10 +122,10 @@
       335
      ],
      "model": [
-      655.0,
-      400.6
+      691.9,
+      368.2
      ],
-     "error_mm": 18.9
+     "error_mm": 11.9
     },
     "middle_mcp_dorsal": {
      "photo": [
@@ -111,10 +133,10 @@
       470
      ],
      "model": [
-      706.1,
-      533.4
+      733.1,
+      503.7
      ],
-     "error_mm": 22.3
+     "error_mm": 17.0
     },
     "ring_mcp_dorsal": {
      "photo": [
@@ -122,10 +144,10 @@
       620
      ],
      "model": [
-      715.2,
-      672.5
+      728.1,
+      659.0
      ],
-     "error_mm": 21.6
+     "error_mm": 19.2
     },
     "little_mcp_dorsal": {
      "photo": [
@@ -133,10 +155,10 @@
       790
      ],
      "model": [
-      681.7,
-      816.7
+      709.8,
+      799.0
      ],
-     "error_mm": 20.5
+     "error_mm": 16.0
     },
     "hand_back": {
      "photo": [
@@ -144,21 +166,51 @@
       500
      ],
      "model": [
-      556.1,
-      628.6
+      585.5,
+      592.9
      ],
-     "error_mm": 19.7
+     "error_mm": 16.8
     }
    },
-   "mean_error_mm": 20.6,
-   "max_error_mm": 22.3,
-   "note": "Photo points are the knuckles as they show on the outline of the back of the hand, good to about 20 px (4 mm); the model points are joint landmarks on the glove. The shooter in R1 is prone; the model stands. The support hand in R1 holds the front of the magazine well (R1-S01); that hold is not one of this asset's grips and is not drawn."
+   "mean_error_mm": 16.2,
+   "max_error_mm": 19.2,
+   "hand_hidden_by_a_sleeve": {
+    "fireR": 0.381
+   },
+   "note": "Photo points are the knuckles as they show on the outline of the back of the hand, good to about 20 px (4 mm); the model points are joint landmarks on the glove. The shooter in R1 is prone; the model stands. The support hand in R1 holds the front of the magazine well (R1-S01); that hold is not one of this asset's grips and is not drawn.",
+   "knuckle_row_from_picture_vertical_deg": {
+    "photo": 6.6,
+    "model": 2.4,
+    "how": "CR-2: direction of the line from the index knuckle to the little-finger knuckle in the picture, measured from straight down, positive toward the muzzle. It says how the hand is pitched and turned on the grip."
+   },
+   "render_camera": {
+    "eye": [
+     -553.2738114211706,
+     -204.10720990535557,
+     -687.0531661015677
+    ],
+    "target": [
+     49.21790919802841,
+     -80.57572587856417,
+     -29.98110076972349
+    ],
+    "up": [
+     -0.13699774348336383,
+     0.9887362910526916,
+     -0.060267445904347766
+    ],
+    "ortho_mm": 236.42103082511915
+   }
   },
   "R3": {
    "grips": [
     "fire_indexed",
     "mag_grip"
    ],
+   "hand_hidden_by_a_sleeve": {
+    "fire_indexedR": 0.008,
+    "mag_gripL": 0.0
+   },
    "camera": {
     "kind": "set by eye: the rifle in R3 is wrapped in cloth and shows too few points to fit"
    },
@@ -166,12 +218,12 @@
    "measures": {
     "index_finger_against_the_three_wrapped_fingers_deg": {
      "photo": 2.5,
-     "model": 14.0,
+     "model": 15.1,
      "how": "photo: index axis against the mean direction of the three gaps between the wrapped fingers; model: index knuckle-to-tip against the mean knuckle-to-middle-joint direction of the three fingers, seen square from the right"
     },
     "index_finger_against_the_bore_deg": {
      "photo": null,
-     "model": 13.1,
+     "model": 10.4,
      "how": "the photo has no bore line (rifle wrapped); in the picture the finger lies -5.6 deg from the picture's horizontal"
     },
     "index_tip_from_magazine_release_in_finger_breadths": {
@@ -180,8 +232,8 @@
       "above": -0.84
      },
      "model": {
-      "ahead": 0.12,
-      "above": -0.85
+      "ahead": 0.19,
+      "above": -0.84
      },
      "how": "tip of the index finger relative to the centre of the button, in units of one gloved finger breadth (photo: 145 px between the gaps; model: 23.3 mm)"
     }
@@ -239,7 +291,100 @@
     ],
     "finger_pitch_px": 145.0
    },
-   "note": "Read by eye, about 15 px; angles good to about 5 deg. The glove in R3 is a thick cold-weather glove. The magazine grip is compared by grid region only (notes/NOTES.md)."
+   "note": "Read by eye, about 15 px; angles good to about 5 deg. The glove in R3 is a thick cold-weather glove. The magazine grip is compared by grid region only (notes/NOTES.md).",
+   "render_camera": {
+    "eye": [
+     -640.0,
+     150.0,
+     -160.0
+    ],
+    "target": [
+     0.0,
+     -75.0,
+     -95.0
+    ],
+    "up": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "fov_deg": 27.0
+   }
+  },
+  "first_person": {
+   "first_person_sights": {
+    "camera": {
+     "eye": [
+      0.0,
+      65.5,
+      -260.6
+     ],
+     "target": [
+      0.0,
+      20.0,
+      300.0
+     ],
+     "up": [
+      0,
+      1,
+      0
+     ],
+     "fov_deg": 75.0
+    },
+    "hand_hidden_by_a_sleeve": {
+     "fire_indexedR": 0.0,
+     "supportL": 0.001
+    }
+   },
+   "first_person_low_ready": {
+    "camera": {
+     "eye": [
+      150.0,
+      130.0,
+      -470.0
+     ],
+     "target": [
+      -15.0,
+      -55.0,
+      20.0
+     ],
+     "up": [
+      0,
+      1,
+      0
+     ],
+     "fov_deg": 50.0
+    },
+    "hand_hidden_by_a_sleeve": {
+     "fire_indexedR": 0.0,
+     "supportL": 0.005
+    }
+   }
+  },
+  "firing_grip_web": {
+   "grip": "fire_indexed",
+   "notch_mm": [
+    0.0,
+    -45.0,
+    -178.5
+   ],
+   "web_middle_mm": [
+    -19.3,
+    -57.2,
+    -188.9
+   ],
+   "web_middle_from_notch_mm": {
+    "right": 19.3,
+    "below": 12.2,
+    "behind": 10.4
+   },
+   "version_2": {
+    "right": 20,
+    "below": 17,
+    "behind": 14
+   },
+   "nearest_glove_surface_to_notch_mm": 6.1,
+   "note": "The notch is where the top of the grip's back meets the underside of the receiver's rear. The web is modelled 14.4 mm thick, so its middle cannot come nearer the notch than about 7 mm. version_2 is the figure in the notes of version 2."
   }
  },
  "verdict": "Not a fidelity score. Structural, visual and owner-review results are reported separately in notes/NOTES.md."

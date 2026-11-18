@@ -9,7 +9,8 @@ For each frame and hand:
      sampled at about 0.6 mm and the samples are tested the same way, glove samples against the rifle part and rifle
      samples against the glove shell;
   3. rifle vertices inside a glove shell's box are tested against that shell.
-The frame's penetration is the largest depth found.  Depth into overlapping rifle parts is taken per part (the largest
+The frame's penetration is the largest depth found.  The glove is given as posed, pads compressed; where a frame also
+carries its uncompressed glove (U_<i>), the pads' vertices of that one are tested too and reported apart (CR-2).  Depth into overlapping rifle parts is taken per part (the largest
 single-part depth), which is exact unless the point is inside two overlapping parts at once."""
 import sys, json, numpy as np
 from mathutils import Vector
@@ -86,6 +87,36 @@ for fi, fr in enumerate(meta['frames']):
                 if inside(ts, G['V'][i]):
                     d = depth(ts, G['V'][i])
                     if d > best['depth']: best.update(depth=float(d), part='(vertex of group %s)' % g, shell=sn, kind='rifle vertex in glove shell', at=[round(float(x), 1) for x in G['V'][i]])
+    if f'U_{fi}' in Z.files:          # CR-2: the uncompressed glove's pad vertices: how deep they would be (overlap), and how much of that no allowed compression explains (beyond)
+        U = Z[f'U_{fi}'].astype(float); PW = Z['PADW']; PL = Z['PLIM']; ov = [0.0] * len(PL); bey = [0.0] * len(PL); padv = np.where(PW.max(0) > 0.02)[0]
+        for g, G in gtree.items():
+            if g in skip: continue
+            M = motion.get(g); Ug = U if M is None else (U - M[:3, 3]) @ M[:3, :3]
+            for n in groups[g]:
+                P_ = parts[n]
+                for i in padv[np.all(Ug[padv] >= P_['lo'], 1) & np.all(Ug[padv] <= P_['hi'], 1)]:
+                    if inside(P_['t'], Ug[i]):
+                        d = depth(P_['t'], Ug[i])
+                        for k in range(len(PL)):
+                            if PW[k, i] > 0.02: ov[k] = max(ov[k], d); bey[k] = max(bey[k], d - float((PL * PW[:, i]).sum()))
+        best['pad_overlap'] = [round(v, 3) for v in ov]; best['pad_beyond'] = [round(max(v, 0.0), 3) for v in bey]
     best['id'] = fr['id']; best['depth'] = round(best['depth'], 3); res.append(best)
     print('BVH', fr['id'], best['depth'], best.get('part', ''), best.get('shell', ''), flush=True)
+# ---- CR-2: hand against hand, for the pairs of poses the caller found close together
+for pi, (ia, ib) in enumerate(meta.get('pairs', [])):
+    best = dict(depth=0.0, pair=pi); Vs = [Z[f'V_{ia}'].astype(float), Z[f'V_{ib}'].astype(float)]; sid = Z['S']; Fh = Z['F']
+    for A_, B_, who in ((0, 1, 'right glove vertex in left glove'), (1, 0, 'left glove vertex in right glove')):
+        for s_, sn in enumerate(shell_names):
+            vi = np.where(sid == s_)[0]; fm = np.where(sid[Fh[:, 0]] == s_)[0]
+            if not len(vi): continue
+            Vs_ = Vs[B_][vi]; lo, hi = Vs_.min(0), Vs_.max(0); F_ = Fh[fm] - vi[0]
+            if A_ == 0: F_ = F_          # (winding does not matter to the ray test)
+            cand = np.where(np.all(Vs[A_] >= lo, 1) & np.all(Vs[A_] <= hi, 1))[0]
+            if not len(cand): continue
+            ts = tree(Vs_, F_)
+            for i in cand:
+                if inside(ts, Vs[A_][i]):
+                    d = depth(ts, Vs[A_][i])
+                    if d > best['depth']: best.update(depth=float(d), shell=sn, by=who)
+    best['depth'] = round(best['depth'], 3); res.append(best); print('BVH pair', pi, best['depth'], best.get('shell', ''), flush=True)
 json.dump(res, open(argv[1], 'w'), indent=1)

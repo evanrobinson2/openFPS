@@ -3,7 +3,7 @@ Derived from reference R1 (notes/DECOMPOSITION.md, notes/STUDIES.md): knit back,
 caps, ribbed flex panels over the knuckles, a terry wipe panel on the back of the thumb, a dark cuff with a plain strap."""
 import math
 import numpy as np
-from handlib import BI, ORDER, P, seg
+from handlib import BI, ORDER, P, seg, FING
 
 MATERIALS = ['glove_back_knit', 'glove_palm_synthetic_leather', 'glove_fingertip', 'glove_flex_rib', 'glove_terry', 'glove_cuff', 'sleeve_fabric', 'glove_seam', 'glove_tab']
 MI = {n: i for i, n in enumerate(MATERIALS)}
@@ -24,10 +24,10 @@ def face_materials(sh):
     elif k == 'palm':
         V = sh['V'][F].mean(1); V[:len(V) // 2 * 2] = np.repeat((V[0:len(V) // 2 * 2:2] + V[1:len(V) // 2 * 2:2]) / 2, 2, axis=0)                                           # dorsal by vertex z against the mid-plane
         m[:] = np.where(V[:, 2] > -3.0, MI['glove_back_knit'], MI['glove_palm_synthetic_leather'])
-        u = s; band = (V[:, 2] > 6.0) & (u > 0.80) & (u < 0.97); rib = rg % 2 == 0   # ribbed panel over the knuckles
-        m[band & rib] = MI['glove_flex_rib']; m[band & ~rib] = MI['glove_seam']
+        u = s                                    # (CR-2: the ribbed panel over the knuckles is now four raised pads, detail_parts)
         m[(np.abs(V[:, 2] + 3.0) < 1.6) & (u > 0.1)] = MI['glove_seam']
-    elif k == 'web': m[:] = MI['glove_palm_synthetic_leather']
+    elif k == 'web':
+        m[:] = MI['glove_palm_synthetic_leather']; m[dors > 0.25] = MI['glove_seam']      # CR-2: R1-F07, the dark binding along the edge between thumb and index
     elif k == 'cuff': m[:] = MI['glove_cuff']
     else: m[:] = MI['sleeve_fabric']
     return m
@@ -48,5 +48,13 @@ def detail_parts(hand):
     V, F = _box(np.array([-4.0, -9.0, wh[1] + 2.4 + 2.4]), X, Y, Z, 11.0, 5.0, 0.35, bev=0.3); out['cuff_placeholder_panel'] = dict(V=V, F=F, bone='hand', mat='glove_flex_rib')
     # palm reinforcement patch (heel of the hand) and a knuckle bar: low raised slabs
     V, F = _box(np.array([-22.0, 24.0, -P['thick_palmar'] - g - 3.2]), X, Y, Z, 15.0, 14.0, 1.0); out['palm_heel_patch'] = dict(V=V, F=F, bone='hand', mat='glove_palm_synthetic_leather')
+    out['palm_heel_patch']['pad_shift'] = hand.pad_fields(np.array([[-22.0, 24.0, -P['thick_palmar'] - g - 3.2]]), 'palm')[:, 0, :]      # CR-2: the patch rides the hypothenar pad under it
+    # CR-2: a ribbed pad over each big knuckle (R1-F05 shows it on the index knuckle; carried to the other three by inference),
+    # four ridges across the finger, each rigid to its own metacarpal just behind the joint so the joint itself stays free
+    for f in FING:
+        m = hand.J[f + '_01'][1]; o, Xf, Yf, Zf = m[:3, 3], m[:3, 0], m[:3, 1], m[:3, 2]; top = 11.5 + P['knuckle']['mcp'] + g
+        for i in range(4):
+            c = o - Yf * (3.0 + i * RIB_PITCH) + Zf * (top - 0.55 * i - 0.2)
+            V, F = _box(c, Xf, Yf, Zf, 7.6 - 0.3 * i, 1.05, 0.75, bev=0.45); out['knuckle_rib_%s_%d' % (f, i + 1)] = dict(V=V, F=F, bone=f + '_meta', mat='glove_flex_rib')
     return out
 def unit(v): v = np.asarray(v, float); return v / np.linalg.norm(v)

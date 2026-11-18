@@ -3,7 +3,7 @@ checks/fk_reference.json (fingertip positions per frame, for the JS parity test)
 
     python3 checks/limits.py
 
-The 23 hand angles are read from the clips; the four arm angles (wrist flexion, wrist deviation, forearm pronation,
+The 25 hand angles and the four pad compressions (mm, against the limits of handlib.pad_table) are read from the clips; the four arm angles (wrist flexion, wrist deviation, forearm pronation,
 elbow flexion) are measured from the hand and forearm matrices and the assumed shoulder (grips/solve.py SHOULDER)."""
 import os, sys, json
 import numpy as np
@@ -20,7 +20,8 @@ for clip, fl in E.items():
             for a, v in vals.items():
                 lo, hi = hl.limit_of(a) if a in hl.ANGLES else hl.LIMITS[a][:2]; m = min(v - lo, hi - v); nvals += 1; nbad += m < -1e-6
                 obs[a][0] = min(obs[a][0], float(v)); obs[a][1] = max(obs[a][1], float(v))
-                if m < worst[0]: worst = (float(m), dict(frame=f + 1, hand=s, joint=a, value=round(float(v), 2), min=lo, max=hi))
+                if a.startswith('pad_') and v - lo >= -1e-6: m = hi - v      # a pad at rest sits on its lower limit (0 mm): only its upper margin says anything
+                if m < worst[0] and not a.startswith('pad_'): worst = (float(m), dict(frame=f + 1, hand=s, joint=a, value=round(float(v), 2), min=lo, max=hi))
             H, F = fr[s]['H'], fr[s]['F']
             if s == 'R': H, F = hl.mirror_mats(H), hl.mirror_mats(F)
             L = h.pose_landmarks(h.skin_mats(h.fk(q, H, F)))

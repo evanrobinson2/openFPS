@@ -46,6 +46,7 @@ def opened(p, back, amount=0.45, clip=None, r=1):
     for d, idx in DIGIT_IDX.items():
         if d == 'thumb': q[idx[3:]] *= amount; q[idx[1]] = q[idx[1]] * amount - 8 * (1 - amount)
         else: q[[idx[0], idx[2], idx[3]]] *= amount
+    q[hl.PAD_IDX] = 0.0                                             # CR-2: a hand off the rifle has nothing pressing on its pads
     H = p.H(clip, r).copy(); H[:3, 3] += np.asarray(back, float); return Pose(p.side, q, H, 'static')
 P = {k: from_grip(k) for k in ('fire_indexed', 'fire', 'fire_reach', 'support', 'mag_grip', 'catch_ready', 'charge_grip')}
 BACK = dict(support=(0, -32, 0), mag_grip=(34, -4, 0), catch_ready=(30, 0, 0), charge_grip=(26, 8, 10))
@@ -140,6 +141,14 @@ def build():
         c = Clip(nm, nm, pre=4, post=4, note='Firing thumb goes toward the selector lever on the left side as the lever turns. It does not reach it: the gap is measured in checks/contact.json and explained in notes/NOTES.md.'); c.hold('R', fi); c.hold('L', sup)
         mid = 4 + c.n_rifle // 2; q2, e = place_digit('R', 'thumb', fi.q, fi.H(), 'thumb_tip', control_point('selector', nm, c.rc(mid)), nm, c.rc(mid), touch=0.0, iters=400)
         q2, c.gap[('R', 'thumb', mid)] = close_gap('R', 'thumb', q2, fi.H(), LEVER_PARTS, nm, c.rc(mid), iters=500)
+        # CR-2: the lever is out of reach, so the search above ends wherever it started from; try the thumb poses whose tip comes nearest the lever too
+        rng = np.random.default_rng(416); ti = DIGIT_IDX['thumb']; TH = hl.LO[ti] + 0.5 + (hl.HI[ti] - hl.LO[ti] - 1.0) * rng.random((400, 5)); tgt = S.world('R', control_point('selector', nm, c.rc(mid))); S.mir = True; S.motion = motion(nm, c.rc(mid)); S.skip = ()
+        def tipd(a_): qq = fi.q.copy(); qq[ti] = a_; Sk_ = S.skin(qq, canon('R', fi.H())); return float(np.linalg.norm(S.lm(Sk_, 'thumb_tip') - tgt)) + 100.0 * S.pen('thumb', Sk_)
+        for i_ in np.argsort([tipd(a_) for a_ in TH])[:3]:
+            qq = fi.q.copy(); qq[ti] = TH[i_]; qq, g_ = close_gap('R', 'thumb', qq, fi.H(), LEVER_PARTS, nm, c.rc(mid), iters=350)
+            S.mir = True; S.motion = motion(nm, c.rc(mid))
+            if g_ < c.gap[('R', 'thumb', mid)] and S.pen('thumb', S.skin(qq, canon('R', fi.H()))) == 0: q2, c.gap[('R', 'thumb', mid)] = qq, g_
+        S.motion = None
         for f in range(4, 4 + c.n_rifle): c.set('R', f, q2, fi.H())
         c.blend_digit('R', 'thumb', 0, 4); c.blend_digit('R', 'thumb', 4 + c.n_rifle - 1, c.n - 1); c.err[('R', 'thumb', mid)] = e; C[c.name] = c
     # bolt catch: support hand to the magazine well, thumb on the paddle
@@ -201,7 +210,19 @@ def sanitize(C):
             S.motion = None
     return moved
 
+def relax_pads(C):
+    """CR-2.  A pad is pressed in only as far as the rifle presses it: in every frame each pad's compression is cut back
+    (bisection) to the least that still leaves the whole glove clear of the rifle (solve.Solver.relax)."""
+    for name, c in C.items():
+        for s in 'RL':
+            for f in range(c.n):
+                q, H = c.fr[s][f]
+                if not np.any(q[hl.PAD_IDX] > 0): continue
+                S.motion = motion(c.rifle, c.rc(f)) or None; S.mir = s == 'R'; S.skip = (); q = S.relax(q, canon(s, H))
+                c.set(s, f, q, H)
+    S.motion = None
 # ------------------------------------------------------------------ evaluation of every frame: forearm, wrist angles, approximate clearance
+FOLDED = {}
 def evaluate(C):
     out = {}
     for name, c in C.items():
@@ -210,10 +231,15 @@ def evaluate(C):
             fr = dict(rifle_frame=c.rc(f) if c.rifle else None)
             for s in 'RL':
                 q, H = c.fr[s][f]; Hc = canon(s, H); best = None
+                sh_ = S.world(s, solve.SHOULDER[s]); L12 = hl.ANSUR['acromion_radiale'][0], hl.ANSUR['radiale_stylion'][0]
+                dmin = math.sqrt(L12[0] ** 2 + L12[1] ** 2 - 2 * L12[0] * L12[1] * math.cos(math.radians(180.0 - hl.LIMITS['elbow_flex'][1] + 0.3)))      # wrist no nearer the shoulder than the elbow can fold
+                dv = Hc[:3, 3] - sh_
+                if np.linalg.norm(dv) < dmin:          # CR-2: a frame in mid-air that asks for more elbow flexion than there is: the hand is moved out along the shoulder-wrist line (under 1 mm in practice)
+                    Hc = Hc.copy(); Hc[:3, 3] = sh_ + dv / np.linalg.norm(dv) * dmin; H = canon(s, Hc); c.set(s, f, q, H); FOLDED[name] = max(FOLDED.get(name, 0.0), float(dmin - np.linalg.norm(dv)))
                 for sw in np.arange(solve.SWIVEL[0], solve.SWIVEL[1] + 0.1, 1.0):
                     F, a = hl.forearm_and_wrist(Hc, S.world(s, solve.SHOULDER[s]), solve.pole_of(sw))
                     viol = sum(max(0.0, hl.LIMITS[k][0] - a[k], a[k] - hl.LIMITS[k][1]) for k in ('wrist_flex', 'wrist_dev', 'pronation', 'elbow_flex'))
-                    key = (round(viol, 2), abs(sw - sw_prev[s]) if sw_prev[s] is not None else -solve.arm_margin(a))
+                    key = (round(viol, 2), abs(sw - sw_prev[s]) if sw_prev[s] is not None else solve.swivel_rank(s, sw, a))
                     if best is None or key < best[0]: best = (key, F, dict(a, swivel=float(sw)))
                 sw_prev[s] = best[2]['swivel']
                 S.motion = motion(c.rifle, c.rc(f)) or None; S.mir = s == 'R'; S.skip = (); Sk = S.skin(q, Hc); d = min(float(S.sdf(S.pts(g, Sk)).min()) for g in S.grp); S.motion = None
@@ -232,10 +258,17 @@ def quat(Rm):
 def pq(M): return [round(float(x) / 1000.0, 7) for x in M[:3, 3]] + quat(M[:3, :3])
 
 if __name__ == '__main__':
-    C = build(); MOVED = sanitize(C); E = evaluate(C); h = S.h
+    import pickle; CACHE = os.path.join(solve.HERE, 'refs-local', 'build', 'clips_cache.pkl')        # --reuse: skip building the frames, redo only the evaluation and the files
+    if '--reuse' in sys.argv and os.path.exists(CACHE):
+        saved = pickle.load(open(CACHE, 'rb')); C = {}; MOVED = saved['moved']
+        for n, d in saved['clips'].items(): c = Clip(n, d['rifle'], d['pre'], d['post'], d['note']); c.fr = d['fr']; c.err = d['err']; c.gap = d['gap']; C[n] = c
+    else:
+        C = build(); MOVED = sanitize(C); relax_pads(C)
+        pickle.dump(dict(moved=MOVED, clips={n: dict(rifle=c.rifle, pre=c.pre, post=c.post, note=c.note, fr=c.fr, err=c.err, gap=c.gap) for n, c in C.items()}), open(CACHE, 'wb'))
+    E = evaluate(C); h = S.h
     for name, frames in E.items():
         c = C[name]; worst = min(min(fr[s]['sdf'] for s in 'RL') for fr in frames); e = max(c.err.values()) if c.err else 0.0
-        print(f"{name:20s} {len(frames):3d} frames  pre {c.pre:2d}  approx. clearance min {worst:6.2f} mm  digit target error max {e:5.2f} mm  largest escape move {MOVED[name]:5.1f} mm", flush=True)
+        print(f"{name:20s} {len(frames):3d} frames  pre {c.pre:2d}  approx. clearance min {worst:6.2f} mm  digit target error max {e:5.2f} mm  largest escape move {MOVED[name]:5.1f} mm  moved out for the elbow {FOLDED.get(name, 0.0):4.2f} mm", flush=True)
     # ---- frames for the checks
     np.savez(os.path.join(solve.HERE, 'refs-local', 'build', 'frames.npz'), E=np.array({n: [dict(rifle_frame=fr['rifle_frame'], **{s: dict(q=fr[s]['q'], H=fr[s]['H'], F=fr[s]['F'], arm=fr[s]['arm']) for s in 'RL'}) for fr in frames] for n, frames in E.items()}, dtype=object),
              meta=json.dumps({n: dict(rifle=C[n].rifle, pre=C[n].pre, post=C[n].post, n_rifle=C[n].n_rifle) for n in C}))
@@ -250,6 +283,7 @@ if __name__ == '__main__':
                            arm_deg={k: round(float(v), 1) for k, v in g['wrist'].items() if k != 'reach_over'},
                            solver=dict(pads_gap_mm=g['gaps'], digit_target_error_mm=g['digits'], min_clearance_mm_approx=round(g['min_sdf'], 2), limit_violation_deg=round(float(g['limit_violation_deg']), 2),
                                        **{k: g[k] for k in ('place_fit_rms', 'backed_off') if k in g}))
+    np.savez(solve.RAW, g=np.array(G, dtype=object))            # the forearms as chosen here (checks/compare.py draws the grips from this file)
     json.dump(dict(units='position metres + quaternion xyzw in the rifle frame (+X left, +Y up, +Z muzzle); angles degrees', sockets={k: [round(float(x) / 1000, 6) for x in v] for k, v in sock.items() if 'hand' in k}, grips=grips),
               open(os.path.join(solve.HERE, 'grips', 'grips.json'), 'w'), indent=1)
     # ---- runtime data
@@ -258,7 +292,8 @@ if __name__ == '__main__':
     rt = dict(asset='hands-gloved', credit='carpetshark', fps=FPS,
               frame='Rifle frame of assets/hk416: metres, +X shooter\'s left, +Y up, +Z to the muzzle, origin on the bore axis at the upper receiver\'s front face.',
               skeleton=dict(note='Canonical LEFT hand, rest pose: X radial, Y distal, Z dorsal, origin at the wrist joint centre. The right hand is its mirror image (x -> -x). rest = 4x4 row-major, translation in metres.', bones=bones),
-              angles=hl.ANGLES, limits_deg={k: dict(min=v[0], max=v[1], source=hl.SRC[v[2]].split(';')[0].split(':')[0][:120], note=v[3]) for k, v in hl.LIMITS.items()},
+              angles=hl.ANGLES, angle_units='degrees, except the last four (pad_*): compression of a palm pad at its middle, millimetres', arch=hl.ARCH,
+              pads={k: dict(limit_mm=v['limit_mm'], tissue_mm=v['tissue_mm'], how=v['how']) for k, v in h.pad_info.items()}, limits_deg={k: dict(min=v[0], max=v[1], source=hl.SRC[v[2]].split(';')[0].split(':')[0][:120], note=v[3]) for k, v in hl.LIMITS.items()},
               landmarks={n: dict(bone=hl.ORDER[h.lm_bone[i]], position=[round(float(x) / 1000, 6) for x in h.lm_pos[i]]) for i, n in enumerate(h.lm_names)},
               capsules=[dict(bone=n, radius=round(float(r) / 1000, 5)) for n, r in [(f + s, hl.breadth(f) / 2 * k + hl.P['glove']) for f in hl.FING for s, k in (('_01', 1.0), ('_02', 0.93), ('_03', 0.86))] + [('thumb_01', 15.0), ('thumb_02', 12.5), ('thumb_03', 11.8)]],
               sockets={k: [round(float(x) / 1000, 6) for x in v] for k, v in sock.items() if 'hand' in k}, shoulders={s: [round(float(x) / 1000, 4) for x in solve.SHOULDER[s]] for s in 'RL'},

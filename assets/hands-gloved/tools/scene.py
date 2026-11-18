@@ -16,7 +16,7 @@ def hand_meshes(side, q, H, F=None, prefix=''):
         if side == 'R': V = V * [-1, 1, 1]; Fc = Fc[:, ::-1]
         out.append(dict(name=f'{prefix}{side}_{n}', V=V, F=Fc, mats=glove.MATERIALS, M=h.mats[n]))
     for n, d in h.details.items():
-        Sb = S[hl.BI[d['bone']]]; V = d['V'] @ Sb[:3, :3].T + Sb[:3, 3]; Fc = d['F']
+        Sb = np.asarray(S)[hl.BI[d['bone']]]; V0 = d['V'] + (S.pads @ d['pad_shift'] if 'pad_shift' in d and getattr(S, 'pads', None) is not None else 0.0); V = V0 @ Sb[:3, :3].T + Sb[:3, 3]; Fc = d['F']
         if side == 'R': V = V * [-1, 1, 1]; Fc = Fc[:, ::-1]
         out.append(dict(name=f'{prefix}{side}_{n}', V=V, F=Fc, mat=d['mat'], smooth=False))
     return out
@@ -40,6 +40,21 @@ def render(meshes, camera, out, size=(1280, 853), samples=24, **kw):
     r = subprocess.run([BLENDER, '-b', '--python', os.path.join(HERE, 'tools', 'render.py'), '--', tmp, out], capture_output=True, text=True)
     os.remove(tmp)
     if 'RENDERED' not in r.stdout: print(r.stdout[-3000:], r.stderr[-2000:])
+    return out
+def hidden_by_sleeve(meshes, camera):
+    """CR-2 (sleeve fix).  Share of each hand's glove (vertices of its fingers, thumb, palm and web) whose line of sight to
+    the camera is cut by a forearm sleeve, either hand's.  camera: eye/target with ortho_mm (parallel rays) or fov_deg."""
+    sl = [m for m in meshes if m['name'].endswith('_sleeve')]; T = np.concatenate([np.asarray(m['V'], float)[np.asarray(m['F'])] for m in sl]); A, e1, e2 = T[:, 0], T[:, 1] - T[:, 0], T[:, 2] - T[:, 0]
+    eye = np.array(camera['eye'], float); tgt = np.array(camera['target'], float); out = {}
+    for hand_ in sorted({m['name'].rsplit('_', 1)[0] for m in sl}):
+        P = np.concatenate([np.asarray(m['V'], float) for m in meshes if m['name'].startswith(hand_ + '_') and m['name'][len(hand_) + 1:].split('_')[0] in ('finger', 'thumb', 'palm', 'web')])
+        D = np.tile((eye - tgt) / np.linalg.norm(eye - tgt), (len(P), 1)) if 'ortho_mm' in camera else (eye - P) / np.linalg.norm(eye - P, axis=1)[:, None]
+        tmax = np.full(len(P), 1e9) if 'ortho_mm' in camera else np.linalg.norm(eye - P, axis=1); hit = np.zeros(len(P), bool)
+        for i in range(0, len(P), 400):          # Moller-Trumbore, in blocks
+            o = P[i:i + 400, None, :]; d = D[i:i + 400, None, :]; pv = np.cross(d, e2[None]); det = (e1[None] * pv).sum(-1); ok = np.abs(det) > 1e-9; inv = 1.0 / np.where(ok, det, 1.0)
+            tv = o - A[None]; u = (tv * pv).sum(-1) * inv; qv = np.cross(tv, e1[None]); v = (d * qv).sum(-1) * inv; t = (e2[None] * qv).sum(-1) * inv
+            hit[i:i + 400] = (ok & (u >= 0) & (v >= 0) & (u + v <= 1) & (t > 0.5) & (t < tmax[i:i + 400, None])).any(1)
+        out[hand_] = round(float(hit.mean()), 3)
     return out
 if __name__ == '__main__':
     # flat hand study views

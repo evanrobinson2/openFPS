@@ -11,8 +11,8 @@ for (const clip of H.clips) for (let f = 0; f < d.clips[clip].frames; f++) {
 }
 ok(worst < 5e-6, 'fingertip positions match the Python recipe in every frame: worst ' + (worst * 1e6).toFixed(2) + ' micrometres over ' + n + ' points');
 // 2. joint limits in every frame, and between frames
-let bad = 0, m = 0; for (const clip of H.clips) for (let t = 0; t <= H.duration(clip) + 1e-9; t += 1 / (H.fps * 4)) { const s = H.sample(clip, t); bad += H.checkLimits(s.R.angles).length + H.checkLimits(s.L.angles).length; m += 46; }
-ok(bad === 0, 'all 23 joint angles of both hands inside their limits at 4 samples per frame: ' + m + ' values, ' + bad + ' outside');
+let bad = 0, m = 0; for (const clip of H.clips) for (let t = 0; t <= H.duration(clip) + 1e-9; t += 1 / (H.fps * 4)) { const s = H.sample(clip, t); bad += H.checkLimits(s.R.angles).length + H.checkLimits(s.L.angles).length; m += 2 * H.angles.length; }
+ok(bad === 0, 'all ' + H.angles.length + ' values (25 joint angles, 4 pad compressions) of both hands inside their limits at 4 samples per frame: ' + m + ' values, ' + bad + ' outside');
 // 3. grips load and bones are rigid (orthonormal)
 let orth = 0; for (const g of H.grips) { const p = H.grip(g); for (const b of H.bones) { const x = p.bones[b]; orth = Math.max(orth, Math.abs(x[0] * x[1] + x[4] * x[5] + x[8] * x[9]), Math.abs(x[0] * x[0] + x[4] * x[4] + x[8] * x[8] - 1)); } }
 ok(orth < 1e-5, H.grips.length + ' grips: bone matrices orthonormal to ' + orth.toExponential(1));

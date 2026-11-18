@@ -37,6 +37,14 @@ SRC = {
     'G': 'Greiner 1991, Hand Anthropometry of U.S. Army Personnel, NATICK/TR-92/011, men n = 1,003: digit 2 / 3 / 4 / 5 length '
          '(tip to the digit\'s base landmark) 75.3 / 83.8 / 79.2 / 64.7 mm, hand length 194.1 mm (pp. 61, 85, 109, 133, 159; read '
          '2026-11-17 from the scanned report\'s text layer, which is rough: each mean was checked against its 50th percentile)',
+    'SP': 'Spartacus, Shojaeizadeh, Raffault, Shoults, Van Wieren & Sparrey 2021, PLoS ONE 16(12):e0261008, In vivo soft tissue '
+          'compressive properties of the human hand: 15 adults, a 3 mm flat indenter pressed into the palm over the trapezium to 50 % '
+          'of the soft-tissue thickness measured there by ultrasound (cohort split at 2.5 and 3.0 mm), at 0.2 and 20 Hz; the rates '
+          'were compared at 31 % (full text read 2026-11-17 through the Europe PMC API)',
+    'LA': 'Lameu, Gerude, Correa & Lima 2004, Rev Hosp Clin Fac Med Sao Paulo 59(2):57-62: thickness of the first web (adductor '
+          'pollicis) pinched by a Lange caliper at 10 g/mm2, 209 men: 12.5 +/- 2.8 mm (abstract, read 2026-11-17 through the PubMed API)',
+    'CH': 'Choi & Robinovitch 2011, J Biomech 44(3):532-539: a 5 mm foam pad on the palm (standing for a glove) cut peak palm pressure '
+          'by 83 % in forward falls (abstract, read 2026-11-17; used only as evidence that glove padding takes up load, no number taken)',
     'I': 'inference (no measurement found); see notes/NOTES.md',
 }
 
@@ -83,8 +91,21 @@ P = dict(
     palm_expo=3.8,                     # I: superellipse exponent of the palm's section at the knuckles (2 = ellipse), set so the circumference matches A
     web_offset=19.2,                   # I: the finger web / proximal digital crease lies this far distal of the MCP joint centre
     thenar_crease=(-4.0, 9.0, 12.0),   # I: thenar crease: x at the wrist, x at 62 % of the palm, blend width (mm); CR-1
-    cuff_len=42.0, sleeve_len=210.0,   # I: glove cuff past the wrist; forearm sleeve shown
+    cuff_len=42.0, sleeve_len=245.0,   # I: glove cuff past the wrist; forearm sleeve shown (CR-2: to 23 mm short of the elbow, so its end stays out of the picture)
+    knuckle=dict(mcp=3.2, joint=0.10, waist=0.07, valley=2.2),     # I: knuckles stand 3.2 mm proud of the back of the hand; finger joints 10 % deeper, phalanges 7 % slimmer on the back; 2.2 mm valleys between metacarpals
+    rib_height=0.45,                   # I: ridge height of the flex panels (R1-F05 shows about five ridges over 16 mm)
+    forearm_end=(46.0, 39.0),          # I: forearm half-breadth and half-depth 245 mm above the wrist: a circumference of 268 mm, 86 % of the flexed girth (A: 310.1), for a relaxed arm
+    sleeve_cloth=3.0, sleeve_taper=1.6,  # I: thickness of the sleeve over the arm; the arm stays slim for its first third and swells toward the elbow (exponent)
+    # CR-2: soft tissue that gives under contact.  A pad's surface may move toward the bone by at most
+    # strain_limit x (soft-tissue thickness under it) + glove_give.  strain_limit is SP's in-vivo indentation depth.
+    strain_limit=0.50,                 # SP: 50 % of the local soft-tissue thickness
+    glove_give=0.4,                    # I: the 1.2 mm glove shell (0.8 mm synthetic leather and a lining) packs down by a third
+    bone_r=dict(mc1=6.0, mc5=4.5),     # I: half-thickness of the first and fifth metacarpal shafts (recalled order of size, not re-read)
+    trapezium_tissue=2.75,             # SP: soft tissue over the trapezium, the middle of the cohort's 2.5 to 3.0 mm band
+    midpalm_tissue=4.0,                # I: skin, fat and palmar aponeurosis over the flexor tendons (the tendons are taken as incompressible)
+    distal_tissue=5.0,                 # I: skin and fat pad in front of the metacarpal heads and flexor sheaths
 )
+PADS = ('thenar', 'hypothenar', 'midpalm', 'distal')
 
 def seg(f):
     """Bone lengths (mm): metacarpal, proximal, middle, distal, soft tip."""
@@ -103,17 +124,27 @@ LIMITS = dict(   # joint: (min, max, source key, note)
     thumb_cmc_abd=(-21, 21, 'CO', 'half of 42 each way from the relaxed mid-range rest (I)'),
     thumb_cmc_rot=(-8.5, 8.5, 'CO', 'half of 17 each way'),
     thumb_mcp_flex=(0, 56, 'HU', 'active range'), thumb_ip_flex=(-5, 73, 'HU', 'active range'),
+    mc2_flex=(-1.7, 9.3, 'ES', 'index carpometacarpal: the 11 deg arc, the flat hand taken 15 % into it (I); CR-2'),
+    mc3_flex=(-1.0, 6.0, 'ES', 'middle carpometacarpal: the 7 deg arc, the flat hand taken 15 % into it (I); CR-2'),
     mc4_flex=(-3, 17, 'ES', 'ring carpometacarpal: the 20 deg arc, the flat hand taken 15 % into it (I)'),
     mc5_flex=(-4, 23, 'ES', 'little carpometacarpal: the 27 deg arc, the flat hand taken 15 % into it (I)'),
     wrist_flex=(-70, 80, 'AA', 'extension 70, flexion 80'), wrist_dev=(-30, 20, 'AA', 'ulnar 30 (-), radial 20 (+)'),
     pronation=(-80, 80, 'AA', 'supination 80 (-), pronation 80 (+) from the thumb-up neutral'),
     elbow_flex=(0, 150, 'AA', 'extension 0, flexion 150'))
 ANGLES = [f + '_' + k for f in FING for k in ('mcp_flex', 'mcp_abd', 'pip_flex', 'dip_flex')] + \
-         ['thumb_cmc_flex', 'thumb_cmc_abd', 'thumb_cmc_rot', 'thumb_mcp_flex', 'thumb_ip_flex', 'mc4_flex', 'mc5_flex']
+         ['thumb_cmc_flex', 'thumb_cmc_abd', 'thumb_cmc_rot', 'thumb_mcp_flex', 'thumb_ip_flex', 'mc4_flex', 'mc5_flex', 'mc2_flex', 'mc3_flex'] + \
+         ['pad_' + k for k in PADS]          # CR-2: the last four are not angles: compression of each palm pad at its middle, mm
+PAD_IDX = [ANGLES.index('pad_' + k) for k in PADS]
+# CR-2: metacarpal arching.  ES gives 27 and 22 deg of pronation-supination at the ring and little carpometacarpal joints beside
+# 20 and 27 deg of flexion.  The two are taken to go together in proportion (I): as the metacarpal flexes it turns its palmar
+# side toward the thumb, which is the cupping of the hand.  No separate angle.
+ARCH = dict(ring=27.0 / 20.0, little=22.0 / 27.0)
 def limit_of(name):
     k = name if name in LIMITS else name.split('_', 1)[1]
     return LIMITS[k][0], LIMITS[k][1]
-LO = np.array([limit_of(a)[0] for a in ANGLES], float); HI = np.array([limit_of(a)[1] for a in ANGLES], float)
+def _set_limits():
+    global LO, HI
+    LO = np.array([limit_of(a)[0] for a in ANGLES], float); HI = np.array([limit_of(a)[1] for a in ANGLES], float)
 
 # ------------------------------------------------------------------ small maths
 def rx(a): c, s = math.cos(a), math.sin(a); return np.array([[1, 0, 0], [0, c, -s], [0, s, c]], float)
@@ -173,7 +204,8 @@ def local_rotations(q):
     for f in FING:
         R[f + '_01'] = rz(-q[f + '_mcp_abd'] * D2R) @ rx(-q[f + '_mcp_flex'] * D2R)      # abduction in the palm plane, then flexion
         R[f + '_02'] = rx(-q[f + '_pip_flex'] * D2R); R[f + '_03'] = rx(-q[f + '_dip_flex'] * D2R)
-    R['ring_meta'] = rx(-q['mc4_flex'] * D2R); R['little_meta'] = rx(-q['mc5_flex'] * D2R)
+    R['ring_meta'] = rx(-q['mc4_flex'] * D2R) @ ry(-ARCH['ring'] * q['mc4_flex'] * D2R); R['little_meta'] = rx(-q['mc5_flex'] * D2R) @ ry(-ARCH['little'] * q['mc5_flex'] * D2R)
+    R['index_meta'] = rx(-q['mc2_flex'] * D2R); R['middle_meta'] = rx(-q['mc3_flex'] * D2R)
     R['thumb_01'] = rz(q['thumb_cmc_abd'] * D2R) @ ry(q['thumb_cmc_rot'] * D2R) @ rx(-q['thumb_cmc_flex'] * D2R)
     R['thumb_02'] = rx(-q['thumb_mcp_flex'] * D2R); R['thumb_03'] = rx(-q['thumb_ip_flex'] * D2R)
     return R
@@ -241,17 +273,20 @@ class Hand:
             m = J[f + '_01'][1]; o, X, Y, Z = m[:3, 3], m[:3, 0], m[:3, 1], m[:3, 2]
             D_p, D_d, D_t = 2 * B * P['depth_pip'], 2 * B * P['dip_breadth'] * P['depth_dip'], 2 * B * 0.66
             s1, s2 = s['pp'], s['pp'] + s['mp']
-            kn = [(-13.0, B * 0.70, 8.0, 9.0), (-6.0, B * 1.00, 10.5, 12.5), (0.0, B * 1.03, 11.5, 13.0),
-                  (s1 * 0.5, B * 0.95, D_p * 1.02 * ds, D_p * 1.06 * (1 - ds)), (s1, B, D_p * ds * 1.05, D_p * (1 - ds) * 0.97),
-                  ((s1 + s2) / 2, B * 0.92, D_p * 0.93 * ds, D_p * 0.97 * (1 - ds)), (s2, B * P['dip_breadth'], D_d * ds * 1.05, D_d * (1 - ds)),
+            kd = P['knuckle']          # CR-2: dorsal relief so that knuckles and finger joints read (R1-F05, R3-F04); the palmar side is as before
+            kn = [(-13.0, B * 0.70, 8.0, 9.0), (-6.0, B * 1.00, 10.5 + 0.7 * kd['mcp'], 12.5), (0.0, B * 1.03, 11.5 + kd['mcp'], 13.0), (s1 * 0.22, B * 0.97, D_p * 1.02 * ds + 0.25 * kd['mcp'], D_p * 1.06 * (1 - ds)),
+                  (s1 * 0.5, B * 0.95, D_p * (1.02 - kd['waist']) * ds, D_p * 1.06 * (1 - ds)), (s1, B, D_p * ds * (1.05 + kd['joint']), D_p * (1 - ds) * 0.97),
+                  ((s1 + s2) / 2, B * 0.92, D_p * (0.93 - kd['waist']) * ds, D_p * 0.97 * (1 - ds)), (s2, B * P['dip_breadth'], D_d * ds * (1.05 + kd['joint']), D_d * (1 - ds)),
                   (L - 0.50 * 2 * B, B * 0.84, D_t * 0.40, D_t * 0.60)]
             st = _round_tip(_stations(kn), L, 0.50 * 2 * B * 0.9)
             path = o[None] + st[:, :1] * Y[None]
             V, F, ring, ang = _tube(path, np.tile(X, (len(st), 1)), np.tile(Z, (len(st), 1)), st[:, 1], st[:, 2], st[:, 3], expo=2.3)
             sv = st[ring, 0]; hw = [0.50 * 2 * B, 0.52 * D_p, 0.52 * D_d]
             wl = _blend(sv, [0.0, s1, s2], hw); W = np.zeros((len(V), len(ORDER)))
-            base = f + '_meta' if f in ('ring', 'little') else 'hand'
+            base = f + '_meta'                       # CR-2: every finger's base follows its own metacarpal
             for k, bn in enumerate([base, f + '_01', f + '_02', f + '_03']): W[:, BI[bn]] += wl[:, k]
+            for jc, half in ((s1, 8.0), (s2, 5.5)):        # CR-2: the flex panels are real ridges, one per ring of the surface (R1-F05)
+                band = (np.abs(sv - jc) < half) & (np.sin(ang) > 0.35) & (ring < len(st)); V[band] += Z[None] * (np.where(ring[band] % 2 == 0, 1.0, -1.0) * P['rib_height'] * np.sin(ang[band]))[:, None]
             self.shells['finger_' + f] = dict(V=V, F=F, W=W, s=sv, ang=ang, ring=ring, kind='finger', L=L, joints=(0.0, s1, s2), B=B)
             # landmarks (rigid to one bone)
             lm(f + '_tip', f + '_03', o + Y * L)
@@ -259,9 +294,9 @@ class Hand:
             lm(f + '_pad_mid', f + '_02', o + Y * (s1 + s2) / 2 - Z * D_p * 0.97 * (1 - ds))
             lm(f + '_pad_prox', f + '_01', o + Y * s1 * 0.5 - Z * D_p * 1.06 * (1 - ds))
             lm(f + '_mcp_palmar', base, o - Z * 13.0 - Y * 4.0)
-            lm(f + '_mcp_dorsal', base, o + Z * 11.5)
-            lm(f + '_pip_dorsal', f + '_01', o + Y * s1 + Z * D_p * ds * 1.05)
-            lm(f + '_dip_dorsal', f + '_02', o + Y * s2 + Z * D_d * ds * 1.05)
+            lm(f + '_mcp_dorsal', base, o + Z * (11.5 + kd['mcp']))
+            lm(f + '_pip_dorsal', f + '_01', o + Y * s1 + Z * D_p * ds * (1.05 + kd['joint']))
+            lm(f + '_dip_dorsal', f + '_02', o + Y * s2 + Z * D_d * ds * (1.05 + kd['joint']))
             lm(f + '_side_radial', f + '_02', o + Y * (s1 + s2) / 2 + X * B * 0.92)
         # ---- thumb (the metacarpal carries the thenar eminence)
         s = seg('thumb'); B = breadth('thumb') / 2 + g; m = J['thumb_01'][1]; o, X, Y, Z = m[:3, 3], m[:3, 0], m[:3, 1], m[:3, 2]
@@ -290,6 +325,8 @@ class Hand:
             x = cx + hw * cc * (0.985 + 0.015 * k); z = np.where(ss >= 0, zt, zp) * ss * k
             hyp = np.exp(-((x + 30) / 14.0) ** 2) * np.exp(-((u - 0.30) / 0.30) ** 2) * 4.5      # hypothenar eminence (I)
             z = np.where(ss < 0, z - hyp * k, z) - 0.0022 * (x + 9.0) ** 2 * u                  # transverse arch (I)
+            val = np.min(np.abs(x[:, None] - xs[None]), axis=1)                                 # CR-2: the back of the hand dips between the metacarpals toward the knuckles (I)
+            z = np.where(ss > 0, z - P['knuckle']['valley'] * smooth((u - 0.45) / 0.45) * smooth(val / 9.0) * (x > xs.min() - 4) * (x < xs.max() + 4) * ss, z)
             y = -7.0 + u * (m3 + 5.0 + np.interp(x, xs, dys) + 7.0)
             V.append(np.c_[x, y, z]); uu.append(np.full(len(th), u))
         n = len(us); R = 2 * NSEG; V = np.concatenate(V); uu = np.concatenate(uu); F = []
@@ -300,17 +337,19 @@ class Hand:
         F += [(len(V) - 2, (j + 1) % R, j) for j in range(R)]; o2 = (n - 1) * R; F += [(len(V) - 1, o2 + j, o2 + (j + 1) % R) for j in range(R)]
         W = np.zeros((len(V), len(ORDER))); tr = smooth((-10.0 - V[:, 0]) / 12.0) * smooth(uu / 0.6); tl = smooth((-29.0 - V[:, 0]) / 10.0) * smooth(uu / 0.6)
         W[:, BI['little_meta']] = tl; W[:, BI['ring_meta']] = tr - tl * tr
+        ti = smooth((V[:, 0] - 8.0) / 10.0) * smooth(uu / 0.6); tm_ = np.clip(smooth(uu / 0.6) - ti - tr, 0.0, 1.0)      # CR-2: index and middle metacarpals carry their part of the palm
         # CR-1: the thenar part of the palm follows the thumb metacarpal, so the palm folds along the thenar crease when the
         # thumb opposes (KA: the metacarpal abducts, rotates and flexes on the trapezium).  The crease runs from the wrist's
         # middle to the web; radial of it the skin goes with the thumb: fully on the palmar side, 35 % on the back (I).
         cr = P['thenar_crease']; xc = cr[0] + (cr[1] - cr[0]) * np.clip(uu / 0.62, 0, 1)
         W[:, BI['thumb_01']] = smooth((V[:, 0] - xc) / cr[2]) * smooth((uu - 0.08) / 0.16) * smooth((0.70 - uu) / 0.20) * (0.35 + 0.65 * smooth((2.0 - V[:, 2]) / 10.0))
+        rem = 1 - W[:, BI['thumb_01']]; W[:, BI['index_meta']] = ti * rem; W[:, BI['middle_meta']] = tm_ * rem
         W[:, BI['hand']] = 0; W[:, BI['hand']] = 1 - W.sum(1)
         self.shells['palm'] = dict(V=V, F=np.array(F, np.int32), W=W, s=uu, ang=np.zeros(len(V)), ring=np.r_[np.repeat(np.arange(n), R), 0, n - 1], kind='palm')
         lm('thenar_base', 'thumb_01', o + Y * s1 * 0.15 - Z * 14.5); lm('thenar_ulnar', 'thumb_01', o + Y * s1 * 0.5 - Z * 12.0 - X * 12.5)
-        lm('index_meta_palmar', 'hand', (16.0, m3 * 0.72, -P['thick_palmar'] - g + 1.5)); lm('hypothenar_distal', 'little_meta', (-36.0, m3 * 0.62, -P['thick_palmar'] - g - 1.0))
+        lm('index_meta_palmar', 'index_meta', (16.0, m3 * 0.72, -P['thick_palmar'] - g + 1.5)); lm('hypothenar_distal', 'little_meta', (-36.0, m3 * 0.62, -P['thick_palmar'] - g - 1.0))
         lm('palm_centre', 'hand', (-6.0, m3 * 0.55, -P['thick_palmar'] - g + 1.0)); lm('hypothenar', 'hand', (-32.0, m3 * 0.30, -P['thick_palmar'] - g - 4.0))
-        lm('palm_heel', 'hand', (-6.0, 8.0, -wh[1] - g)); lm('palm_distal', 'hand', (-8.0, m3 * 0.86, -P['thick_palmar'] - g))
+        lm('palm_heel', 'hand', (-6.0, 8.0, -wh[1] - g)); lm('palm_distal', 'middle_meta', (-8.0, m3 * 0.86, -P['thick_palmar'] - g))
         lm('hand_back', 'hand', (-6.0, m3 * 0.5, 15.0)); lm('wrist_dorsal', 'hand', (0, 0, wh[1] + g)); lm('wrist_palmar', 'hand', (0, 0, -wh[1] - g))
         lm('wrist_radial', 'hand', (wh[0] + g, 0, 0)); lm('wrist_ulnar', 'hand', (-wh[0] - g, 0, 0)); lm('wrist', 'hand', (0, 0, 0))
         # ---- web between the thumb and the index metacarpal
@@ -324,9 +363,12 @@ class Hand:
         self.shells['web'] = dict(V=V, F=F, W=W, s=t[ring], ang=ang, ring=ring, kind='web')
         lm('web', 'hand', path[5] + wide * 13.0)
         # ---- cuff (glove) and sleeve (forearm); the forearm follows the hand in pronation, the wrist bends over y -26..+6
-        for name, y0, y1, grow in (('cuff', 5.0, -P['cuff_len'], 2.6), ('sleeve', -P['cuff_len'] + 14.0, -P['sleeve_len'], 5.0)):
-            ys = np.linspace(y0, y1, max(6, int(abs(y1 - y0) / 4.0))); fr = np.clip(-ys / 200.0, 0, 1)
-            hb = wh[0] + grow + 15.0 * fr ** 0.8; hd = wh[1] + grow + 20.0 * fr ** 0.8
+        for name, y0, y1, grow in (('cuff', 5.0, -P['cuff_len'], 2.6), ('sleeve', -P['cuff_len'] + 14.0, -P['sleeve_len'], P['sleeve_cloth'])):
+            ys = np.linspace(y0, y1, max(6, int(abs(y1 - y0) / 4.0)))
+            if name == 'cuff': fr = np.clip(-ys / 200.0, 0, 1); hb = wh[0] + grow + 15.0 * fr ** 0.8; hd = wh[1] + grow + 20.0 * fr ** 0.8
+            else:          # CR-2: version 2's sleeve reached 101 x 93 mm across only 210 mm up the arm, as thick as the elbow, and hid the hand
+                fr = np.clip(-ys / P['sleeve_len'], 0, 1) ** P['sleeve_taper']; fe = P['forearm_end']; c_ = P['sleeve_cloth']
+                hb = wh[0] + c_ + (fe[0] - wh[0]) * fr; hd = wh[1] + c_ + (fe[1] - wh[1]) * fr
             path = np.c_[-1.0 + 0 * ys, ys, 0 * ys]
             V, F, ring, ang = _tube(path, np.tile([1.0, 0, 0], (len(ys), 1)), np.tile([0, 0, 1.0], (len(ys), 1)), hb, hd, hd, expo=2.3)
             W = np.zeros((len(V), len(ORDER))); tt = smooth((V[:, 1] + 26.0) / 32.0); W[:, BI['hand']] = tt; W[:, BI['forearm']] = 1 - tt
@@ -337,6 +379,64 @@ class Hand:
         self.names = list(self.shells)
         self.lm_names = list(self.landmarks); self.lm_bone = np.array([BI[self.landmarks[n][0]] for n in self.lm_names])
         self.lm_pos = np.array([self.landmarks[n][1] for n in self.lm_names])
+        # ---- CR-2: compressible pads.  Each shell vertex and landmark gets, per pad, the vector it moves (rest pose, mm) for 1 mm of
+        # compression at the pad's middle; the limits follow from the tissue under each pad (pad_table).
+        self.pad_info = self.pad_table()
+        for k, n in enumerate(PADS): LIMITS['pad_' + n] = (0.0, self.pad_info[n]['limit_mm'], 'SP', 'compression at the pad\'s middle, mm: %s' % self.pad_info[n]['how'])
+        _set_limits()
+        for n, sh in self.shells.items(): sh['D'] = self.pad_fields(sh['V'], n)
+        self.lm_D = self.pad_fields(self.lm_pos, 'landmarks')
+
+    # -------------------------------------------------------------- CR-2: soft pads
+    def _pad_geom(self):
+        J = self.J; t = J['thumb_01'][1]; l = J['little_meta'][1]; m3 = mcp3_y()
+        return dict(t0=t[:3, 3], td=t[:3, 1], tl=seg('thumb')['mc'], te=-t[:3, 2], l0=l[:3, 3], ld=l[:3, 1], ll=J['little_meta'][2],
+                    hyp_c=(-30.0, 28.0), mid_c=(-4.0, 0.55 * m3),
+                    heads_x=np.array([J[f + '_01'][1][0, 3] for f in FING[::-1]]), heads_y=np.array([J[f + '_01'][1][1, 3] for f in FING[::-1]]) - 4.0)
+    THENAR_PROFILE = ((-0.15, 0.0), (0.0, None), (0.45, 1.0), (0.80, 0.75), (1.0, 0.40), (1.12, 0.0))     # along the first metacarpal; the value at 0 is set from SP's trapezium
+    def pad_fields(self, Pts, shell):
+        """(4, n, 3): displacement of each point per mm of compression of each pad (order PADS), rest pose."""
+        G = self._pad_geom(); Pts = np.asarray(Pts, float); n = len(Pts); D = np.zeros((len(PADS), n, 3))
+        with np.errstate(all='ignore'): return self._pad_fields(G, Pts, n, D, shell)      # (numpy on this machine warns falsely inside matmul)
+    def _pad_fields(self, G, Pts, n, D, shell):
+        if shell in ('web', 'sleeve') or n == 0: return D
+        x, y, z = Pts[:, 0], Pts[:, 1], Pts[:, 2]; fingers = shell.startswith('finger_')
+        if not fingers:
+            # thenar eminence: palmar and ulnar-palmar of the first metacarpal; moves toward the bone's axis
+            t = (Pts - G['t0']) @ G['td'] / G['tl']; near = G['t0'] + np.clip(t, 0, 1)[:, None] * G['tl'] * G['td']; r = Pts - near; rn = np.linalg.norm(r, axis=1) + 1e-9
+            prof = [(a, (self.pad_info['thenar']['base_share'] if b is None else b)) for a, b in self.THENAR_PROFILE]
+            w = np.interp(t, [a for a, _ in prof], [b for _, b in prof]) * smooth(((r @ G['te']) / rn - 0.15) / 0.55) * smooth((27.0 - rn) / 6.0)
+            if shell == 'cuff': w = w * 0
+            D[0] = -(r / rn[:, None]) * w[:, None]
+        if shell not in ('thumb',) and not fingers:
+            # hypothenar eminence: palmar of the fifth metacarpal and the heel of the hand; moves toward that bone
+            t = (Pts - G['l0']) @ G['ld'] / G['ll']; near = G['l0'] + np.clip(t, 0, 1)[:, None] * G['ll'] * G['ld']; r = Pts - near; rn = np.linalg.norm(r, axis=1) + 1e-9
+            w = np.exp(-((x - G['hyp_c'][0]) / 15.0) ** 2 - ((y - G['hyp_c'][1]) / 22.0) ** 2) * smooth((-2.0 - z) / 6.0); w = np.where(w < 0.03, 0.0, w)
+            D[1] = -(r / rn[:, None]) * w[:, None]
+            # middle of the palm: moves straight toward the metacarpals (dorsal)
+            w = np.exp(-((x - G['mid_c'][0]) / 15.0) ** 2 - ((y - G['mid_c'][1]) / 14.0) ** 2) * smooth((-8.0 - z) / 6.0); w = np.where(w < 0.03, 0.0, w)
+            D[2, :, 2] = w
+        if shell != 'thumb' and shell != 'cuff':
+            # distal palm: the pads in front of the four metacarpal heads (and the bases of the fingers over them)
+            yh = np.interp(x, G['heads_x'], G['heads_y']); w = np.exp(-((y - yh) / 9.0) ** 2) * smooth((x + 50.0) / 6.0) * smooth((32.0 - x) / 6.0) * smooth((-6.0 - z) / 5.0); w = np.where(w < 0.03, 0.0, w)
+            D[3, :, 2] = w
+        return D
+    def pad_table(self):
+        """Soft-tissue thickness under each pad's middle and the compression allowed there (mm)."""
+        G = self._pad_geom(); g = P['glove']; sl = P['strain_limit']; gg = P['glove_give']; out = {}
+        th = self.shells['thumb']; i = np.argmin(np.abs(th['s'] - 0.45 * G['tl']) + 100.0 * (np.abs(th['ang'] - 3 * math.pi / 2) > 0.2))     # the palmar line of the thumb shell
+        skin = float(np.linalg.norm(np.cross(th['V'][i] - G['t0'], G['td']))); tis = skin - g - P['bone_r']['mc1']
+        out['thenar'] = dict(tissue_mm=round(tis, 2), limit_mm=round(sl * tis + gg, 2), base_share=round((sl * P['trapezium_tissue'] + gg) / (sl * tis + gg), 3),
+                             how='%.0f %% (SP) of %.1f mm of muscle and skin between the glove and the first metacarpal (model geometry; bone half-thickness %.1f mm I), plus %.1f mm of glove (I); tapering to %.1f mm over the trapezium (SP: 2.5 to 3.0 mm of tissue there)' % (sl * 100, tis, P['bone_r']['mc1'], gg, sl * P['trapezium_tissue'] + gg))
+        pm = self.shells['palm']; V = pm['V']; i = np.argmin(np.hypot(V[:, 0] - G['hyp_c'][0], V[:, 1] - G['hyp_c'][1]) + 1000.0 * (V[:, 2] > -8))
+        t = np.clip((V[i] - G['l0']) @ G['ld'], 0, G['ll']); skin = float(np.linalg.norm(V[i] - G['l0'] - t * G['ld'])); tis = skin - g - P['bone_r']['mc5']
+        out['hypothenar'] = dict(tissue_mm=round(tis, 2), limit_mm=round(sl * tis + gg, 2), how='%.0f %% (SP) of %.1f mm between the glove and the fifth metacarpal (model geometry; bone half-thickness %.1f mm I), plus %.1f mm of glove (I)' % (sl * 100, tis, P['bone_r']['mc5'], gg))
+        for n, k, what in (('midpalm', 'midpalm_tissue', 'skin, fat and aponeurosis over the flexor tendons'), ('distal', 'distal_tissue', 'skin and fat pad in front of the metacarpal heads')):
+            out[n] = dict(tissue_mm=P[k], limit_mm=round(sl * P[k] + gg, 2), how='%.0f %% (SP) of %.1f mm of %s (I), plus %.1f mm of glove (I)' % (sl * 100, P[k], what, gg))
+        return out
+    def pad_of_vertices(self, name, thresh=0.05):
+        """Index into PADS of the pad each vertex of a shell belongs to (its largest share), or -1."""
+        w = np.linalg.norm(self.shells[name]['D'], axis=2); k = w.argmax(0); return np.where(w.max(0) > thresh, k, -1)
 
     # -------------------------------------------------------------- kinematics
     def fk(self, q, H, F=None):
@@ -347,18 +447,33 @@ class Hand:
         for i, n in enumerate(ORDER):
             if i < 2: continue
             Wd[i] = Wd[self.parent[i]] @ self.local[i] @ M4(R.get(n))
+        Wd = Wd.view(Posed); Wd.pads = np.asarray(q, float)[PAD_IDX].copy()            # CR-2: the pads' compression travels with the pose
         return Wd
-    def skin_mats(self, Wd): return Wd @ self.rest_inv
-    def pose_shell(self, name, S):
-        sh = self.shells[name]; Vh = np.c_[sh['V'], np.ones(len(sh['V']))]
-        out = np.einsum('vb,bij,vj->vi', sh['W'], S[:, :3, :], Vh); return out
+    def skin_mats(self, Wd):
+        S = (np.asarray(Wd) @ self.rest_inv).view(Posed); S.pads = getattr(Wd, 'pads', None); return S
+    def rest_shell(self, name, pads=None):
+        """Rest-pose vertices of a shell with its pads compressed by pads (mm, order PADS)."""
+        sh = self.shells[name]
+        return sh['V'] if pads is None or not np.any(pads) else sh['V'] + np.einsum('k,kvj->vj', np.asarray(pads, float), sh['D'])
+    def pose_shell(self, name, S, pads='pose'):
+        """Skinned vertices.  pads: 'pose' = as the pose has them, None = uncompressed, or four values in mm."""
+        sh = self.shells[name]; V = self.rest_shell(name, getattr(S, 'pads', None) if isinstance(pads, str) else pads); Vh = np.c_[V, np.ones(len(V))]
+        out = np.einsum('vb,bij,vj->vi', sh['W'], np.asarray(S)[:, :3, :], Vh); return out
     def pose_points(self, P_, bones, S):
-        return np.einsum('nij,nj->ni', S[bones][:, :3, :3], P_) + S[bones][:, :3, 3]
-    def pose_landmarks(self, S): return dict(zip(self.lm_names, self.pose_points(self.lm_pos, self.lm_bone, S)))
+        S = np.asarray(S); return np.einsum('nij,nj->ni', S[bones][:, :3, :3], P_) + S[bones][:, :3, 3]
+    def pose_landmarks(self, S):
+        c = getattr(S, 'pads', None); P_ = self.lm_pos if c is None or not np.any(c) else self.lm_pos + np.einsum('k,kvj->vj', c, self.lm_D)
+        return dict(zip(self.lm_names, self.pose_points(P_, self.lm_bone, S)))
 
+class Posed(np.ndarray):
+    """Bone or skin matrices that remember the pose's pad compressions (.pads, mm, order PADS)."""
+    pads = None
+    def __array_finalize__(self, obj): self.pads = getattr(obj, 'pads', None)
 def mirror_mats(Wd):
     """Bone or skin matrices of the left hand -> the right hand (x -> -x on both sides keeps them proper rotations)."""
-    return MIRROR @ Wd @ MIRROR
+    out = MIRROR @ np.asarray(Wd) @ MIRROR
+    if getattr(Wd, 'pads', None) is not None: out = out.view(Posed); out.pads = Wd.pads
+    return out
 
 # ------------------------------------------------------------------ arm: elbow from a two-bone solve, wrist angles from a swing / twist split
 def arm_ik(shoulder, wrist, l1, l2, pole):
@@ -388,7 +503,9 @@ def forearm_and_wrist(H, shoulder, pole):
     elbow = 180.0 - math.degrees(math.acos(max(-1, min(1, float(np.dot(-ua, y))))))
     return F, dict(wrist_flex=flex, wrist_dev=dev, pronation=pron, elbow_flex=elbow, reach_over=bool(over))
 
+_H0 = Hand()        # sets the pads' limits (they follow from the built geometry)
 if __name__ == '__main__':
-    h = Hand()
+    h = _H0; print({k: (v['tissue_mm'], v['limit_mm']) for k, v in h.pad_info.items()}, 'thenar base share', h.pad_info['thenar']['base_share'])
+    for n, s in h.shells.items(): print(n, 'pad shares max', np.round(np.linalg.norm(s['D'], axis=2).max(1), 2))
     print('MCP3_Y', round(mcp3_y(), 2), 'carpus', round(mcp3_y() - seg('middle')['mc'] - P['stylion_y'], 2))
     for n, s in h.shells.items(): print(n, len(s['V']), 'verts', len(s['F']), 'tris', 'weights ok' if np.allclose(s['W'].sum(1), 1) else 'WEIGHTS BAD')

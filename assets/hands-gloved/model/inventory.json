@@ -5,25 +5,25 @@
    "vertices": 922,
    "triangles": 1840,
    "skinned_to": [
-    "hand",
     "index_01",
     "index_02",
-    "index_03"
+    "index_03",
+    "index_meta"
    ]
   },
   "finger_middle_left": {
    "vertices": 1062,
    "triangles": 2120,
    "skinned_to": [
-    "hand",
     "middle_01",
     "middle_02",
-    "middle_03"
+    "middle_03",
+    "middle_meta"
    ]
   },
   "finger_ring_left": {
-   "vertices": 1022,
-   "triangles": 2040,
+   "vertices": 1002,
+   "triangles": 2000,
    "skinned_to": [
     "ring_01",
     "ring_02",
@@ -32,8 +32,8 @@
    ]
   },
   "finger_little_left": {
-   "vertices": 862,
-   "triangles": 1720,
+   "vertices": 842,
+   "triangles": 1680,
    "skinned_to": [
     "little_01",
     "little_02",
@@ -56,7 +56,9 @@
    "triangles": 2400,
    "skinned_to": [
     "hand",
+    "index_meta",
     "little_meta",
+    "middle_meta",
     "ring_meta",
     "thumb_01"
    ]
@@ -78,8 +80,8 @@
    ]
   },
   "sleeve_left": {
-   "vertices": 902,
-   "triangles": 1800,
+   "vertices": 1082,
+   "triangles": 2160,
    "skinned_to": [
     "forearm"
    ]
@@ -112,29 +114,141 @@
     "hand"
    ]
   },
+  "knuckle_rib_index_1_left": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "index_meta"
+   ]
+  },
+  "knuckle_rib_index_2_left": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "index_meta"
+   ]
+  },
+  "knuckle_rib_index_3_left": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "index_meta"
+   ]
+  },
+  "knuckle_rib_index_4_left": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "index_meta"
+   ]
+  },
+  "knuckle_rib_middle_1_left": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "middle_meta"
+   ]
+  },
+  "knuckle_rib_middle_2_left": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "middle_meta"
+   ]
+  },
+  "knuckle_rib_middle_3_left": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "middle_meta"
+   ]
+  },
+  "knuckle_rib_middle_4_left": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "middle_meta"
+   ]
+  },
+  "knuckle_rib_ring_1_left": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "ring_meta"
+   ]
+  },
+  "knuckle_rib_ring_2_left": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "ring_meta"
+   ]
+  },
+  "knuckle_rib_ring_3_left": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "ring_meta"
+   ]
+  },
+  "knuckle_rib_ring_4_left": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "ring_meta"
+   ]
+  },
+  "knuckle_rib_little_1_left": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "little_meta"
+   ]
+  },
+  "knuckle_rib_little_2_left": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "little_meta"
+   ]
+  },
+  "knuckle_rib_little_3_left": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "little_meta"
+   ]
+  },
+  "knuckle_rib_little_4_left": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "little_meta"
+   ]
+  },
   "finger_index_right": {
    "vertices": 922,
    "triangles": 1840,
    "skinned_to": [
-    "hand",
     "index_01",
     "index_02",
-    "index_03"
+    "index_03",
+    "index_meta"
    ]
   },
   "finger_middle_right": {
    "vertices": 1062,
    "triangles": 2120,
    "skinned_to": [
-    "hand",
     "middle_01",
     "middle_02",
-    "middle_03"
+    "middle_03",
+    "middle_meta"
    ]
   },
   "finger_ring_right": {
-   "vertices": 1022,
-   "triangles": 2040,
+   "vertices": 1002,
+   "triangles": 2000,
    "skinned_to": [
     "ring_01",
     "ring_02",
@@ -143,8 +257,8 @@
    ]
   },
   "finger_little_right": {
-   "vertices": 862,
-   "triangles": 1720,
+   "vertices": 842,
+   "triangles": 1680,
    "skinned_to": [
     "little_01",
     "little_02",
@@ -167,7 +281,9 @@
    "triangles": 2400,
    "skinned_to": [
     "hand",
+    "index_meta",
     "little_meta",
+    "middle_meta",
     "ring_meta",
     "thumb_01"
    ]
@@ -189,8 +305,8 @@
    ]
   },
   "sleeve_right": {
-   "vertices": 902,
-   "triangles": 1800,
+   "vertices": 1082,
+   "triangles": 2160,
    "skinned_to": [
     "forearm"
    ]
@@ -221,6 +337,118 @@
    "triangles": 12,
    "skinned_to": [
     "hand"
+   ]
+  },
+  "knuckle_rib_index_1_right": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "index_meta"
+   ]
+  },
+  "knuckle_rib_index_2_right": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "index_meta"
+   ]
+  },
+  "knuckle_rib_index_3_right": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "index_meta"
+   ]
+  },
+  "knuckle_rib_index_4_right": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "index_meta"
+   ]
+  },
+  "knuckle_rib_middle_1_right": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "middle_meta"
+   ]
+  },
+  "knuckle_rib_middle_2_right": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "middle_meta"
+   ]
+  },
+  "knuckle_rib_middle_3_right": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "middle_meta"
+   ]
+  },
+  "knuckle_rib_middle_4_right": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "middle_meta"
+   ]
+  },
+  "knuckle_rib_ring_1_right": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "ring_meta"
+   ]
+  },
+  "knuckle_rib_ring_2_right": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "ring_meta"
+   ]
+  },
+  "knuckle_rib_ring_3_right": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "ring_meta"
+   ]
+  },
+  "knuckle_rib_ring_4_right": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "ring_meta"
+   ]
+  },
+  "knuckle_rib_little_1_right": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "little_meta"
+   ]
+  },
+  "knuckle_rib_little_2_right": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "little_meta"
+   ]
+  },
+  "knuckle_rib_little_3_right": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "little_meta"
+   ]
+  },
+  "knuckle_rib_little_4_right": {
+   "vertices": 8,
+   "triangles": 12,
+   "skinned_to": [
+    "little_meta"
    ]
   }
  },
@@ -332,12 +560,27 @@
  ],
  "skinning_parity": {
   "grips": 7,
-  "worst_vertex_difference_mm": 8e-05,
+  "worst_vertex_difference_mm": 0.00011,
   "note": "Blender's armature modifier against handlib's linear-blend skinning, every shell vertex, every grip"
  },
+ "pads": {
+  "note": "CR-2: each palm pad is a shape key on the meshes it moves (pressed in to its limit at value 1); clips animate the values.",
+  "shape_keys": [
+   "pad_thenar",
+   "pad_hypothenar",
+   "pad_midpalm",
+   "pad_distal"
+  ],
+  "limits_mm": {
+   "thenar": 5.3,
+   "hypothenar": 7.12,
+   "midpalm": 2.4,
+   "distal": 2.9
+  }
+ },
  "totals": {
-  "parts": 26,
-  "triangles": 29936,
+  "parts": 58,
+  "triangles": 30880,
   "bones_per_hand": 21,
   "clips": 12
  }

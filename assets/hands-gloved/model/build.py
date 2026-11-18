@@ -35,6 +35,7 @@ bpy.ops.wm.read_factory_settings(use_empty=True); sc = bpy.context.scene; sc.ren
 root = bpy.data.objects.new('hands_gloved', None); sc.collection.objects.link(root)
 root.matrix_world = Matrix(((1, 0, 0, 0), (0, 0, -1, 0), (0, 1, 0, 0), (0, 0, 0, 1)))        # asset frame (Y up, Z muzzle) -> Blender (Z up, -Y muzzle)
 h = hl.Hand(); details = glove.detail_parts(h); inv = dict(asset='hands-gloved', parts={}, bones=hl.ORDER, materials=glove.MATERIALS, clips={}, sockets=[])
+PLIM = [hl.limit_of('pad_' + k)[1] for k in hl.PADS]
 rigs = {}
 for side in 'LR':
     sfx = '_left' if side == 'L' else '_right'; mir = side == 'R'
@@ -68,8 +69,18 @@ for side in 'LR':
         md = o.modifiers.new('armature', 'ARMATURE'); md.object = arm
         me.calc_loop_triangles(); inv['parts'][name + sfx] = dict(vertices=len(V), triangles=len(me.loop_triangles), skinned_to=sorted({bn for bi, bn in enumerate(hl.ORDER) if W is not None and W[:, bi].max() > 1e-6} or {bone}))
         objs.append((name, o)); return o
-    for n, sh in h.shells.items(): add_mesh(n, sh['V'], sh['F'], W=sh['W'], mats=glove.MATERIALS, midx=glove.face_materials(sh))
-    for n, d in details.items(): add_mesh(n, d['V'], d['F'], bone=d['bone'], mats=[d['mat']], midx=np.zeros(len(d['F'])), smooth=False)
+    def add_pads(o, V, D):
+        """CR-2: one shape key per palm pad that moves this mesh: the pad pressed in to its limit.  Key value = compression / limit."""
+        if not np.any(D): return
+        o.shape_key_add(name='Basis')
+        for k, pn in enumerate(hl.PADS):
+            if not np.any(D[k]): continue
+            kb = o.shape_key_add(name='pad_' + pn); kb.slider_min = 0.0; kb.slider_max = 1.0; P_ = (np.asarray(V, float) + PLIM[k] * D[k]) * MM * ([-1, 1, 1] if mir else [1, 1, 1])
+            kb.data.foreach_set('co', P_.ravel())
+    for n, sh in h.shells.items(): add_pads(add_mesh(n, sh['V'], sh['F'], W=sh['W'], mats=glove.MATERIALS, midx=glove.face_materials(sh)), sh['V'], sh['D'])
+    for n, d in details.items():
+        o = add_mesh(n, d['V'], d['F'], bone=d['bone'], mats=[d['mat']], midx=np.zeros(len(d['F'])), smooth=False)
+        if 'pad_shift' in d: add_pads(o, d['V'], np.repeat(d['pad_shift'][:, None, :], len(d['V']), axis=1))        # a sewn-on part rides the pad under it
     for sock, lmk in (('socket_palm', 'palm_centre'), ('socket_index_tip', 'index_tip'), ('socket_thumb_tip', 'thumb_tip'), ('socket_wrist', 'wrist')):
         bone, p = h.landmarks[lmk]; p = p * MM * ([-1, 1, 1] if mir else [1, 1, 1]); e = bpy.data.objects.new(sock + sfx, None); e.empty_display_size = 0.01; sc.collection.objects.link(e)
         e.parent = arm; e.parent_type = 'BONE'; e.parent_bone = bone; e.matrix_world = root.matrix_world @ Matrix.Translation(Vector(p)); inv['sockets'].append(sock + sfx)
@@ -88,6 +99,11 @@ def set_pose(side, hand_pq, fore_pq, q):
             j = hl.BI[par.name]; Sp = metres(hl.mirror_mats(S[j]) if mir else S[j]); pw = Sp @ rg['restB'][par.name]
             basis = np.linalg.inv(np.linalg.inv(rg['restB'][par.name]) @ rg['restB'][n]) @ np.linalg.inv(pw) @ world
         pb.matrix_basis = M(basis)
+    for n, o in rg['objs']:                      # CR-2: the pads' compression drives the shape keys
+        if o.data.shape_keys:
+            for k, pn in enumerate(hl.PADS):
+                kb = o.data.shape_keys.key_blocks.get('pad_' + pn)
+                if kb: kb.value = float(q[hl.PAD_IDX[k]]) / PLIM[k]
     return S
 
 # ---- skinning parity: Blender's armature deform against the recipe's linear-blend skinning, in every grip
@@ -111,11 +127,19 @@ for cname, c in RT['clips'].items():
             for n in hl.ORDER:
                 pb = arm.pose.bones[n]; pb.keyframe_insert('rotation_quaternion', frame=f + 1)
                 if pb.parent is None: pb.keyframe_insert('location', frame=f + 1)
+            for n, o in rigs[side]['objs']:
+                if o.data.shape_keys:
+                    for kb in o.data.shape_keys.key_blocks[1:]: kb.keyframe_insert('value', frame=f + 1)
         tr = ad.nla_tracks.new(); tr.name = cname; tr.strips.new(cname, 1, act); tr.mute = True; ad.action = None
+        for n, o in rigs[side]['objs']:              # the pads' shape-key animation goes on a track of the same name, so the exporter puts it in the same clip
+            sk = o.data.shape_keys
+            if sk and sk.animation_data and sk.animation_data.action:
+                a2 = sk.animation_data.action; a2.name = f"{cname}.{o.name}.pads"; t2 = sk.animation_data.nla_tracks.new(); t2.name = cname; t2.strips.new(cname, 1, a2); t2.mute = True; sk.animation_data.action = None
     inv['clips'][cname] = dict(frames=c['frames'], rifle_clip=c['rifle_clip'], pre_roll=c['pre_roll'])
 for side in 'LR':
     g = RT['grips']['fire_indexed' if side == 'R' else 'support']; set_pose(side, g['hand'], g['forearm'], g['angles'])     # leave the rig in its idle grips
 sc.frame_start = 1; sc.frame_end = max(c['frames'] for c in RT['clips'].values())
+inv['pads'] = dict(note='CR-2: each palm pad is a shape key on the meshes it moves (pressed in to its limit at value 1); clips animate the values.', shape_keys=['pad_' + k for k in hl.PADS], limits_mm=dict(zip(hl.PADS, PLIM)))
 inv['totals'] = dict(parts=len(inv['parts']), triangles=sum(p['triangles'] for p in inv['parts'].values()), bones_per_hand=len(hl.ORDER), clips=len(inv['clips']))
 bpy.ops.wm.save_as_mainfile(filepath=os.path.join(OUT, 'hands-gloved.blend'))
 bpy.ops.export_scene.gltf(filepath=os.path.join(OUT, 'hands-gloved.glb'), export_format='GLB', export_animations=True, export_animation_mode='NLA_TRACKS', export_yup=True, export_skins=True)

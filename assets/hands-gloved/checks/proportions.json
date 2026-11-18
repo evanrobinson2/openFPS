@@ -35,10 +35,10 @@
   },
   {
    "dimension": "hand circumference (round the metacarpal heads)",
-   "model_mm": 212.25,
+   "model_mm": 212.03,
    "reference_mm": 212.3,
-   "difference_mm": -0.05,
-   "difference_pct": -0.02,
+   "difference_mm": -0.27,
+   "difference_pct": -0.13,
    "source": "A",
    "kind": "fitted",
    "how": "perimeter of the palm shell ring at 80 % of the palm, less 2 pi x glove; the section exponent (3.8) was tuned to this with the 29.5 mm thickness held",

@@ -39,7 +39,7 @@
   <div id="status">loading...</div>
 
   <h2>Joint angles against their limits</h2>
-  <p>Each bar spans the joint's range from the biomechanics sources (<code>limits_deg</code> in the data); the marker is the angle now, the thin line is zero. <code>HandsGloved.checkLimits()</code> runs every frame.</p>
+  <p>Each bar spans the joint's range from the biomechanics sources (<code>limits_deg</code> in the data); the marker is the angle now, the thin line is zero. <code>HandsGloved.checkLimits()</code> runs every frame. The last four bars (<code>pad_*</code>) are not angles: each is how far a soft pad of the palm is pressed in at its middle, in millimetres, against the limit for that pad (<code>pads</code> in the data).</p>
   <div class="grid" id="bars"></div>
 
   <h2>Checks committed with the asset</h2>
@@ -60,7 +60,9 @@
     const p = pen && pen.clips[c], l = lim && lim.clips[c];
     tr.innerHTML = `<td>${c}</td><td>${k.frames}</td><td>${k.rifle_clip || '-'}</td><td>${k.rifle_clip ? k.pre_roll + 1 : '-'}</td>` +
       `<td class="${p && p.max_depth_mm > pen.tolerance_mm ? 'bad' : 'ok'}">${p ? p.max_depth_mm.toFixed(2) : '?'}</td><td class="${l && l.smallest_margin_deg < 0 ? 'bad' : 'ok'}">${l ? l.smallest_margin_deg.toFixed(1) : '?'}</td>`; }
-  $('note').textContent = (pen ? `Interpenetration tolerance ${pen.tolerance_mm} mm, measured against the rifle's triangles in ${pen.frames_measured} hand-frames. ` : '') + (lim ? `${lim.values_checked} joint values checked, ${lim.outside_limits} outside their limits.` : '');
+  $('note').textContent = (pen ? `Interpenetration tolerance ${pen.tolerance_mm} mm, measured against the rifle's triangles in ${pen.frames_measured} hand-frames. ` : '') + (lim ? `${lim.values_checked} joint values checked, ${lim.outside_limits} outside their limits. ` : '') +
+    (pen && pen.soft_pads ? 'Soft pads, most compression in any frame against the limit: ' + Object.entries(pen.soft_pads.pads).map(([k, v]) => `${k} ${v.commanded_max_mm} of ${v.limit_mm} mm`).join(', ') + '. ' : '') +
+    (pen && pen.hand_against_hand ? `Hand against hand: ${pen.hand_against_hand.max_depth_mm} mm at worst in ${pen.hand_against_hand.frames_with_hands_near} frames where the hands come near each other.` : '');
   // ---- angle bars
   const bars = {}; for (const a of H.angles) { const L = H.limitOf(a), d = document.createElement('div');
     d.innerHTML = `<table><tr><td style="width:150px">${a}</td><td><div class="bar"><b style="left:${(0 - L.min) / (L.max - L.min) * 100}%"></b><i></i></div></td><td style="width:60px"></td></tr></table>`;

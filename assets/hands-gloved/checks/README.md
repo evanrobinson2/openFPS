@@ -6,8 +6,9 @@
 | `python3 checks/limits.py` | `limits.json`, `fk_reference.json` | the frames from `clips/make.py` |
 | `node checks/test_runtime.js` | (prints) | `hands-gloved.json`, `fk_reference.json` |
 | `python3 checks/contact.py` | `contact.json` | the frames, the local rifle build |
-| `python3 checks/penetration.py` | `penetration.json` | the local rifle build, Blender (BVH tree only); about 10 minutes |
-| `python3 checks/compare.py` | `comparison.json`, `../renders/compare_*.jpg` | the photographs in `refs-local/`, Blender |
+| `python3 checks/penetration.py` | `penetration.json` (interpenetration, soft-pad compression, hand against hand) | the local rifle build, Blender (BVH tree only); about 10 minutes |
+| `python3 checks/selector_reach.py` | `selector_reach.json` | the solved grips, the local rifle build; about 2 minutes |
+| `python3 checks/compare.py` | `comparison.json`, `../renders/compare_*.jpg`, `../renders/first_person_*.jpg` | the photographs in `refs-local/`, Blender |
 
 Results and what they do and do not show are in `../notes/NOTES.md`.
 
@@ -25,6 +26,19 @@ Results and what they do and do not show are in `../notes/NOTES.md`.
   against the exact triangles of the rifle built from `assets/hk416/model/build.py`. Tolerance 1.0 mm. Twenty-two of
   the rifle's 301 parts are not watertight; a point counts as inside on four of six rays. Depth is per rifle part.
   Hand against hand is not tested.
+- **Soft pads (version 3).** The glove is measured with each palm pad pressed in by what the frame carries, and that
+  measurement is the interpenetration: one tolerance, 1.0 mm, everywhere, pads included. Compression is reported apart
+  from it under `soft_pads`: `commanded` (what the frames carry, against each pad's limit), `overlap_uncompressed` (how
+  deep the pad would sit in the rifle with no compression, measured the same way) and `beyond_limit` (overlap that the
+  pad's limit could not take up; it must stay inside the tolerance). The limits and where they come from are in
+  `model/handlib.py` (`pad_table`, `SRC['SP']`). `limits.py` checks the four compressions like the angles. Before
+  version 3 nothing was allowed to compress; the version 2 result (0.57 mm at worst) is in this file's history.
+- **Hand against hand (version 3).** Frames in which the two gloves' boxes come within 2 mm are measured: the deepest
+  vertex of either glove inside a closed shell of the other. A glove is not tested against itself.
+- **Selector reach (version 3).** The thumb's whole range from the firing grip, then again after 700 random small
+  moves of the hand, for the smallest distance from the thumb's glove to the lever; and the geometry behind the answer.
+- **Sleeve.** `comparison.json` gives, for each matched view and two first-person views, the share of each hand's
+  glove whose line of sight to the camera is cut by a sleeve (`hand_hidden_by_a_sleeve`).
 - **Comparison.** Photo coordinates were read by eye from gridded crops, good to about 15 px. R2: scale from the
   handguard's height. R1: a scaled orthographic camera fitted to five points on the receiver's right side; the
   across-rifle direction is derived, not measured. R3: no ruler (the rifle is wrapped), so angles and distances in

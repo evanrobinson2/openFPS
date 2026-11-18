@@ -1,0 +1,94 @@
+{
+ "asset": "hands-gloved",
+ "asks": "CR-2 goal 4: the thumb's glove within 1.0 mm of the left selector lever in both safety clips, or numbers showing why not",
+ "tolerance_mm": 1.0,
+ "from_the_firing_grip": {
+  "glove_to_lever_mm": 10.52,
+  "thumb_inside_rifle_mm": 0.0,
+  "thumb_angles_deg": [
+   7.6,
+   -6.0,
+   6.9,
+   19.5,
+   42.4
+  ],
+  "searched": "1,500 random thumb poses over the joint ranges, the five best polished"
+ },
+ "after_a_small_move_of_the_hand": {
+  "tried": 700,
+  "kept_clear_and_in_wrist_range": 135,
+  "limits": "up to 14 mm along each axis and 16 degrees about each",
+  "six_best": [
+   {
+    "glove_to_lever_mm": 10.92,
+    "thumb_inside_rifle_mm": 0.0,
+    "hand_moved_mm": 14.3,
+    "hand_turned_deg": 15.4
+   },
+   {
+    "glove_to_lever_mm": 10.95,
+    "thumb_inside_rifle_mm": 0.0,
+    "hand_moved_mm": 16.5,
+    "hand_turned_deg": 5.6
+   },
+   {
+    "glove_to_lever_mm": 7.84,
+    "thumb_inside_rifle_mm": 0.0,
+    "hand_moved_mm": 9.6,
+    "hand_turned_deg": 12.8
+   },
+   {
+    "glove_to_lever_mm": 10.02,
+    "thumb_inside_rifle_mm": 0.0,
+    "hand_moved_mm": 14.8,
+    "hand_turned_deg": 9.0
+   },
+   {
+    "glove_to_lever_mm": 11.4,
+    "thumb_inside_rifle_mm": 0.0,
+    "hand_moved_mm": 11.7,
+    "hand_turned_deg": 12.9
+   },
+   {
+    "glove_to_lever_mm": 11.14,
+    "thumb_inside_rifle_mm": 0.0,
+    "hand_moved_mm": 12.3,
+    "hand_turned_deg": 14.5
+   }
+  ],
+  "smallest_gap_mm": 7.84
+ },
+ "geometry": {
+  "thumb_base_joint_mm": [
+   -27.6,
+   -86.3,
+   -225.0
+  ],
+  "lever_rear_tip_safe_mm": [
+   11.9,
+   -36.4,
+   -160.5
+  ],
+  "base_joint_to_lever_tip_mm": 90.7,
+  "lever_above_base_joint_mm": 50.0,
+  "thumb_base_joint_to_glove_tip_straight_mm": 112.0,
+  "web_middle_mm": [
+   -19.3,
+   -57.2,
+   -188.9
+  ],
+  "web_seat_mm": [
+   0.0,
+   -54.0,
+   -187.0
+  ],
+  "web_from_seat_mm": {
+   "right": 19.3,
+   "below": 3.2,
+   "behind": 1.9
+  },
+  "base_joint_to_lever_tip_if_web_were_on_its_seat_mm": 80.7,
+  "note": "The thumb has to cross behind the top of the grip, under the receiver's rear, and then lie along the left wall at the lever's height. The lever's rear tip is that far above the thumb's base joint; the thumb's first bone is 48.1 mm long and its base joint turns 26.5 degrees each way in flexion and 21.0 in abduction, so the far end of that bone cannot rise to the lever's height while it also crosses to the left side. With the web on its seat the base joint would be higher and further left by the web's offset."
+ },
+ "reached": false
+}

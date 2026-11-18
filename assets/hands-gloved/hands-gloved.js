@@ -7,7 +7,7 @@
  *   const s = HandsGloved.sample('charge', t)            // t seconds from the start of the HAND clip
  *   // s.rifleClip, s.rifleTime (seconds into the rifle's clip, null before it starts), s.R and s.L:
  *   //   .hand, .forearm   [x, y, z, qx, qy, qz, qw]   metres + quaternion in the rifle frame
- *   //   .angles           { index_mcp_flex: degrees, ... }  (HandsGloved.angles lists the 23 names)
+ *   //   .angles           { index_mcp_flex: degrees, ... }  (HandsGloved.angles lists the names: 25 joint angles, then 4 pad compressions in mm)
  *   //   .bones            { forearm: m, hand: m, index_meta: m, index_01: m, ... }  4x4 world matrices, row-major
  *   const g = HandsGloved.grip('support')                // a static grip: { side, hand, forearm, angles, bones }
  *   HandsGloved.checkLimits(s.R.angles)                  // [] or [{ joint, value, min, max }]
@@ -64,19 +64,23 @@
   }
   function load(url) { return fetch(url).then(function (r) { return r.json(); }).then(use); }
 
-  /* local rotation of every bone in its own rest frame, from the 23 joint angles (degrees); left-hand convention */
+  /* local rotation of every bone in its own rest frame, from the joint angles (degrees); left-hand convention */
   function localRot(q) {
     var R = {}, d = need();
     FING.forEach(function (f) {
       R[f + '_01'] = mul(rotZ(-q[AI[f + '_mcp_abd']] * RAD), rotX(-q[AI[f + '_mcp_flex']] * RAD));
       R[f + '_02'] = rotX(-q[AI[f + '_pip_flex']] * RAD); R[f + '_03'] = rotX(-q[AI[f + '_dip_flex']] * RAD);
     });
-    R.ring_meta = rotX(-q[AI.mc4_flex] * RAD); R.little_meta = rotX(-q[AI.mc5_flex] * RAD);
+    /* version 3: all four metacarpals flex at their bases; the ring and little ones also turn as they flex (the hand's arch) */
+    var arch = d.arch || { ring: 0, little: 0 };
+    R.ring_meta = mul(rotX(-q[AI.mc4_flex] * RAD), rotY(-arch.ring * q[AI.mc4_flex] * RAD));
+    R.little_meta = mul(rotX(-q[AI.mc5_flex] * RAD), rotY(-arch.little * q[AI.mc5_flex] * RAD));
+    if (AI.mc2_flex !== undefined) { R.index_meta = rotX(-q[AI.mc2_flex] * RAD); R.middle_meta = rotX(-q[AI.mc3_flex] * RAD); }
     R.thumb_01 = mul(mul(rotZ(q[AI.thumb_cmc_abd] * RAD), rotY(q[AI.thumb_cmc_rot] * RAD)), rotX(-q[AI.thumb_cmc_flex] * RAD));
     R.thumb_02 = rotX(-q[AI.thumb_mcp_flex] * RAD); R.thumb_03 = rotX(-q[AI.thumb_ip_flex] * RAD);
     return R;
   }
-  /* forward kinematics. side 'L' or 'R'; hand and forearm are [x,y,z,qx,qy,qz,qw] in the rifle frame; q = 23 angles */
+  /* forward kinematics. side 'L' or 'R'; hand and forearm are [x,y,z,qx,qy,qz,qw] in the rifle frame; q = the values named by HandsGloved.angles */
   function fk(side, hand, forearm, q) {
     need(); var H = fromPQ(hand), F = fromPQ(forearm), right = side === 'R';
     if (right) { H = mirror(H); F = mirror(F); }
@@ -120,7 +124,7 @@
   }
   function duration(name) { var c = need().clips[name]; return (c.frames - 1) / D.fps; }
 
-  /* joint limits: every one of the 23 angles against its range */
+  /* joint limits: every angle and every pad compression against its range */
   function limitOf(a) { var L = need().limits_deg; return L[a] || L[a.slice(a.indexOf('_') + 1)]; }
   function checkLimits(angles) {
     var bad = []; need().angles.forEach(function (a) {

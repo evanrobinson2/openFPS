@@ -1,6 +1,6 @@
 {
  "asset": "hands-gloved",
- "values_checked": 12798,
+ "values_checked": 15642,
  "outside_limits": 0,
  "all_within_limits": true,
  "sources": {
@@ -20,10 +20,10 @@
    "at": {
     "frame": 1,
     "hand": "R",
-    "joint": "middle_mcp_abd",
-    "value": -19.5,
-    "min": -20,
-    "max": 20
+    "joint": "index_mcp_flex",
+    "value": -18.5,
+    "min": -19,
+    "max": 90
    },
    "pass_": true
   },
@@ -33,10 +33,10 @@
    "at": {
     "frame": 1,
     "hand": "R",
-    "joint": "middle_mcp_abd",
-    "value": -19.5,
-    "min": -20,
-    "max": 20
+    "joint": "index_mcp_flex",
+    "value": -18.5,
+    "min": -19,
+    "max": 90
    },
    "pass_": true
   },
@@ -72,10 +72,10 @@
    "at": {
     "frame": 1,
     "hand": "R",
-    "joint": "index_dip_flex",
-    "value": -5.5,
-    "min": -6,
-    "max": 84
+    "joint": "index_mcp_flex",
+    "value": -18.5,
+    "min": -19,
+    "max": 90
    },
    "pass_": true
   },
@@ -85,10 +85,10 @@
    "at": {
     "frame": 1,
     "hand": "R",
-    "joint": "index_dip_flex",
-    "value": -5.5,
-    "min": -6,
-    "max": 84
+    "joint": "index_mcp_flex",
+    "value": -18.5,
+    "min": -19,
+    "max": 90
    },
    "pass_": true
   },
@@ -98,10 +98,10 @@
    "at": {
     "frame": 1,
     "hand": "R",
-    "joint": "index_dip_flex",
-    "value": -5.5,
-    "min": -6,
-    "max": 84
+    "joint": "index_mcp_flex",
+    "value": -18.5,
+    "min": -19,
+    "max": 90
    },
    "pass_": true
   },
@@ -111,21 +111,21 @@
    "at": {
     "frame": 1,
     "hand": "R",
-    "joint": "middle_mcp_abd",
-    "value": -19.5,
-    "min": -20,
-    "max": 20
+    "joint": "index_mcp_flex",
+    "value": -18.5,
+    "min": -19,
+    "max": 90
    },
    "pass_": true
   },
   "mag_out": {
    "frames": 36,
-   "smallest_margin_deg": 0.0,
+   "smallest_margin_deg": 0.03,
    "at": {
-    "frame": 35,
+    "frame": 34,
     "hand": "L",
     "joint": "wrist_dev",
-    "value": 20.0,
+    "value": 19.97,
     "min": -30,
     "max": 20
    },
@@ -133,27 +133,27 @@
   },
   "mag_in": {
    "frames": 35,
-   "smallest_margin_deg": 0.02,
+   "smallest_margin_deg": 0.07,
    "at": {
-    "frame": 32,
+    "frame": 17,
     "hand": "L",
-    "joint": "pronation",
-    "value": -79.98,
-    "min": -80,
+    "joint": "wrist_flex",
+    "value": -69.93,
+    "min": -70,
     "max": 80
    },
    "pass_": true
   },
   "charge": {
    "frames": 49,
-   "smallest_margin_deg": 0.0,
+   "smallest_margin_deg": 0.01,
    "at": {
-    "frame": 31,
+    "frame": 23,
     "hand": "L",
-    "joint": "elbow_flex",
-    "value": 150.0,
-    "min": 0,
-    "max": 150
+    "joint": "wrist_dev",
+    "value": -29.99,
+    "min": -30,
+    "max": 20
    },
    "pass_": true
   },
@@ -163,10 +163,10 @@
    "at": {
     "frame": 1,
     "hand": "R",
-    "joint": "middle_mcp_abd",
-    "value": -19.5,
-    "min": -20,
-    "max": 20
+    "joint": "index_mcp_flex",
+    "value": -18.5,
+    "min": -19,
+    "max": 90
    },
    "pass_": true
   }
@@ -174,34 +174,34 @@
  "joints": {
   "index_mcp_flex": {
    "min_seen": -18.5,
-   "max_seen": 29.69,
+   "max_seen": 39.26,
    "limit_min": -19,
    "limit_max": 90,
    "source": "BA"
   },
   "index_mcp_abd": {
-   "min_seen": -16.87,
-   "max_seen": 5.11,
+   "min_seen": -12.05,
+   "max_seen": 19.5,
    "limit_min": -20,
    "limit_max": 20,
    "source": "K"
   },
   "index_pip_flex": {
    "min_seen": -1.62,
-   "max_seen": 79.31,
+   "max_seen": 82.59,
    "limit_min": -7,
    "limit_max": 101,
    "source": "BA"
   },
   "index_dip_flex": {
    "min_seen": -5.5,
-   "max_seen": 40.54,
+   "max_seen": 58.76,
    "limit_min": -6,
    "limit_max": 84,
    "source": "BA"
   },
   "middle_mcp_flex": {
-   "min_seen": 4.35,
+   "min_seen": -9.69,
    "max_seen": 80.0,
    "limit_min": -19,
    "limit_max": 90,
@@ -209,14 +209,14 @@
   },
   "middle_mcp_abd": {
    "min_seen": -19.5,
-   "max_seen": 4.28,
+   "max_seen": 19.5,
    "limit_min": -20,
    "limit_max": 20,
    "source": "K"
   },
   "middle_pip_flex": {
    "min_seen": -6.5,
-   "max_seen": 95.0,
+   "max_seen": 98.44,
    "limit_min": -7,
    "limit_max": 101,
    "source": "BA"
@@ -229,50 +229,50 @@
    "source": "BA"
   },
   "ring_mcp_flex": {
-   "min_seen": 12.3,
+   "min_seen": 12.62,
    "max_seen": 80.0,
    "limit_min": -19,
    "limit_max": 90,
    "source": "BA"
   },
   "ring_mcp_abd": {
-   "min_seen": -14.72,
-   "max_seen": 1.57,
+   "min_seen": -10.53,
+   "max_seen": 2.66,
    "limit_min": -20,
    "limit_max": 20,
    "source": "K"
   },
   "ring_pip_flex": {
-   "min_seen": -6.5,
-   "max_seen": 95.0,
+   "min_seen": 0.82,
+   "max_seen": 97.72,
    "limit_min": -7,
    "limit_max": 101,
    "source": "BA"
   },
   "ring_dip_flex": {
-   "min_seen": -5.31,
+   "min_seen": 1.03,
    "max_seen": 55.0,
    "limit_min": -6,
    "limit_max": 84,
    "source": "BA"
   },
   "little_mcp_flex": {
-   "min_seen": -10.51,
-   "max_seen": 81.81,
+   "min_seen": -10.91,
+   "max_seen": 89.5,
    "limit_min": -19,
    "limit_max": 90,
    "source": "BA"
   },
   "little_mcp_abd": {
-   "min_seen": -19.5,
-   "max_seen": 1.16,
+   "min_seen": -17.49,
+   "max_seen": 5.21,
    "limit_min": -20,
    "limit_max": 20,
    "source": "K"
   },
   "little_pip_flex": {
    "min_seen": -6.5,
-   "max_seen": 100.5,
+   "max_seen": 95.0,
    "limit_min": -7,
    "limit_max": 101,
    "source": "BA"
@@ -293,7 +293,7 @@
   },
   "thumb_cmc_abd": {
    "min_seen": -20.5,
-   "max_seen": 14.68,
+   "max_seen": 14.61,
    "limit_min": -21,
    "limit_max": 21,
    "source": "CO"
@@ -306,57 +306,99 @@
    "source": "CO"
   },
   "thumb_mcp_flex": {
-   "min_seen": 0.23,
-   "max_seen": 41.48,
+   "min_seen": 0.5,
+   "max_seen": 55.5,
    "limit_min": 0,
    "limit_max": 56,
    "source": "HU"
   },
   "thumb_ip_flex": {
-   "min_seen": -0.18,
-   "max_seen": 35.79,
+   "min_seen": -4.5,
+   "max_seen": 35.03,
    "limit_min": -5,
    "limit_max": 73,
    "source": "HU"
   },
   "mc4_flex": {
-   "min_seen": -2.07,
-   "max_seen": 3.0,
+   "min_seen": -1.24,
+   "max_seen": 4.57,
    "limit_min": -3,
    "limit_max": 17,
    "source": "ES"
   },
   "mc5_flex": {
-   "min_seen": 1.99,
+   "min_seen": -1.28,
    "max_seen": 8.0,
    "limit_min": -4,
    "limit_max": 23,
    "source": "ES"
   },
+  "mc2_flex": {
+   "min_seen": -1.14,
+   "max_seen": 0.0,
+   "limit_min": -1.7,
+   "limit_max": 9.3,
+   "source": "ES"
+  },
+  "mc3_flex": {
+   "min_seen": 0.0,
+   "max_seen": 1.72,
+   "limit_min": -1.0,
+   "limit_max": 6.0,
+   "source": "ES"
+  },
+  "pad_thenar": {
+   "min_seen": 0.0,
+   "max_seen": 0.0,
+   "limit_min": 0.0,
+   "limit_max": 5.3,
+   "source": "SP"
+  },
+  "pad_hypothenar": {
+   "min_seen": 0.0,
+   "max_seen": 0.3,
+   "limit_min": 0.0,
+   "limit_max": 7.12,
+   "source": "SP"
+  },
+  "pad_midpalm": {
+   "min_seen": 0.0,
+   "max_seen": 0.0,
+   "limit_min": 0.0,
+   "limit_max": 2.4,
+   "source": "SP"
+  },
+  "pad_distal": {
+   "min_seen": 0.0,
+   "max_seen": 2.43,
+   "limit_min": 0.0,
+   "limit_max": 2.9,
+   "source": "SP"
+  },
   "wrist_flex": {
-   "min_seen": -69.94,
-   "max_seen": 18.01,
+   "min_seen": -69.93,
+   "max_seen": 18.3,
    "limit_min": -70,
    "limit_max": 80,
    "source": "AA"
   },
   "wrist_dev": {
    "min_seen": -29.99,
-   "max_seen": 20.0,
+   "max_seen": 19.97,
    "limit_min": -30,
    "limit_max": 20,
    "source": "AA"
   },
   "pronation": {
-   "min_seen": -79.99,
-   "max_seen": 33.55,
+   "min_seen": -79.88,
+   "max_seen": 33.22,
    "limit_min": -80,
    "limit_max": 80,
    "source": "AA"
   },
   "elbow_flex": {
-   "min_seen": 83.19,
-   "max_seen": 150.0,
+   "min_seen": 83.25,
+   "max_seen": 149.7,
    "limit_min": 0,
    "limit_max": 150,
    "source": "AA"
