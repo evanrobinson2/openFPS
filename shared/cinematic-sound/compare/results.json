@@ -1,0 +1,1332 @@
+{
+ "targets": {
+  "share_0_2ms_max": 10,
+  "crest_db_max": 14,
+  "t_minus20_ms_min": 60,
+  "tail_minus40_ms_min_outdoor": 300,
+  "peak_dbfs_max": -1,
+  "band_40_120_db_min": -10,
+  "band_120_300_db_min": -12,
+  "narrow_peak_db_max": 4,
+  "loudness_spread_db": [
+   3,
+   10
+  ],
+  "suppressed_quieter_db": [
+   6,
+   14
+  ],
+  "autofire_dip_db_min": 6,
+  "autofire_drift_db_max": 2,
+  "crack_delay_tol_ms": 1.5
+ },
+ "guns": {
+  "shotgun-590": {
+   "design": {
+    "size": 0.9257,
+    "energy_term": 0.8856,
+    "bore_term": 1,
+    "g_crack": 1,
+    "f_crack": 3164,
+    "tau_crack": 0.009602,
+    "g_cracknoise": 0.5126,
+    "f_body": 178,
+    "tau_body": 0.04762,
+    "tau_roar": 0.1418,
+    "g_body": 0.8777,
+    "g_roar": 0.4777,
+    "f_sub_end": 47.08,
+    "sub_ratio": 3.2,
+    "tau_sub": 0.1352,
+    "g_sub": 0.7718,
+    "sub_h2": 0.7,
+    "sub_h3": 0.45,
+    "sub_drive": 1.6,
+    "g_mech": 0,
+    "tail_rt_scale": 1.259,
+    "tail_lp": 3186,
+    "tail_db": -13.52,
+    "trim_db": -0.1858,
+    "steal_s": 0.03,
+    "steal_floor": 0.08,
+    "duck_floor": 0.1,
+    "duck_tau": 0.25,
+    "pump_delay_s": 0.45,
+    "mach": 1.177,
+    "supersonic_to_m": 18.6
+   },
+   "shot_outdoor": {
+    "overlay": "range",
+    "peak_dbfs": -2.19,
+    "clipped_run": 0,
+    "share_0_2ms": 0.4,
+    "share_2_10ms": 2.8,
+    "share_10_50ms": 11.6,
+    "share_50_300ms": 56,
+    "share_after_300ms": 29.3,
+    "crest_db": 6.37,
+    "t_minus20_ms": 571,
+    "tail_minus40_ms": 1207,
+    "band_40_120_db": -4.46,
+    "band_120_300_db": -6.19,
+    "band_300_2k_db": -4.65,
+    "band_2k_up_db": -16.01,
+    "centroid_hz": 425,
+    "loudness_db": -10.13
+   },
+   "shot_indoor": {
+    "overlay": "room",
+    "peak_dbfs": -2.16,
+    "clipped_run": 0,
+    "share_0_2ms": 0.3,
+    "share_2_10ms": 2.2,
+    "share_10_50ms": 9.3,
+    "share_50_300ms": 58.4,
+    "share_after_300ms": 29.9,
+    "crest_db": 5.31,
+    "t_minus20_ms": 709,
+    "tail_minus40_ms": 1433,
+    "band_40_120_db": -3.93,
+    "band_120_300_db": -5,
+    "band_300_2k_db": -5.99,
+    "band_2k_up_db": -21.62,
+    "centroid_hz": 284,
+    "loudness_db": -8.93
+   },
+   "shot_dry": {
+    "overlay": null,
+    "peak_dbfs": -2.18,
+    "clipped_run": 0,
+    "share_0_2ms": 0.7,
+    "share_2_10ms": 5.2,
+    "share_10_50ms": 21,
+    "share_50_300ms": 69.4,
+    "share_after_300ms": 3.7,
+    "crest_db": 7.67,
+    "t_minus20_ms": 324,
+    "tail_minus40_ms": 718,
+    "band_40_120_db": -9.17,
+    "band_120_300_db": -10.52,
+    "band_300_2k_db": -5.31,
+    "band_2k_up_db": -15.43,
+    "centroid_hz": 381,
+    "loudness_db": -12.03
+   },
+   "shot_outdoor_slug": {
+    "peak_dbfs": -2,
+    "clipped_run": 0,
+    "share_0_2ms": 0.4,
+    "share_2_10ms": 3,
+    "share_10_50ms": 12.1,
+    "share_50_300ms": 53.1,
+    "share_after_300ms": 31.4,
+    "crest_db": 6.03,
+    "t_minus20_ms": 574,
+    "tail_minus40_ms": 1184,
+    "band_40_120_db": -4.79,
+    "band_120_300_db": -6.48,
+    "band_300_2k_db": -4.19,
+    "band_2k_up_db": -15.93,
+    "centroid_hz": 448,
+    "loudness_db": -9.6
+   },
+   "narrow_outdoor": {
+    "first_100ms": {
+     "excess_db": 1.35,
+     "hz": 1469,
+     "band_hz": 85,
+     "ring": {
+      "band_ms": 515,
+      "below_ms": 519,
+      "above_ms": 524
+     }
+    },
+    "tail": {
+     "excess_db": 3.54,
+     "hz": 159,
+     "band_hz": 9,
+     "ring": {
+      "band_ms": 192,
+      "below_ms": 217,
+      "above_ms": 333
+     }
+    }
+   },
+   "narrow_indoor": {
+    "first_100ms": {
+     "excess_db": 0.99,
+     "hz": 1512,
+     "band_hz": 87,
+     "ring": {
+      "band_ms": 470,
+      "below_ms": 469,
+      "above_ms": 493
+     }
+    },
+    "tail": {
+     "excess_db": 2.46,
+     "hz": 159,
+     "band_hz": 9,
+     "ring": {
+      "band_ms": 50,
+      "below_ms": 154,
+      "above_ms": 207
+     }
+    }
+   },
+   "earmuffs": {
+    "peak_dbfs": -3.63,
+    "clipped_run": 0,
+    "share_0_2ms": 0.5,
+    "share_2_10ms": 2.6,
+    "share_10_50ms": 13,
+    "share_50_300ms": 50.9,
+    "share_after_300ms": 33.1,
+    "crest_db": 11.05,
+    "t_minus20_ms": 669,
+    "tail_minus40_ms": 1221,
+    "band_40_120_db": -10.38,
+    "band_120_300_db": -7.83,
+    "band_300_2k_db": -1.35,
+    "band_2k_up_db": -24.61,
+    "centroid_hz": 484,
+    "loudness_db": -15.68
+   },
+   "distance": {
+    "front_10m": {
+     "loudness_db": -15.85,
+     "peak_dbfs": -7.99,
+     "centroid_hz": 368,
+     "band_40_120_db": -3.75,
+     "band_2k_up_db": -17,
+     "tail_minus40_ms": 1198,
+     "share_0_2ms": 0.1,
+     "bullet_crack": true,
+     "designed_crack_to_blast_ms": 4.4,
+     "measured_first_arrival_to_loudest_ms": 178
+    },
+    "front_50m": {
+     "loudness_db": -21.98,
+     "peak_dbfs": -14.2,
+     "centroid_hz": 308,
+     "band_40_120_db": -3.14,
+     "band_2k_up_db": -18.97,
+     "tail_minus40_ms": 1203,
+     "share_0_2ms": 0.1,
+     "bullet_crack": false,
+     "designed_crack_to_blast_ms": 0,
+     "measured_first_arrival_to_loudest_ms": 174
+    },
+    "front_100m": {
+     "loudness_db": -24.91,
+     "peak_dbfs": -17.22,
+     "centroid_hz": 275,
+     "band_40_120_db": -2.89,
+     "band_2k_up_db": -22.46,
+     "tail_minus40_ms": 1204,
+     "share_0_2ms": 0.1,
+     "bullet_crack": false,
+     "designed_crack_to_blast_ms": 0,
+     "measured_first_arrival_to_loudest_ms": 174
+    },
+    "side_10m": {
+     "loudness_db": -15.91,
+     "peak_dbfs": -8,
+     "centroid_hz": 366,
+     "band_40_120_db": -3.75,
+     "band_2k_up_db": -17.1,
+     "tail_minus40_ms": 1198,
+     "share_0_2ms": 0.2,
+     "bullet_crack": false,
+     "designed_crack_to_blast_ms": 0,
+     "measured_first_arrival_to_loudest_ms": 173.5
+    },
+    "side_50m": {
+     "loudness_db": -21.98,
+     "peak_dbfs": -14.2,
+     "centroid_hz": 308,
+     "band_40_120_db": -3.14,
+     "band_2k_up_db": -18.97,
+     "tail_minus40_ms": 1203,
+     "share_0_2ms": 0.1,
+     "bullet_crack": false,
+     "designed_crack_to_blast_ms": 0,
+     "measured_first_arrival_to_loudest_ms": 174
+    },
+    "side_100m": {
+     "loudness_db": -24.91,
+     "peak_dbfs": -17.22,
+     "centroid_hz": 275,
+     "band_40_120_db": -2.89,
+     "band_2k_up_db": -22.46,
+     "tail_minus40_ms": 1204,
+     "share_0_2ms": 0.1,
+     "bullet_crack": false,
+     "designed_crack_to_blast_ms": 0,
+     "measured_first_arrival_to_loudest_ms": 174
+    }
+   },
+   "mech_pump": {
+    "peak_dbfs": -1.83,
+    "clipped_run": 0,
+    "share_0_2ms": 0.4,
+    "share_2_10ms": 0.2,
+    "share_10_50ms": 5.3,
+    "share_50_300ms": 85.7,
+    "share_after_300ms": 8.4,
+    "crest_db": 15.05,
+    "t_minus20_ms": 45,
+    "tail_minus40_ms": 513,
+    "band_40_120_db": -14.86,
+    "band_120_300_db": -7.86,
+    "band_300_2k_db": -3.8,
+    "band_2k_up_db": -4.14,
+    "centroid_hz": 3396,
+    "loudness_db": -15.36
+   },
+   "pump_two_strokes": {
+    "rear_stop_s": 0.15,
+    "locked_s": 0.33,
+    "back_stroke_level_db": -8.93,
+    "forward_stroke_level_db": -8.65,
+    "gap_between_db": 19.53,
+    "slide_noise_before_first_db": 7.62
+   },
+   "shot_then_pump": {
+    "peak_dbfs": -1.85,
+    "clipped_run": 0,
+    "share_0_2ms": 0.3,
+    "share_2_10ms": 2.6,
+    "share_10_50ms": 10.5,
+    "share_50_300ms": 50.6,
+    "share_after_300ms": 36,
+    "crest_db": 6.71,
+    "t_minus20_ms": 769,
+    "tail_minus40_ms": 1307,
+    "band_40_120_db": -7.76,
+    "band_120_300_db": -7.65,
+    "band_300_2k_db": -4.39,
+    "band_2k_up_db": -5.49,
+    "centroid_hz": 2634,
+    "loudness_db": -10.13
+   },
+   "mech_pump_back": {
+    "peak_dbfs": -1.63,
+    "clipped_run": 0,
+    "share_0_2ms": 1.3,
+    "share_2_10ms": 0.5,
+    "share_10_50ms": 10.8,
+    "share_50_300ms": 85.5,
+    "share_after_300ms": 1.9,
+    "crest_db": 17.4,
+    "t_minus20_ms": 55,
+    "tail_minus40_ms": 564,
+    "band_40_120_db": -12.53,
+    "band_120_300_db": -5.89,
+    "band_300_2k_db": -3.19,
+    "band_2k_up_db": -6.9,
+    "centroid_hz": 1935,
+    "loudness_db": -18.09
+   },
+   "mech_pump_forward": {
+    "peak_dbfs": -1.89,
+    "clipped_run": 0,
+    "share_0_2ms": 0,
+    "share_2_10ms": 0.4,
+    "share_10_50ms": 13.8,
+    "share_50_300ms": 84.4,
+    "share_after_300ms": 1.4,
+    "crest_db": 15.97,
+    "t_minus20_ms": 51,
+    "tail_minus40_ms": 514,
+    "band_40_120_db": -14.96,
+    "band_120_300_db": -8.56,
+    "band_300_2k_db": -3.2,
+    "band_2k_up_db": -4.58,
+    "centroid_hz": 2876,
+    "loudness_db": -16.3
+   },
+   "mech_shell_insert": {
+    "peak_dbfs": -2.22,
+    "clipped_run": 0,
+    "share_0_2ms": 0,
+    "share_2_10ms": 0.5,
+    "share_10_50ms": 24.4,
+    "share_50_300ms": 73.9,
+    "share_after_300ms": 1.1,
+    "crest_db": 12.68,
+    "t_minus20_ms": 39,
+    "tail_minus40_ms": 528,
+    "band_40_120_db": -29.8,
+    "band_120_300_db": -23.3,
+    "band_300_2k_db": -4.29,
+    "band_2k_up_db": -2.06,
+    "centroid_hz": 3060,
+    "loudness_db": -12.71
+   },
+   "mech_dry_fire": {
+    "peak_dbfs": -5.03,
+    "clipped_run": 0,
+    "share_0_2ms": 37.8,
+    "share_2_10ms": 44.6,
+    "share_10_50ms": 10.7,
+    "share_50_300ms": 2.7,
+    "share_after_300ms": 4.2,
+    "crest_db": 25.69,
+    "t_minus20_ms": 25,
+    "tail_minus40_ms": 515,
+    "band_40_120_db": -17.58,
+    "band_120_300_db": -10.79,
+    "band_300_2k_db": -4.11,
+    "band_2k_up_db": -2.92,
+    "centroid_hz": 2204,
+    "loudness_db": -28.72
+   },
+   "burst_1s": {
+    "shots": 3,
+    "period_s": 0.5,
+    "peak_dbfs": -2.05,
+    "clipped_run": 0,
+    "crest_db": 6.5,
+    "loudness_db": -10.13,
+    "level_first_shot_db": -6.59,
+    "level_last_shot_db": -5.53,
+    "level_max_shot_db": -5.53,
+    "level_min_shot_db": -6.59,
+    "smallest_dip_between_shots_db": 11.06,
+    "shot_levels_db": [
+     -6.6,
+     -5.6,
+     -5.5
+    ],
+    "tail_after_last_minus40_ms": 1290
+   },
+   "realistic_outdoor": {
+    "peak_dbfs": -0.45,
+    "clipped_run": 0,
+    "share_0_2ms": 49.6,
+    "share_2_10ms": 25,
+    "share_10_50ms": 24.1,
+    "share_50_300ms": 1.3,
+    "share_after_300ms": 0,
+    "crest_db": 30.76,
+    "t_minus20_ms": 46,
+    "tail_minus40_ms": 133,
+    "band_40_120_db": -25.2,
+    "band_120_300_db": -12.34,
+    "band_300_2k_db": -2.54,
+    "band_2k_up_db": -4.19,
+    "centroid_hz": 2440,
+    "loudness_db": -30.87
+   }
+  },
+  "hk416": {
+   "design": {
+    "size": 0.5486,
+    "energy_term": 0.844,
+    "bore_term": 0,
+    "g_crack": 1,
+    "f_crack": 3993,
+    "tau_crack": 0.009409,
+    "g_cracknoise": 0.4749,
+    "f_body": 299.9,
+    "tau_body": 0.03556,
+    "tau_roar": 0.04495,
+    "g_body": 0.7646,
+    "g_roar": 0.3646,
+    "f_sub_end": 65.28,
+    "sub_ratio": 3.2,
+    "tau_sub": 0.03746,
+    "g_sub": 0.6285,
+    "sub_h2": 0.7,
+    "sub_h3": 0.45,
+    "sub_drive": 1.6,
+    "g_mech": 0.1778,
+    "tail_rt_scale": 1.052,
+    "tail_lp": 4128,
+    "tail_db": -16.16,
+    "trim_db": -1.128,
+    "steal_s": 0.01873,
+    "steal_floor": 0.08,
+    "duck_floor": 0.1,
+    "duck_tau": 0.2622,
+    "pump_delay_s": 0.45,
+    "mach": 2.477,
+    "supersonic_to_m": 600
+   },
+   "shot_outdoor": {
+    "overlay": "range_berm",
+    "peak_dbfs": -3.56,
+    "clipped_run": 0,
+    "share_0_2ms": 1.3,
+    "share_2_10ms": 10.3,
+    "share_10_50ms": 33,
+    "share_50_300ms": 40.7,
+    "share_after_300ms": 14.7,
+    "crest_db": 12.19,
+    "t_minus20_ms": 457,
+    "tail_minus40_ms": 939,
+    "band_40_120_db": -7.56,
+    "band_120_300_db": -4.99,
+    "band_300_2k_db": -3.78,
+    "band_2k_up_db": -10.58,
+    "centroid_hz": 753,
+    "loudness_db": -15.72
+   },
+   "shot_indoor": {
+    "overlay": "indoor_range",
+    "peak_dbfs": -3.55,
+    "clipped_run": 0,
+    "share_0_2ms": 1.6,
+    "share_2_10ms": 12.7,
+    "share_10_50ms": 44.5,
+    "share_50_300ms": 41.1,
+    "share_after_300ms": 0,
+    "crest_db": 12.44,
+    "t_minus20_ms": 205,
+    "tail_minus40_ms": 323,
+    "band_40_120_db": -6.82,
+    "band_120_300_db": -6.9,
+    "band_300_2k_db": -3.59,
+    "band_2k_up_db": -9.25,
+    "centroid_hz": 1257,
+    "loudness_db": -16.32
+   },
+   "shot_dry": {
+    "overlay": null,
+    "peak_dbfs": -3.56,
+    "clipped_run": 0,
+    "share_0_2ms": 2.2,
+    "share_2_10ms": 17.6,
+    "share_10_50ms": 55.5,
+    "share_50_300ms": 24.7,
+    "share_after_300ms": 0,
+    "crest_db": 13.83,
+    "t_minus20_ms": 147,
+    "tail_minus40_ms": 272,
+    "band_40_120_db": -9.18,
+    "band_120_300_db": -11.84,
+    "band_300_2k_db": -4.22,
+    "band_2k_up_db": -4.62,
+    "centroid_hz": 3241,
+    "loudness_db": -17.31
+   },
+   "narrow_outdoor": {
+    "first_100ms": {
+     "excess_db": 1.09,
+     "hz": 1512,
+     "band_hz": 87,
+     "ring": {
+      "band_ms": 133,
+      "below_ms": 254,
+      "above_ms": 137
+     }
+    },
+    "tail": {
+     "excess_db": 3.18,
+     "hz": 168,
+     "band_hz": 10,
+     "ring": {
+      "band_ms": 167,
+      "below_ms": 162,
+      "above_ms": 217
+     }
+    }
+   },
+   "narrow_indoor": {
+    "first_100ms": {
+     "excess_db": 1.1,
+     "hz": 1512,
+     "band_hz": 87,
+     "ring": {
+      "band_ms": 121,
+      "below_ms": 128,
+      "above_ms": 112
+     }
+    },
+    "tail": {
+     "excess_db": 2.14,
+     "hz": 168,
+     "band_hz": 10,
+     "ring": {
+      "band_ms": 105,
+      "below_ms": 44,
+      "above_ms": 130
+     }
+    }
+   },
+   "earmuffs": {
+    "peak_dbfs": -12.05,
+    "clipped_run": 0,
+    "share_0_2ms": 0.1,
+    "share_2_10ms": 2.2,
+    "share_10_50ms": 29.7,
+    "share_50_300ms": 55,
+    "share_after_300ms": 13,
+    "crest_db": 10.92,
+    "t_minus20_ms": 250,
+    "tail_minus40_ms": 901,
+    "band_40_120_db": -1.6,
+    "band_120_300_db": -5.47,
+    "band_300_2k_db": -18.71,
+    "band_2k_up_db": -26.5,
+    "centroid_hz": 116,
+    "loudness_db": -27.79
+   },
+   "distance": {
+    "front_10m": {
+     "loudness_db": -21.25,
+     "peak_dbfs": -8.88,
+     "centroid_hz": 622,
+     "band_40_120_db": -6.61,
+     "band_2k_up_db": -11.64,
+     "tail_minus40_ms": 938,
+     "share_0_2ms": 0.5,
+     "bullet_crack": true,
+     "designed_crack_to_blast_ms": 17.4,
+     "measured_first_arrival_to_loudest_ms": 27
+    },
+    "front_50m": {
+     "loudness_db": -27.35,
+     "peak_dbfs": -15.12,
+     "centroid_hz": 478,
+     "band_40_120_db": -5.77,
+     "band_2k_up_db": -13.96,
+     "tail_minus40_ms": 940,
+     "share_0_2ms": 0.2,
+     "bullet_crack": true,
+     "designed_crack_to_blast_ms": 86.9,
+     "measured_first_arrival_to_loudest_ms": 96.5
+    },
+    "front_100m": {
+     "loudness_db": -30.22,
+     "peak_dbfs": -18.16,
+     "centroid_hz": 400,
+     "band_40_120_db": -5.42,
+     "band_2k_up_db": -17.58,
+     "tail_minus40_ms": 951,
+     "share_0_2ms": 0.1,
+     "bullet_crack": true,
+     "designed_crack_to_blast_ms": 173.7,
+     "measured_first_arrival_to_loudest_ms": 183.5
+    },
+    "side_10m": {
+     "loudness_db": -21.87,
+     "peak_dbfs": -9.47,
+     "centroid_hz": 612,
+     "band_40_120_db": -6.59,
+     "band_2k_up_db": -11.78,
+     "tail_minus40_ms": 939,
+     "share_0_2ms": 0.8,
+     "bullet_crack": false,
+     "designed_crack_to_blast_ms": 0,
+     "measured_first_arrival_to_loudest_ms": 12.5
+    },
+    "side_50m": {
+     "loudness_db": -28.1,
+     "peak_dbfs": -15.95,
+     "centroid_hz": 468,
+     "band_40_120_db": -5.72,
+     "band_2k_up_db": -14.08,
+     "tail_minus40_ms": 955,
+     "share_0_2ms": 0.4,
+     "bullet_crack": false,
+     "designed_crack_to_blast_ms": 0,
+     "measured_first_arrival_to_loudest_ms": 10
+    },
+    "side_100m": {
+     "loudness_db": -31.07,
+     "peak_dbfs": -19.32,
+     "centroid_hz": 387,
+     "band_40_120_db": -5.32,
+     "band_2k_up_db": -18.09,
+     "tail_minus40_ms": 914,
+     "share_0_2ms": 0.3,
+     "bullet_crack": false,
+     "designed_crack_to_blast_ms": 0,
+     "measured_first_arrival_to_loudest_ms": 113
+    }
+   },
+   "mech_charge": {
+    "peak_dbfs": -3.11,
+    "clipped_run": 0,
+    "share_0_2ms": 1.7,
+    "share_2_10ms": 0.5,
+    "share_10_50ms": 0,
+    "share_50_300ms": 0,
+    "share_after_300ms": 97.8,
+    "crest_db": 34.12,
+    "t_minus20_ms": 55,
+    "tail_minus40_ms": 476,
+    "band_40_120_db": -12.67,
+    "band_120_300_db": -7.83,
+    "band_300_2k_db": -3.76,
+    "band_2k_up_db": -4.45,
+    "centroid_hz": 2920,
+    "loudness_db": -20.32
+   },
+   "burst_1s": {
+    "shots": 14,
+    "period_s": 0.07492,
+    "peak_dbfs": -2.92,
+    "clipped_run": 0,
+    "crest_db": 7.99,
+    "loudness_db": -9.06,
+    "level_first_shot_db": -9.44,
+    "level_last_shot_db": -7.23,
+    "level_max_shot_db": -6.85,
+    "level_min_shot_db": -9.44,
+    "smallest_dip_between_shots_db": 7.34,
+    "shot_levels_db": [
+     -9.4,
+     -7.5,
+     -7.6,
+     -7.8,
+     -7.3,
+     -7.2,
+     -6.9,
+     -7.3,
+     -8.3,
+     -7.5,
+     -7.7,
+     -7.8,
+     -7.3,
+     -7.2
+    ],
+    "tail_after_last_minus40_ms": 1465
+   },
+   "prerendered_auto1s": {
+    "peak_dbfs": -2.8,
+    "clipped_run": 0,
+    "share_0_2ms": 0.1,
+    "share_2_10ms": 0.9,
+    "share_10_50ms": 2.8,
+    "share_50_300ms": 19.4,
+    "share_after_300ms": 76.8,
+    "crest_db": 7.92,
+    "t_minus20_ms": 670,
+    "tail_minus40_ms": 1123,
+    "band_40_120_db": -8.07,
+    "band_120_300_db": -6.96,
+    "band_300_2k_db": -3.47,
+    "band_2k_up_db": -7.26,
+    "centroid_hz": 1521,
+    "loudness_db": -8.53
+   },
+   "realistic_outdoor": {
+    "peak_dbfs": -0.16,
+    "clipped_run": 0,
+    "share_0_2ms": 0.1,
+    "share_2_10ms": 47.4,
+    "share_10_50ms": 50.8,
+    "share_50_300ms": 1.7,
+    "share_after_300ms": 0,
+    "crest_db": 18.58,
+    "t_minus20_ms": 26,
+    "tail_minus40_ms": 359,
+    "band_40_120_db": -12.16,
+    "band_120_300_db": -7.75,
+    "band_300_2k_db": -3.57,
+    "band_2k_up_db": -4.84,
+    "centroid_hz": 2040,
+    "loudness_db": -17.46
+   }
+  },
+  "g44v": {
+   "design": {
+    "size": 0,
+    "energy_term": 0,
+    "bore_term": 0,
+    "g_crack": 1,
+    "f_crack": 5200,
+    "tau_crack": 0.004065,
+    "g_cracknoise": 0.42,
+    "f_body": 568.6,
+    "tau_body": 0.018,
+    "tau_roar": 0.04,
+    "g_body": 0.6,
+    "g_roar": 0.2,
+    "f_sub_end": 105,
+    "sub_ratio": 3.2,
+    "tau_sub": 0.038,
+    "g_sub": 0.42,
+    "sub_h2": 0.7,
+    "sub_h3": 0.45,
+    "sub_drive": 1.6,
+    "g_mech": 0.1778,
+    "tail_rt_scale": 0.75,
+    "tail_lp": 5500,
+    "tail_db": -20,
+    "trim_db": -2.5,
+    "steal_s": 0.03,
+    "steal_floor": 0.08,
+    "duck_floor": 0.1,
+    "duck_tau": 0.4,
+    "pump_delay_s": 0.45,
+    "mach": 0.7903,
+    "supersonic_to_m": 0
+   },
+   "shot_outdoor": {
+    "overlay": "outdoor_berm",
+    "peak_dbfs": -5,
+    "clipped_run": 0,
+    "share_0_2ms": 2.4,
+    "share_2_10ms": 16,
+    "share_10_50ms": 43.2,
+    "share_50_300ms": 37.3,
+    "share_after_300ms": 1,
+    "crest_db": 12.79,
+    "t_minus20_ms": 255,
+    "tail_minus40_ms": 611,
+    "band_40_120_db": -6.33,
+    "band_120_300_db": -3.91,
+    "band_300_2k_db": -5.54,
+    "band_2k_up_db": -11.12,
+    "centroid_hz": 637,
+    "loudness_db": -17.96
+   },
+   "shot_indoor": {
+    "overlay": "indoor_range",
+    "peak_dbfs": -5,
+    "clipped_run": 0,
+    "share_0_2ms": 2.7,
+    "share_2_10ms": 17.8,
+    "share_10_50ms": 52.1,
+    "share_50_300ms": 27.4,
+    "share_after_300ms": 0,
+    "crest_db": 13.22,
+    "t_minus20_ms": 161,
+    "tail_minus40_ms": 309,
+    "band_40_120_db": -4.57,
+    "band_120_300_db": -5.32,
+    "band_300_2k_db": -6.05,
+    "band_2k_up_db": -11.1,
+    "centroid_hz": 668,
+    "loudness_db": -18.34
+   },
+   "shot_dry": {
+    "overlay": null,
+    "peak_dbfs": -5,
+    "clipped_run": 0,
+    "share_0_2ms": 3.3,
+    "share_2_10ms": 21.3,
+    "share_10_50ms": 56.9,
+    "share_50_300ms": 18.6,
+    "share_after_300ms": 0,
+    "crest_db": 14,
+    "t_minus20_ms": 121,
+    "tail_minus40_ms": 217,
+    "band_40_120_db": -3.58,
+    "band_120_300_db": -9.97,
+    "band_300_2k_db": -7.09,
+    "band_2k_up_db": -7.32,
+    "centroid_hz": 1263,
+    "loudness_db": -18.95
+   },
+   "shot_outdoor_cci_mini_mag": {
+    "peak_dbfs": -4.95,
+    "clipped_run": 0,
+    "share_0_2ms": 2.4,
+    "share_2_10ms": 15,
+    "share_10_50ms": 42.6,
+    "share_50_300ms": 38.9,
+    "share_after_300ms": 1.1,
+    "crest_db": 12.45,
+    "t_minus20_ms": 255,
+    "tail_minus40_ms": 621,
+    "band_40_120_db": -6,
+    "band_120_300_db": -4.05,
+    "band_300_2k_db": -5.58,
+    "band_2k_up_db": -11.33,
+    "centroid_hz": 613,
+    "loudness_db": -17.64
+   },
+   "shot_outdoor_cci_quiet_22": {
+    "peak_dbfs": -4.96,
+    "clipped_run": 0,
+    "share_0_2ms": 2.5,
+    "share_2_10ms": 16.2,
+    "share_10_50ms": 42.8,
+    "share_50_300ms": 37.4,
+    "share_after_300ms": 1,
+    "crest_db": 12.77,
+    "t_minus20_ms": 255,
+    "tail_minus40_ms": 611,
+    "band_40_120_db": -6.29,
+    "band_120_300_db": -3.93,
+    "band_300_2k_db": -5.55,
+    "band_2k_up_db": -11.13,
+    "centroid_hz": 632,
+    "loudness_db": -17.91
+   },
+   "narrow_outdoor": {
+    "first_100ms": {
+     "excess_db": 0.91,
+     "hz": 925,
+     "band_hz": 80,
+     "ring": {
+      "band_ms": 132,
+      "below_ms": 186,
+      "above_ms": 139
+     }
+    },
+    "tail": {
+     "excess_db": 3.32,
+     "hz": 300,
+     "band_hz": 17,
+     "ring": {
+      "band_ms": 91,
+      "below_ms": 46,
+      "above_ms": 137
+     }
+    }
+   },
+   "narrow_indoor": {
+    "first_100ms": {
+     "excess_db": 1.06,
+     "hz": 925,
+     "band_hz": 80,
+     "ring": {
+      "band_ms": 112,
+      "below_ms": 109,
+      "above_ms": 103
+     }
+    },
+    "tail": {
+     "excess_db": 2.33,
+     "hz": 252,
+     "band_hz": 15,
+     "ring": {
+      "band_ms": 109,
+      "below_ms": 43,
+      "above_ms": 112
+     }
+    }
+   },
+   "earmuffs": {
+    "peak_dbfs": -8.84,
+    "clipped_run": 0,
+    "share_0_2ms": 1.1,
+    "share_2_10ms": 20.1,
+    "share_10_50ms": 36.8,
+    "share_50_300ms": 40.6,
+    "share_after_300ms": 1.5,
+    "crest_db": 15.96,
+    "t_minus20_ms": 268,
+    "tail_minus40_ms": 608,
+    "band_40_120_db": -12.15,
+    "band_120_300_db": -5.28,
+    "band_300_2k_db": -2,
+    "band_2k_up_db": -19.96,
+    "centroid_hz": 483,
+    "loudness_db": -25.97
+   },
+   "distance": {
+    "front_10m": {
+     "loudness_db": -23.99,
+     "peak_dbfs": -11,
+     "centroid_hz": 507,
+     "band_40_120_db": -6.02,
+     "band_2k_up_db": -12.59,
+     "tail_minus40_ms": 624,
+     "share_0_2ms": 1.5,
+     "bullet_crack": false,
+     "designed_crack_to_blast_ms": 0,
+     "measured_first_arrival_to_loudest_ms": 8
+    },
+    "front_50m": {
+     "loudness_db": -30.38,
+     "peak_dbfs": -17.83,
+     "centroid_hz": 368,
+     "band_40_120_db": -5.73,
+     "band_2k_up_db": -15.69,
+     "tail_minus40_ms": 740,
+     "share_0_2ms": 0.7,
+     "bullet_crack": false,
+     "designed_crack_to_blast_ms": 0,
+     "measured_first_arrival_to_loudest_ms": 8
+    },
+    "front_100m": {
+     "loudness_db": -33.42,
+     "peak_dbfs": -21.16,
+     "centroid_hz": 307,
+     "band_40_120_db": -5.6,
+     "band_2k_up_db": -20.18,
+     "tail_minus40_ms": 741,
+     "share_0_2ms": 0.5,
+     "bullet_crack": false,
+     "designed_crack_to_blast_ms": 0,
+     "measured_first_arrival_to_loudest_ms": 8
+    },
+    "side_10m": {
+     "loudness_db": -23.99,
+     "peak_dbfs": -11,
+     "centroid_hz": 507,
+     "band_40_120_db": -6.02,
+     "band_2k_up_db": -12.59,
+     "tail_minus40_ms": 624,
+     "share_0_2ms": 1.5,
+     "bullet_crack": false,
+     "designed_crack_to_blast_ms": 0,
+     "measured_first_arrival_to_loudest_ms": 8
+    },
+    "side_50m": {
+     "loudness_db": -30.38,
+     "peak_dbfs": -17.83,
+     "centroid_hz": 368,
+     "band_40_120_db": -5.73,
+     "band_2k_up_db": -15.69,
+     "tail_minus40_ms": 740,
+     "share_0_2ms": 0.7,
+     "bullet_crack": false,
+     "designed_crack_to_blast_ms": 0,
+     "measured_first_arrival_to_loudest_ms": 8
+    },
+    "side_100m": {
+     "loudness_db": -33.42,
+     "peak_dbfs": -21.16,
+     "centroid_hz": 307,
+     "band_40_120_db": -5.6,
+     "band_2k_up_db": -20.18,
+     "tail_minus40_ms": 741,
+     "share_0_2ms": 0.5,
+     "bullet_crack": false,
+     "designed_crack_to_blast_ms": 0,
+     "measured_first_arrival_to_loudest_ms": 8
+    }
+   },
+   "mech_slide_rack": {
+    "peak_dbfs": -4.36,
+    "clipped_run": 0,
+    "share_0_2ms": 0.1,
+    "share_2_10ms": 0.8,
+    "share_10_50ms": 15.9,
+    "share_50_300ms": 83.2,
+    "share_after_300ms": 0,
+    "crest_db": 17.43,
+    "t_minus20_ms": 55,
+    "tail_minus40_ms": 270,
+    "band_40_120_db": -14.46,
+    "band_120_300_db": -8.23,
+    "band_300_2k_db": -2.59,
+    "band_2k_up_db": -5.81,
+    "centroid_hz": 2437,
+    "loudness_db": -20.93
+   },
+   "burst_1s": {
+    "shots": 8,
+    "period_s": 0.13,
+    "peak_dbfs": -3.64,
+    "clipped_run": 0,
+    "crest_db": 10.13,
+    "loudness_db": -12.35,
+    "level_first_shot_db": -10.14,
+    "level_last_shot_db": -8.07,
+    "level_max_shot_db": -7.69,
+    "level_min_shot_db": -10.14,
+    "smallest_dip_between_shots_db": 17.12,
+    "shot_levels_db": [
+     -10.1,
+     -8.4,
+     -9.1,
+     -8.8,
+     -7.7,
+     -8.2,
+     -8.1,
+     -8.1
+    ],
+    "tail_after_last_minus40_ms": 957
+   },
+   "realistic_outdoor": {
+    "peak_dbfs": -1.62,
+    "clipped_run": 0,
+    "share_0_2ms": 60.1,
+    "share_2_10ms": 22.3,
+    "share_10_50ms": 9.1,
+    "share_50_300ms": 8.6,
+    "share_after_300ms": 0,
+    "crest_db": 30.64,
+    "t_minus20_ms": 21,
+    "tail_minus40_ms": 288,
+    "band_40_120_db": -21.95,
+    "band_120_300_db": -16.21,
+    "band_300_2k_db": -2.06,
+    "band_2k_up_db": -4.59,
+    "centroid_hz": 2007,
+    "loudness_db": -30.73
+   }
+  }
+ },
+ "suppressor": {
+  "shooter": {
+   "bare": {
+    "peak_dbfs": -3.56,
+    "clipped_run": 0,
+    "share_0_2ms": 1.3,
+    "share_2_10ms": 10.3,
+    "share_10_50ms": 33,
+    "share_50_300ms": 40.7,
+    "share_after_300ms": 14.7,
+    "crest_db": 12.19,
+    "t_minus20_ms": 457,
+    "tail_minus40_ms": 939,
+    "band_40_120_db": -7.56,
+    "band_120_300_db": -4.99,
+    "band_300_2k_db": -3.78,
+    "band_2k_up_db": -10.58,
+    "centroid_hz": 753,
+    "loudness_db": -15.72
+   },
+   "suppressed": {
+    "peak_dbfs": -9.19,
+    "clipped_run": 0,
+    "share_0_2ms": 0,
+    "share_2_10ms": 13.6,
+    "share_10_50ms": 56.8,
+    "share_50_300ms": 28.2,
+    "share_after_300ms": 1.4,
+    "crest_db": 16.91,
+    "t_minus20_ms": 170,
+    "tail_minus40_ms": 580,
+    "band_40_120_db": -5.94,
+    "band_120_300_db": -8.32,
+    "band_300_2k_db": -3.68,
+    "band_2k_up_db": -7.77,
+    "centroid_hz": 1667,
+    "loudness_db": -25.59
+   },
+   "quieter_by_db": 9.87,
+   "tail_minus40_ms": [
+    939,
+    580
+   ],
+   "centroid_hz": [
+    753,
+    1667
+   ],
+   "band_40_120_db": [
+    -7.56,
+    -5.94
+   ],
+   "physical_reduction_db": 20.64221241404318,
+   "bullet_crack_before_blast": null
+  },
+  "front_50m": {
+   "bare": {
+    "peak_dbfs": -15.12,
+    "clipped_run": 0,
+    "share_0_2ms": 0.2,
+    "share_2_10ms": 0.2,
+    "share_10_50ms": 0,
+    "share_50_300ms": 72.4,
+    "share_after_300ms": 27.2,
+    "crest_db": 11.76,
+    "t_minus20_ms": 489,
+    "tail_minus40_ms": 940,
+    "band_40_120_db": -5.77,
+    "band_120_300_db": -4.27,
+    "band_300_2k_db": -4.97,
+    "band_2k_up_db": -13.96,
+    "centroid_hz": 478,
+    "loudness_db": -27.35
+   },
+   "suppressed": {
+    "peak_dbfs": -19.71,
+    "clipped_run": 0,
+    "share_0_2ms": 1.6,
+    "share_2_10ms": 1.4,
+    "share_10_50ms": 0.1,
+    "share_50_300ms": 94.3,
+    "share_after_300ms": 2.6,
+    "crest_db": 17.6,
+    "t_minus20_ms": 110,
+    "tail_minus40_ms": 577,
+    "band_40_120_db": -4.56,
+    "band_120_300_db": -7.79,
+    "band_300_2k_db": -3.71,
+    "band_2k_up_db": -13.02,
+    "centroid_hz": 625,
+    "loudness_db": -37.97
+   },
+   "quieter_by_db": 10.62,
+   "tail_minus40_ms": [
+    940,
+    577
+   ],
+   "centroid_hz": [
+    478,
+    625
+   ],
+   "band_40_120_db": [
+    -5.77,
+    -4.56
+   ],
+   "physical_reduction_db": 20.64221241404318,
+   "bullet_crack_before_blast": {
+    "window_ms": 87,
+    "crack_peak": 0.2516,
+    "max_difference": 0
+   }
+  },
+  "burst_1s": {
+   "peak_dbfs": -6.36,
+   "clipped_run": 0,
+   "share_0_2ms": 0.1,
+   "share_2_10ms": 0.7,
+   "share_10_50ms": 2,
+   "share_50_300ms": 23,
+   "share_after_300ms": 74.2,
+   "crest_db": 11.39,
+   "t_minus20_ms": 787,
+   "tail_minus40_ms": 1164,
+   "band_40_120_db": -9.88,
+   "band_120_300_db": -8.69,
+   "band_300_2k_db": -3.37,
+   "band_2k_up_db": -5.43,
+   "centroid_hz": 2213,
+   "loudness_db": -15.36
+  },
+  "realistic_suppressed": {
+   "peak_dbfs": -2.1,
+   "clipped_run": 0,
+   "share_0_2ms": 0.7,
+   "share_2_10ms": 46.3,
+   "share_10_50ms": 34.4,
+   "share_50_300ms": 18.6,
+   "share_after_300ms": 0,
+   "crest_db": 27.96,
+   "t_minus20_ms": 43,
+   "tail_minus40_ms": 167,
+   "band_40_120_db": -16.31,
+   "band_120_300_db": -14.57,
+   "band_300_2k_db": -5.95,
+   "band_2k_up_db": -1.64,
+   "centroid_hz": 4131,
+   "loudness_db": -28.68,
+   "v2_peak_db_spl": 136.8424256377757,
+   "bare_peak_db_spl": 157.49882451592643
+  }
+ },
+ "realistic_identity": {
+  "hk416": {
+   "single_range_berm": {
+    "samples": 192000,
+    "peak": 0.981315,
+    "max_abs_difference": 0,
+    "identical": true
+   },
+   "single_default": {
+    "samples": 192000,
+    "peak": 0.981315,
+    "max_abs_difference": 0,
+    "identical": true
+   },
+   "auto1s_hallway_earmuffs": {
+    "samples": 192000,
+    "peak": 1.651699,
+    "max_abs_difference": 0,
+    "identical": true
+   },
+   "single_dry_no_ear": {
+    "samples": 192000,
+    "peak": 0.891251,
+    "max_abs_difference": 0,
+    "identical": true
+   },
+   "bystander_open_field_ground": {
+    "samples": 192000,
+    "peak": 0.883601,
+    "max_abs_difference": 0,
+    "identical": true
+   },
+   "mech_charge_via_chain_mech": {
+    "samples": 96000,
+    "peak": 1.1052,
+    "max_abs_difference": 0,
+    "identical": true
+   },
+   "single_via_chain_fire": {
+    "samples": 144000,
+    "peak": 0.981315,
+    "max_abs_difference": 0,
+    "identical": true
+   }
+  },
+  "g44v": {
+   "standard_indoor": {
+    "samples": 72000,
+    "peak": 0.829514,
+    "max_abs_difference": 0,
+    "identical": true
+   },
+   "minimag_open_air_ground": {
+    "samples": 72000,
+    "peak": 0.830254,
+    "max_abs_difference": 0,
+    "identical": true
+   },
+   "quiet_berm_earmuffs": {
+    "samples": 72000,
+    "peak": 0.433842,
+    "max_abs_difference": 0,
+    "identical": true
+   },
+   "bystander_no_ear": {
+    "samples": 72000,
+    "peak": 0.891251,
+    "max_abs_difference": 0,
+    "identical": true
+   },
+   "slide_rack_via_chain_mech": {
+    "samples": 72000,
+    "peak": 0.838123,
+    "max_abs_difference": 0,
+    "identical": true
+   }
+  },
+  "shotgun-590": {
+   "play_shot_buck00_shooter": {
+    "samples": 105601,
+    "peak": 0.95,
+    "max_abs_difference": 0,
+    "identical": true
+   },
+   "play_shot_slug_bystander_room": {
+    "samples": 105601,
+    "peak": 0.95,
+    "max_abs_difference": 0,
+    "identical": true
+   },
+   "play_shot_buck00_range_front_50m": {
+    "samples": 105601,
+    "peak": 0.038981,
+    "max_abs_difference": 0,
+    "identical": true
+   },
+   "play_pump": {
+    "samples": 105601,
+    "peak": 0.474999,
+    "max_abs_difference": 0,
+    "identical": true
+   },
+   "play_shell_insert": {
+    "samples": 105601,
+    "peak": 0.000069,
+    "max_abs_difference": 0,
+    "identical": true
+   },
+   "buck00_range_via_chain_fire": {
+    "samples": 105601,
+    "peak": 0.95,
+    "max_abs_difference": 0,
+    "identical": true
+   },
+   "render_all_names": {
+    "sounds": 33,
+    "max_abs_difference_pa": 0,
+    "identical": true
+   }
+  },
+  "all_identical": true
+ }
+}

@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>openFPS cinematic sound: acceptance</title>
+<style>body{font:13px/1.4 ui-monospace,Menlo,monospace;background:#111;color:#ddd;margin:16px}table{border-collapse:collapse;margin:8px 0}td,th{border:1px solid #333;padding:2px 6px;text-align:right}th:first-child,td:first-child{text-align:left}.bad{color:#f66}.ok{color:#7c7}button{font:inherit}</style></head>
+<body>
+<h1>Cinematic sound: acceptance measurements</h1>
+<p>Every number here is measured on the output of the page's real Web Audio chain, rendered with <code>OfflineAudioContext</code> (two channels, 48 kHz). Targets were fixed before measuring (<code>TARGETS</code> below, and README.md). Add <code>?save=1</code> to post labelled WAVs and the results to <code>serve.py</code>; <code>?base=1</code> also compares mode 'realistic' with the modules of the merged commit unpacked in <code>audio/_base/</code>.</p>
+<p id="status">loading…</p><div id="out"></div>
+<script src="../../assets/shotgun-590/sound/shotgun590-sound.js"></script>
+<script>/* a compact text summary of window.RESULTS, for reading the page from a script */ window.SUMMARY = ()=>{const R=window.RESULTS; if(!R||R.error) return JSON.stringify(R)+document.getElementById('status').textContent; const f=(m)=>m&&[m.peak_dbfs,'sh',m.share_0_2ms,m.share_2_10ms,m.share_10_50ms,m.share_50_300ms,m.share_after_300ms,'crest',m.crest_db,'t20',m.t_minus20_ms,'t40',m.tail_minus40_ms,'bands',m.band_40_120_db,m.band_120_300_db,m.band_300_2k_db,m.band_2k_up_db,'cen',m.centroid_hz,'L',m.loudness_db].join(' '); let all={}; for(const id in R.guns){const g=R.guns[id]; let o={}; for(const k in g) if(g[k]&&g[k].crest_db!=null) o[k]=f(g[k]); const nn=(n)=>n&&[n.first_100ms.excess_db,n.first_100ms.hz,JSON.stringify(n.first_100ms.ring),n.tail.excess_db,n.tail.hz,JSON.stringify(n.tail.ring)].join(' '); o.narrow=nn(g.narrow_outdoor); o.narrow_in=nn(g.narrow_indoor); o.dist=Object.entries(g.distance).map(([k,v])=>k+': '+[v.loudness_db,v.centroid_hz,v.band_2k_up_db,v.designed_crack_to_blast_ms,v.measured_first_arrival_to_loudest_ms,v.peak_dbfs].join(' ')); o.burst=JSON.stringify(g.burst_1s); o.pump=JSON.stringify(g.pump_two_strokes); all[id]=o;} if(R.suppressor){const s=R.suppressor; all.sup={}; for(const k of ['shooter','front_50m']){const v=s[k]; all.sup[k]={bare:f(v.bare),sup:f(v.suppressed),q:v.quieter_by_db,R:v.physical_reduction_db,bc:v.bullet_crack_before_blast};} all.sup.burst=f(s.burst_1s); all.sup.real=f(s.realistic_suppressed)+' spl '+s.realistic_suppressed.v2_peak_db_spl+' bare '+s.realistic_suppressed.bare_peak_db_spl;} if(R.realistic_identity) all.identity=R.realistic_identity.all_identical; return JSON.stringify(all,null,1)};</script>
+<script type="module">
+const CS = window.OpenFPSCinematicSound || await window.Shotgun590Sound.cinematicReady(), FS = 48000, Q = new URLSearchParams(location.search), SAVE = Q.has('save');
+const TARGETS = { share_0_2ms_max: 10, crest_db_max: 14, t_minus20_ms_min: 60, tail_minus40_ms_min_outdoor: 300, peak_dbfs_max: -1, band_40_120_db_min: -10, band_120_300_db_min: -12, narrow_peak_db_max: 4,
+  loudness_spread_db: [3, 10], suppressed_quieter_db: [6, 14], autofire_dip_db_min: 6, autofire_drift_db_max: 2, crack_delay_tol_ms: 1.5 };
+const dummy = new OfflineAudioContext(1, 1, FS), R = { targets: TARGETS, guns: {} }, $ = (id) => document.getElementById(id);
+const say = (s) => { $('status').textContent = s; };
+
+async function loadGuns() {
+  const guns = {};
+  const want = (Q.get('guns') || 'shotgun-590,hk416,g44v').split(',');
+  if (want.includes('shotgun-590')) guns['shotgun-590'] = { S: await window.Shotgun590Sound.build(dummy, { params: '../../assets/shotgun-590/sound/params.json' }), key: 'buck00', outdoor: 'range', indoor: 'room', mech: 'pump', keys: ['buck00', 'slug'] };
+  if (want.includes('hk416')) { const M = (await import('../../assets/hk416/sound/hk416-sound.js')).default; const S = await M.build(dummy); guns.hk416 = { S, M, key: 'single', outdoor: 'range_berm', indoor: 'indoor_range', mech: 'charge', keys: ['single'], auto: true }; }
+  if (want.includes('g44v')) { const M = (await import('../../assets/g44v/sound/g44v-sound.js')).default; const S = await M.build(dummy); guns.g44v = { S, M, key: 'cci_standard_velocity', outdoor: 'outdoor_berm', indoor: 'indoor_range', mech: 'slide_rack', keys: ['cci_standard_velocity', 'cci_mini_mag', 'cci_quiet_22'] }; }
+  return guns;
+}
+// render through the real chain. job: { chain: opts, shots: [{ key, when, seed }], auto: { shots }, mech: [{ name, when }], dur }
+async function render(S, job) {
+  const off = new OfflineAudioContext(2, Math.ceil(job.dur * FS), FS), c = await S.chain(job.chain || {}, off); c.output.connect(off.destination);
+  for (const s of job.shots || []) await c.fire(Object.assign({ when: 0.02 }, s));
+  if (job.auto) await Promise.all(c.auto(Object.assign({ when: 0.02 }, job.auto)));
+  for (const m of job.mech || []) await c.mech(m.name, { when: m.when == null ? 0.02 : m.when });
+  const b = await off.startRendering(); return [Float64Array.from(b.getChannelData(0)), Float64Array.from(b.getChannelData(1))];
+}
+const peakDb = (ch) => { let p = 0; for (const x of ch) for (let i = 0; i < x.length; i++) p = Math.max(p, Math.abs(x[i])); return Math.round(2000 * Math.log10(p + 1e-30)) / 100; };
+function wav(ch) { const n = ch[0].length, b = new DataView(new ArrayBuffer(44 + n * 4)), w = (o, s) => [...s].forEach((c, i) => b.setUint8(o + i, c.charCodeAt(0)));
+  w(0, 'RIFF'); b.setUint32(4, 36 + n * 4, true); w(8, 'WAVEfmt '); b.setUint32(16, 16, true); b.setUint16(20, 1, true); b.setUint16(22, 2, true); b.setUint32(24, FS, true); b.setUint32(28, FS * 4, true); b.setUint16(32, 4, true); b.setUint16(34, 16, true); w(36, 'data'); b.setUint32(40, n * 4, true);
+  for (let i = 0; i < n; i++) for (let c = 0; c < 2; c++) b.setInt16(44 + i * 4 + c * 2, Math.max(-32768, Math.min(32767, Math.round(ch[c][i] * 32767))), true); return b.buffer; }
+async function save(name, ch) { if (SAVE) await fetch('/save/' + name + '.wav', { method: 'POST', body: wav(ch) }); }
+const M = (ch) => Object.assign(CS.metrics(ch[0], FS), { peak_dbfs: peakDb(ch) });
+// short-term level (10 ms) in dB at time t
+function levelAt(x, t) { const a = Math.max(0, Math.round((t - 0.005) * FS)), b = Math.min(x.length, a + 480); let s = 0; for (let i = a; i < b; i++) s += x[i] * x[i]; return 10 * Math.log10(s / 480 + 1e-30); }
+
+async function measureGun(id, g) {
+  const S = g.S, out = {}, pre = id + '_';
+  out.design = Object.fromEntries(Object.entries(S.design(g.key)).filter(([k, v]) => typeof v === 'number').map(([k, v]) => [k, +v.toPrecision(4)]));
+  // 1. the default shot outdoors, indoors and dry
+  for (const [nm, ov] of [['outdoor', g.outdoor], ['indoor', g.indoor], ['dry', null]]) { say(id + ' ' + nm); const ch = await render(S, { chain: { overlay: ov }, shots: [{ key: g.key, seed: 0 }], dur: 4.5 }); out['shot_' + nm] = Object.assign({ overlay: ov }, M(ch)); await save(pre + 'cinematic_shot_' + nm + (ov ? '_' + ov : ''), ch); }
+  for (const k of g.keys.slice(1)) { const ch = await render(S, { chain: { overlay: g.outdoor, key: k }, shots: [{ key: k, seed: 0 }], dur: 4.5 }); out['shot_outdoor_' + k] = M(ch); await save(pre + 'cinematic_shot_outdoor_' + k, ch); }
+  // 2. narrow peaks: eight seeds (shot noise and tail noise both change), power spectra averaged
+  for (const [nm, ov] of [['outdoor', g.outdoor], ['indoor', g.indoor]]) {
+    say(id + ' narrow peaks ' + nm); const L = [];
+    for (let s = 0; s < 8; s++) L.push((await render(S, { chain: { overlay: ov, seed: s }, shots: [{ key: g.key, seed: s }], dur: 3 }))[0]);
+    const on = 0.02 + S.info(await S.shot(g.key)).onset_s, a = CS.spectralPeaks(L, FS, { t0: on, t1: on + 0.1 }), b = CS.spectralPeaks(L, FS, { t0: on + 0.1, t1: on + 1.3 });
+    out['narrow_' + nm] = { first_100ms: Object.assign(a, { ring: CS.ring(L[0], FS, a.hz) }), tail: Object.assign(b, { ring: CS.ring(L[0], FS, b.hz) }) };
+  }
+  // 3. earmuffs
+  { const ch = await render(S, { chain: { overlay: g.outdoor, hpd: true }, shots: [{ key: g.key, seed: 0 }], dur: 4 }); out.earmuffs = M(ch); await save(pre + 'cinematic_shot_earmuffs', ch); }
+  // 4. distance, near the line of fire and to the side
+  out.distance = {};
+  for (const bearing of ['front', 'side']) for (const dist of [10, 50, 100]) { say(id + ' ' + dist + ' m ' + bearing);
+    const ch = await render(S, { chain: { overlay: g.outdoor, distance: dist, bearing }, shots: [{ key: g.key, seed: 0 }], dur: 4.5 }), m = M(ch), inf = S.info(await S.shot(g.key, { distance: dist, bearing }));
+    // delay from the first arrival to the loudest 10 ms: the bullet's crack to the muzzle blast
+    const x = ch[0]; let on = 0, pk = 0; for (let i = 0; i < x.length; i++) pk = Math.max(pk, Math.abs(x[i])); for (let i = 0; i < x.length; i++) if (Math.abs(x[i]) > 0.05 * pk) { on = i; break; }
+    let best = -1e9, tb = 0; for (let t = on / FS; t < on / FS + 0.5; t += 0.0005) { const l = levelAt(x, t); if (l > best + 0.01) { best = l; tb = t; } }
+    out.distance[bearing + '_' + dist + 'm'] = { loudness_db: m.loudness_db, peak_dbfs: m.peak_dbfs, centroid_hz: m.centroid_hz, band_40_120_db: m.band_40_120_db, band_2k_up_db: m.band_2k_up_db, tail_minus40_ms: m.tail_minus40_ms, share_0_2ms: m.share_0_2ms, bullet_crack: inf.blast_delay_s > 0, designed_crack_to_blast_ms: Math.round(inf.blast_delay_s * 1e4) / 10, measured_first_arrival_to_loudest_ms: Math.round((tb - on / FS) * 1e4) / 10 };
+    await save(pre + 'cinematic_shot_' + dist + 'm_' + bearing, ch); }
+  // 5. the mechanical sound on its own
+  { const ch = await render(S, { chain: { overlay: g.outdoor }, mech: [{ name: g.mech }], dur: 2 }); out['mech_' + g.mech] = M(ch); await save(pre + 'cinematic_mech_' + g.mech, ch); }
+  if (id === 'shotgun-590') { // the rack on its own: two strokes, from the action's event times (rear stop, then locked)
+    const ev = S.params.sounds.pump.events, at = (n) => ev.find((e) => e.event === n).t, x = (await render(S, { chain: { overlay: null }, mech: [{ name: 'pump' }], dur: 1 }))[0], mx = (a, b) => { let m = -1e9; for (let t = a; t < b; t += 0.001) m = Math.max(m, levelAt(x, 0.02 + t)); return m; }, mn = (a, b) => { let m = 1e9; for (let t = a; t < b; t += 0.001) m = Math.min(m, levelAt(x, 0.02 + t)); return m; };
+    const b1 = mx(at('rear_stop') - 0.01, at('rear_stop') + 0.03), b2 = mx(at('locked') - 0.01, at('locked') + 0.03);
+    out.pump_two_strokes = { rear_stop_s: at('rear_stop'), locked_s: at('locked'), back_stroke_level_db: +b1.toFixed(2), forward_stroke_level_db: +b2.toFixed(2), gap_between_db: +(Math.min(b1, b2) - mn(at('rear_stop') + 0.03, at('locked') - 0.03)).toFixed(2), slide_noise_before_first_db: +(b1 - mx(0.06, at('rear_stop') - 0.02)).toFixed(2) };
+    const ch = await render(S, { chain: { overlay: g.outdoor }, shots: [{ key: g.key, seed: 0, pump: true }], dur: 4.5 }); out.shot_then_pump = M(ch); await save(pre + 'cinematic_shot_then_pump', ch);
+    for (const nm of ['pump_back', 'pump_forward', 'shell_insert', 'dry_fire']) { const c2 = await render(S, { chain: { overlay: g.outdoor }, mech: [{ name: nm }], dur: 1.5 }); out['mech_' + nm] = M(c2); await save(pre + 'cinematic_mech_' + nm, c2); } }
+  // 6. a one-second burst through fire(): voice stealing and tail ducking live
+  { say(id + ' burst'); const per = S.design(g.key).sim.cyclic_period_s || 0.5, n = Math.max(2, Math.floor(1 / per) + 1), ch = await render(S, { chain: { overlay: g.outdoor }, auto: { shots: n, period: per }, dur: 1.2 + 3.5 }), m = M(ch), x = ch[0], on = 0.02 + S.info(await S.shot(g.key)).onset_s;
+    const pk = [], dip = []; for (let k = 0; k < n; k++) { let a = -1e9, b = 1e9; for (let t = 0; t < per; t += 0.001) { const l = levelAt(x, on + k * per + t); a = Math.max(a, l); if (t > 0.01) b = Math.min(b, l); } pk.push(a); if (k < n - 1) dip.push(a - b); }
+    out.burst_1s = { shots: n, period_s: per, peak_dbfs: m.peak_dbfs, clipped_run: m.clipped_run, crest_db: m.crest_db, loudness_db: m.loudness_db, level_first_shot_db: +pk[0].toFixed(2), level_last_shot_db: +pk[n - 1].toFixed(2), level_max_shot_db: +Math.max(...pk).toFixed(2), level_min_shot_db: +Math.min(...pk).toFixed(2), smallest_dip_between_shots_db: +Math.min(...dip).toFixed(2), shot_levels_db: pk.map((v) => +v.toFixed(1)), tail_after_last_minus40_ms: Math.round(m.tail_minus40_ms) };
+    await save(pre + 'cinematic_burst_1s', ch);
+    if (g.auto) { const c2 = await render(S, { chain: { overlay: g.outdoor }, shots: [{ key: 'auto1s', seed: 0 }], dur: 5 }); out.prerendered_auto1s = M(c2); await save(pre + 'cinematic_auto1s_prerendered', c2); } }
+  // 7. realistic, for reference and for the WAV folder
+  { const ch = await render(S, { chain: { overlay: g.outdoor, mode: 'realistic' }, shots: [{ key: g.key }], dur: 4 }); out.realistic_outdoor = M(ch); await save(pre + 'realistic_shot_outdoor', ch); }
+  return out;
+}
+async function measureSuppressor(g) {
+  const S = g.S, out = {}, Qs = window.SuppressorQD556; await Qs.load('../../assets/suppressor-qd-556/sim/suppressor.json');
+  const hkParams = await (await fetch('../../assets/hk416/sound/params.json')).json(), sup = Qs.soundParams(hkParams, 'subsequent');
+  for (const [nm, o] of [['shooter', {}], ['front_50m', { distance: 50, bearing: 'front' }]]) {
+    const a = await render(S, { chain: Object.assign({ overlay: g.outdoor }, o), shots: [{ key: 'single', seed: 0 }], dur: 4.5 }), b = await render(S, { chain: Object.assign({ overlay: g.outdoor, suppressor: sup }, o), shots: [{ key: 'single', seed: 0 }], dur: 4.5 }), ma = M(a), mb = M(b);
+    const ba = S.info(await S.shot('single', o)), xa = (await S.shot('single', o)).getChannelData(0), xb = (await S.shot('single', Object.assign({ suppressor: sup }, o))).getChannelData(0);
+    // the bullet's layer: compare the dry buffers before the blast arrives (front) or report the levels (shooter)
+    let dmax = 0, pka = 0; const n1 = Math.round((ba.onset_s - ba.blast_delay_s + Math.max(0, ba.blast_delay_s - 0.01)) * FS); if (ba.blast_delay_s > 0) for (let i = 0; i < n1; i++) { dmax = Math.max(dmax, Math.abs(xa[i] - xb[i])); pka = Math.max(pka, Math.abs(xa[i])); }
+    out[nm] = { bare: ma, suppressed: mb, quieter_by_db: +(ma.loudness_db - mb.loudness_db).toFixed(2), tail_minus40_ms: [ma.tail_minus40_ms, mb.tail_minus40_ms], centroid_hz: [ma.centroid_hz, mb.centroid_hz], band_40_120_db: [ma.band_40_120_db, mb.band_40_120_db], physical_reduction_db: S.info(await S.shot('single', { suppressor: sup })).suppress_db,
+      bullet_crack_before_blast: ba.blast_delay_s > 0 ? { window_ms: Math.round(n1 / 48), crack_peak: +pka.toFixed(4), max_difference: dmax } : null };
+    await save('hk416_cinematic_suppressed_' + nm, b); if (nm !== 'shooter') await save('hk416_cinematic_bare_' + nm, a);
+  }
+  { const per = 0.07492, n = 14, ch = await render(S, { chain: { overlay: g.outdoor, suppressor: sup }, auto: { shots: n, period: per }, dur: 4.5 }); out.burst_1s = M(ch); await save('hk416_cinematic_suppressed_burst_1s', ch); }
+  { const ch = await render(S, { chain: { overlay: g.outdoor, suppressor: sup, mode: 'realistic' }, shots: [{ key: 'single' }], dur: 4 }); out.realistic_suppressed = Object.assign(M(ch), { v2_peak_db_spl: (await S.suppressed(sup)).info((await S.suppressed(sup)).shot('single', { mode: 'realistic' })).peak_db_spl, bare_peak_db_spl: S.info(S.shot('single', { mode: 'realistic' })).peak_db_spl }); await save('hk416_realistic_suppressed_outdoor', ch); }
+  return out;
+}
+function table(title, rows, cols) { let h = '<h3>' + title + '</h3><table><tr><th></th>' + cols.map((c) => '<th>' + c + '</th>').join('') + '</tr>'; for (const [n, r] of rows) h += '<tr><td>' + n + '</td>' + cols.map((c) => '<td>' + (r && r[c] != null ? r[c] : '') + '</td>').join('') + '</tr>'; return h + '</table>'; }
+try {
+  const guns = await loadGuns();
+  for (const [id, g] of Object.entries(guns)) R.guns[id] = await measureGun(id, g);
+  if (guns.hk416 && window.SuppressorQD556) R.suppressor = await measureSuppressor(guns.hk416);
+  if (Q.has('base')) R.realistic_identity = await (await import('./identity.js')).default(guns, render, say);
+  const cols = ['peak_dbfs', 'clipped_run', 'share_0_2ms', 'share_2_10ms', 'share_10_50ms', 'share_50_300ms', 'share_after_300ms', 'crest_db', 't_minus20_ms', 'tail_minus40_ms', 'band_40_120_db', 'band_120_300_db', 'band_300_2k_db', 'band_2k_up_db', 'centroid_hz', 'loudness_db'];
+  let h = ''; for (const [id, r] of Object.entries(R.guns)) h += table(id, Object.entries(r).filter(([k, v]) => v && v.crest_db != null), cols) + '<pre>' + JSON.stringify({ narrow_outdoor: r.narrow_outdoor, narrow_indoor: r.narrow_indoor, distance: r.distance, burst_1s: r.burst_1s }, null, 1) + '</pre>';
+  if (R.suppressor) h += '<pre>' + JSON.stringify(R.suppressor, null, 1) + '</pre>'; if (R.realistic_identity) h += '<pre>' + JSON.stringify(R.realistic_identity, null, 1) + '</pre>';
+  $('out').innerHTML = h; window.RESULTS = R; say('done');
+  if (SAVE) await fetch('/results', { method: 'POST', body: JSON.stringify(R, null, 1) });
+} catch (e) { say('ERROR ' + e.message + '\n' + e.stack); window.RESULTS = { error: e.message, stack: e.stack }; }
+</script>
+<script src="../../assets/suppressor-qd-556/sim/suppressor-qd-556.js"></script>
+</body></html>
