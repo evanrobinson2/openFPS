@@ -77,9 +77,9 @@ the forend), `socket_shoulder`, `socket_eject`, `socket_load`, `socket_chamber`,
 | What | Command (from `assets/shotgun-590/`) | Needs |
 |---|---|---|
 | Reference trace | `python3 model/tools/trace_reference.py` | numpy, Pillow, the profile photo in `refs-local/` |
-| Geometry | `blender -b --python model/build.py` | Blender 4.x or 5.x. Writes `model/build/shotgun590.glb` and `.blend` (ignored by git) and `model/inventory.json` |
+| Geometry | `blender -b --python model/build.py` | Blender 4.x or 5.x. Writes `model/masters/shotgun590.glb` and `.blend` and `model/inventory.json`. `model/masters/` is ignored by git, and `tools/check_assets.py` skips a folder of that name, so a local build does not fail the check |
 | Model checks | `python3 model/tools/checks.py` | the build |
-| Renders and comparison | `blender -b model/build/shotgun590.blend --python model/tools/render.py`, then `python3 model/tools/compare.py` | the build; the photo in `refs-local/` |
+| Renders and comparison | `blender -b model/masters/shotgun590.blend --python model/tools/render.py`, then `python3 model/tools/compare.py` | the build; the photo in `refs-local/` |
 | Action | `python3 action/sim.py`, then `node action/test_action.js` | numpy, matplotlib, node |
 | Ballistics | `python3 ballistics/sim.py`, then `node ballistics/test.js` | numpy, matplotlib, node |
 | Sound | `python3 sound/sim.py`, then `python3 sound/verify_js.py` | numpy, matplotlib, node |
