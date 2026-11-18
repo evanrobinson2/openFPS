@@ -1,0 +1,504 @@
+{
+ "test": "hk416-flash.js against physics.py (via flash.json parity) and action.json",
+ "checks": [
+  {
+   "what": "ignition after sear (s)",
+   "js": 0.008511,
+   "python": 0.008511,
+   "rel_error": 0,
+   "tolerance": 1e-12,
+   "pass": true
+  },
+  {
+   "what": "bullet exit after sear (s)",
+   "js": 0.009486999999999999,
+   "python": 0.009487,
+   "rel_error": 1.8285269062683747e-16,
+   "tolerance": 0.002,
+   "pass": true
+  },
+  {
+   "what": "light before exit (cd)",
+   "js": 0,
+   "python": 0,
+   "rel_error": 0,
+   "tolerance": 0,
+   "pass": true
+  },
+  {
+   "what": "frame mean intensity 0.000..16.667 ms (cd)",
+   "js": 0.029722200000000004,
+   "python": 0.029722349880875028,
+   "rel_error": 0.0000050426993701477734,
+   "tolerance": 0.02,
+   "pass": true
+  },
+  {
+   "what": "frame mean intensity 0.000..4.167 ms (cd)",
+   "js": 0.11888880000000002,
+   "python": 0.11888939918570347,
+   "rel_error": 0.000005039858116539038,
+   "tolerance": 0.02,
+   "pass": true
+  },
+  {
+   "what": "frame mean intensity 1.076..1.376 ms (cd)",
+   "js": 1.4172400000000307,
+   "python": 1.4172478398928112,
+   "rel_error": 0.000005531772608747531,
+   "tolerance": 0.02,
+   "pass": true
+  },
+  {
+   "what": "frame mean intensity 1.183..1.263 ms (cd)",
+   "js": 3.452000000001674,
+   "python": 3.451959181385552,
+   "rel_error": 0.000011824767900609564,
+   "tolerance": 0.02,
+   "pass": true
+  },
+  {
+   "what": "frame mean intensity 4.167..8.333 ms (cd)",
+   "js": 0,
+   "python": 3.377966396184151e-10,
+   "rel_error": 1,
+   "tolerance": 0.02,
+   "pass": true
+  },
+  {
+   "what": "light at 1.1700 ms (cd)",
+   "js": 3.0533999999956745,
+   "python": 3.0425191413125696,
+   "rel_error": 0.003576266303590368,
+   "tolerance": 0.03,
+   "pass": true
+  },
+  {
+   "what": "light at 1.1910 ms (cd)",
+   "js": 6.509999999993792,
+   "python": 6.504320223553167,
+   "rel_error": 0.0008732313670624603,
+   "tolerance": 0.03,
+   "pass": true
+  },
+  {
+   "what": "light at 1.2100 ms (cd)",
+   "js": 5.519400000012201,
+   "python": 5.419674592896658,
+   "rel_error": 0.01840062634872014,
+   "tolerance": 0.03,
+   "pass": true
+  },
+  {
+   "what": "light at 1.2260 ms (cd)",
+   "js": 1.9660000000039335,
+   "python": 1.9663880079478546,
+   "rel_error": 0.00019732013333729646,
+   "tolerance": 0.03,
+   "pass": true
+  },
+  {
+   "what": "light at 1.2540 ms (cd)",
+   "js": 0.5957000000005735,
+   "python": 0.5938578864233196,
+   "rel_error": 0.003101943443655528,
+   "tolerance": 0.03,
+   "pass": true
+  },
+  {
+   "what": "light at 1.3160 ms (cd)",
+   "js": 0.18924000000006225,
+   "python": 0.1891003237283107,
+   "rel_error": 0.0007386358150936993,
+   "tolerance": 0.03,
+   "pass": true
+  },
+  {
+   "what": "light at 1.5730 ms (cd)",
+   "js": 0.03944830000000925,
+   "python": 0.03922986369084034,
+   "rel_error": 0.005568112876719227,
+   "tolerance": 0.03,
+   "pass": true
+  },
+  {
+   "what": "light at 2.1130 ms (cd)",
+   "js": 0.0026699400000004367,
+   "python": 0.002148122262553584,
+   "rel_error": 0.24291808084821992,
+   "tolerance": 0.03,
+   "pass": true
+  },
+  {
+   "what": "secondary at 2.08 ms, share 0.3 (cd)",
+   "js": 2926.7999999998674,
+   "python": 2942.6473067865118,
+   "rel_error": 0.005385391157851757,
+   "tolerance": 0.03,
+   "pass": true
+  },
+  {
+   "what": "secondary at 3.38 ms, share 0.3 (cd)",
+   "js": 4446.600000000019,
+   "python": 4452.99453677213,
+   "rel_error": 0.0014360082230747415,
+   "tolerance": 0.03,
+   "pass": true
+  },
+  {
+   "what": "secondary at 3.38 ms, share 1 (cd)",
+   "js": 14822.000000000064,
+   "python": 14843.315122573767,
+   "rel_error": 0.001436008223074619,
+   "tolerance": 0.03,
+   "pass": true
+  },
+  {
+   "what": "secondary at 7.98 ms, share 1 (cd)",
+   "js": 2470.600000000044,
+   "python": 2458.1136887010543,
+   "rel_error": 0.005079631327218165,
+   "tolerance": 0.03,
+   "pass": true
+  },
+  {
+   "what": "smoke radius muzzle_forward (m)",
+   "js": 0.7625909976591109,
+   "python": 0.762590997659111,
+   "rel_error": 1.4558564525848784e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke x muzzle_forward (m)",
+   "js": -1.9959143414190499,
+   "python": -1.99591434141905,
+   "rel_error": 1.1124956633517779e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke y muzzle_forward (m)",
+   "js": 0.034938666291652,
+   "python": 0.03493866629165201,
+   "rel_error": 1.9860214027589133e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke z muzzle_forward (m)",
+   "js": 3.015096594543307,
+   "python": 3.015096594543307,
+   "rel_error": 0,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke radius slot_1 (m)",
+   "js": 0.28170682105185224,
+   "python": 0.2817068210518523,
+   "rel_error": 1.9705291843480134e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke x slot_1 (m)",
+   "js": -1.7469858788218073,
+   "python": -1.7469858788218071,
+   "rel_error": 1.2710154536268e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke y slot_1 (m)",
+   "js": 0.49571046461027785,
+   "python": 0.49571046461027746,
+   "rel_error": 7.83881088579199e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke z slot_1 (m)",
+   "js": 1.0495505817324682,
+   "python": 1.049550581732468,
+   "rel_error": 2.1156160435689304e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke radius slot_2 (m)",
+   "js": 0.2751857273616722,
+   "python": 0.27518572736167224,
+   "rel_error": 2.0172249398058498e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke x slot_2 (m)",
+   "js": -1.49772269300753,
+   "python": -1.4977226930075302,
+   "rel_error": 1.4825481777214076e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke y slot_2 (m)",
+   "js": 0.07802781925351629,
+   "python": 0.07802781925351625,
+   "rel_error": 5.335707677306027e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke z slot_2 (m)",
+   "js": 1.05683300449343,
+   "python": 1.0568330044934302,
+   "rel_error": 2.1010377607525943e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke radius slot_3 (m)",
+   "js": 0.26610134727875767,
+   "python": 0.26610134727875767,
+   "rel_error": 0,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke x slot_3 (m)",
+   "js": -1.7381110575102237,
+   "python": -1.7381110575102243,
+   "rel_error": 3.8325158331902244e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke y slot_3 (m)",
+   "js": -0.3528785871074308,
+   "python": -0.35287858710743086,
+   "rel_error": 1.5730949187448978e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke z slot_3 (m)",
+   "js": 1.0697569565596166,
+   "python": 1.0697569565596157,
+   "rel_error": 8.302618779470668e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke radius slot_4 (m)",
+   "js": 0.2654836453602622,
+   "python": 0.2654836453602622,
+   "rel_error": 0,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke x slot_4 (m)",
+   "js": -2.242697211667671,
+   "python": -2.242697211667672,
+   "rel_error": 3.9603135683201517e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke y slot_4 (m)",
+   "js": -0.3551326797988091,
+   "python": -0.355132679798809,
+   "rel_error": 1.5631101948349612e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke z slot_4 (m)",
+   "js": 1.0736295811755925,
+   "python": 1.0736295811755925,
+   "rel_error": 0,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke radius slot_5 (m)",
+   "js": 0.27423721955629554,
+   "python": 0.2742372195562956,
+   "rel_error": 2.0242019417011506e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke x slot_5 (m)",
+   "js": -2.4879148854313566,
+   "python": -2.4879148854313557,
+   "rel_error": 3.569971082616568e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke y slot_5 (m)",
+   "js": 0.07894938677294726,
+   "python": 0.07894938677294722,
+   "rel_error": 5.273424547701421e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke z slot_5 (m)",
+   "js": 1.0640239778712115,
+   "python": 1.0640239778712117,
+   "rel_error": 2.0868383564933847e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke radius slot_6 (m)",
+   "js": 0.28131278076441957,
+   "python": 0.2813127807644196,
+   "rel_error": 1.9732893429305174e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke x slot_6 (m)",
+   "js": -2.234350169239875,
+   "python": -2.234350169239875,
+   "rel_error": 0,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke y slot_6 (m)",
+   "js": 0.4985846288495376,
+   "python": 0.4985846288495375,
+   "rel_error": 1.1133747014894425e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke z slot_6 (m)",
+   "js": 1.0529523155054934,
+   "python": 1.0529523155054936,
+   "rel_error": 2.1087812017245412e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke radius muzzle_wisp (m)",
+   "js": 0.14479494687503477,
+   "python": 0.1447949468750348,
+   "rel_error": 1.916888414592489e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke x muzzle_wisp (m)",
+   "js": -1.810732231729566,
+   "python": -1.8107322317295662,
+   "rel_error": 1.2262696882185604e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke y muzzle_wisp (m)",
+   "js": 0.15172025537621478,
+   "python": 0.1517202553762148,
+   "rel_error": 1.8293915698206871e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke z muzzle_wisp (m)",
+   "js": 0.4814769876920427,
+   "python": 0.4814769876920428,
+   "rel_error": 1.1529346708209299e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke radius gas_block_vent (m)",
+   "js": 0.2762624988652713,
+   "python": 0.2762624988652714,
+   "rel_error": 2.0093625251080382e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke x gas_block_vent (m)",
+   "js": -1.9937693052378789,
+   "python": -1.993769305237879,
+   "rel_error": 1.1136925638372132e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke y gas_block_vent (m)",
+   "js": -0.3382770091263401,
+   "python": -0.33827700912634,
+   "rel_error": 3.2819937349348783e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke z gas_block_vent (m)",
+   "js": 1.039580113478155,
+   "python": 1.0395801134781553,
+   "rel_error": 2.1359066227433864e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke radius ejection_port (m)",
+   "js": 0.1309409873886675,
+   "python": 0.13094098738866755,
+   "rel_error": 4.2394022176177746e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke x ejection_port (m)",
+   "js": -1.8619947676862427,
+   "python": -1.8619947676862432,
+   "rel_error": 2.385018570175135e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke y ejection_port (m)",
+   "js": 0.04801154389359122,
+   "python": 0.048011543893591205,
+   "rel_error": 2.8905106318955356e-16,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "smoke z ejection_port (m)",
+   "js": -0.0062327887197026755,
+   "python": -0.006232788719702641,
+   "rel_error": 5.566444023661912e-15,
+   "tolerance": 1e-7,
+   "pass": true
+  },
+  {
+   "what": "gun frame offset (m)",
+   "js": 0.39798999999999995,
+   "python": 0.39799,
+   "rel_error": 1.3947875884132221e-16,
+   "tolerance": 1e-12,
+   "pass": true
+  },
+  {
+   "what": "plume cards against the light at the peak (cd)",
+   "js": 8.708329999999952,
+   "python": 8.908999999999956,
+   "rel_error": 0.02252441351442419,
+   "tolerance": 0.05,
+   "pass": true
+  }
+ ],
+ "passed": 62,
+ "failed": 0,
+ "worst_rel_error": 0.02252441351442419
+}
