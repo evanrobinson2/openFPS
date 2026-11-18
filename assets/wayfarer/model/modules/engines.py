@@ -37,6 +37,58 @@ def nozzle(mb, s0, s1, y, z, r0, r1, petals=16, m='machinery_heat'):
     mb.lathe((s0 - 0.3, y, z), (1, 0, 0), [(0, r0 - 0.07), (0.3 + L * 0.5, r0 * 0.80), (0.3 + L * 0.5, 0.0)], 'engine_glow', n=petals * 2, cap0=False, cap1=False)
     mb.lathe((s0 - 0.2, y, z), (1, 0, 0), [(0, r0 * 0.34), (0.2 + L * 0.55, r0 * 0.30), (0.2 + L * 1.02, 0.02)], 'machinery_dark', n=petals * 2, cap0=False, cap1=True)
 
+def _polar(side, y, z):
+    """Helpers for a pod on the s axis through (y, z): er(a) = radial unit vector, P(s, a, rad) = point."""
+    def er(a): return (0.0, side * math.cos(a), math.sin(a))
+    def P(s, a, rad): e = er(a); return (s, y + e[1] * rad, z + e[2] * rad)
+    return er, P
+
+def conduits(mb, bolts, side, y, z, r, s0, s1, angles, rad=0.028, m='machinery_bare'):
+    """Pipes laid along a pod barrel, standing off it on clamp blocks."""
+    er, P = _polar(side, y, z)
+    for k, a in enumerate(angles):
+        a = math.radians(a)
+        mb.pipe([P(s0 - 0.05, a, r - 0.02), P(s0 + 0.06, a, r + rad + 0.02), P(s1 - 0.06, a, r + rad + 0.02), P(s1 + 0.05, a, r - 0.02)], rad, m if k % 2 == 0 else 'copper_pipe', n=8)
+        n = max(2, int((s1 - s0) / 0.55))
+        for q in range(n + 1):
+            s = s0 + 0.15 + (s1 - s0 - 0.3) * q / n
+            mb.cyl(P(s - 0.025, a, r + rad + 0.02), P(s + 0.025, a, r + rad + 0.02), rad + 0.014, 'machinery_dark', n=8)
+            bolts.bolt(P(s, a, r + 2 * rad + 0.034), er(a), r=0.008, h=0.006, washer=False)
+
+def fuel_ring(mb, bolts, side, y, z, r, s, n=16, m='copper_pipe'):
+    """Fuel manifold: a ring standing off the barrel with an injector stub at each station."""
+    er, P = _polar(side, y, z)
+    mb.lathe((s, y, z), (1, 0, 0), [(0, r + 0.075), (0.012, r + 0.11), (0.048, r + 0.11), (0.06, r + 0.075), (0.048, r + 0.04), (0.012, r + 0.04), (0, r + 0.075)], m, n=40, cap0=False, cap1=False)
+    for k in range(n):
+        a = 2 * math.pi * (k + 0.5) / n
+        mb.cyl(P(s + 0.03, a, r - 0.01), P(s + 0.03, a, r + 0.05), 0.016, 'machinery_bare', n=6)
+        mb.cyl(P(s + 0.03, a, r + 0.10), P(s + 0.03, a, r + 0.125), 0.02, 'machinery_dark', n=6)
+
+def nozzle_flaps(mb, side, y, z, s0, s1, r0, r1, n=18, m='armour_gunmetal_d'):
+    """Outer flaps over the nozzle petals, one per petal, each a plate lying on the cone."""
+    er, P = _polar(side, y, z)
+    L = s1 - s0; sl = math.atan2(r1 - r0, L)
+    for k in range(n):
+        a = 2 * math.pi * k / n; e = er(a)
+        es = (math.cos(sl), e[1] * math.sin(sl), e[2] * math.sin(sl))
+        en = (-math.sin(sl), e[1] * math.cos(sl), e[2] * math.cos(sl))
+        et = kit.vcross(es, en)
+        rm = 0.5 * (r0 + r1) + 0.055
+        c = P(s0 + L * 0.47, a, rm)
+        mb.obox(c, kit.vmul(es, L * 0.40), kit.vmul(en, 0.009), kit.vmul(et, math.pi * rm / n * 0.86), m if k % 2 else 'machinery_heat')
+        mb.obox(kit.vadd(c, kit.vmul(en, 0.018)), kit.vmul(es, L * 0.36), kit.vmul(en, 0.009), kit.vmul(et, 0.02), 'machinery_dark')
+
+def fan(side, y, z, s, r, blades=14):
+    """Compressor face behind an intake: a spinner and twisted blades. Its own object, so the game can spin it."""
+    mb = MB(); er, P = _polar(side, y, z); es = (1.0, 0.0, 0.0)
+    mb.lathe((s - 0.20, y, z), (1, 0, 0), [(0, 0.012), (0.07, 0.07), (0.16, 0.105), (0.26, 0.11)], 'machinery_bare', n=20, cap0=True, cap1=True)
+    tw = math.radians(34)
+    for k in range(blades):
+        a = 2 * math.pi * k / blades; e = er(a); et = kit.vcross(es, e)
+        t2 = kit.vadd(kit.vmul(et, math.cos(tw)), kit.vmul(es, math.sin(tw))); n2 = kit.vcross(e, t2)
+        mb.obox(P(s, a, 0.10 + (r - 0.10) / 2), kit.vmul(e, (r - 0.10) / 2), kit.vmul(t2, 0.06), kit.vmul(n2, 0.005), 'machinery_bare')
+    return mb
+
 def main_pod(side):
     mb = MB(); bolts = MB()
     y = side * E['pod_y']; z = E['pod_z']; r = E['pod_r']; s0 = E['pod_s0']; s1 = E['pod_s1']
@@ -103,6 +155,48 @@ def main_pod(side):
     mb.lathe((s0 + 4.16, y, z), (1, 0, 0), [(0, rb), (0.25, rb), (1.05, rb * 0.90), (1.05, rb * 0.90 + 0.05), (1.12, rb * 0.90 + 0.05), (1.12, rb * 0.88)], 'armour_gunmetal_b', n=40, cap0=False, cap1=False)
     bolts.bolt_circle((s0 + 5.28, y, z), (1, 0, 0), rb * 0.90 + 0.025, 28, r=0.016, h=0.01)
     nozzle(mb, s0 + 5.28, s1, y, z, rb * 0.88, rb * 0.74, petals=18)
+    nozzle_flaps(mb, side, y, z, s0 + 5.34, s1 - 0.10, rb * 0.88, rb * 0.74, n=18)
+    mb.lathe((s0 + 5.20, y, z), (1, 0, 0), [(0, rb * 0.90 + 0.05), (0, rb * 0.90 + 0.11), (0.07, rb * 0.90 + 0.11), (0.07, rb * 0.90 + 0.05)], 'machinery_dark', n=40, cap0=False, cap1=False)   # unison ring
+    er, P = _polar(side, y, z)
+    for k in range(6):                              # unison ring actuators
+        a = 2 * math.pi * (k + 0.5) / 6
+        mb.cyl(P(s0 + 4.55, a, rb + 0.035), P(s0 + 5.20, a, rb * 0.90 + 0.085), 0.034, 'machinery_dark', n=8)
+        mb.cyl(P(s0 + 4.95, a, rb * 0.94 + 0.065), P(s0 + 5.21, a, rb * 0.90 + 0.085), 0.018, 'hydraulic_chrome', n=8)
+        mb.obox(P(s0 + 4.52, a, rb + 0.03), (0.05, 0, 0), kit.vmul(er(a), 0.04), kit.vmul(kit.vcross((1, 0, 0), er(a)), 0.05), 'structure_steel')
+    conduits(mb, bolts, side, y, z, rb, s0 + 1.60, s0 + 4.06, (-22, -36, -50, 196, 212))
+    fuel_ring(mb, bolts, side, y, z, rb, s0 + 4.22, n=18)
+    mb.pipe([P(s0 + 4.25, math.radians(-50), rb + 0.075), P(s0 + 4.10, math.radians(-58), rb + 0.16), P(s0 + 2.70, math.radians(-75), rb + 0.20)], 0.03, 'copper_pipe', n=8)
+    # accessory gearbox slung under the barrel: case, starter, generator, pump, and its drive tower
+    zb = z - rb
+    mb.box(s0 + 1.95, s0 + 2.75, y - 0.30, y + 0.30, zb - 0.30, zb + 0.10, 'machinery_dark')
+    mb.box(s0 + 2.02, s0 + 2.68, y - 0.33, y + 0.33, zb - 0.22, zb - 0.02, 'machinery_bare')
+    mb.cyl((s0 + 2.20, y, zb + 0.08), (s0 + 2.20, y, zb + 0.22), 0.09, 'machinery_bare', n=12)
+    mb.cyl((s0 + 1.60, y - 0.14, zb - 0.14), (s0 + 1.95, y - 0.14, zb - 0.14), 0.11, 'machinery_bare', n=14)          # starter
+    mb.cyl((s0 + 1.66, y + 0.15, zb - 0.14), (s0 + 1.95, y + 0.15, zb - 0.14), 0.09, 'armour_gunmetal_a', n=14)       # generator
+    mb.cyl((s0 + 2.75, y, zb - 0.12), (s0 + 3.10, y, zb - 0.12), 0.10, 'copper_pipe', n=14)                            # fuel pump
+    mb.cyl((s0 + 3.10, y, zb - 0.12), (s0 + 3.16, y, zb - 0.12), 0.13, 'machinery_dark', n=14)
+    mb.pipe([(s0 + 3.13, y + side * 0.10, zb - 0.12), (s0 + 3.40, y + side * 0.20, zb - 0.10), P(s0 + 3.70, math.radians(-50), rb + 0.075)], 0.025, 'copper_pipe', n=8)
+    bolts.bolt_line((s0 + 2.00, y - 0.301, zb - 0.26), (s0 + 2.70, y - 0.301, zb - 0.26), (0, -1, 0), pitch=0.14, r=0.012, h=0.008)
+    bolts.bolt_line((s0 + 2.00, y + 0.301, zb - 0.26), (s0 + 2.70, y + 0.301, zb - 0.26), (0, 1, 0), pitch=0.14, r=0.012, h=0.008)
+    mb.box(s0 + 2.20, s0 + 2.42, y - 0.06, y + 0.06, zb - 0.302, zb - 0.30, 'placard_white')                           # data plate
+    # two igniter boxes on the inboard flank, with leads to the barrel
+    for ds in (3.30, 3.62):
+        a = math.radians(170)
+        mb.obox(P(s0 + ds, a, rb + 0.07), (0.10, 0, 0), kit.vmul(er(a), 0.05), kit.vmul(kit.vcross((1, 0, 0), er(a)), 0.08), 'hazard_yellow')
+        mb.pipe([P(s0 + ds, a, rb + 0.12), P(s0 + ds + 0.1, math.radians(160), rb + 0.16), P(s0 + ds + 0.2, math.radians(152), rb + 0.03)], 0.012, 'cable_black', n=6)
+    # intake: two splitters across the vanes, hazard marks on the face, an access hatch on the outboard flank
+    for dz in (-0.26, 0.26):
+        mb.box(s0 + 0.12, s0 + 0.58, y - hw * 0.93, y + hw * 0.93, z + dz - 0.012, z + dz + 0.012, 'machinery_bare')
+    for sx in (-1, 1):
+        for k in range(4):
+            mb.box(s0 - 0.006, s0, y + sx * (hw + 0.16), y + sx * (hw + 0.30), z - 0.42 + 0.24 * k, z - 0.34 + 0.24 * k, 'hazard_yellow')
+    yo = y + side * (r * 0.985 * 0.985 + 0.012)
+    mb.box(s0 + 0.60, s0 + 0.98, yo - 0.012, yo + 0.012, z - 0.34, z + 0.34, 'armour_gunmetal_c')
+    mb.pipe([(s0 + 0.70, yo, z - 0.10), (s0 + 0.70, yo + side * 0.016, z - 0.10), (s0 + 0.70, yo + side * 0.016, z + 0.10), (s0 + 0.70, yo, z + 0.10)], 0.008, 'hazard_yellow', n=6)
+    for (a0, b0) in ((0.64, -0.30), (0.94, -0.30), (0.64, 0.30), (0.94, 0.30), (0.79, -0.30), (0.79, 0.30), (0.64, 0.0), (0.94, 0.0)):
+        bolts.bolt((s0 + a0, yo + side * 0.012, z + b0), (0, side, 0), r=0.012, h=0.008)
+    for ds in (0.44, 1.14):                         # lifting eyes on top of the housing
+        mb.tube((s0 + ds - 0.02, y, z + r * 0.985 + 0.07), (s0 + ds + 0.02, y, z + r * 0.985 + 0.07), 0.06, 0.035, 'machinery_bare', n=12)
     return mb, bolts
 
 def upper_pod(side):
@@ -117,6 +211,11 @@ def upper_pod(side):
     flange(mb, bolts, s0 + 3.72, y, z, r * 0.97, nb=24, w=0.05)
     mb.lathe((s0 + 3.75, y, z), (1, 0, 0), [(0, r * 0.97), (0.45, r * 0.88)], 'armour_gunmetal_b', n=32, cap0=False, cap1=False)
     nozzle(mb, s0 + 4.20, s1, y, z, r * 0.88, r * 0.72, petals=14)
+    nozzle_flaps(mb, side, y, z, s0 + 4.26, s1 - 0.08, r * 0.88, r * 0.72, n=14)
+    er, P = _polar(side, y, z)
+    conduits(mb, bolts, side, y, z, r * 0.97, s0 + 0.72, s0 + 3.66, (-40, -62, 220, 242), rad=0.022)
+    fuel_ring(mb, bolts, side, y, z, r * 0.92, s0 + 3.84, n=12)
+    mb.lathe((s0 + 0.30, y, z), (1, 0, 0), [(0, r + 0.004), (0.10, r + 0.004)], 'hazard_yellow', n=32, cap0=False, cap1=False)       # intake warning band
     return mb, bolts
 
 def cowl(side):
@@ -164,6 +263,18 @@ def pylons(side):
             mb.cyl((s - 0.03, yy + side * 0.10, zz), (s + 0.03, yy + side * 0.10, zz), 0.075 if not k else 0.058, 'machinery_dark', n=10)
     mb.pipe([(25.3, side * 2.6, z + 0.9), (25.3, side * 2.45, z + 1.25), (25.3, side * 2.35, E['top_z'] - E['top_r'] * 0.9)], 0.07, 'machinery_bare', n=10)
     mb.pipe([(26.9, side * 2.6, z + 0.9), (26.9, side * 2.45, z + 1.25), (26.9, side * 2.35, E['top_z'] - E['top_r'] * 0.9)], 0.07, 'machinery_bare', n=10)
+    # struts tying the upper pod to the main pod, with a lug at each end, and stiffeners on the pylon webs
+    for s in (24.6, 25.9, 27.2):
+        a0 = (s, side * (E['pod_y'] - 0.35), z + E['pod_r'] * 0.93 * 0.96); a1 = (s, side * (E['top_y'] + 0.22), E['top_z'] - E['top_r'] * 0.92)
+        mb.cyl(a0, a1, 0.04, 'structure_steel', n=10)
+        for q in (a0, a1):
+            mb.cyl((q[0] - 0.05, q[1], q[2]), (q[0] + 0.05, q[1], q[2]), 0.07, 'machinery_bare', n=10)
+            bolts.bolt((q[0] + 0.05, q[1], q[2]), (1, 0, 0), r=0.02, h=0.012)
+    for (s0, s1) in ((24.9, 25.7), (26.6, 27.3)):
+        for f in (0.3, 0.6):
+            yy = y0 + (y1 - y0) * f
+            mb.box(s0 + 0.10, s1 - 0.10, yy - 0.012, yy + 0.012, z + 0.42, z + 0.47, 'structure_steel')
+            mb.box(s0 + 0.10, s1 - 0.10, yy - 0.012, yy + 0.012, z - 0.47, z - 0.42, 'structure_steel')
     return mb, bolts
 
 def core():
@@ -187,11 +298,24 @@ def core():
     r = E['core_r']
     mb.lathe((s0 + 0.12, 0, 0), (1, 0, 0), [(0, 0.95), (0.10, 0.95), (0.10, 0.62), (0.34, 0.55)], 'machinery_bare', n=40, cap0=False, cap1=False)
     bolts.bolt_circle((s0 + 0.22, 0, 0), (1, 0, 0), 0.80, 28, r=0.022, h=0.014)
-    mb.lathe((s0 + 0.40, 0, 0), (1, 0, 0), [(0, 0.50), (0.25, 0.72), (0.65, 1.00), (1.20, r), (1.20, r - 0.04), (0.65, 0.95), (0.25, 0.67), (0.0, 0.44)], 'machinery_heat', n=48, cap0=False, cap1=False)
+    bell = MB()                                                  # the bell is its own object, pivoted at the gimbal
+    bell.lathe((s0 + 0.40, 0, 0), (1, 0, 0), [(0, 0.50), (0.25, 0.72), (0.65, 1.00), (1.20, r), (1.20, r - 0.04), (0.65, 0.95), (0.25, 0.67), (0.0, 0.44)], 'machinery_heat', n=48, cap0=False, cap1=False)
     for k in range(6):                                           # stiffening hoops on the bell
         t = 0.30 + 0.16 * k; rr = 0.50 + (r - 0.50) * (t / 1.20) ** 0.65
-        mb.lathe((s0 + 0.40 + t, 0, 0), (1, 0, 0), [(0, rr), (0.0, rr + 0.035), (0.04, rr + 0.035), (0.04, rr)], 'machinery_dark', n=48, cap0=False, cap1=False)
-    mb.lathe((s0 + 0.30, 0, 0), (1, 0, 0), [(0.0, 0.44), (0.9, 0.9), (0.9, 0.0)], 'engine_glow', n=32, cap0=False, cap1=False)
+        bell.lathe((s0 + 0.40 + t, 0, 0), (1, 0, 0), [(0, rr), (0.0, rr + 0.035), (0.04, rr + 0.035), (0.04, rr)], 'machinery_dark', n=48, cap0=False, cap1=False)
+    bell.lathe((s0 + 0.30, 0, 0), (1, 0, 0), [(0.0, 0.44), (0.9, 0.9), (0.9, 0.0)], 'engine_glow', n=32, cap0=False, cap1=False)
+    for k in range(24):                                          # regenerative cooling tubes down the upper bell
+        a = 2 * math.pi * k / 24; c, sn = math.cos(a), math.sin(a)
+        bell.cyl((s0 + 0.42, 0.515 * c, 0.515 * sn), (s0 + 0.66, 0.745 * c, 0.745 * sn), 0.012, 'copper_pipe', n=5)
+    core.bell = bell
+    mb.lathe((s0 + 0.12, 0, 0), (1, 0, 0), [(0, 1.06), (0.05, 1.06), (0.05, 0.96), (0, 0.96)], 'rubber_black', n=40, cap0=False, cap1=False)      # heat blanket
+    for sy in (-1, 1):                                           # propellant feed lines to the throat
+        mb.pipe([(s0 + 0.12, sy * 0.55, 1.35), (s0 + 0.30, sy * 0.55, 1.20), (s0 + 0.36, sy * 0.40, 0.72), (s0 + 0.40, sy * 0.30, 0.50)], 0.06, 'machinery_bare' if sy > 0 else 'copper_pipe', n=10)
+        mb.cyl((s0 + 0.12, sy * 0.55, 1.35), (s0 + 0.16, sy * 0.55, 1.35), 0.10, 'machinery_dark', n=12)
+        bolts.bolt_circle((s0 + 0.16, sy * 0.55, 1.35), (1, 0, 0), 0.08, 6, r=0.01, h=0.007)
+    for k in range(8):                                           # thrust struts from the plate to the gimbal ring
+        a = math.pi / 8 + k * math.pi / 4; c, sn = math.cos(a), math.sin(a)
+        mb.cyl((s0 + 0.12, 1.55 * c, 1.55 * sn), (s0 + 0.20, 0.97 * c, 0.97 * sn), 0.03, 'structure_steel', n=8)
     for k in range(4):                                           # gimbal actuators
         a = math.pi / 4 + k * math.pi / 2; c, sn = math.cos(a), math.sin(a)
         mb.cyl((s0 + 0.12, 1.25 * c, 1.25 * sn), (s0 + 0.75, 0.86 * c, 0.86 * sn), 0.05, 'machinery_dark', n=10)
@@ -202,6 +326,7 @@ def core():
         mb.lathe((s0 + 0.12, yy, zz), (1, 0, 0), [(0, 0.16), (0.12, 0.14), (0.42, 0.24), (0.42, 0.21), (0.12, 0.11)], 'machinery_heat', n=16, cap0=False, cap1=False)
         mb.lathe((s0 + 0.2, yy, zz), (1, 0, 0), [(0.0, 0.11), (0.2, 0.17), (0.2, 0.0)], 'engine_glow', n=12, cap0=False, cap1=False)
         bolts.bolt_circle((s0 + 0.12, yy, zz), (1, 0, 0), 0.21, 8, r=0.012, h=0.009)
+        mb.pipe([(s0 + 0.14, yy * 0.55, zz * 0.62), (s0 + 0.20, yy * 0.8, zz * 0.85), (s0 + 0.16, yy * 0.93, zz * 0.95)], 0.025, 'copper_pipe', n=8)     # vernier feed
     return mb, bolts
 
 def build(H):
@@ -216,5 +341,9 @@ def build(H):
             finish(name, mb, parent, pivot=piv, group='engines'); allb.merge(bolts)
     mb, bolts = core()
     finish('engine_core_and_thrust_plate', mb, parent, pivot=(E['core_s0'], 0, 0), group='engines'); allb.merge(bolts)
+    finish('engine_core_bell', core.bell, 'engine_core_and_thrust_plate', pivot=(E['core_s0'] + 0.40, 0, 0), group='engines')
+    for side, sn in ((1, 'stbd'), (-1, 'port')):                 # compressor faces, free to spin
+        s = E['pod_s0'] + 0.74
+        finish(f'engine_fan_{sn}', fan(side, side * E['pod_y'], E['pod_z'], s, 0.40), f'engine_main_pod_{sn}', pivot=(s, side * E['pod_y'], E['pod_z']), group='engines')
     finish('engine_bolts', allb, parent, sharp=60, group='fasteners')
-    return dict(pods=5)
+    return dict(pods=5, fans=2)

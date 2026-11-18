@@ -56,9 +56,10 @@ FRAME_PITCH = 1.0           # ring frames every metre from cockpit_fwd to hull_a
 
 # ------------------------------------------------------------------ nose and canopy
 NOSE_Z = -0.80              # height of the nose tip: the nose droops, the canopy sits above it
+CANOPY_SLIT = 0.80      # height of the canopy glazing, m. The concept's heavy brow is 0.80; raise it (to about 1.10) to open the pilots' view
 CANOPY = dict(s0=0.62, s1=4.40, blend_to=6.40,
               sill=lambda s: 0.62 + 0.06 * s,      # lower edge of the glazing, z
-              brow=lambda s: 1.42 + 0.06 * s,      # upper edge of the glazing, z: a 0.80 m slit under an armoured brow
+              brow=lambda s: 0.62 + 0.06 * s + CANOPY_SLIT,   # upper edge of the glazing, z, under an armoured brow
               pillars=(0.62, 1.60, 2.55, 3.50, 4.40))
 
 # ------------------------------------------------------------------ waist channel and bays (per side)
