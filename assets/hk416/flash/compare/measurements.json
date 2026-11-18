@@ -1,0 +1,39 @@
+{
+ "model_16in_a2_3shots": {
+  "upstream_half_max_mm": 117.75,
+  "downstream_half_max_mm": 180.56,
+  "centroid_mm": 142.23,
+  "height_fwhm_mm": 31.55,
+  "slot_blob_over_peak_gamma": 0.4,
+  "gap_over_peak": 0.05,
+  "haze_G_over_R_linear": 0.256
+ },
+ "photo_ttag_a2": {
+  "upstream_half_max_mm": 122.82,
+  "downstream_half_max_mm": 169.58,
+  "centroid_mm": 143.02,
+  "height_fwhm_mm": 29.86,
+  "slot_blob_over_peak_gamma": 0.42,
+  "gap_over_peak": 0.05,
+  "haze_G_over_R_linear": 0.051
+ },
+ "model_secondary_full": {
+  "length_mm": 424.0,
+  "height_mm": 416.0
+ },
+ "photo_103rqs_m4": {
+  "length_mm": 436,
+  "height_mm": 396,
+  "note": "clipped core plus orange rim, measured by eye on the 1280 px image; scale from the carbine length, +-15 %"
+ },
+ "model_secondary_through_hider": {
+  "length_mm": 232.0,
+  "height_mm": 216.0
+ },
+ "photo_marine_m4a1_dusk": {
+  "length_mm": 300,
+  "height_mm": 240,
+  "core_ahead_of_muzzle_mm": 160,
+  "note": "orange halo measured by eye; scale from the carbine length, +-20 %; includes lens glare"
+ }
+}
