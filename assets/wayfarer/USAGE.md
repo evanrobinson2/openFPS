@@ -33,7 +33,7 @@ Needs a Python that `bpy` (Blender as a module) installs on, and `numpy`. Built 
 pip install bpy numpy
 cd assets/wayfarer/model
 python3 build.py --glb             # work/wayfarer.blend, out/wayfarer.glb (14 MB, every bolt)
-python3 build.py --glb --lod 1     # out/wayfarer_lod1.glb (7 MB, no fasteners)
+python3 build.py --glb --lod 1 --tag wayfarer_lod1   # out/wayfarer_lod1.glb (7 MB, no fasteners)
 python3 build.py --only engines    # one module, for working on it
 python3 tools/checks.py            # sizes, clearances and clips
 python3 blockout.py                # the stage-3 blockout
