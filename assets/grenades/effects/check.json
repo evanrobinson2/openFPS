@@ -1,0 +1,209 @@
+{
+ "_doc": "Written by node effects/test.js",
+ "python_checks": [
+  {
+   "check": "frag: damage at the published 5 m killing radius is exactly lethal (100)",
+   "value": 100,
+   "passed": true
+  },
+  {
+   "check": "frag: damage at the published 15 m casualty radius equals the wound threshold (25)",
+   "value": 25,
+   "passed": true
+  },
+  {
+   "check": "frag: damage never rises with distance, lethal everywhere inside 5 m, zero from 20 m",
+   "value": [
+    400,
+    0
+   ],
+   "passed": true
+  },
+  {
+   "check": "flash: bang at 5 ft is inside the published 170..180 dB",
+   "value": 175,
+   "passed": true
+  },
+  {
+   "check": "flash: 1,000,000 cd gives 1,000,000 lux at 1 m",
+   "value": 1000000,
+   "passed": true
+  },
+  {
+   "check": "flash (night): blind and deafen are both at full strength at the published 9 m radius and weaker beyond",
+   "value": [
+    1,
+    1,
+    0.9803714487482091,
+    0.9760089125918179
+   ],
+   "passed": true
+  },
+  {
+   "check": "flash (indoor): blind and deafen are both at full strength at the published 9 m radius and weaker beyond",
+   "value": [
+    1,
+    1,
+    0.9709103232185375,
+    0.9760089125918179
+   ],
+   "passed": true
+  },
+  {
+   "check": "flash (day): blind and deafen are both at full strength at the published 9 m radius and weaker beyond",
+   "value": [
+    1,
+    1,
+    0.9405906594520911,
+    0.9760089125918179
+   ],
+   "passed": true
+  },
+  {
+   "check": "flash: blinding falls as the player looks away (0, 30, 60, 90, 120, 180 deg at 5 m indoors)",
+   "value": [
+    1,
+    1,
+    1,
+    0.6887344495697679,
+    0.510351797997087,
+    0.510351797997087
+   ],
+   "passed": true
+  },
+  {
+   "check": "flash: deafen ends where the bang falls to the 140 dB limit (free field)",
+   "value": 85.7008179590092,
+   "passed": true
+  },
+  {
+   "check": "smoke: the emission curve integrates to 1 over a 60.0 s burn",
+   "value": 1.0000000000000433,
+   "passed": true
+  },
+  {
+   "check": "smoke: the puffs carry the whole yield (2400.0 m2)",
+   "value": 2400.0000000000036,
+   "passed": true
+  },
+  {
+   "check": "smoke: a puff drifts downwind at the wind speed (2 m/s)",
+   "value": 2,
+   "passed": true
+  },
+  {
+   "check": "smoke: emission stops at the end of the burn (last puff born before 60.0 s)",
+   "value": 59.75,
+   "passed": true
+  },
+  {
+   "check": "smoke-white: the emission curve integrates to 1 over a 127.5 s burn",
+   "value": 0.9999997099550579,
+   "passed": true
+  },
+  {
+   "check": "smoke-white: the puffs carry the whole yield (7500.0 m2)",
+   "value": 7500.000000000021,
+   "passed": true
+  },
+  {
+   "check": "smoke-white: a puff drifts downwind at the wind speed (2 m/s)",
+   "value": 2,
+   "passed": true
+  },
+  {
+   "check": "smoke-white: emission stops at the end of the burn (last puff born before 127.5 s)",
+   "value": 127.25,
+   "passed": true
+  },
+  {
+   "check": "smoke: optical depth through one puff matches the closed form m / (2 pi sigma^2)",
+   "value": [
+    8.818975201628835,
+    8.818975201628835
+   ],
+   "passed": true
+  },
+  {
+   "check": "smoke: optical depth across the plateau plume where sigma = 2 m, before thinning, is the tuning target of 4 (within 10 %)",
+   "value": [
+    4.090449642442056,
+    3.609809139633381
+   ],
+   "passed": true
+  }
+ ],
+ "js_checks": [
+  {
+   "check": "frag: JS damage vs Python at 11 distances (limit 1e-9)",
+   "value": 0,
+   "passed": true
+  },
+  {
+   "check": "frag: lethal to 5 m, casualty to 15 m (published radii)",
+   "value": [
+    true,
+    false,
+    true,
+    false
+   ],
+   "passed": true
+  },
+  {
+   "check": "frag: cover blocks it, prone halves it outside the killing radius",
+   "value": [
+    0,
+    0.5
+   ],
+   "passed": true
+  },
+  {
+   "check": "flash: JS vs Python over 216 cases (relative limit 1e-12)",
+   "value": 2.2540173526295116e-16,
+   "passed": true
+  },
+  {
+   "check": "flash: facing it at the published 9 m is full blind and full deafen; back turned keeps the deafen and loses most of the blind",
+   "value": [
+    1,
+    1,
+    0.19410613756296063,
+    1
+   ],
+   "passed": true
+  },
+  {
+   "check": "flash: bang level at 5 ft",
+   "value": 175,
+   "passed": true
+  },
+  {
+   "check": "smoke: JS plume vs Python at 8 times (limit 1e-9)",
+   "value": 7.940933880509066e-23,
+   "passed": true
+  },
+  {
+   "check": "smoke-white: JS plume vs Python at 14 times (limit 1e-9)",
+   "value": 1.0097419586828951e-28,
+   "passed": true
+  },
+  {
+   "check": "smoke: a sight line through the plume is blocked, one 15 m to the side is clear",
+   "value": [
+    5.564125865518777e-11,
+    0.9997513133030449
+   ],
+   "passed": true
+  },
+  {
+   "check": "smoke: colour of the red variant",
+   "value": [
+    0.78,
+    0.1,
+    0.1
+   ],
+   "passed": true
+  }
+ ],
+ "all_passed": true
+}

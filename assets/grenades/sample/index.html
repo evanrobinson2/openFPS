@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Grenades sample</title>
+<style>
+  :root { --fg:#e9eef2; --dim:#9aa6b0; --acc:#ffb347; --acc2:#6cc3ff; --bg:#0d1014; --panel:#161b21; --line:#2a323b; }
+  html,body { margin:0; background:var(--bg); color:var(--fg); font:14px/1.45 ui-monospace,Menlo,monospace; }
+  main { max-width:1040px; margin:0 auto; padding:20px 16px 48px; }
+  h1 { font-size:20px; margin:0 0 4px; } h2 { font-size:15px; margin:22px 0 6px; } p { color:var(--dim); margin:4px 0 12px; }
+  .row { display:flex; flex-wrap:wrap; gap:10px 16px; align-items:end; background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:12px; }
+  label { display:grid; gap:4px; color:var(--dim); font-size:12px; }
+  select,button,input[type=range] { font:inherit; color:var(--fg); background:#0f1318; border:1px solid var(--line); border-radius:6px; padding:6px 8px; }
+  button { cursor:pointer; } button.go { border-color:var(--acc); color:var(--acc); } button:disabled { opacity:.4; cursor:default; }
+  canvas { width:100%; display:block; background:#07090c; border:1px solid var(--line); border-radius:8px; margin-top:10px; }
+  table { border-collapse:collapse; width:100%; margin-top:8px; font-size:13px; } th,td { border-bottom:1px solid var(--line); padding:5px 8px; text-align:right; } th:first-child,td:first-child { text-align:left; }
+  .wrap { overflow-x:auto; } #status,#log { color:var(--dim); margin-top:8px; } #log { min-height:3em; white-space:pre-wrap; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Grenades: simulation sample</h1>
+  <p>Everything on this page is computed from the asset's simulations: the flight, bounces and fuse come from <code>throw/grenades-throw.js</code>, the damage, flash and smoke from <code>effects/grenades-effects.js</code>, and every sound is synthesised by <code>sound/grenades-sound.js</code>. No recordings, no mesh files. This is a game model: what a player sees, hears and feels, from published figures. Nothing plays until you press Throw; start with the volume low.</p>
+
+  <div class="row">
+    <button class="go" id="throw" disabled>Pull pin and throw</button>
+    <label>Grenade <select id="variant"><option value="frag">Frag</option><option value="impact">Impact (game-only)</option><option value="flash">Flash</option><option value="smoke-red">Smoke, red</option><option value="smoke-yellow">Smoke, yellow</option><option value="smoke-green">Smoke, green</option><option value="smoke-violet">Smoke, violet</option><option value="smoke-white">Smoke, white</option></select></label>
+    <label>Ground <select id="surface"></select></label>
+    <label>Power <input type="range" id="power" min="0.3" max="1.2" step="0.01" value="1"></label>
+    <label>Angle <input type="range" id="angle" min="5" max="70" step="1" value="40"></label>
+    <label>Cook (s) <input type="range" id="cook" min="0" max="5" step="0.1" value="0"></label>
+    <label>Wind (m/s) <input type="range" id="wind" min="0" max="6" step="0.5" value="2"></label>
+    <label>Volume <input type="range" id="vol" min="0" max="1" step="0.01" value="0.25"></label>
+  </div>
+  <div id="status">Loading the simulations…</div>
+
+  <h2>Side view (you are at 0 m; the dots are players every 2.5 m)</h2>
+  <canvas id="view" width="1000" height="330"></canvas>
+  <div id="log"></div>
+
+  <h2>Published figures against the simulation</h2>
+  <div class="wrap"><table id="tab"></table></div>
+</main>
+<script src="../throw/grenades-throw.js"></script>
+<script src="../effects/grenades-effects.js"></script>
+<script type="module">
+import GrenadeSound from '../sound/grenades-sound.js';
+const $ = (id) => document.getElementById(id);
+const GT = window.GrenadeThrow, GE = window.GrenadeEffects;
+const AC = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 48000 });
+const master = AC.createGain(); master.gain.value = +$('vol').value; master.connect(AC.destination);
+$('vol').oninput = () => { master.gain.value = +$('vol').value; };
+let S = null, run = null, seed = 1;
+const W = 1000, H = 330, X0 = 40, GY = 270, SC = 19;                 // 19 px per metre, ground line at y = 270
+const sx = (x) => X0 + x * SC, sy = (y) => GY - y * SC;
+
+function draw(st) {
+  const c = $('view').getContext('2d'); c.clearRect(0, 0, W, H);
+  c.strokeStyle = '#2a323b'; c.fillStyle = '#9aa6b0'; c.font = '11px ui-monospace,Menlo,monospace';
+  c.beginPath(); c.moveTo(0, GY); c.lineTo(W, GY); c.stroke();
+  for (let m = 0; m <= 50; m += 5) { c.fillRect(sx(m), GY, 1, 5); c.fillText(m + ' m', sx(m) - 10, GY + 18); }
+  // the plume first, so everything else draws over it
+  if (st.plume) for (const p of st.plume.puffs) { if (!p.pos) continue; const a = 1 - Math.exp(-p.m / (2 * Math.PI * p.sigma * p.sigma)), col = st.plume.colour.map((v) => Math.round(v * 255));
+    const g = c.createRadialGradient(sx(p.pos[0]), sy(p.pos[1]), 0, sx(p.pos[0]), sy(p.pos[1]), 2 * p.sigma * SC); g.addColorStop(0, `rgba(${col},${Math.min(0.9, a)})`); g.addColorStop(1, `rgba(${col},0)`);
+    c.fillStyle = g; c.beginPath(); c.arc(sx(p.pos[0]), sy(p.pos[1]), 2 * p.sigma * SC, 0, 7); c.fill(); }
+  // players every 2.5 m, coloured by what the effect did to them
+  for (let x = 2.5; x <= 50; x += 2.5) { let col = '#55636f';
+    if (st.fn && st.kind === 'frag') { const d = GE.fragDamage(Math.abs(x - st.fn.pos[0])); col = d.lethal ? '#ff5544' : d.casualty ? '#ffb347' : d.damage > 0 ? '#c9c36a' : '#55636f'; }
+    if (st.fn && st.kind === 'flash') { const f = GE.flashAt([x, 1.6, 0], [x < st.fn.pos[0] ? 1 : -1, 0, 0], st.fn.pos, { ambient: 'indoor' }); col = `rgb(${Math.round(85 + 170 * f.blind)},${Math.round(99 + 150 * f.blind)},${Math.round(111 + 60 * f.deafen)})`; }
+    if (st.plume) { const tr = st.plume.transmission([0, 1.6, 0], [x, 1.6, 0]); col = `rgba(108,195,255,${0.15 + 0.85 * tr})`; }
+    c.fillStyle = col; c.beginPath(); c.arc(sx(x), sy(1.6), 3.5, 0, 7); c.fill(); c.fillRect(sx(x) - 1, sy(1.45), 2, 1.45 * SC); }
+  c.fillStyle = '#6cc3ff'; c.beginPath(); c.arc(sx(0), sy(1.6), 4.5, 0, 7); c.fill(); c.fillRect(sx(0) - 1.5, sy(1.45), 3, 1.45 * SC);
+  // trail, bounces, the grenade
+  c.strokeStyle = '#ffb347'; c.beginPath(); st.trail.forEach((p, i) => (i ? c.lineTo(sx(p[0]), sy(p[1])) : c.moveTo(sx(p[0]), sy(p[1])))); c.stroke();
+  c.fillStyle = '#ffb347'; for (const b of st.bounces) c.fillRect(sx(b[0]) - 1, GY - 6, 2, 6);
+  if (st.pos && !(st.fn && st.kind !== 'smoke')) { c.beginPath(); c.arc(sx(st.pos[0]), sy(st.pos[1]), 4, 0, 7); c.fill(); }
+  if (st.fn && st.kind !== 'smoke') { const age = st.t - st.fn.t, x = sx(st.fn.pos[0]), y = sy(st.fn.pos[1]);
+    if (st.kind === 'frag') for (const [r, col] of [[GE.params.frag.killing_radius_m, '#ff5544'], [GE.params.frag.casualty_radius_m, '#ffb347']]) { c.strokeStyle = col; c.beginPath(); c.arc(x, y, r * SC, Math.PI, 2 * Math.PI); c.stroke(); c.fillStyle = col; c.fillText(r + ' m', x + r * SC - 26, GY - 8); }
+    if (st.kind === 'flash') { c.strokeStyle = '#e9eef2'; c.beginPath(); c.arc(x, y, GE.params.flash.effect_radius_m * SC, Math.PI, 2 * Math.PI); c.stroke(); c.fillStyle = '#e9eef2'; c.fillText('9 m', x + 9 * SC - 22, GY - 8); }
+    if (age < 0.25) { c.fillStyle = `rgba(255,${st.kind === 'flash' ? 255 : 190},${st.kind === 'flash' ? 255 : 120},${1 - age / 0.25})`; c.beginPath(); c.arc(x, y, 10 + age * 500, 0, 7); c.fill(); } }
+  c.fillStyle = '#9aa6b0'; c.font = '12px ui-monospace,Menlo,monospace';
+  c.fillText(`t = ${st.t.toFixed(2)} s   ${st.note || ''}`, 12, 18);
+}
+
+function fire() {
+  if (!S) return; AC.resume();
+  const variant = $('variant').value, surface = $('surface').value, a = +$('angle').value * Math.PI / 180, cook = +$('cook').value, wind = +$('wind').value;
+  const g = new GT.Grenade(variant, { seed: seed++, surface }), kind = g.entry.burn_window_s ? 'smoke' : variant === 'flash' ? 'flash' : 'frag';
+  const st = { t: 0, trail: [], bounces: [], pos: [0, 1.8, 0], fn: null, kind, plume: null, note: '' }, id = {}, log = []; run = id;
+  const say = (s) => { log.push(s); $('log').textContent = log.slice(-6).join('\n'); };
+  const t0 = AC.currentTime + 0.05; let hiss = null, last = performance.now(), thrown = false, tThrow = cook > 0 ? 0.6 + cook : 0.9;
+  S.play('pin_pull', { destination: master, when: t0 }); say('0.00 s  pin pulled');
+  g.pullPin(); let levered = false;
+  (function frame(now) {
+    if (run !== id) return;
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    if (cook > 0 && !levered && g.t >= 0.6) { levered = true; g.releaseLever(); S.play(S.leverRelease(variant), { destination: master }); say(`${g.t.toFixed(2)} s  lever released in the hand: cooking for ${cook.toFixed(1)} s (fuse delay sampled: ${g.delay === null ? 'none' : g.delay.toFixed(2) + ' s'})`); }
+    if (!thrown && g.t >= tThrow - 1e-9 && g.state !== 'done') { thrown = true;
+      g.throwFrom([0, 1.8, 0], GT.releaseVelocity(variant, [Math.cos(a), Math.sin(a), 0], +$('power').value));
+      if (cook === 0) { S.play(S.leverRelease(variant), { destination: master }); S.play(S.leverLand(variant), { destination: master, when: AC.currentTime + 0.8, distance: 2 }); }
+      say(`${g.t.toFixed(2)} s  thrown at ${(GT.tables.variants[GT.tableKey(variant)].release_speed_mps * +$('power').value).toFixed(1)} m/s` + (g.delay !== null && cook === 0 ? ` (fuse delay sampled: ${g.delay.toFixed(2)} s)` : '')); }
+    for (const e of g.update(dt)) {
+      const r = Math.hypot(e.pos[0], e.pos[1] - 1.6, e.pos[2]);
+      if (e.type === 'bounce') { st.bounces.push(e.pos); S.play(S.bounce(variant, e.surface, e.normalSpeed), { destination: master, distance: r }); }
+      if (e.type === 'rest') say(`${e.t.toFixed(2)} s  at rest, ${e.pos[0].toFixed(1)} m`);
+      if (e.type === 'function') { st.fn = e;
+        if (kind === 'smoke') { st.plume = new GE.SmokePlume(variant, { burn: e.burn, origin: [e.pos[0], e.pos[1] + 0.06, 0], wind: [wind, 0, 0] }); S.play('smoke_ignite', { destination: master, distance: r }); hiss = S.play('smoke_hiss_loop', { destination: master, distance: r, loop: true }); hiss.base = hiss.gain.gain.value;
+          say(`${e.t.toFixed(2)} s  ignites at ${e.pos[0].toFixed(1)} m, will burn ${e.burn.toFixed(0)} s`); }
+        else if (kind === 'flash') { S.play('detonation_flash', { destination: master, distance: r }); const f = GE.flashAt([0, 1.6, 0], [1, 0, 0], e.pos, { ambient: 'indoor' });
+          say(`${e.t.toFixed(2)} s  flash at ${e.pos[0].toFixed(1)} m${e.inHand ? ' IN THE HAND' : ''}: you get ${f.spl_db.toFixed(0)} dB, blind ${(f.blind * 100).toFixed(0)} % (${f.whiteout_s.toFixed(1)} s whiteout), deaf ${(f.deafen * 100).toFixed(0)} % (${f.deaf_s.toFixed(1)} s)`); }
+        else { S.play('detonation_frag', { destination: master, distance: r }); const d = GE.fragDamage(Math.hypot(e.pos[0], e.pos[1] - 1.0));
+          say(`${e.t.toFixed(2)} s  detonates at ${e.pos[0].toFixed(1)} m${e.inHand ? ' IN THE HAND' : ''} (${e.cause}): you take ${d.damage.toFixed(0)} damage${d.lethal ? ', lethal' : ''}`); } }
+      if (e.type === 'burnout') { say(`${e.t.toFixed(2)} s  burnt out`); if (hiss) hiss.source.stop(); }
+    }
+    st.t = g.t; st.pos = g.pos; if (g.flight && !st.fn) st.trail.push(g.pos.slice()); else if (g.flight && kind === 'smoke' && g.flight.mode !== 'rest') st.trail.push(g.pos.slice());
+    if (st.plume) { st.plume.setOrigin([g.pos[0], g.pos[1] + 0.06, 0]); st.plume.step(dt); if (hiss) hiss.gain.gain.value = hiss.base * Math.min(1, st.plume.rate() * st.plume.burn); st.note = `sight line from you to 40 m: ${(st.plume.transmission([0, 1.6, 0], [40, 1.6, 0]) * 100).toFixed(0)} % clear`; }
+    else if (g.tLever !== null && !st.fn && g.delay !== null) st.note = `fuse: ${g.remaining().toFixed(2)} s left`;
+    else st.note = '';
+    draw(st);
+    const over = st.fn && (kind === 'smoke' ? g.state === 'done' && st.t > st.fn.t + st.fn.burn + 30 : st.t > st.fn.t + 2);
+    if (!over && st.t < 400) requestAnimationFrame(frame);
+  })(performance.now());
+}
+$('throw').onclick = fire;
+
+function table() {
+  const T = GT.tables, row = (n, pub, sim) => `<tr><td>${n}</td><td>${pub}</td><td>${sim}</td></tr>`; let h = '<tr><th>Figure</th><th>Published</th><th>Simulation</th></tr>';
+  for (const [k, e] of Object.entries(T.variants)) {
+    h += row(`${k}: average throw (m)`, e.throw_inferred ? `${e.published_throw_m} (inferred, not published)` : k === 'impact' ? `${e.published_throw_m} (game-only)` : e.published_throw_m, `${e.sim_first_landing_m.toFixed(2)} at ${e.release_speed_mps.toFixed(1)} m/s, 40°`);
+    if (e.delay_window_s) h += row(`${k}: delay (s)`, e.delay_window_s.join(' to '), `${e.delay_stats.min.toFixed(2)} to ${e.delay_stats.max.toFixed(2)} over ${e.delay_stats.n} samples`);
+    if (e.burn_window_s) h += row(`${k}: burn (s)`, e.burn_window_s.join(' to ') + (e.burn_mean_s ? `, average ${e.burn_mean_s}` : ''), `${e.burn_stats.min.toFixed(1)} to ${e.burn_stats.max.toFixed(1)}, mean ${e.burn_stats.mean.toFixed(1)}`);
+  }
+  h += row('frag: killing / casualty radius (m)', '5 / 15', `lethal to ${[...Array(400).keys()].map((i) => i * 0.05).filter((r) => GE.fragDamage(r).lethal).pop().toFixed(2)}, casualty to ${[...Array(400).keys()].map((i) => i * 0.05).filter((r) => GE.fragDamage(r).casualty).pop().toFixed(2)}`);
+  h += row('flash: bang at 5 ft (dB)', '170 to 180', S.buffer('detonation_flash').info.peakDb.toFixed(1) + ' (synthesised peak)');
+  h += row('flash: full effect radius (m)', '9', `blind ${GE.flashEffect(9).blind.toFixed(2)}, deafen ${GE.flashEffect(9).deafen.toFixed(2)} at 9 m; ${GE.flashEffect(12).blind.toFixed(2)}, ${GE.flashEffect(12).deafen.toFixed(2)} at 12 m`);
+  $('tab').innerHTML = h;
+}
+
+Promise.all([GT.load('../throw/throw.json'), GE.load('../effects/effects.json'), GrenadeSound.build(AC)]).then(([T, , s]) => {
+  S = s; for (const k of Object.keys(T.surfaces)) { const o = document.createElement('option'); o.value = k; o.textContent = k.replace('_', ' '); $('surface').appendChild(o); }
+  $('surface').value = 'packed_dirt'; $('throw').disabled = false; $('status').textContent = 'Ready. Impact is a game-only variant; all its numbers are game tuning.';
+  table(); draw({ t: 0, trail: [], bounces: [], pos: [0, 1.8, 0], fn: null, kind: 'frag', plume: null });
+}).catch((e) => { $('status').textContent = 'Could not load: ' + e.message + ' (serve the repo over http, see USAGE.md)'; });
+</script>
+</body>
+</html>
