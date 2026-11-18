@@ -51,7 +51,22 @@ MU = 0.78                 # Fansler & Schmidt momentum index (recalled value, se
 T_DIR_EXP = 0.5           # positive-phase duration scales with (l'/l'90)^0.5 (inferred)
 RISE = 10e-6              # s shock rise used for synthesis (below the 48 kHz band)
 SEC_DB, SEC_T, SEC_DELAY, SEC_MU = -10.0, 0.45e-3, 0.7e-3, 0.3    # secondary (afterburn) pulse, inferred
-JET_DB, JET_TAU = -22.0, 1.2e-3                    # propellant jet noise, inferred
+# version 2 source terms, driven by ../action/action.json (see README "Muzzle source, version 2")
+GAMMA_G_FALLBACK = 1.24   # propellant gas, used only if action.json is missing
+TAU_MIX = 3.0e-3          # s, time for the gas plume to give up its kinetic energy by entrainment (inferred: 1.7 to 7 ms)
+JET_ETA = 0.005           # acoustic efficiency of a supersonic jet (NASA SP-8072: about 0.3 to 1 % of the jet's mechanical power)
+JET_ST = 0.03             # Strouhal number of the spectral peak on the fully expanded jet (SP-8072 rocket data 0.02 to 0.04)
+JET_CORE_D = 15.0         # supersonic core length in fully expanded diameters; the jet front reaching it sets the noise build-up time (inferred)
+JET_DIR_DEG = [0, 45, 90, 135, 180]; JET_DIR_DB = [-6.0, 0.0, -10.0, -17.0, -20.0]   # overall level against angle from the jet axis (supersonic-jet shape, recalled)
+EAR_LIMIT_DB = 134.0      # dB peak above which the middle ear stops following the pressure (AHAAH: stapes displacement limit; inferred within 130 to 140)
+ETA_IMPACT = 3e-4         # radiated sound energy / energy lost in a metal-to-metal impact (Richards et al. 1979: 1e-4 to 1e-3)
+ETA_BUFFER = 5e-5         # the same for the polymer-faced, tungsten-filled buffer (inferred: dead blow)
+ETA_BRASS = 1e-3          # a free brass case rings well (inferred, top of the published range)
+ETA_CASE_DIRT = 5e-5      # a case landing on dirt: the ground takes most of it (inferred)
+ETA_FRICTION = 3e-5       # sound power / friction power of sliding steel on aluminium (inferred)
+STRUCT_LOSS = 0.02        # structural loss factor of the assembled rifle held in the hands (inferred)
+SLIDE_BANDS = [0, 0, .02, .05, .13, .25, .30, .20, .05]      # octave-band share of the sliding noise, 63 Hz..16 kHz (inferred)
+GROUND_ROUGH = 0.010      # m, rms height of the ground's roughness (packed dirt, sparse grass; inferred)
 SHOT_SD_DB = 0.7          # shot-to-shot level spread (inferred)
 
 # bullet (M855)
@@ -125,6 +140,13 @@ def ground_Q(f, R2, cos_inc, sigma=GROUND_SIGMA):
     return Rp + (1 - Rp) * F
 
 
+def rough_coherent(f, cos_inc, sigma_h=None):
+    """Amplitude factor of the specular (coherent) reflection from a rough surface: exp(-2 (k sigma_h cos)^2).
+    The rest of the reflected energy, 1 - exp(-4 (k sigma_h cos)^2), is scattered diffusely."""
+    sh = GROUND_ROUGH if sigma_h is None else sigma_h
+    return np.exp(-2 * (2 * np.pi * np.asarray(f, float) / C0 * sh * cos_inc) ** 2)
+
+
 NFIR, LAT = 1024, 128
 
 
@@ -132,7 +154,7 @@ def path_fir(r, ground=None):
     """48 kHz FIR for a path: air absorption over r, times ground reflection Q if ground=(R2, cos_inc)."""
     f = np.fft.rfftfreq(NFIR, 1 / FS)
     H = 10 ** (-iso9613_alpha(f) * r / 20) + 0j
-    if ground: H = H * np.conj(ground_Q(f, *ground))      # numpy uses exp(+iwt)
+    if ground: H = H * np.conj(ground_Q(f, *ground)) * rough_coherent(f, ground[1])      # numpy uses exp(+iwt)
     h = np.roll(np.fft.irfft(H, NFIR), LAT)
     win = np.ones(NFIR); n = 64; ramp = 0.5 - 0.5 * np.cos(np.pi * np.arange(n) / n)
     win[:n] = ramp; win[-n:] = ramp[::-1]
@@ -161,6 +183,9 @@ PERSP_LIS = {
     'shooter': EYE + V3(*EAR_FROM_EYE),
     'bystander': EYE + V3(5.0, -0.02, 0.0),
     'downrange': EYE + V3(2.0, -0.02, 50.0),          # 50 m downrange, 2 m beside the line of fire
+    # far-field listeners for the outdoor range: side-on (90 degrees right of the muzzle) and in front (2 m beside the line of fire)
+    'side25': EYE + V3(*MUZZLE_FROM_EYE) + V3(25.0, 0.045, 0.0), 'side50': EYE + V3(*MUZZLE_FROM_EYE) + V3(50.0, 0.045, 0.0), 'side100': EYE + V3(*MUZZLE_FROM_EYE) + V3(100.0, 0.045, 0.0),
+    'front25': EYE + V3(*MUZZLE_FROM_EYE) + V3(2.0, 0.045, 25.0), 'front50': EYE + V3(*MUZZLE_FROM_EYE) + V3(2.0, 0.045, 50.0), 'front100': EYE + V3(*MUZZLE_FROM_EYE) + V3(2.0, 0.045, 100.0),
     'ongun': EYE + V3(*MUZZLE_FROM_EYE) + V3(0.0, 0.06, -0.40),   # comparison mic on the handguard (inferred position)
     'side1m': EYE + V3(*MUZZLE_FROM_EYE) + V3(-1.0, 0.0, 0.0),    # comparison mic 1 m left of the muzzle
 }
@@ -190,50 +215,192 @@ MAT = {
     'wood_bench': [1, 1, 1, .10, .10, .10, .10, .10, .10],     # too small to reflect below ~300 Hz
     'partition': [1, 1, .6, .3, .3, .3, .3, .3, .3],
     'open': [1] * 9,
+    'tree_line': [.99, .98, .97, .95, .92, .90, .90, .92, .95],   # 1 - energy scattered back by a forest edge (order of magnitude after Wunderli and Salomons 2009, recalled)
 }
+FAR = ['side25', 'side50', 'side100', 'front25', 'front50', 'front100']
 FOLIAGE_DB_M = [.02, .03, .04, .05, .06, .08, .09, .12, .12]     # ISO 9613-2 Table A.1 dense foliage
 
 
+def load_action():
+    path = os.path.join(HERE, '..', 'action', 'action.json')
+    return json.load(open(path)) if os.path.exists(path) else None
+
+
+ACTION = load_action()
+
+
+def gas_state():
+    """Muzzle gas after the bullet leaves, from the action simulation's bore pressure and temperature (blow-down).
+    Returns the conserved quantities the sound source must respect and the jet tables."""
+    if ACTION is None: return None
+    a = ACTION; b = a['ballistics']; pr = {k: v['value'] for k, v in a['params'].items()}
+    g = pr['gamma']; R = pr['force_const'] / pr['flame_temp']; cov = pr['covolume']; A = pr['bore_area']
+    Vb = pr['chamber_vol'] + A * (pr['barrel_len'] - pr['bullet_base0']); dt = b['dt']
+    k0 = int(math.ceil((a['events']['times']['bullet_exit'] - b['t0']) / dt)) + 1      # first sample of the blow-down
+    p = np.array(b['chamber_MPa'][k0:]) * 1e6; T = np.array(b['gas_temp_K'][k0:]); t = np.arange(len(p)) * dt
+    m = p * Vb / (R * T + p * cov)                                  # Noble-Abel gas left in the bore
+    mdot = np.maximum(-np.gradient(m, dt), 0); h0 = g / (g - 1) * R * T + p * cov
+    Tj = T * (P_ATM / p) ** ((g - 1) / g); uj = np.sqrt(2 * g / (g - 1) * R * (T - Tj))   # expanded to 1 atm
+    Dj = np.sqrt(4 * mdot / (np.pi * (P_ATM / (R * Tj)) * uj) + 1e-12)                  # fully expanded jet diameter
+    W = 0.5 * mdot * uj ** 2; H = float(np.trapezoid(mdot * h0, t)); KE = float(np.trapezoid(W, t))
+    cum = np.cumsum(W) * dt / KE; tau_b = float(t[np.argmax(cum >= 1 - math.exp(-1))])
+    J = a['validation']['recoil_impulse']['sim'] - pr['m_bullet'] * a['validation']['muzzle_velocity']['sim']
+    V_inf = (g - 1) / g * H / P_ATM
+    t_est = JET_CORE_D * Dj[0] / (0.7 * uj[0])
+    return dict(t=t, W=W, uj=uj, Dj=Dj, tau_b=tau_b, t_est=float(t_est), J=float(J), V_inf=float(V_inf), gamma=g,
+                doc=dict(source='action/action.json ballistics (bore pressure and temperature during blow-down)', gas_mass_g=round(float(m[0]) * 1e3, 3), exit_pressure_MPa=round(float(p[0]) / 1e6, 1),
+                         exit_temp_K=round(float(T[0])), enthalpy_out_J=round(H), jet_kinetic_J=round(KE), jet_power_MW_at_exit=round(float(W[0]) / 1e6, 2), jet_velocity_mps_at_exit=round(float(uj[0])),
+                         jet_diameter_mm_at_exit=round(float(Dj[0]) * 1e3, 1), gas_volume_at_1atm_L=round(V_inf * 1e3, 2), gas_momentum_Ns=round(float(J), 3), efflux_time_ms=round(tau_b * 1e3, 3),
+                         mix_time_ms=TAU_MIX * 1e3, jet_buildup_ms=round(float(t_est) * 1e3, 3),
+                         static_enthalpy_volume_L=round((g - 1) / g * (H - KE) / P_ATM * 1e3, 2), monopole_impulse_Pa_s_at_1m=round(RHO0 * (g - 1) / g * float((mdot * h0 - W)[0]) / P_ATM / (4 * np.pi), 3)))
+
+
+GAS = gas_state()
+V_INF = GAS['V_inf'] if GAS else 8.4e-3
+J_GAS = GAS['J'] if GAS else 2.06
+TAU_B = GAS['tau_b'] if GAS else 0.45e-3
+
+
+def jet_dir(cos_t):
+    """Energy directivity of the jet noise, normalised to a sphere mean of 1."""
+    th = np.linspace(0, np.pi, 721); e = 10 ** (np.interp(np.degrees(th), JET_DIR_DEG, JET_DIR_DB) / 10)
+    mean = np.trapezoid(e * np.sin(th), th) / 2
+    return 10 ** (np.interp(np.degrees(np.arccos(np.clip(cos_t, -1, 1))), JET_DIR_DEG, JET_DIR_DB) / 10) / mean
+
+
+def jet_table():
+    """Mean-square pressure of the jet noise at 1 m (sphere mean) per octave band and 48 kHz sample."""
+    if GAS is None: return dict(n=0, env=[[] for _ in BANDS])
+    n = int(GAS['t'][-1] * FS); tt = np.arange(n) / FS
+    W = np.interp(tt, GAS['t'], GAS['W']) * (1 - np.exp(-tt / GAS['t_est'])); fp = JET_ST * np.interp(tt, GAS['t'], GAS['uj']) / np.interp(tt, GAS['t'], GAS['Dj'])
+    x = np.array(BANDS, float)[:, None] / fp[None, :]; S = x ** 2 / (1 + x ** 2) ** 2; S /= S.sum(0)       # +6 / -6 dB per octave about the peak
+    env = JET_ETA * W[None, :] * S * RHO0 * C0 / (4 * np.pi); env *= (0.5 + 0.5 * np.cos(np.pi * np.clip((tt - tt[-1] + 2e-4) / 2e-4, 0, 1)))[None, :]
+    return dict(n=n, env=[[float('%.5g' % v) for v in row] for row in env], peak_hz_at_exit=round(float(fp[0])), peak_hz_at_end=round(float(fp[-1])))
+
+
+def beam_modes(L, ro, ri, E, rho, kind):
+    """Euler-Bernoulli bending frequencies of a uniform tube: first four cantilever or free-free modes."""
+    I = np.pi * (ro ** 4 - ri ** 4) / 4; A = np.pi * (ro * ro - ri * ri); bl = dict(cantilever=[1.8751, 4.6941, 7.8548, 10.9955], free=[4.7300, 7.8532, 10.9956, 14.1372])[kind]
+    return [float(b * b / (2 * np.pi * L * L) * math.sqrt(E * I / (rho * A))) for b in bl]
+
+
+def struct_modes():
+    """Structural frequencies from the model recipe (model/build.py dimensions) and handbook constants."""
+    t60 = lambda f: round(2.2 / (STRUCT_LOSS * f), 4)
+    barrel = beam_modes(0.3413, 8.9e-3, 2.78e-3, 207e9, 7850, 'cantilever')       # 14.5 in barrel, free from the barrel nut (22 mm) to the crown; r = 8.9 mm
+    cp = 3.0e-3 * math.sqrt(69e9 / (12 * 2700 * (1 - 0.33 ** 2)))                   # upper receiver side wall: 3 mm aluminium panel 190 x 40 mm, simply supported
+    panel = [float(np.pi / 2 * cp * ((m / 0.190) ** 2 + (1 / 0.040) ** 2)) for m in (1, 3, 5)]
+    tube_air = C0 / (4 * 0.191)                                                     # receiver extension as a quarter-wave air column: 191 mm long (up_l0 to tube_l1), closed at the stock end
+    return dict(barrel=[[round(f, 1), t60(f)] for f in barrel], panel=[[round(f, 1), t60(f)] for f in panel], tube_air=[round(tube_air, 1), 0.02])
+
+
+def action_energies():
+    """Energy lost at each mechanical event (J), from the action simulation's masses and speeds."""
+    if ACTION is None: return {}
+    a = ACTION; pr = {k: v['value'] for k, v in a['params'].items()}; c = a['cycle']; ev = a['events']['times']
+    v_at = lambda name, before=True: abs(c['carrier_mps'][int(ev[name] / c['dt']) - (1 if before else -2)])
+    mc, mb, mbuf, msp, mrod, mround = pr['m_carrier'], pr['m_bolt'], pr['m_buffer'], pr['m_spring_eff'], pr['m_piston_rod'], pr['m_round']
+    M = mc + mb + mbuf + msp; br = a['brass']['nominal']; mcase = a['brass']['case']['mass_kg']
+    vb = np.linalg.norm(br['before_deflector_vel']); va = br['speed']
+    return dict(
+        sear=[pr['trigger_pull'] * 1.5e-3, 'trigger pull x 1.5 mm overtravel (travel inferred)'],
+        hammer=[a['validation']['hammer_energy']['sim'], 'hammer energy at the firing pin'],
+        unlock=[0.5 * mc * mb / (mc + mb) * v_at('unlock') ** 2, 'carrier picks up the bolt: inelastic'],
+        rodstop=[0.5 * mrod * v_at('piston_rod_stop') ** 2, 'piston rod stops'],
+        deflector=[max(0.5 * mcase * (vb * vb - va * va), 1e-3), 'case speed lost on the deflector'],
+        buffer=[(1 - pr['buffer_restitution'] ** 2) * 0.5 * M * v_at('buffer_impact') ** 2, 'moving parts on the buffer stop, restitution %.2f' % pr['buffer_restitution']],
+        spring=[0.5 * msp * v_at('buffer_impact') ** 2, 'surge energy left in the buffer spring'],
+        feed=[0.5 * M * mround / (M + mround) * v_at('feed') ** 2 + pr['feed_friction'] * 0.030 * ETA_FRICTION / ETA_IMPACT, 'round picked up, plus 30 mm of feed-lip friction at the friction efficiency'],
+        chamber=[0.5 * (mb + mround) * v_at('chambered') ** 2, 'bolt and round stop in the chamber'],
+        battery=[0.5 * (mc + mbuf + msp) * v_at('in_battery') ** 2, 'carrier and buffer stop on the barrel extension'],
+        reset=[0.02, 'trigger reset (inferred)'], catch=[0.5 * M * 2.0 ** 2, 'moving parts caught by the bolt catch at about 2 m/s (inferred)'],
+        handle=[0.3 * ETA_FRICTION / ETA_IMPACT + 0.01, 'charging handle drag and latch (inferred)'],
+        case1=[0.5 * mcase * (2 * 9.81 * a['brass']['eject_height_m'] + br['speed'] ** 2) * 0.2, 'case landing on dirt (a fifth of its energy into ringing, inferred)'],
+        case2=[0.5 * mcase * (2 * 9.81 * a['brass']['eject_height_m'] + br['speed'] ** 2) * 0.02, 'second bounce'], case3=[0.5 * mcase * (2 * 9.81 * a['brass']['eject_height_m'] + br['speed'] ** 2) * 0.006, 'third bounce'])
+
+
+E_FALLBACK = dict(sear=.035, hammer=.48, unlock=.72, rodstop=.78, deflector=.0085, buffer=2.4, spring=.1, feed=.07, chamber=.34, battery=2.98, reset=.02, catch=1.0, handle=.04, case1=.03, case2=.003, case3=.001)
+
+
 def mech_tables():
-    """Modal tables for the action. f Hz, T60 s, relative amplitude; click = broadband contact noise.
-    p1m = peak level at 1 m in dB (inferred). Frequencies: barrel free-free bending 631/1740/3410 Hz
-    (steel tube 368 mm, OD 18, bore 5.56), carrier longitudinal ~15 kHz, case ovalling 8.2 kHz."""
-    spring = [[41.8 * n, 0.16, 1.0 / n ** 0.5] for n in range(6, 30)]       # buffer spring standing waves
-    case = [[8180, .006, 1], [8900, .005, .7], [12400, .004, .45], [15300, .003, .35]]
-    return {
-        'hammer': dict(p1m=92, modes=[[2900, .012, 1], [5200, .008, .7], [8100, .006, .5]], click=[.6, .00012]),
-        'piston': dict(p1m=100, modes=[[631, .030, .5], [1740, .025, .8], [3410, .020, 1], [6300, .010, .6], [11000, .005, .4]], click=[.7, .00015]),
-        'deflector': dict(p1m=88, modes=case, click=[.4, .0001]),
-        'buffer': dict(p1m=101, modes=[[240, .025, 1], [1150, .012, .6], [2600, .008, .4], [4300, .005, .25]], click=[.5, .0004]),   # tungsten-granule buffer: damped thud
-        'spring': dict(p1m=82, modes=spring, click=[0, .001]),
-        'feed': dict(p1m=90, modes=[[1900, .010, 1], [4100, .008, .6]], click=[1.2, .0015]),
-        'battery': dict(p1m=104, modes=[[631, .030, .4], [1740, .025, .7], [3410, .020, 1], [5600, .012, .8], [9200, .008, .5], [15000, .004, .3]], click=[.7, .00015]),
-        'reset': dict(p1m=80, modes=[[3300, .008, 1], [6100, .005, .6]], click=[.5, .0001]),
-        'catch': dict(p1m=97, modes=[[1150, .015, 1], [2600, .012, .8], [5600, .008, .5]], click=[.7, .0002]),
-        'handle': dict(p1m=86, modes=[[2100, .010, 1], [4700, .006, .6]], click=[1.0, .001]),
-        'case1': dict(p1m=78, modes=[[m[0], m[1] * 3, m[2]] for m in case], click=[.8, .0003]),
-        'case2': dict(p1m=72, modes=[[m[0] * 1.012, m[1] * 3, m[2]] for m in case], click=[.6, .0003]),
-        'case3': dict(p1m=66, modes=[[m[0] * 0.991, m[1] * 3, m[2]] for m in case], click=[.5, .0003]),
+    """Modal tables for the action: [f Hz, T60 s, relative amplitude] plus a broadband contact click.
+    Level: radiated energy = efficiency x energy lost in the impact (action simulation); p1m is the peak at 1 m that gives it."""
+    sm = struct_modes(); B = sm['barrel']; Pn = sm['panel']; ta = sm['tube_air']
+    spring = [[41.8 * n, 0.16, 1.0 / n ** 0.5] for n in range(6, 30)]       # buffer spring standing waves (k about 350 N/m, 50 g)
+    case = [[8180, .006, 1], [8900, .005, .7], [12400, .004, .45], [15300, .003, .35]]       # brass case ovalling
+    recv = [[Pn[0][0], Pn[0][1], 1], [Pn[1][0], Pn[1][1], .6], [Pn[2][0], Pn[2][1], .35]]
+    ring = [[B[1][0], B[1][1], .5], [B[2][0], B[2][1], .8], [B[3][0], B[3][1], .6]]          # barrel bending; the 114 Hz mode radiates too poorly to matter
+    T = {
+        'sear': dict(eta=ETA_IMPACT, modes=[[3300, .008, 1], [6100, .005, .6]], click=[.5, .0001]),
+        'hammer': dict(eta=ETA_IMPACT, modes=[[2900, .012, 1], [5200, .008, .7], [8100, .006, .5]] + [[m[0], m[1], .3 * m[2]] for m in recv], click=[.6, .00012]),
+        'unlock': dict(eta=ETA_IMPACT, modes=recv + [[m[0], m[1], .5 * m[2]] for m in ring] + [[11000, .005, .4]], click=[.7, .00015]),
+        'rodstop': dict(eta=ETA_IMPACT, modes=[[m[0], m[1], m[2]] for m in ring] + [[6300, .010, .6]], click=[.7, .00015]),
+        'deflector': dict(eta=ETA_BRASS, modes=case, click=[.4, .0001]),
+        'buffer': dict(eta=ETA_BUFFER, modes=[[240, .025, 1], [ta[0], ta[1], .8], [1150, .012, .6], [2600, .008, .4], [4300, .005, .25]], click=[.5, .0004]),   # tungsten-granule buffer: damped thud, plus the tube's air column
+        'spring': dict(eta=ETA_IMPACT, modes=spring, click=[0, .001]),
+        'feed': dict(eta=ETA_IMPACT, modes=[[1900, .010, 1], [4100, .008, .6]], click=[1.2, .0015]),
+        'chamber': dict(eta=ETA_IMPACT, modes=[[m[0], m[1], m[2]] for m in ring] + [[5600, .012, .6]], click=[.6, .00015]),
+        'battery': dict(eta=ETA_IMPACT, modes=ring + recv + [[9200, .008, .5], [15000, .004, .3]], click=[.7, .00015]),
+        'reset': dict(eta=ETA_IMPACT, modes=[[3300, .008, 1], [6100, .005, .6]], click=[.5, .0001]),
+        'catch': dict(eta=ETA_IMPACT, modes=[[1150, .015, 1], [2600, .012, .8]] + [[m[0], m[1], .5 * m[2]] for m in recv], click=[.7, .0002]),
+        'handle': dict(eta=ETA_IMPACT, modes=[[2100, .010, 1], [4700, .006, .6]], click=[1.0, .001]),
+        'case1': dict(eta=ETA_CASE_DIRT, modes=[[m[0], m[1] * 3, m[2]] for m in case], click=[.8, .0003]),
+        'case2': dict(eta=ETA_CASE_DIRT, modes=[[m[0] * 1.012, m[1] * 3, m[2]] for m in case], click=[.6, .0003]),
+        'case3': dict(eta=ETA_CASE_DIRT, modes=[[m[0] * 0.991, m[1] * 3, m[2]] for m in case], click=[.5, .0003]),
     }
+    En = action_energies()
+    for name, ev in T.items():
+        e_lost, why = En.get(name, [E_FALLBACK[name], 'fallback (no action.json)'])
+        ev['p1m'] = 0.0; s0 = mech_sig(dict(ev, p1m=0.0), 'level/' + name)          # unit peak (p1m = 0 dB re 20 uPa)
+        e_unit = 4 * np.pi * float(np.sum(s0 ** 2)) / FS / (RHO0 * C0)                # joules radiated by that signal at 1 m, free field
+        ev['p1m'] = round(10 * math.log10(ev['eta'] * e_lost / e_unit), 1); ev['energy_lost_J'] = float('%.3g' % e_lost); ev['energy_from'] = why
+    return T
+
+
+def slide_table():
+    """Sliding noise of the carrier and buffer on their bearing surfaces: mean-square pressure at 1 m per octave band,
+    from friction force x carrier speed (action simulation) x a friction-noise efficiency."""
+    if ACTION is None: return dict(n=0, env=[[] for _ in BANDS], t=0.0)
+    c = ACTION['cycle']; ev = ACTION['events']['times']; F = ACTION['params']['rail_friction']['value']
+    t0, t1 = ev['carrier_moves'], ev['in_battery']; n = int((t1 - t0) * FS); tt = t0 + np.arange(n) / FS
+    v = np.abs(np.interp(tt, c['t0'] + np.arange(len(c['carrier_mps'])) * c['dt'], c['carrier_mps'])); w = np.minimum(1, np.minimum(np.arange(n), n - 1 - np.arange(n)) / 48.0)
+    ms = ETA_FRICTION * F * v * w * RHO0 * C0 / (4 * np.pi)
+    return dict(n=n, t=t0 - ev['bullet_exit'], env=[[float('%.4g' % (sb * x)) for x in ms] for sb in SLIDE_BANDS], friction_N=F)
 
 
 CYCLE_S = 60.0 / RPM
-# event, time after the bullet leaves the muzzle (s), source position
-CYCLE = [['hammer', -1.3e-3, 'recv'], ['piston', 0.4e-3, 'recv'], ['deflector', 11e-3, 'recv'], ['buffer', 21e-3, 'buf'],
-         ['spring', 21e-3, 'buf'], ['feed', 46e-3, 'recv'], ['battery', 62e-3, 'recv'],
+# event, time after the bullet leaves the muzzle (s), source position. Replaced by the action simulation's times when action.json exists.
+CYCLE = [['sear', -9.5e-3, 'recv'], ['hammer', -1.5e-3, 'recv'], ['unlock', 2.4e-3, 'recv'], ['rodstop', 3.5e-3, 'recv'], ['deflector', 13.8e-3, 'recv'], ['buffer', 22.7e-3, 'buf'],
+         ['spring', 22.7e-3, 'buf'], ['feed', 36.2e-3, 'recv'], ['chamber', 60.8e-3, 'recv'], ['battery', 63.8e-3, 'recv'],
          ['case1', 0.789, 'case'], ['case2', 1.266, 'case'], ['case3', 1.433, 'case']]
+ACTION_KEYS = dict(sear='sear_release', hammer='hammer_strike', unlock='unlock', rodstop='piston_rod_stop', deflector='eject', buffer='buffer_impact', spring='buffer_impact', feed='feed', chamber='chambered', battery='in_battery')
+
+
+def apply_action_timeline():
+    """Take event times and the cyclic period from the action simulation (../action/action.json). Returns what was used."""
+    global CYCLE_S
+    if ACTION is None: return None
+    ev = ACTION['events']['times']; t_exit = ev['bullet_exit']; got = {}
+    for row in CYCLE:
+        if row[0] in ACTION_KEYS: row[1] = round(ev[ACTION_KEYS[row[0]]] - t_exit, 6); got[row[0]] = row[1]
+    CYCLE_S = ACTION['auto']['period_s']; got['auto_period_s'] = CYCLE_S
+    return got
+
+
+ACTION_USED = apply_action_timeline()
 MECH_CLIPS = {      # standalone mechanical sounds (shooter perspective unless asked otherwise)
-    'cycle': [e for e in CYCLE if not e[0].startswith('case')],
-    'case_drop': [['deflector', 11e-3, 'recv']] + [e for e in CYCLE if e[0].startswith('case')],
-    'trigger': [['hammer', 0.0, 'recv']],
+    'cycle': [e for e in CYCLE if not e[0].startswith('case') and e[0] != 'sear'],
+    'case_drop': [e for e in CYCLE if e[0] == 'deflector'] + [e for e in CYCLE if e[0].startswith('case')],
+    'trigger': [['sear', 0.0, 'recv'], ['hammer', CYCLE[1][1] - CYCLE[0][1], 'recv']],
     'trigger_reset': [['reset', 0.0, 'recv']],
-    'charge': [['handle', 0.02, 'recv'], ['buffer', 0.375, 'buf'], ['spring', 0.375, 'buf'], ['feed', 0.70, 'recv'], ['battery', 0.75, 'recv']],  # times follow the glTF 'charge' clip
-    'bolt_lock_back': [['piston', 0.4e-3, 'recv'], ['deflector', 11e-3, 'recv'], ['buffer', 21e-3, 'buf'], ['spring', 21e-3, 'buf'], ['catch', 30e-3, 'recv']],
-    'bolt_release': [['catch', 0.0, 'recv'], ['feed', 0.022, 'recv'], ['battery', 0.038, 'recv'], ['spring', 0.0, 'buf']],
+    'charge': [['handle', 0.02, 'recv'], ['buffer', 0.375, 'buf'], ['spring', 0.375, 'buf'], ['feed', 0.70, 'recv'], ['chamber', 0.745, 'recv'], ['battery', 0.75, 'recv']],  # times follow the model's 'charge' clip
+    'bolt_lock_back': [e for e in CYCLE if e[0] in ('unlock', 'rodstop', 'deflector', 'buffer', 'spring')] + [['catch', CYCLE[5][1] + 9e-3, 'recv']],
+    'bolt_release': [['catch', 0.0, 'recv'], ['feed', 0.022, 'recv'], ['chamber', 0.036, 'recv'], ['battery', 0.038, 'recv'], ['spring', 0.0, 'buf']],
 }
+SLIDE_CLIPS = ['cycle', 'bolt_lock_back']       # clips that carry the carrier's sliding noise
 VARIANTS = {'single': dict(times=[0.0], reset=0.16, len=1.9),
             'semi3': dict(times=[0.0, 0.25, 0.5], reset=0.12, len=2.4),
-            'auto1s': dict(times=[round(k * CYCLE_S, 6) for k in range(15)], reset=None, len=2.9)}
+            'auto1s': dict(times=[round(k * CYCLE_S, 6) for k in range(14)], reset=None, len=2.9)}
 
 
 def steel_tables():
@@ -284,6 +451,43 @@ def hpd_table():
     return dict(bands=BANDS, att_db=att, fir=b64(hmin), note='apply after the room, at the ear')
 
 
+def muzzle_split(cs):
+    """Split the muzzle pulse at 1 m, at cos(angle from the bore) = cs, into the shock and the gas-volume body.
+    The total peak stays the published level times the Fansler directivity. The pressure's second time-moment is
+    set by conservation: (rho0 V_inf + cos(theta) J_gas / c0) / (4 pi), the monopole of the gas volume released at 1 atm
+    plus the dipole of the gas momentum, both from the action simulation. Whatever the shock and the secondary pulse
+    do not carry is the body: bm (e^(-t/tb)/tb - e^(-t/tm)/tm) / (tm - tb), which starts at bm/(tb tm), has zero
+    impulse and second moment bm. Returns shock peak (Pa), shock duration (s), bm (Pa s^2)."""
+    P90 = P_REF * 10 ** (P90_DB / 20); D = float(dirfac(cs)); T1 = T90 * D ** T_DIR_EXP; kap = TAU_B * TAU_MIX
+    M_tot = (RHO0 * V_INF + cs * J_GAS / C0) / (4 * np.pi) - P90 * 10 ** (SEC_DB / 20) * float(dirfac(cs, SEC_MU)) * SEC_T ** 2
+    Ps = (P90 * D - M_tot / kap) / (1 - T1 * T1 / kap); bm = M_tot - Ps * T1 * T1
+    if bm <= 0 or Ps <= 0: return P90 * D, T1, 0.0        # towards the front the anchored shock already carries the conserved moment
+    return Ps, T1, bm
+
+
+def band_dir_table(dec):
+    """Directivity of the whole muzzle source by octave band: sqrt(energy at 1 m) on a grid of cos(angle).
+    Overlays use the ratio between a reflection's leaving angle and the direct path's. Low bands are close to
+    omnidirectional (gas volume), high bands follow the shock."""
+    cg = np.linspace(-1, 1, 41); N = 4096; W = band_weights(N); P90 = P_REF * 10 ** (P90_DB / 20); Pt = dict(_dec=dec, _firs=[], fir_lat=LAT)
+    jt = jet_table(); je = np.array([sum(r) for r in jt['env']]) if jt['n'] else np.zeros(9); out = np.zeros((9, len(cg)))
+    for j, cs in enumerate(cg):
+        Ps, T1, bm = muzzle_split(cs); x = np.zeros(N)
+        decimate_place(x, blast_sig(Ps, T1, bm, TAU_B, TAU_MIX, RISE), 0.002, 1.0, Pt)
+        decimate_place(x, blast_sig(P90 * 10 ** (SEC_DB / 20) * float(dirfac(cs, SEC_MU)), SEC_T, 0.0, TAU_B, TAU_MIX, RISE), 0.002 + SEC_DELAY, 1.0, Pt)
+        X2 = np.abs(np.fft.rfft(x)) ** 2; X2[1:-1] *= 2
+        for b in range(9): out[b, j] = math.sqrt(float(np.sum(X2 * W[b] ** 2)) / N + je[b] * float(jet_dir(cs)))
+    return dict(cos=[round(float(c), 4) for c in cg], D=[[float('%.5g' % v) for v in row] for row in out])
+
+
+DIRB = None
+
+
+def dirb(cos_t):
+    """Band directivity (9 x ...) at cos_t, from the table (stage A helper; stage B uses P['dirband'])."""
+    return np.array([np.interp(cos_t, DIRB['cos'], DIRB['D'][b]) for b in range(9)])
+
+
 def make_persp(name, firs):
     """Per-listener path tables for the dry sound."""
     L = PERSP_LIS[name]; M = SRC['muzzle']
@@ -298,13 +502,13 @@ def make_persp(name, firs):
     P90 = P_REF * 10 ** (P90_DB / 20)
     blast = {'free': [], 'field': []}; sec = {'free': [], 'field': []}; jet = {'free': [], 'field': []}
     for i, (r, u, gr) in enumerate(rays(M)):
-        D = float(dirfac(u @ AXIS)); P1 = P90 * D; T1 = T90 * D ** T_DIR_EXP
-        k = (GAMMA + 1) / (2 * GAMMA) * P1 / (P_ATM * C0 * T1)             # weak-shock (Landau) lengthening, r0 = 1 m
+        cs = float(u @ AXIS); Ps, T1, bm = muzzle_split(cs)
+        k = (GAMMA + 1) / (2 * GAMMA) * Ps / (P_ATM * C0 * T1)             # weak-shock (Landau) lengthening, r0 = 1 m
         s = math.sqrt(max(0.25, 1 + k * math.log(r)))
         fid = fir_id(r, gr)
-        e = dict(P=P1 / r / s, T=T1 * s, t=r / C0, fir=fid, r=round(r, 4), theta=round(math.degrees(math.acos(u @ AXIS)), 2))
-        e2 = dict(P=P90 * 10 ** (SEC_DB / 20) * float(dirfac(u @ AXIS, SEC_MU)) / r, T=SEC_T, t=r / C0 + SEC_DELAY, fir=fid)
-        e3 = dict(rms=P90 * 10 ** (JET_DB / 20) * D / r, tau=JET_TAU, t=r / C0, fir=fid)
+        e = dict(P=Ps / r / s, T=T1 * s, bm=bm / r, t=r / C0, fir=fid, r=round(r, 4), theta=round(math.degrees(math.acos(cs)), 2))
+        e2 = dict(P=P90 * 10 ** (SEC_DB / 20) * float(dirfac(cs, SEC_MU)) / r, T=SEC_T, t=r / C0 + SEC_DELAY, fir=fid)
+        e3 = dict(g=math.sqrt(float(jet_dir(cs))) / r, t=r / C0, fir=fid)
         for v in (['free', 'field'] if i == 0 else ['field']): blast[v].append(e); sec[v].append(e2); jet[v].append(e3)
     out.update(blast=blast, sec=sec, jet=jet)
     # ballistic shock: ray leaves the trajectory at acos(1/M) to it
@@ -345,8 +549,9 @@ def air_band():
 
 
 def mean_sq_dir():
-    th = np.linspace(0, np.pi, 2001)
-    return float(np.trapezoid(dirfac(np.cos(th)) ** 2 * np.sin(th), th) / 2)
+    """Sphere mean of the squared band directivity, per band."""
+    th = np.linspace(0, np.pi, 2001); d = dirb(np.cos(th))
+    return np.trapezoid(d ** 2 * np.sin(th)[None, :], th, axis=1) / 2
 
 
 def eyring(Lr, alphas):
@@ -359,17 +564,17 @@ def eyring(Lr, alphas):
 def recipe_common(persp, eye):
     off = eye - EYE
     src = SRC['muzzle'] + off; lis = PERSP_LIS[persp] + off
-    d = lis - src; rd = float(np.linalg.norm(d)); Dd = float(dirfac(d @ AXIS / rd))
-    return dict(src=src.tolist(), lis=lis.tolist(), axis=AXIS.tolist(), rd=rd, Dd=Dd)
+    d = lis - src; rd = float(np.linalg.norm(d)); cosd = float(d @ AXIS / rd)
+    return dict(src=src.tolist(), lis=lis.tolist(), axis=AXIS.tolist(), rd=rd, cosd=cosd)
 
 
 def room_recipe(persp, Lr, eye, surf, tmix, scat, length, extra=None, note=''):
     rc = recipe_common(persp, V3(*eye)); alphas = [MAT[s] for s in surf]
     V, S, t_ey, t_sab = eyring(Lr, alphas)
-    Qd = mean_sq_dir() * (rc['rd'] / rc['Dd']) ** 2
+    Qd = mean_sq_dir() * (rc['rd'] / dirb(rc['cosd'])) ** 2
     rc.update(len=length, seed='ir', elements=[
         dict(type='shoebox', L=Lr, alpha=alphas, tmax=tmix, scat=scat, mmax=None, bursts=0),
-        dict(type='stat', T60=t_ey, var0=Qd * 4 * np.pi * C0 / V / FS, te0=rc['rd'] / C0, tmix=tmix, scat=scat, nrate=C0 * S / (4 * V))] + (extra or []),
+        dict(type='stat', T60=t_ey, var0=(Qd * 4 * np.pi * C0 / V / FS).tolist(), te0=rc['rd'] / C0, tmix=tmix, scat=scat, nrate=C0 * S / (4 * V))] + (extra or []),
         doc=dict(kind='shoebox image sources to %.0f ms + Eyring tail' % (tmix * 1e3), dims_m=Lr, surfaces=dict(zip(['x0', 'x1', 'floor', 'ceiling', 'z0_behind', 'z1_ahead'], surf)),
                  shooter_eye=eye, volume_m3=V, surface_m2=S, T60_eyring_s=[round(t, 2) for t in t_ey], T60_sabine_s=[round(t, 2) for t in t_sab], scattering=scat, note=note))
     return rc
@@ -379,10 +584,23 @@ def ground_element(persp):
     """The muzzle->listener ground bounce relative to the direct path (outdoor recipes)."""
     L = PERSP_LIS[persp]; M = SRC['muzzle']; d = L - M; r1 = np.linalg.norm(d)
     d2 = L * V3(1, -1, 1) - M; r2 = np.linalg.norm(d2)
-    D1 = dirfac(d @ AXIS / r1); D2 = dirfac(d2 @ AXIS / r2)
-    f = np.fft.rfftfreq(NFIR, 1 / FS)
-    H = 10 ** (-iso9613_alpha(f) * (r2 - r1) / 20) * np.conj(ground_Q(f, r2, abs(d2[1]) / r2))
-    return dict(type='fir', gain=float(D2 / r2 / (D1 / r1)), delay=float((r2 - r1) / C0), fir=b64(np.roll(np.fft.irfft(H, NFIR), LAT)))
+    ratio = dirb(d2 @ AXIS / r2) / dirb(d @ AXIS / r1)                      # band directivity, reflected ray against direct ray
+    f = np.fft.rfftfreq(NFIR, 1 / FS); Df = np.interp(np.log2(np.maximum(f, 1.0) / 63.0), np.arange(9), ratio)
+    H = 10 ** (-iso9613_alpha(f) * (r2 - r1) / 20) * np.conj(ground_Q(f, r2, abs(d2[1]) / r2)) * rough_coherent(f, abs(d2[1]) / r2) * Df
+    h = np.roll(np.fft.irfft(H, NFIR), LAT); win = np.ones(NFIR); n = 64; ramp = 0.5 - 0.5 * np.cos(np.pi * np.arange(n) / n); win[:n] = ramp; win[-n:] = ramp[::-1]
+    return dict(type='fir', gain=float(r1 / r2), delay=float((r2 - r1) / C0), fir=b64(h * win))
+
+
+def tap_gain(rc0, dd, r, mat):
+    """Per-band gain of a first-order image tap leaving the muzzle along dd (length r), relative to the direct path."""
+    return (dirb(dd @ AXIS / r) / dirb(rc0['cosd']) * rc0['rd'] / r * np.sqrt(1 - np.array(MAT[mat]))).tolist()
+
+
+def ground_scatter(p, at='lis'):
+    """Diffuse (Lambert) scattering from rough ground within 20 m of the listener (or of the muzzle): the near-field tail outdoors."""
+    L = PERSP_LIS[p] if at == 'lis' else SRC['muzzle']
+    if at == 'src': return dict(type='patches', o=[float(L[0]) - 20.0, 0.0, float(L[2]) - 20.0], eu=[40.0, 0, 0], ev=[0, 0, 40.0], nu=80, nv=80, alpha=[0.0] * 9, rough=GROUND_ROUGH, seed='groundscatter_src')
+    return dict(type='patches', o=[float(L[0]) - 20.0, 0.0, float(L[2]) - 20.0], eu=[40.0, 0, 0], ev=[0, 0, 40.0], nu=80, nv=80, alpha=[0.0] * 9, rough=GROUND_ROUGH, seed='groundscatter')
 
 
 def face(origin, eu, ev, nu, nv, mat, seed):
@@ -405,8 +623,7 @@ def make_overlays():
         for side in (-1, 1):   # stall partitions 0.6 m either side of the bore, first-order image
             src = np.array(rc0['src']); lis = np.array(rc0['lis']); img = src.copy(); img[0] = 2 * (src[0] + side * 0.6) - src[0]
             d = lis - img; r = np.linalg.norm(d); dd = d.copy(); dd[0] = -dd[0]
-            g = float(dirfac(dd @ AXIS / r) / r / (rc0['Dd'] / rc0['rd']))
-            taps.append([float((r - rc0['rd']) / C0), [g * math.sqrt(1 - a) for a in MAT['partition']]])
+            taps.append([float((r - rc0['rd']) / C0), tap_gain(rc0, dd, r, 'partition')])
         return room_recipe(p, [12.0, 3.0, 28.0], eye, ['panel_block_mix', 'panel_block_mix', 'concrete', 'baffles', 'acoustic_panel', 'rubber_berm'], 0.12, 0.2, 1.2,
                            extra=[dict(type='taps', taps=taps)], note='25 m lane; stall partitions 0.6 m either side added as first-order images')
     add('indoor_range', 'Indoor range lane (baffles, rubber backstop)', ['shooter'], lane)
@@ -414,19 +631,28 @@ def make_overlays():
         p, [40.0, 10.0, 60.0], [18.0, EYE_H, 6.0], ['metal_wall', 'metal_wall', 'concrete', 'metal_roof', 'metal_wall', 'metal_wall'], 0.25, 0.2, 4.0))
 
     def outdoor(p, length, elements, doc):
-        rc = recipe_common(p, EYE); rc.update(len=length, seed='ir', elements=[ground_element(p)] + elements, doc=doc); return rc
-    gdoc = 'Delany-Bazley ground, sigma %.0f kPa s/m^2, spherical-wave reflection' % GROUND_SIGMA
-    add('open_field', 'Outdoor flat open field (ground reflection only)', ['shooter', 'bystander', 'downrange'],
+        rc = recipe_common(p, EYE); rc.update(len=length, seed='ir', elements=[ground_element(p), ground_scatter(p)] + elements, doc=doc); return rc
+    gdoc = 'Delany-Bazley ground, sigma %.0f kPa s/m^2, spherical-wave reflection; rough-ground Lambert scattering within 20 m' % GROUND_SIGMA
+    add('open_field', 'Outdoor flat open field (ground reflection only)', ['shooter', 'bystander', 'downrange'] + FAR,
         lambda p: outdoor(p, 0.12, [], dict(kind='direct + ground reflection', ground=gdoc)))
     def berm(p):
         rc0 = recipe_common(p, EYE); el = [face([-30, 0, 59], [60, 0, 0], [0, 6, 0], 60, 6, 'soil_berm', 'berm')]
         if p == 'shooter':   # the wooden bench under the muzzle (range page: top at y=0.99)
             src = np.array(rc0['src']); lis = np.array(rc0['lis']); img = src.copy(); img[1] = 2 * 0.99 - src[1]
             d = lis - img; r = np.linalg.norm(d); dd = d.copy(); dd[1] = -dd[1]
-            g = float(dirfac(dd @ AXIS / r) / r / (rc0['Dd'] / rc0['rd']))
-            el.append(dict(type='taps', taps=[[float((r - rc0['rd']) / C0), [g * math.sqrt(1 - a) for a in MAT['wood_bench']]]]))
+            el.append(dict(type='taps', taps=[[float((r - rc0['rd']) / C0), tap_gain(rc0, dd, r, 'wood_bench')]]))
         return outdoor(p, 0.75, el, dict(kind='ground + Lambert-scattering berm face + bench top', berm='face 60 x 6 m at z = 59 m (range page berm centred z = -62, 6 m deep)', ground=gdoc))
     add('range_berm', 'Outdoor range with an earth berm at about 60 m', ['shooter', 'bystander', 'downrange'], berm)
+    def orange(p):
+        # A generic outdoor rifle range in a wooded clearing. The layout is assumed, not measured: a 100 yd (91 m) lane, a 6 m backstop,
+        # a 3 m side berm 15 m to the left (DOE range design criteria: backstop 15 to 20 ft, side berms 8 ft or more), trees on all sides.
+        el = [face([-30, 0, 91], [60, 0, 0], [0, 6, 0], 60, 6, 'soil_berm', 'backstop'), face([-15, 0, 0], [0, 0, 91], [0, 3, 0], 91, 3, 'soil_berm', 'sideberm'),
+              face([-40, 0, -40], [0, 0, 180], [0, 15, 0], 90, 5, 'tree_line', 'treesL'), face([120, 0, -40], [0, 0, 180], [0, 15, 0], 90, 5, 'tree_line', 'treesR'),
+              face([-40, 0, 110], [160, 0, 0], [0, 15, 0], 80, 5, 'tree_line', 'treesF'), face([-40, 0, -40], [160, 0, 0], [0, 15, 0], 80, 5, 'tree_line', 'treesB')]
+        if p != 'shooter': el.append(ground_scatter(p, 'src'))
+        return outdoor(p, 1.6, el, dict(kind='ground + rough-ground scattering + Lambert-scattering backstop, side berm and tree lines (first order)',
+                                        layout='assumed generic range: lane along +z, backstop 60 x 6 m at 91 m, side berm 3 m high 15 m to the left, forest edge 15 m high at x = -40 and +120 m, z = -40 and +110 m', ground=gdoc))
+    add('outdoor_range', 'Outdoor rifle range in a wooded clearing (assumed layout)', ['shooter', 'bystander', 'downrange'] + FAR, orange)
     add('forest_edge', 'Forest edge (tree line 80 m ahead)', ['shooter', 'bystander', 'downrange'], lambda p: outdoor(p, 1.8, [
         dict(type='trees', x0=-150, x1=150, z0=80, z1=200, density=0.04, radius=0.12, heff=3.0, foliage=FOLIAGE_DB_M, seed='trees')],
         dict(kind='ground + single scattering from tree trunks', trees='0.04 trunks/m^2, radius 0.12 m, 300 x 120 m stand starting 80 m ahead', foliage='ISO 9613-2 Table A.1 dB/m inside the stand', ground=gdoc)))
@@ -447,38 +673,17 @@ def make_overlays():
     return out
 
 
-def apply_action_timeline():
-    """If the action simulation (../action/action.json) exists, take event times from it.
-    Accepts {"events": [{"name": ..., "t_ms" | "t_s" | "t": ...}]} with times after the bullet leaves the muzzle
-    (or after hammer strike if that is the earliest event). Returns the list of events it replaced."""
-    path = os.path.join(HERE, '..', 'action', 'action.json')
-    if not os.path.exists(path): return None
-    try:
-        ev = json.load(open(path)); ev = ev.get('events', ev) if isinstance(ev, dict) else ev
-        keys = {'hammer': ['hammer'], 'piston': ['piston', 'rod', 'unlock'], 'deflector': ['deflector', 'eject'], 'buffer': ['buffer', 'rear', 'bottom'],
-                'feed': ['feed', 'strip'], 'battery': ['battery', 'lock', 'closed']}
-        got = {}
-        for e in ev:
-            nm = str(e.get('name', e.get('event', ''))).lower(); t = e.get('t_s', e['t_ms'] / 1e3 if 't_ms' in e else e.get('t'))
-            if t is None: continue
-            for k, words in keys.items():
-                if k not in got and any(w in nm for w in words) and not ('unlock' in nm and k == 'battery'): got[k] = float(t)
-        for row in CYCLE:
-            if row[0] in got: row[1] = got[row[0]]
-            if row[0] == 'spring' and 'buffer' in got: row[1] = got['buffer']
-        return got
-    except Exception as ex:
-        print('action.json present but not understood (%s); using the built-in timeline' % ex); return None
-
-
 def make_params():
-    firs = []; action = apply_action_timeline()
-    dec = signal.firwin(127, 0.9 / OS, window=('kaiser', 9.0))
-    P = dict(version=1, fs=FS, os=OS, c=C0, rise=RISE, bands=BANDS, air_band=air_band(), mu=MU, fir_lat=LAT,
+    global DIRB
+    firs = []; action = ACTION_USED
+    dec = signal.firwin(127, 0.9 / OS, window=('kaiser', 9.0)); DIRB = band_dir_table(dec.astype(np.float32).astype(np.float64))
+    P = dict(version=2, fs=FS, os=OS, c=C0, rise=RISE, bands=BANDS, air_band=air_band(), mu=MU, fir_lat=LAT,
              atmosphere=dict(T_C=T_C, RH=RH, p_Pa=P_ATM), dec=b64(dec), shot_sd_db=SHOT_SD_DB,
-             variants=VARIANTS, cycle=CYCLE, cycle_s=CYCLE_S, mech=mech_tables(), mech_clips=MECH_CLIPS,
+             variants=VARIANTS, cycle=CYCLE, cycle_s=CYCLE_S, mech=mech_tables(), mech_clips=MECH_CLIPS, slide=slide_table(), slide_clips=SLIDE_CLIPS,
+             body=dict(tau_b=TAU_B, tau_m=TAU_MIX), jet=jet_table(), dirband=DIRB, gas=(GAS['doc'] if GAS else None), struct_modes=struct_modes(),
+             default_overlay='range_berm', ear=dict(limit_db=EAR_LIMIT_DB, note='playback stage, see README'),
              persp={n: make_persp(n, firs) for n in PERSP_LIS}, steel=steel_tables(), hpd=hpd_table(), overlays=make_overlays())
-    P['firs'] = firs; P['action_timeline_from'] = 'action/action.json' if action else 'built-in (sim.py CYCLE)'
+    P['firs'] = firs; P['action_timeline_from'] = 'action/action.json' if action else 'built-in (sim.py CYCLE)'; P['action_used'] = action
     return json.loads(json.dumps(P))        # exactly what the JS port reads
 
 
@@ -503,6 +708,27 @@ def friedlander(Pk, T, rise):
     return np.where(t < 0, Pk * (1 + t / rise), Pk * (1 - t / T) * np.exp(-t / T))
 
 
+def blast_sig(Pk, T, bm, tb, tm, rise):
+    """Shock (Friedlander) plus gas-volume body at the oversampled rate; the linear rise carries both to the peak."""
+    b0 = bm / (tb * tm); n = int((rise + (max(10 * T, 8 * tm) if bm > 0 else 10 * T)) * FSO) + 2; t = np.arange(n) / FSO - rise; tp = np.maximum(t, 0)
+    y = Pk * (1 - tp / T) * np.exp(-tp / T)
+    if bm > 0: y = y + bm * (np.exp(-tp / tb) / tb - np.exp(-tp / tm) / tm) / (tm - tb)
+    return np.where(t < 0, (Pk + b0) * (1 + t / rise), y)
+
+
+def band_noise(env, n, seed):
+    """Noise whose mean-square value in octave band b follows env[b][i] (i < n): white noise through the octave
+    filter bank, each band scaled to unit variance, then shaped in time."""
+    NF = 1024
+    while NF < 2 * n: NF *= 2
+    W = band_weights(NF); WF = np.fft.rfft(Rng(seed).g(NF)); out = np.zeros(n); two = np.ones(NF // 2 + 1) * 2; two[0] = 1; two[-1] = 1
+    for b in range(9):
+        e = np.asarray(env[b][:n], float)
+        if not e.any(): continue
+        out += np.fft.irfft(WF * W[b], NF)[:n] / math.sqrt(float(np.sum(W[b] ** 2 * two)) / NF) * np.sqrt(e)
+    return out
+
+
 def nwave(dp, T, rise):
     n = int((T + 2 * rise) * FSO) + 3; t = np.arange(n) / FSO
     return np.where(t < rise, dp * t / rise, np.where(t < rise + T, dp * (1 - 2 * (t - rise) / T), np.where(t < T + 2 * rise, -dp * (1 - (t - rise - T) / rise), 0.0)))
@@ -518,12 +744,6 @@ def mech_sig(ev, seed):
     return s / np.max(np.abs(s)) * P_REF * 10 ** (ev['p1m'] / 20)
 
 
-def jet_sig(rms, tau, seed):
-    n = int(8 * tau * FS); x = Rng(seed).g(n); a = 1 / (1 + 2 * np.pi * 800 / FS)
-    y = signal.lfilter([a, -a], [1, -a], x); t = np.arange(n) / FS
-    return rms * y * (1 - np.exp(-t / 1e-4)) * np.exp(-t / tau)
-
-
 def prep(P):
     if '_dec' not in P:
         P['_dec'] = unb64(P['dec']); P['_firs'] = [unb64(s) for s in P['firs']]
@@ -537,6 +757,14 @@ def add_events(out, P, pp, events, ts, field, seed, jt=1.0, ja=None):
             add_at(out, sig, rnd((ts + te * jt + path['t'] + pp['t0']) * FS), path['g'], P, path['fir'])
 
 
+def add_slide(out, P, pp, ts, field, seed, jt=1.0):
+    sl = P['slide']
+    if not sl['n']: return
+    sig = band_noise(sl['env'], sl['n'], seed)
+    for path in pp['src']['recv']['field' if field else 'free']:
+        add_at(out, sig, rnd((ts + sl['t'] * jt + path['t'] + pp['t0']) * FS), path['g'], P, path['fir'])
+
+
 def synth_dry(P, persp, variant, field=False, parts=('blast', 'nwave', 'mech')):
     """Pressure in Pa at 48 kHz for one perspective and fire variant."""
     prep(P); pp = P['persp'][persp]; var = P['variants'][variant]; v = 'field' if field else 'free'
@@ -544,22 +772,28 @@ def synth_dry(P, persp, variant, field=False, parts=('blast', 'nwave', 'mech')):
     for k, ts in enumerate(var['times']):
         j = Rng('shot%d' % k).g(16); jP = 10 ** (P['shot_sd_db'] * j[0] / 20); jt = 1 + 0.015 * j[1]
         if 'blast' in parts:
-            for e in pp['blast'][v]: decimate_place(out, friedlander(e['P'] * jP, e['T'], rise), ts + e['t'] + t0, 1.0, P, e['fir'])
+            tb, tm = P['body']['tau_b'], P['body']['tau_m']
+            for e in pp['blast'][v]: decimate_place(out, blast_sig(e['P'] * jP, e['T'], e['bm'] * jP, tb, tm, rise), ts + e['t'] + t0, 1.0, P, e['fir'])
             for e in pp['sec'][v]: decimate_place(out, friedlander(e['P'] * jP, e['T'], rise), ts + e['t'] + t0, 1.0, P, e['fir'])
-            for i, e in enumerate(pp['jet'][v]): add_at(out, jet_sig(e['rms'] * jP, e['tau'], 'jet%d/%d' % (k, i)), rnd((ts + e['t'] + t0) * FS), 1.0, P, e['fir'])
+            if P['jet']['n']:
+                js = band_noise(P['jet']['env'], P['jet']['n'], 'jet%d' % k)          # one realisation per shot: reflections carry the same noise
+                for e in pp['jet'][v]: add_at(out, js, rnd((ts + e['t'] + t0) * FS), e['g'] * jP, P, e['fir'])
         if 'nwave' in parts:
             for e in pp['nwave'][v]: decimate_place(out, nwave(e['dp'], e['T'], rise), ts + e['t'] + t0, 1.0, P, e['fir'])
         if 'mech' in parts:
             ev = list(P['cycle'])
             if var['reset'] is not None: ev.append(['reset', var['reset'], 'recv'])
             add_events(out, P, pp, ev, ts, field, 'shot%d' % k, jt, 1.5 * j[2:2 + len(ev)])
+            add_slide(out, P, pp, ts, field, 'slide%d' % k, jt)
     return out
 
 
 def synth_mech(P, clip, persp='shooter', field=False):
     prep(P); pp = P['persp'][persp]; ev = P['mech_clips'][clip]
     out = np.zeros(int((max(e[1] for e in ev) + 0.5) * FS))
-    add_events(out, P, pp, ev, 0.0 - pp['t0'] + 0.005 - min(0, min(e[1] for e in ev)), field, 'clip/' + clip)
+    ts = 0.0 - pp['t0'] + 0.005 - min(0, min(e[1] for e in ev))
+    add_events(out, P, pp, ev, ts, field, 'clip/' + clip)
+    if clip in P['slide_clips']: add_slide(out, P, pp, ts, field, 'clip/slide/' + clip)
     return out
 
 
@@ -584,9 +818,15 @@ def band_weights(nf):
     return W
 
 
+def dirband(P, cos_t):
+    """Band directivity table lookup: array (9, ...) for cos_t (linear interpolation on the cos grid)."""
+    g = P['dirband']; c = np.asarray(cos_t, float); x = np.clip((c + 1) * 0.5 * (len(g['cos']) - 1), 0, len(g['cos']) - 1 - 1e-9); i = np.floor(x).astype(int); f = x - i
+    return np.array([np.asarray(row)[i] * (1 - f) + np.asarray(row)[i + 1] * f for row in g['D']])
+
+
 def el_shoebox(el, rc, P, taps, burst):
     L = el['L']; src = rc['src']; lis = rc['lis']; ax = rc['axis']; rmax = P['c'] * el['tmax'] + rc['rd']; s = el['scat']
-    air = P['air_band']; gd = rc['Dd'] / rc['rd']; per = []
+    air = P['air_band']; dd = dirband(P, rc['cosd']); per = []
     for a in range(3):
         mm = el['mmax'][a] if el['mmax'] else int(math.ceil(rmax / (2 * L[a]))) + 1
         m = np.repeat(np.arange(-mm, mm + 1), 2); p = np.tile([0, 1], 2 * mm + 1)
@@ -599,10 +839,10 @@ def el_shoebox(el, rc, P, taps, burst):
     fx, fy, fz = np.meshgrid(per[0][1], per[1][1], per[2][1], indexing='ij')
     cos = (dx * fx * ax[0] + dy * fy * ax[1] + dz * fz * ax[2]) / np.maximum(r, 1e-9)
     order = per[0][2][:, None, None] + per[1][2][None, :, None] + per[2][2][None, None, :]
-    g0 = dirfac(cos) / np.maximum(r, 1e-9) / gd
+    g0 = rc['rd'] / np.maximum(r, 1e-9); db_ = dirband(P, cos)
     idx = np.floor((r - rc['rd']) / P['c'] * FS + 0.5).astype(int)
     for b in range(9):
-        gb = g0 * per[0][3][:, None, None, b] * per[1][3][None, :, None, b] * per[2][3][None, None, :, b] * 10 ** (-air[b] * r / 20)
+        gb = g0 * db_[b] / dd[b] * per[0][3][:, None, None, b] * per[1][3][None, :, None, b] * per[2][3][None, None, :, b] * 10 ** (-air[b] * r / 20)
         sel = mask & (order > 0) & (gb != 0) & (idx >= 0) & (idx < taps.shape[1])
         np.add.at(taps[b], idx[sel], (gb * (1 - s) ** (order / 2.0))[sel])
         if el['bursts']: np.add.at(burst[b], idx[sel], (gb ** 2 * (1 - (1 - s) ** order))[sel])
@@ -617,10 +857,12 @@ def el_patches(el, rc, P, taps):
     src = np.array(rc['src']); lis = np.array(rc['lis']); ax = np.array(rc['axis'])
     d1 = p - src; r1 = np.linalg.norm(d1, axis=1); d2 = lis - p; r2 = np.linalg.norm(d2, axis=1)
     ci = np.abs(d1 @ nrm) / r1; cs = np.abs(d2 @ nrm) / r2
-    g = dirfac(d1 @ ax / r1) / r1 * np.sqrt(ci * cs * dA / np.pi) / r2 / (rc['Dd'] / rc['rd']) * sign
+    g = rc['rd'] / r1 * np.sqrt(ci * cs * dA / np.pi) / r2 * sign; db_ = dirband(P, d1 @ ax / r1); dd = dirband(P, rc['cosd'])
     idx = np.floor((r1 + r2 - rc['rd']) / P['c'] * FS + 0.5).astype(int); ok = (idx >= 0) & (idx < taps.shape[1])
     for b in range(9):
-        np.add.at(taps[b], idx[ok], (g * math.sqrt(1 - el['alpha'][b]) * 10 ** (-P['air_band'][b] * (r1 + r2) / 20))[ok])
+        if el.get('rough'): g_b = g * np.sqrt(1 - np.exp(-4 * (2 * np.pi * P['bands'][b] / P['c'] * el['rough']) ** 2 * ci * cs))     # diffuse share of a rough surface
+        else: g_b = g
+        np.add.at(taps[b], idx[ok], (g_b * db_[b] / dd[b] * math.sqrt(1 - el['alpha'][b]) * 10 ** (-P['air_band'][b] * (r1 + r2) / 20))[ok])
 
 
 def el_trees(el, rc, P, taps):
@@ -629,20 +871,21 @@ def el_trees(el, rc, P, taps):
     src = np.array(rc['src']); lis = np.array(rc['lis']); ax = np.array(rc['axis'])
     p = np.stack([x, np.full(n, 1.6), z], 1); d1 = p - src; r1 = np.linalg.norm(d1, axis=1); d2 = lis - p; r2 = np.linalg.norm(d2, axis=1)
     inside = np.maximum(0, z - el['z0']) * (r1 / np.maximum(1e-6, np.abs(d1[:, 2]))) + np.where(lis[2] < el['z0'], np.maximum(0, z - el['z0']) * (r2 / np.maximum(1e-6, np.abs(d2[:, 2]))), np.minimum(r2, 60.0))
-    g = dirfac(d1 @ ax / r1) / r1 / r2 / (rc['Dd'] / rc['rd']) * sign
+    g = rc['rd'] / r1 / r2 * sign; db_ = dirband(P, d1 @ ax / r1); dd = dirband(P, rc['cosd'])
     idx = np.floor((r1 + r2 - rc['rd']) / P['c'] * FS + 0.5).astype(int); ok = (idx >= 0) & (idx < taps.shape[1])
     for b in range(9):
         ka = 2 * np.pi * P['bands'][b] / P['c'] * el['radius']; sig = 2 * el['radius'] * el['heff'] * min(1.0, ka * ka)
-        np.add.at(taps[b], idx[ok], (g * math.sqrt(sig / (4 * np.pi)) * 10 ** (-(P['air_band'][b] * (r1 + r2) + el['foliage'][b] * inside) / 20))[ok])
+        np.add.at(taps[b], idx[ok], (g * db_[b] / dd[b] * math.sqrt(sig / (4 * np.pi)) * 10 ** (-(P['air_band'][b] * (r1 + r2) + el['foliage'][b] * inside) / 20))[ok])
 
 
-def build_ir(P, overlay, persp):
-    """Impulse response at 48 kHz, direct path = unit impulse at t = 0. Returns (h, info)."""
+def build_ir(P, overlay, persp, skip=()):
+    """Impulse response at 48 kHz, direct path = unit impulse at t = 0. skip: element seeds to leave out (checks only)."""
     rc = P['overlays'][overlay]['persp'][persp]; N = int(rc['len'] * FS); NF = 1 << int(math.ceil(math.log2(N + 4096)))
     taps = np.zeros((9, N)); burst = np.zeros((9, N)); var = np.zeros((9, N)); firs = []; has_noise = False; t = np.arange(N) / FS
     taps[:, 0] += 1.0
     for el in rc['elements']:
         ty = el['type']
+        if el.get('seed') in skip: continue
         if ty == 'shoebox':
             el_shoebox(el, rc, P, taps, burst)
             if el['bursts']:
@@ -651,7 +894,7 @@ def build_ir(P, overlay, persp):
         elif ty == 'stat':
             has_noise = True; te = t + el['te0']
             w = np.where(t >= el['tmix'], 1.0, 1 - (1 - el['scat']) ** (el['nrate'] * te))
-            for b in range(9): var[b] += el['var0'] * np.exp(-13.8155 * te / el['T60'][b]) * w
+            for b in range(9): var[b] += el['var0'][b] * np.exp(-13.8155 * te / el['T60'][b]) * w
         elif ty == 'taps':
             for delay, g in el['taps']:
                 i = rnd(delay * FS)
@@ -759,6 +1002,44 @@ def run_overlays(P):
          extra=dict(att_db=P['hpd']['att_db'], bands=BANDS, prescale=50))
 
 
+def ear_playback(x, peak_db, hpd=None):
+    """The page's 'ear' stage (hk416-sound.js chain): x at playback scale, whose -1 dBFS corresponds to peak_db dB SPL.
+    A memoryless limit at EAR_LIMIT_DB, then make-up gain 0.85 / limit (x4 behind earmuffs). hpd: an earmuff FIR applied first.
+    The page's WaveShaper oversamples 4x; this does not, so the two differ slightly near the limit."""
+    if hpd is not None: x = np.convolve(x, hpd)[:len(x)]
+    L = min(1.0, 10 ** ((EAR_LIMIT_DB - peak_db - 1) / 20))
+    return L * np.tanh(np.clip(x, -1, 1) / L) * (4 if hpd is not None else 1) * 0.85 / L
+
+
+def run_listen(P):
+    """Local listening renders (16-bit WAV in sound/audio/, which git ignores). Never commit them."""
+    out = {}; n1 = lambda x: x / np.max(np.abs(x)) * 10 ** (-1 / 20)
+    dry = synth_dry(P, 'shooter', 'single', False); pk = levels(dry)['peak_db_spl']; ov = P['default_overlay']; h = build_ir(P, ov, 'shooter'); hp = unb64(P['hpd']['fir'])
+    conv = lambda v, o: signal.fftconvolve(synth_dry(P, 'shooter', v, False), build_ir(P, o, 'shooter')) / np.max(np.abs(dry)) * 10 ** (-1 / 20)      # as the page: shot at -1 dBFS into the room
+    out['listen_1_dry_shot_linear'] = n1(dry); out['listen_2_dry_shot_ear'] = ear_playback(n1(dry), pk)
+    out['listen_3_default_%s_linear' % ov] = n1(conv('single', ov)); out['listen_4_default_%s_ear' % ov] = ear_playback(conv('single', ov), pk)
+    out['listen_5_default_%s_ear_semi3' % ov] = ear_playback(conv('semi3', ov), pk); out['listen_6_default_%s_ear_auto' % ov] = ear_playback(conv('auto1s', ov), pk)
+    out['listen_7_default_%s_ear_earmuffs' % ov] = ear_playback(conv('single', ov), pk, hp)
+    out['listen_8_indoor_range_ear'] = ear_playback(conv('single', 'indoor_range'), pk); out['listen_9_action_only_cycle'] = n1(synth_mech(P, 'cycle'))
+    for name, x in out.items():
+        write_wav(os.path.join(AUDIO, name + '.wav'), np.concatenate([np.zeros(int(0.2 * FS)), x]), 16); print('  wrote', os.path.join(AUDIO, name + '.wav'))
+
+
+def run_scoring(P):
+    """Unprocessed mono renders for independent scoring (24-bit WAV in sound/audio/scoring/, ignored by git): one shot
+    in the outdoor range at each far-field listener and at the shooter's ear. Linear: no ear stage, no compression.
+    Each file is scaled to -1 dBFS; scoring.json beside them gives pascals per full scale and the true peak."""
+    d = os.path.join(AUDIO, 'scoring'); os.makedirs(d, exist_ok=True); meta = {}
+    for ov in ('outdoor_range', 'open_field'):
+        for persp in ['shooter'] + FAR:
+            dry = synth_dry(P, persp, 'single', False); wet = signal.fftconvolve(dry, build_ir(P, ov, persp)); pk = float(np.max(np.abs(wet)))
+            pp = P['persp'][persp]; name = '%s_%s.wav' % (ov, persp); write_wav(os.path.join(d, name), wet / pk * 10 ** (-1 / 20), 24)
+            meta[name] = dict(overlay=ov, listener=persp, listener_xyz_m=pp['lis'], distance_from_muzzle_m=pp['blast']['free'][0]['r'], angle_from_bore_deg=pp['blast']['free'][0]['theta'], peak_db_spl=round(20 * math.log10(pk / P_REF), 1),
+                              pa_per_fullscale=round(pk / 10 ** (-1 / 20), 3), first_arrival_s=round(pp['t_first'] + pp['t0'], 5), sample_rate=FS, processing='none (linear pressure)')
+            print('  wrote', os.path.join(d, name), meta[name]['peak_db_spl'], 'dB')
+    json.dump(meta, open(os.path.join(d, 'scoring.json'), 'w'), indent=1)
+
+
 def write_manifest():
     old = []
     mp = os.path.join(HERE, 'manifest.json')
@@ -786,6 +1067,8 @@ def main():
     if cmd in ('all', 'dry'): run_dry(P)
     if cmd in ('all', 'overlays'): run_overlays(P)
     if MANIFEST: write_manifest()
+    if cmd in ('all', 'listen'): run_listen(P)
+    if cmd in ('all', 'scoring'): run_scoring(P)
     if cmd in ('all', 'compare'):
         sys.path.insert(0, HERE); import compare; compare.run(P)
 

@@ -10,7 +10,7 @@ choice of surroundings and earmuffs, the bolt carrier and recoil in slow motion,
 
 | Part | State |
 |---|---|
-| Sound (`sound/`) | Ready. Synthesised in the browser from `params.json`; the JS port matches the Python to -160 dB. Not yet validated by listening. |
+| Sound (`sound/`) | Version 2. Synthesised in the browser from `params.json`; the JS port matches the Python to -160 dB. Muzzle source and action noise are driven by `action/action.json`. Checked by measurement; the owner has not yet listened to version 2. |
 | Action and recoil (`action/`) | Ready. Calibrated to the manual: 850 m/s, 52,000 psi, about 800 rpm, 3.49 kg. |
 | Ballistics (`ballistics/`) | Ready. M855, Mk 262 and M856 with G7 drag, HK's zeros, dispersion and terminal effects. |
 | Geometry (`model/`) | Ready as a recipe. `build.py` is Blender Python: 301 named parts, 13 clips, 7 sockets, two LODs. It writes `hk416.glb`, a build output that is never committed. The sample page doesn't draw the model yet. Renders of a build are in `renders/`. |
@@ -40,7 +40,7 @@ const S = await HK416Sound.build(ac);                 // loads params.json next 
 await HK416Action.load('assets/hk416/action/action.json');
 
 // one shot: sound now, mechanism and recoil sampled every frame from t = 0 (the trigger break)
-const chain = await S.chain({ overlay: 'range_berm', hpd: false, ear: true });
+const chain = await S.chain({ overlay: 'range_berm', hpd: false, ear: true });   // omit overlay for S.defaultOverlay; null or 'dry' = free field
 chain.output.connect(ac.destination);
 const src = ac.createBufferSource(); src.buffer = S.shot('single'); src.connect(chain.input); src.start();
 const s = HK416Action.sample(t, { stance: 'ads', mode: 'semi' });   // s.carrierZ, s.boltRot, s.recoil.{pos,pitch,yaw,pivot}
@@ -74,7 +74,7 @@ Sockets include `socket_optic`, `socket_muzzle`, `socket_ads_eye` and `socket_ha
 
 - The model is the exterior a player sees; hidden internals are not modelled (no hammer or firing pin nodes).
 - The selector has no auto position; the rear sight is a folding ring rather than HK's diopter drum.
-- Sound: the dry shot's body comes from the room overlays; it has not been checked by listening.
+- Sound: played linearly, a shot in the open is a 0.2 ms shock and little else; that is the physics. The `ear` stage of `S.chain()` (on by default) models the ear's own peak limit and is what makes it play as a shot. The two reference recordings are overloaded and validate timing and decay only (`sound/README.md`).
 - See `notes/MANUAL_COMPARE.md` and each simulation's README for the rest.
 
 ## Sources

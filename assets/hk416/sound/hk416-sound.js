@@ -10,15 +10,18 @@
 //   S.steel(0.22, { dist: 35, seed: 3 })   -> AudioBuffer of the plate ring heard at dist metres
 //   await S.ir('range_berm')               -> AudioBuffer impulse response (direct path = 1.0 at sample 0)
 //   S.hpd()                                -> AudioBuffer earmuff FIR (apply after the room)
-//   S.chain({ overlay: 'range_berm', hpd: false, ear: true }) -> Promise<{ input, output, set(opts) }>
+//   S.chain({ overlay: 'range_berm', hpd: false, ear: true, peakDb }) -> Promise<{ input, output, set(opts) }>
 //       (overlay: null or 'dry' = no room; second argument: an OfflineAudioContext to render into)
 //   S.info(buffer)                         -> { peak_pa, peak_db_spl, pa_per_fullscale } true simulated level
 //   S.overlays, S.variants, S.perspectives, S.mechClips, S.steelKeys, S.params
 //   S.raw.dry / mech / steel / ir          -> Float64Array in pascals (or IR units), for tests
 //
 // Playback is normalised: real levels (157 dB at the ear) cannot be reproduced, so every buffer is
-// scaled to -1 dBFS and S.info() carries the true level. The 'ear' stage of chain() is a compressor:
-// a playback mapping so tails 40-60 dB under the shot stay audible. It is not part of the physics.
+// scaled to -1 dBFS and S.info() carries the true level. The 'ear' stage of chain() is the ear's own
+// peak limit: a memoryless limit at params.ear.limit_db (the middle ear stops following a pressure peak
+// above about 134 dB), then make-up gain. It is calibrated for S.shot() at the chain's perspective; for
+// another buffer pass { peakDb: S.info(buffer).peak_db_spl } or { ear: false }.
+// chain({}) with no overlay uses S.defaultOverlay; overlay: null or 'dry' is the free-field shot.
 
 const P_REF = 20e-6;
 const fnv1a = (s) => { let h = 0x811c9dc5; for (const c of new TextEncoder().encode(s)) { h ^= c; h = Math.imul(h, 0x01000193) >>> 0; } return h >>> 0; };
@@ -53,6 +56,24 @@ function makeCore(P) {
     addAt(out, y, base - 16, gain, fir);
   }
   function friedlander(Pk, T, rise) { const n = Math.floor((rise + 10 * T) * FSO) + 2, o = new Float64Array(n); for (let i = 0; i < n; i++) { const t = i / FSO - rise; o[i] = t < 0 ? Pk * (1 + t / rise) : Pk * (1 - t / T) * Math.exp(-t / T); } return o; }
+  // shock (Friedlander) plus the gas-volume body, at the oversampled rate
+  function blastSig(Pk, T, bm, tb, tm, rise) {
+    const b0 = bm / (tb * tm), n = Math.floor((rise + (bm > 0 ? Math.max(10 * T, 8 * tm) : 10 * T)) * FSO) + 2, o = new Float64Array(n);
+    for (let i = 0; i < n; i++) { const t = i / FSO - rise; if (t < 0) { o[i] = (Pk + b0) * (1 + t / rise); continue; } let y = Pk * (1 - t / T) * Math.exp(-t / T); if (bm > 0) y += bm * (Math.exp(-t / tb) / tb - Math.exp(-t / tm) / tm) / (tm - tb); o[i] = y; }
+    return o;
+  }
+  // noise whose mean-square value in octave band b follows env[b][i]
+  function bandNoise(env, n, seed) {
+    let NF = 1024; while (NF < 2 * n) NF *= 2;
+    const W = bandWeights(NF), wr = new Float64Array(NF), wi = new Float64Array(NF), re = new Float64Array(NF), im = new Float64Array(NF), out = new Float64Array(n);
+    wr.set(new Rng(seed).g(NF)); fft(wr, wi, false);
+    for (let b = 0; b < 9; b++) {
+      const e = env[b]; let any = false; for (let i = 0; i < n; i++) if (e[i]) { any = true; break; } if (!any) continue;
+      const w = W[b]; let sw = 0; for (let k = 0; k < NF; k++) { re[k] = wr[k] * w[k]; im[k] = wi[k] * w[k]; sw += w[k] * w[k]; }
+      fft(re, im, true); const nb = Math.sqrt(sw / NF); for (let i = 0; i < n; i++) out[i] += re[i] / nb * Math.sqrt(e[i]);
+    }
+    return out;
+  }
   function nwave(dp, T, rise) { const n = Math.floor((T + 2 * rise) * FSO) + 3, o = new Float64Array(n); for (let i = 0; i < n; i++) { const t = i / FSO; o[i] = t < rise ? dp * t / rise : t < rise + T ? dp * (1 - 2 * (t - rise) / T) : t < T + 2 * rise ? -dp * (1 - (t - rise - T) / rise) : 0; } return o; }
   function mechSig(ev, seed) {
     let tmax = 0; for (const m of ev.modes) tmax = Math.max(tmax, m[1]);
@@ -62,30 +83,35 @@ function makeCore(P) {
     if (amp > 0) { const m = Math.min(n, Math.floor(8 * tau * FS) + 1), g = new Rng(seed).g(m); for (let i = 0; i < m; i++) s[i] += amp * g[i] * Math.exp(-(i / FS) / tau); }
     let pk = 0; for (let i = 0; i < n; i++) pk = Math.max(pk, Math.abs(s[i])); const k = P_REF * Math.pow(10, ev.p1m / 20) / pk; for (let i = 0; i < n; i++) s[i] *= k; return s;
   }
-  function jetSig(rms, tau, seed) { const n = Math.floor(8 * tau * FS), x = new Rng(seed).g(n), a = 1 / (1 + 2 * Math.PI * 800 / FS), y = new Float64Array(n); let px = 0, py = 0; for (let i = 0; i < n; i++) { py = a * x[i] - a * px + a * py; px = x[i]; const t = i / FS; y[i] = rms * py * (1 - Math.exp(-t / 1e-4)) * Math.exp(-t / tau); } return y; }
   function addEvents(out, pp, events, ts, field, seed, jt = 1, ja = null) {
     events.forEach(([name, te, pos], i) => {
       const sig = mechSig(P.mech[name], seed + '/' + name), k = ja ? Math.pow(10, ja[i] / 20) : 1; if (k !== 1) for (let q = 0; q < sig.length; q++) sig[q] *= k;
       for (const path of pp.src[pos][field ? 'field' : 'free']) addAt(out, sig, rnd((ts + te * jt + path.t + pp.t0) * FS), path.g, path.fir);
     });
   }
+  function addSlide(out, pp, ts, field, seed, jt = 1) {
+    const sl = P.slide; if (!sl.n) return; const sig = bandNoise(sl.env, sl.n, seed);
+    for (const path of pp.src.recv[field ? 'field' : 'free']) addAt(out, sig, rnd((ts + sl.t * jt + path.t + pp.t0) * FS), path.g, path.fir);
+  }
   function dry(persp = 'shooter', variant = 'single', field = false, parts = ['blast', 'nwave', 'mech']) {
     const pp = P.persp[persp], v = P.variants[variant], key = field ? 'field' : 'free', out = new Float64Array(Math.floor(v.len * FS)), t0 = pp.t0, rise = P.rise;
     v.times.forEach((ts, k) => {
       const j = new Rng('shot' + k).g(16), jP = Math.pow(10, P.shot_sd_db * j[0] / 20), jt = 1 + 0.015 * j[1];
       if (parts.includes('blast')) {
-        for (const e of pp.blast[key]) decimatePlace(out, friedlander(e.P * jP, e.T, rise), ts + e.t + t0, 1, e.fir);
+        const tb = P.body.tau_b, tm = P.body.tau_m;
+        for (const e of pp.blast[key]) decimatePlace(out, blastSig(e.P * jP, e.T, e.bm * jP, tb, tm, rise), ts + e.t + t0, 1, e.fir);
         for (const e of pp.sec[key]) decimatePlace(out, friedlander(e.P * jP, e.T, rise), ts + e.t + t0, 1, e.fir);
-        pp.jet[key].forEach((e, i) => addAt(out, jetSig(e.rms * jP, e.tau, 'jet' + k + '/' + i), rnd((ts + e.t + t0) * FS), 1, e.fir));
+        if (P.jet.n) { const js = bandNoise(P.jet.env, P.jet.n, 'jet' + k); for (const e of pp.jet[key]) addAt(out, js, rnd((ts + e.t + t0) * FS), e.g * jP, e.fir); }
       }
       if (parts.includes('nwave')) for (const e of pp.nwave[key]) decimatePlace(out, nwave(e.dp, e.T, rise), ts + e.t + t0, 1, e.fir);
-      if (parts.includes('mech')) { const ev = P.cycle.slice(); if (v.reset !== null) ev.push(['reset', v.reset, 'recv']); addEvents(out, pp, ev, ts, field, 'shot' + k, jt, ev.map((_, i) => 1.5 * j[2 + i])); }
+      if (parts.includes('mech')) { const ev = P.cycle.slice(); if (v.reset !== null) ev.push(['reset', v.reset, 'recv']); addEvents(out, pp, ev, ts, field, 'shot' + k, jt, ev.map((_, i) => 1.5 * j[2 + i])); addSlide(out, pp, ts, field, 'slide' + k, jt); }
     });
     return out;
   }
   function mech(clip, persp = 'shooter', field = false) {
     const pp = P.persp[persp], ev = P.mech_clips[clip]; let tmax = -1e9, tmin = 0; for (const e of ev) { tmax = Math.max(tmax, e[1]); tmin = Math.min(tmin, e[1]); }
-    const out = new Float64Array(Math.floor((tmax + 0.5) * FS)); addEvents(out, pp, ev, 0.0 - pp.t0 + 0.005 - tmin, field, 'clip/' + clip); return out;
+    const out = new Float64Array(Math.floor((tmax + 0.5) * FS)), ts = 0.0 - pp.t0 + 0.005 - tmin; addEvents(out, pp, ev, ts, field, 'clip/' + clip);
+    if (P.slide_clips.includes(clip)) addSlide(out, pp, ts, field, 'clip/slide/' + clip); return out;
   }
   function steel(key, dist = null, seed = 0) {
     const st = P.steel[key], d = dist === null ? st.dist : dist, n = Math.floor(1.6 * FS), s = new Float64Array(n), rg = new Rng('steelhit/' + key + '/' + seed), w = rg.u(st.modes.length);
@@ -95,8 +121,11 @@ function makeCore(P) {
   }
   // ---- impulse responses
   const mk9 = (N) => Array.from({ length: 9 }, () => new Float64Array(N));
+  // band directivity of the muzzle source (9 octave bands) at cos(angle from the bore), linear on the table's cos grid
+  const DB = P.dirband.D, NDB = P.dirband.cos.length, dbv = new Float64Array(9);
+  function dirband(c, o = dbv) { const x = Math.max(0, Math.min(NDB - 1 - 1e-9, (c + 1) * 0.5 * (NDB - 1))), i = Math.floor(x), f = x - i; for (let b = 0; b < 9; b++) o[b] = DB[b][i] * (1 - f) + DB[b][i + 1] * f; return o; }
   function elShoebox(el, rc, taps, burst) {
-    const L = el.L, rmax = C * el.tmax + rc.rd, s = el.scat, air = P.air_band, gd = rc.Dd / rc.rd, N = taps[0].length, per = [];
+    const L = el.L, rmax = C * el.tmax + rc.rd, s = el.scat, air = P.air_band, dd = dirband(rc.cosd, new Float64Array(9)), N = taps[0].length, per = [];
     for (let a = 0; a < 3; a++) {
       const mm = el.mmax ? el.mmax[a] : Math.ceil(rmax / (2 * L[a])) + 1, d = [], fl = [], cnt = [], gain = [];
       const b0 = el.alpha[2 * a].map((x) => Math.sqrt(1 - x)), b1 = el.alpha[2 * a + 1].map((x) => Math.sqrt(1 - x));
@@ -109,29 +138,31 @@ function makeCore(P) {
       for (let k = 0; k < Z.d.length; k++) {
         const r = Math.sqrt(dxy + Z.d[k] * Z.d[k]), order = X.cnt[i] + Y.cnt[j] + Z.cnt[k]; if (!(r < rmax) || order === 0) continue;
         const idx = Math.floor((r - rc.rd) / C * FS + 0.5); if (idx < 0 || idx >= N) continue;
-        const cos = (X.d[i] * X.fl[i] * ax[0] + Y.d[j] * Y.fl[j] * ax[1] + Z.d[k] * Z.fl[k] * ax[2]) / Math.max(r, 1e-9), g0 = dirfac(cos) / Math.max(r, 1e-9) / gd, sp = Math.pow(1 - s, order / 2), df = 1 - Math.pow(1 - s, order);
-        for (let b = 0; b < 9; b++) { const gb = g0 * X.gain[i][b] * Y.gain[j][b] * Z.gain[k][b] * Math.pow(10, -air[b] * r / 20); if (gb === 0) continue; taps[b][idx] += gb * sp; if (el.bursts) burst[b][idx] += gb * gb * df; }
+        const cos = (X.d[i] * X.fl[i] * ax[0] + Y.d[j] * Y.fl[j] * ax[1] + Z.d[k] * Z.fl[k] * ax[2]) / Math.max(r, 1e-9), g0 = rc.rd / Math.max(r, 1e-9), sp = Math.pow(1 - s, order / 2), df = 1 - Math.pow(1 - s, order), dv = dirband(cos);
+        for (let b = 0; b < 9; b++) { const gb = g0 * dv[b] / dd[b] * X.gain[i][b] * Y.gain[j][b] * Z.gain[k][b] * Math.pow(10, -air[b] * r / 20); if (gb === 0) continue; taps[b][idx] += gb * sp; if (el.bursts) burst[b][idx] += gb * gb * df; }
       }
     }
   }
   const sub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]], dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2], norm = (a) => Math.sqrt(dot(a, a));
   function elPatches(el, rc, taps) {
-    const rg = new Rng(el.seed), { o, eu, ev, nu, nv } = el, N = taps[0].length; let nrm = [eu[1] * ev[2] - eu[2] * ev[1], eu[2] * ev[0] - eu[0] * ev[2], eu[0] * ev[1] - eu[1] * ev[0]]; const nl = norm(nrm), dA = nl / (nu * nv); nrm = nrm.map((v) => v / nl);
+    const rg = new Rng(el.seed), { o, eu, ev, nu, nv } = el, N = taps[0].length, dd = dirband(rc.cosd, new Float64Array(9)), kr = el.rough ? P.bands.map((f) => 4 * (2 * Math.PI * f / C * el.rough) ** 2) : null; let nrm = [eu[1] * ev[2] - eu[2] * ev[1], eu[2] * ev[0] - eu[0] * ev[2], eu[0] * ev[1] - eu[1] * ev[0]]; const nl = norm(nrm), dA = nl / (nu * nv); nrm = nrm.map((v) => v / nl);
     for (let i = 0; i < nu; i++) for (let j = 0; j < nv; j++) {
       const u0 = rg.next(), u1 = rg.next(), u2 = rg.next(), a = (i + u0) / nu, b = (j + u1) / nv, p = [o[0] + a * eu[0] + b * ev[0], o[1] + a * eu[1] + b * ev[1], o[2] + a * eu[2] + b * ev[2]], sign = u2 < 0.5 ? -1 : 1;
       const d1 = sub(p, rc.src), r1 = norm(d1), d2 = sub(rc.lis, p), r2 = norm(d2), ci = Math.abs(dot(d1, nrm)) / r1, cs = Math.abs(dot(d2, nrm)) / r2;
-      const g = dirfac(dot(d1, rc.axis) / r1) / r1 * Math.sqrt(ci * cs * dA / Math.PI) / r2 / (rc.Dd / rc.rd) * sign, idx = Math.floor((r1 + r2 - rc.rd) / C * FS + 0.5); if (idx < 0 || idx >= N) continue;
-      for (let q = 0; q < 9; q++) taps[q][idx] += g * Math.sqrt(1 - el.alpha[q]) * Math.pow(10, -P.air_band[q] * (r1 + r2) / 20);
+      const g = rc.rd / r1 * Math.sqrt(ci * cs * dA / Math.PI) / r2 * sign, idx = Math.floor((r1 + r2 - rc.rd) / C * FS + 0.5); if (idx < 0 || idx >= N) continue;
+      const dv = dirband(dot(d1, rc.axis) / r1);
+      for (let q = 0; q < 9; q++) taps[q][idx] += (kr ? g * Math.sqrt(1 - Math.exp(-kr[q] * ci * cs)) : g) * dv[q] / dd[q] * Math.sqrt(1 - el.alpha[q]) * Math.pow(10, -P.air_band[q] * (r1 + r2) / 20);
     }
   }
   function elTrees(el, rc, taps) {
-    const rg = new Rng(el.seed), n = Math.floor(el.density * (el.x1 - el.x0) * (el.z1 - el.z0)), N = taps[0].length;
+    const rg = new Rng(el.seed), n = Math.floor(el.density * (el.x1 - el.x0) * (el.z1 - el.z0)), N = taps[0].length, dd = dirband(rc.cosd, new Float64Array(9));
     for (let t = 0; t < n; t++) {
       const u0 = rg.next(), u1 = rg.next(), u2 = rg.next(), x = el.x0 + u0 * (el.x1 - el.x0), z = el.z0 + u1 * (el.z1 - el.z0), sign = u2 < 0.5 ? -1 : 1, p = [x, 1.6, z];
       const d1 = sub(p, rc.src), r1 = norm(d1), d2 = sub(rc.lis, p), r2 = norm(d2), dz = Math.max(0, z - el.z0);
       const inside = dz * (r1 / Math.max(1e-6, Math.abs(d1[2]))) + (rc.lis[2] < el.z0 ? dz * (r2 / Math.max(1e-6, Math.abs(d2[2]))) : Math.min(r2, 60));
-      const g = dirfac(dot(d1, rc.axis) / r1) / r1 / r2 / (rc.Dd / rc.rd) * sign, idx = Math.floor((r1 + r2 - rc.rd) / C * FS + 0.5); if (idx < 0 || idx >= N) continue;
-      for (let b = 0; b < 9; b++) { const ka = 2 * Math.PI * P.bands[b] / C * el.radius, sig = 2 * el.radius * el.heff * Math.min(1, ka * ka); taps[b][idx] += g * Math.sqrt(sig / (4 * Math.PI)) * Math.pow(10, -(P.air_band[b] * (r1 + r2) + el.foliage[b] * inside) / 20); }
+      const g = rc.rd / r1 / r2 * sign, idx = Math.floor((r1 + r2 - rc.rd) / C * FS + 0.5); if (idx < 0 || idx >= N) continue;
+      const dv = dirband(dot(d1, rc.axis) / r1);
+      for (let b = 0; b < 9; b++) { const ka = 2 * Math.PI * P.bands[b] / C * el.radius, sig = 2 * el.radius * el.heff * Math.min(1, ka * ka); taps[b][idx] += g * dv[b] / dd[b] * Math.sqrt(sig / (4 * Math.PI)) * Math.pow(10, -(P.air_band[b] * (r1 + r2) + el.foliage[b] * inside) / 20); }
     }
   }
   function bandWeights(NF) { const W = mk9(NF); for (let k = 0; k < NF; k++) { const f = Math.min(k, NF - k) * FS / NF, u = Math.log2(Math.max(f, 1e-3) / 63); for (let b = 0; b < 9; b++) { const x = Math.max(-1, Math.min(1, u - b)); let w = Math.cos(Math.PI / 2 * x) ** 2; if (b === 0 && u < 0) w = 1; if (b === 8 && u > 8) w = 1; W[b][k] = w; } } return W; }
@@ -143,7 +174,7 @@ function makeCore(P) {
         if (el.bursts) burst = mk9(N); elShoebox(el, rc, taps, burst);
         if (el.bursts) { vr = vr || mk9(N); const a = Math.exp(-1 / (el.bursts * FS)); for (let b = 0; b < 9; b++) { let y = 0; for (let i = 0; i < N; i++) { y = (1 - a) * burst[b][i] + a * y; vr[b][i] += y; } } }
       } else if (el.type === 'stat') {
-        vr = vr || mk9(N); for (let i = 0; i < N; i++) { const t = i / FS, te = t + el.te0, w = t >= el.tmix ? 1 : 1 - Math.pow(1 - el.scat, el.nrate * te); if (w === 0) continue; for (let b = 0; b < 9; b++) vr[b][i] += el.var0 * Math.exp(-13.8155 * te / el.T60[b]) * w; }
+        vr = vr || mk9(N); for (let i = 0; i < N; i++) { const t = i / FS, te = t + el.te0, w = t >= el.tmix ? 1 : 1 - Math.pow(1 - el.scat, el.nrate * te); if (w === 0) continue; for (let b = 0; b < 9; b++) vr[b][i] += el.var0[b] * Math.exp(-13.8155 * te / el.T60[b]) * w; }
       } else if (el.type === 'taps') { for (const [delay, g] of el.taps) { const i = rnd(delay * FS); for (let b = 0; b < 9; b++) taps[b][i] += g[b]; } }
       else if (el.type === 'fir') firEls.push(el);
       else if (el.type === 'patches') elPatches(el, rc, taps);
@@ -175,22 +206,28 @@ async function build(ctx, opts = {}) {
   const steelKey = (r) => Object.keys(P.steel).reduce((a, b) => Math.abs(P.steel[a].radius - r) <= Math.abs(P.steel[b].radius - r) ? a : b);
   const S = {
     params: P, raw: core, overlays: Object.fromEntries(Object.entries(P.overlays).map(([k, v]) => [k, { title: v.title, perspectives: Object.keys(v.persp) }])),
-    variants: Object.keys(P.variants), perspectives: ['shooter', 'bystander', 'downrange'], mechClips: Object.keys(P.mech_clips), steelKeys: Object.keys(P.steel),
+    defaultOverlay: P.default_overlay || null, variants: Object.keys(P.variants), perspectives: Object.keys(P.persp).filter((k) => k !== 'ongun' && k !== 'side1m'), mechClips: Object.keys(P.mech_clips), steelKeys: Object.keys(P.steel),
     info: (buf) => meta.get(buf),
+    // ear stage: the level (as a fraction of a buffer's full scale) at which the middle ear stops passing peaks, for a buffer whose -1 dBFS peak is peakDb
+    earLimit: (peakDb) => Math.min(1, Math.pow(10, (P.ear.limit_db - peakDb - 1) / 20)),
     shot: (variant = 'single', { perspective = 'shooter', ground = false } = {}) => memo(`shot/${variant}/${perspective}/${ground}`, () => toBuffer(core.dry(perspective, variant, ground), true)),
     mech: (clip = 'cycle', { perspective = 'shooter' } = {}) => memo(`mech/${clip}/${perspective}`, () => toBuffer(core.mech(clip, perspective), true)),
     steel: (radius = 0.2, { dist = null, seed = 0 } = {}) => { const k = steelKey(radius); return memo(`steel/${k}/${dist}/${seed}`, () => toBuffer(core.steel(k, dist, seed), true)); },
     // the IR is built on first use (0.1 to 2 s of CPU depending on its length), then cached
     ir: (overlay, perspective = 'shooter') => memo(`ir/${overlay}/${perspective}`, () => new Promise((res) => setTimeout(() => res(toBuffer(core.ir(overlay, perspective), false)), 0))),
     hpd: () => memo('hpd', () => toBuffer(core.hpd(), false)),
-    // input -> [room convolver] -> [earmuff FIR] -> [ear compressor] -> output. Connect output yourself.
+    // input -> [room convolver] -> [earmuff FIR] -> [ear: peak limit + make-up] -> output. Connect output yourself.
     async chain(o = {}, actx = ctx) { // actx: pass an OfflineAudioContext to render the chain
       const ctx = actx, input = ctx.createGain(), output = ctx.createGain(); let nodes = [];
       const c = { input, output, opts: {}, async set(n) {
-        Object.assign(c.opts, n); const { overlay = null, perspective = 'shooter', hpd = false, ear = true } = c.opts; const next = [];
+        Object.assign(c.opts, n); const { overlay = S.defaultOverlay, perspective = 'shooter', hpd = false, ear = true, peakDb = null } = c.opts, next = []; // overlay: omit it for the default surroundings; null or 'dry' for none
         if (overlay && overlay !== 'dry') { const cv = ctx.createConvolver(); cv.normalize = false; cv.buffer = await S.ir(overlay, perspective); next.push(cv); }
-        if (hpd) { const cv = ctx.createConvolver(); cv.normalize = false; cv.buffer = S.hpd(); const g = ctx.createGain(); g.gain.value = 4; next.push(cv, g); } // +12 dB make-up so the muffled shot is still audible
-        if (ear) { const k = ctx.createDynamicsCompressor(); k.threshold.value = -42; k.knee.value = 8; k.ratio.value = 14; k.attack.value = 0.001; k.release.value = 0.22; const g = ctx.createGain(); g.gain.value = 0.9; next.push(k, g); }
+        if (hpd) { const cv = ctx.createConvolver(); cv.normalize = false; cv.buffer = S.hpd(); next.push(cv); if (!ear) { const g = ctx.createGain(); g.gain.value = 4; next.push(g); } } // without the ear stage: +12 dB make-up so the muffled shot is still audible
+        if (ear) { // the ear's own peak limit (see README "The ear stage"): memoryless, so it acts on the 0.2 ms shock that a compressor lets through
+          const L = S.earLimit(peakDb === null ? S.info(S.shot('single', { perspective })).peak_db_spl : peakDb), N = 16385, curve = new Float32Array(N);
+          for (let i = 0; i < N; i++) { const x = 2 * i / (N - 1) - 1; curve[i] = L * Math.tanh(x / L); }
+          const ws = ctx.createWaveShaper(); ws.curve = curve; ws.oversample = '4x'; const g = ctx.createGain(); g.gain.value = (hpd ? 4 : 1) * 0.85 / L; if (L < 1) next.push(ws); next.push(g); // earmuffs: +12 dB make-up so the muffled shot is still audible
+        }
         input.disconnect(); nodes.forEach((x) => x.disconnect()); nodes = next; let prev = input; for (const x of nodes) { prev.connect(x); prev = x; } prev.connect(output); return c;
       } };
       return c.set(o);
