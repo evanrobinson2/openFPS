@@ -12,6 +12,7 @@ audio files; every asset ships `USAGE.md`, a sample page and `provenance.json`; 
 | Asset | What | Sample |
 |---|---|---|
 | [HK416 D14.5RS](assets/hk416/USAGE.md) | 5.56 mm rifle: action and recoil, ballistics (M855, Mk 262, M856), synthesised sound with ten surroundings and earmuffs. Parametric geometry recipe: 301 named parts, 13 clips, 7 sockets. | [`assets/hk416/sample/`](assets/hk416/sample/index.html) |
+| [Hand grenades](assets/grenades/USAGE.md) | Frag, impact (game-only), flashbang, coloured smoke and white smoke: throw and bounce, fuse windows and cook-off, game-level effects from published radii and figures, synthesised sound. Exterior only, parametric geometry recipe. | [`assets/grenades/sample/`](assets/grenades/sample/index.html) |
 
 ## Try it
 

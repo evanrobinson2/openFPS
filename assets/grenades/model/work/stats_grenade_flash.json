@@ -1,0 +1,134 @@
+{
+ "variant": "flash",
+ "lod": 0,
+ "parts": 12,
+ "triangles": 13770,
+ "by_part": {
+  "hex_base": 308,
+  "hex_top": 212,
+  "tube": 8996,
+  "core_placeholder": 76,
+  "label_panel_1": 2,
+  "label_panel_2": 2,
+  "fuze_body": 490,
+  "hinge_lug": 296,
+  "lever": 1660,
+  "lever_tip_band": 52,
+  "safety_pin": 268,
+  "pull_ring": 1408
+ },
+ "bbox_mm": {
+  "x": [
+   -19.03,
+   32.48
+  ],
+  "y_front_back": [
+   -22.73,
+   21.82
+  ],
+  "z_up": [
+   -53.78,
+   79.58
+  ]
+ },
+ "overall_length_mm": 133.35,
+ "info": {
+  "length": 133.35,
+  "width": 43.942,
+  "base_z": -53.775,
+  "top_z": 79.575,
+  "holes": 18
+ },
+ "hierarchy": {
+  "grenade_flash": null,
+  "body_group": "grenade_flash",
+  "fuze": "grenade_flash",
+  "hex_base": "body_group",
+  "hex_top": "body_group",
+  "tube": "body_group",
+  "core_placeholder": "body_group",
+  "label_panel_1": "hex_top",
+  "label_panel_2": "hex_top",
+  "fuze_body": "fuze",
+  "hinge_lug": "fuze",
+  "lever": "fuze",
+  "lever_tip_band": "lever",
+  "socket_lever_hinge": "fuze",
+  "socket_thumb": "lever",
+  "safety_pin": "fuze",
+  "pull_ring": "safety_pin",
+  "socket_pin_ring": "pull_ring",
+  "socket_grip": "body_group",
+  "socket_effect": "body_group"
+ },
+ "sockets_mm_model_frame": {
+  "socket_lever_hinge": [
+   -12.0,
+   0,
+   73.375
+  ],
+  "socket_thumb": [
+   33.0,
+   0,
+   19.075
+  ],
+  "socket_pin_ring": [
+   11.994,
+   -18.327,
+   53.237
+  ],
+  "socket_grip": [
+   0,
+   0,
+   0
+  ],
+  "socket_effect": [
+   0,
+   0,
+   0
+  ]
+ },
+ "sockets_m_export_frame": {
+  "socket_lever_hinge": [
+   -0.012,
+   0.07337,
+   0.0
+  ],
+  "socket_thumb": [
+   0.033,
+   0.01907,
+   0.0
+  ],
+  "socket_pin_ring": [
+   0.01199,
+   0.05324,
+   0.01833
+  ],
+  "socket_grip": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "socket_effect": [
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ "clips": {
+  "lever_squeeze": [
+   "lever"
+  ],
+  "pin_pull": [
+   "pull_ring",
+   "safety_pin"
+  ],
+  "lever_release": [
+   "lever"
+  ]
+ },
+ "options": {
+  "m18_livery": "table",
+  "flash_holes": 18
+ }
+}

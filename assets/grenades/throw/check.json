@@ -1,0 +1,340 @@
+{
+ "_doc": "Written by node throw/test.js",
+ "python_checks": [
+  {
+   "check": "frag: 20000 sampled delays inside the published window [4.0, 5.5] s",
+   "value": [
+    4.011645925056655,
+    5.488905148231424
+   ],
+   "passed": true
+  },
+  {
+   "check": "frag: first landing equals the published throwing distance 35 m (release speed calibrated to it)",
+   "value": 35,
+   "passed": true
+  },
+  {
+   "check": "frag: calibrated release speed is a human throw (14 to 24 m/s; plausibility band, EST)",
+   "value": 18.69542127663047,
+   "passed": true
+  },
+  {
+   "check": "impact: first landing equals the game-only throwing distance 35 m (release speed calibrated to it)",
+   "value": 35,
+   "passed": true
+  },
+  {
+   "check": "impact: calibrated release speed is a human throw (14 to 24 m/s; plausibility band, EST)",
+   "value": 18.69542127663047,
+   "passed": true
+  },
+  {
+   "check": "flash: 20000 sampled delays inside the published window [1.0, 2.3] s",
+   "value": [
+    1.010093135049101,
+    2.2903844618005675
+   ],
+   "passed": true
+  },
+  {
+   "check": "flash: first landing equals the inferred (Table A-5 publishes none) throwing distance 35 m (release speed calibrated to it)",
+   "value": 35.00000000000001,
+   "passed": true
+  },
+  {
+   "check": "flash: calibrated release speed is a human throw (14 to 24 m/s; plausibility band, EST)",
+   "value": 19.510936849211113,
+   "passed": true
+  },
+  {
+   "check": "smoke: 20000 sampled delays inside the published window [0.7, 2.0] s",
+   "value": [
+    0.7100931350491009,
+    1.9903844618005677
+   ],
+   "passed": true
+  },
+  {
+   "check": "smoke: 20000 sampled burn times inside the published window [50, 90] s",
+   "value": [
+    50.00000000009873,
+    89.99937286928218
+   ],
+   "passed": true
+  },
+  {
+   "check": "smoke: mean sampled burn time equals the published average 60 s within 0.5 s",
+   "value": 59.97871703511261,
+   "passed": true
+  },
+  {
+   "check": "smoke: first landing equals the published throwing distance 35 m (release speed calibrated to it)",
+   "value": 35,
+   "passed": true
+  },
+  {
+   "check": "smoke: calibrated release speed is a human throw (14 to 24 m/s; plausibility band, EST)",
+   "value": 20.239221070239445,
+   "passed": true
+  },
+  {
+   "check": "smoke-white: 20000 sampled delays inside the published window [0.7, 2.0] s",
+   "value": [
+    0.7100931350491009,
+    1.9903844618005677
+   ],
+   "passed": true
+  },
+  {
+   "check": "smoke-white: 20000 sampled burn times inside the published window [105, 150] s",
+   "value": [
+    105.06651583418716,
+    149.85320922802202
+   ],
+   "passed": true
+  },
+  {
+   "check": "smoke-white: first landing equals the published throwing distance 30 m (release speed calibrated to it)",
+   "value": 30.000000000000007,
+   "passed": true
+  },
+  {
+   "check": "smoke-white: calibrated release speed is a human throw (14 to 24 m/s; plausibility band, EST)",
+   "value": 17.97612836577678,
+   "passed": true
+  },
+  {
+   "check": "smoke-white: distance predicted from the coloured can at equal release energy is within 1 m of the published 30 m",
+   "value": 30.087297933475693,
+   "passed": true
+  }
+ ],
+ "js_checks": [
+  {
+   "check": "frag: JS first landing vs the published 35 m (limit 0.05 m)",
+   "value": 35,
+   "passed": true
+  },
+  {
+   "check": "frag: JS path vs Python reference, worst difference over 38 samples (limit 1e-5 m)",
+   "value": 5.504546536663095e-7,
+   "passed": true
+  },
+  {
+   "check": "frag: JS rest point vs Python on packed dirt (limit 1e-6 m)",
+   "value": 38.2417,
+   "passed": true
+  },
+  {
+   "check": "frag: rest point on concrete vs Python",
+   "value": 40.646,
+   "passed": true
+  },
+  {
+   "check": "frag: rest point on grass vs Python",
+   "value": 37.603,
+   "passed": true
+  },
+  {
+   "check": "frag: 20000 JS delays inside [4,5.5] s and equal to Python's stream",
+   "value": [
+    4.011645925056655,
+    5.488905148231424
+   ],
+   "passed": true
+  },
+  {
+   "check": "impact: JS first landing vs the game-only 35 m (limit 0.05 m)",
+   "value": 35,
+   "passed": true
+  },
+  {
+   "check": "impact: JS path vs Python reference, worst difference over 38 samples (limit 1e-5 m)",
+   "value": 5.504546536663095e-7,
+   "passed": true
+  },
+  {
+   "check": "impact: JS rest point vs Python on packed dirt (limit 1e-6 m)",
+   "value": 38.2417,
+   "passed": true
+  },
+  {
+   "check": "impact: rest point on concrete vs Python",
+   "value": 40.646,
+   "passed": true
+  },
+  {
+   "check": "impact: rest point on grass vs Python",
+   "value": 37.603,
+   "passed": true
+  },
+  {
+   "check": "flash: JS first landing vs the inferred 35 m (limit 0.05 m)",
+   "value": 35,
+   "passed": true
+  },
+  {
+   "check": "flash: JS path vs Python reference, worst difference over 37 samples (limit 1e-5 m)",
+   "value": 6.967640579842287e-7,
+   "passed": true
+  },
+  {
+   "check": "flash: JS rest point vs Python on packed dirt (limit 1e-6 m)",
+   "value": 37.2178,
+   "passed": true
+  },
+  {
+   "check": "flash: rest point on concrete vs Python",
+   "value": 39.3,
+   "passed": true
+  },
+  {
+   "check": "flash: rest point on grass vs Python",
+   "value": 36.553,
+   "passed": true
+  },
+  {
+   "check": "flash: 20000 JS delays inside [1,2.3] s and equal to Python's stream",
+   "value": [
+    1.010093135049101,
+    2.2903844618005675
+   ],
+   "passed": true
+  },
+  {
+   "check": "smoke: JS first landing vs the published 35 m (limit 0.05 m)",
+   "value": 35,
+   "passed": true
+  },
+  {
+   "check": "smoke: JS path vs Python reference, worst difference over 37 samples (limit 1e-5 m)",
+   "value": 5.800430410281277e-7,
+   "passed": true
+  },
+  {
+   "check": "smoke: JS rest point vs Python on packed dirt (limit 1e-6 m)",
+   "value": 36.6355,
+   "passed": true
+  },
+  {
+   "check": "smoke: rest point on concrete vs Python",
+   "value": 38.329,
+   "passed": true
+  },
+  {
+   "check": "smoke: rest point on grass vs Python",
+   "value": 36.082,
+   "passed": true
+  },
+  {
+   "check": "smoke: 20000 JS delays inside [0.7,2] s and equal to Python's stream",
+   "value": [
+    0.7100931350491009,
+    1.9903844618005677
+   ],
+   "passed": true
+  },
+  {
+   "check": "smoke: 20000 JS burn times inside [50,90] s, mean 60",
+   "value": [
+    50.00000000009873,
+    89.99937286928218,
+    59.97871703511261
+   ],
+   "passed": true
+  },
+  {
+   "check": "smoke-white: JS first landing vs the published 30 m (limit 0.05 m)",
+   "value": 30,
+   "passed": true
+  },
+  {
+   "check": "smoke-white: JS path vs Python reference, worst difference over 34 samples (limit 1e-5 m)",
+   "value": 6.909004493380304e-7,
+   "passed": true
+  },
+  {
+   "check": "smoke-white: JS rest point vs Python on packed dirt (limit 1e-6 m)",
+   "value": 31.8109,
+   "passed": true
+  },
+  {
+   "check": "smoke-white: rest point on concrete vs Python",
+   "value": 33.56,
+   "passed": true
+  },
+  {
+   "check": "smoke-white: rest point on grass vs Python",
+   "value": 31.254,
+   "passed": true
+  },
+  {
+   "check": "smoke-white: 20000 JS delays inside [0.7,2] s and equal to Python's stream",
+   "value": [
+    0.7100931350491009,
+    1.9903844618005677
+   ],
+   "passed": true
+  },
+  {
+   "check": "smoke-white: 20000 JS burn times inside [105,150] s, mean not published",
+   "value": [
+    105.06651583418716,
+    149.85320922802202,
+    127.46118470958027
+   ],
+   "passed": true
+  },
+  {
+   "check": "frag thrown at once: functions after its sampled delay, in the published 4 to 5.5 s window",
+   "value": 4.058,
+   "passed": true
+  },
+  {
+   "check": "frag cooked for 2 s: functions the same delay after the lever, so 2 s sooner after the throw",
+   "value": 2.058,
+   "passed": true
+  },
+  {
+   "check": "frag cooked too long: functions in the hand",
+   "value": true,
+   "passed": true
+  },
+  {
+   "check": "pin not pulled: nothing functions",
+   "value": 0,
+   "passed": true
+  },
+  {
+   "check": "impact (game-only): functions on its first contact, at the landing point",
+   "value": [
+    "contact",
+    35
+   ],
+   "passed": true
+  },
+  {
+   "check": "impact (game-only): a wall 1.5 m away is hit before the 0.35 s arming time, so it bounces off and functions on a later contact",
+   "value": [
+    1,
+    "contact"
+   ],
+   "passed": true
+  },
+  {
+   "check": "smoke: ignites in 0.7 to 2.0 s, burns 50 to 90 s",
+   "value": [
+    1.65,
+    50.4
+   ],
+   "passed": true
+  },
+  {
+   "check": "frag on concrete: impact speed falls at every bounce",
+   "value": 6,
+   "passed": true
+  }
+ ],
+ "all_passed": true
+}

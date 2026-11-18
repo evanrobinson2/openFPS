@@ -1,0 +1,13 @@
+{
+  "asset": "grenades",
+  "credit": "carpetshark",
+  "modelled_by": [
+    { "part": "model (model/build.py): frag, impact, flash, smoke red/yellow/green/violet, smoke-white", "model": "Claude Fable 5.2", "date": "2026-11-17" },
+    { "part": "throw, bounce, fuse and cook-off simulation (throw/)", "model": "Claude Fable 5.2", "date": "2026-11-17" },
+    { "part": "effects simulation: frag damage, flash, smoke (effects/)", "model": "Claude Fable 5.2", "date": "2026-11-17" },
+    { "part": "sound simulation (sound/)", "model": "Claude Fable 5.2", "date": "2026-11-17" }
+  ],
+  "references": "US Army FM 3-23.30, Grenades and Pyrotechnic Signals, 15 Oct 2009: Figs. A-2, A-12, B-3, B-5 and Tables A-1, A-5, B-2, B-3 (can size only), B-4. Cited in notes/REFERENCES.md; not in this repository.",
+  "content_boundary": "Exterior shape, published weight, delay, throwing distance and effect figures, game-level effects and synthesised sound only. The tables' filler and fuze rows are not used. Every interior is a solid placeholder.",
+  "status": "Parametric geometry recipe (Blender Python) with matched comparison renders; throw, effects and sound simulations with checks. 'impact' is a game-only variant. Not yet reviewed by the owner; sound not yet checked by listening."
+}

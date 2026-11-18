@@ -1,0 +1,103 @@
+{
+ "_doc": "JS synthesiser (grenades-sound.js) against the Python renderer (sim.py), every sample. Limit: -120 dB re the peak.",
+ "worst_db": -312.2,
+ "passed": true,
+ "sounds": {
+  "pin_pull": {
+   "samples": 21600,
+   "python_samples": 21600,
+   "peak_pa": 0.052281080184804464,
+   "max_error_db_re_peak": -317.5
+  },
+  "lever_release_frag": {
+   "samples": 24000,
+   "python_samples": 24000,
+   "peak_pa": 0.13295454431714657,
+   "max_error_db_re_peak": -313.6
+  },
+  "lever_land_frag": {
+   "samples": 14400,
+   "python_samples": 14400,
+   "peak_pa": 0.0319943505177115,
+   "max_error_db_re_peak": -313.3
+  },
+  "lever_release_flash": {
+   "samples": 24000,
+   "python_samples": 24000,
+   "peak_pa": 0.11151595665536532,
+   "max_error_db_re_peak": -318.1
+  },
+  "lever_land_flash": {
+   "samples": 14400,
+   "python_samples": 14400,
+   "peak_pa": 0.028146744117793714,
+   "max_error_db_re_peak": -312.2
+  },
+  "lever_release_smoke": {
+   "samples": 24000,
+   "python_samples": 24000,
+   "peak_pa": 0.11633189138140558,
+   "max_error_db_re_peak": -312.4
+  },
+  "lever_land_smoke": {
+   "samples": 14400,
+   "python_samples": 14400,
+   "peak_pa": 0.02896293032825953,
+   "max_error_db_re_peak": -312.4
+  },
+  "detonation_frag": {
+   "samples": 76800,
+   "python_samples": 76800,
+   "peak_pa": 11246.826503806982,
+   "max_error_db_re_peak": -321.8
+  },
+  "detonation_flash": {
+   "samples": 33600,
+   "python_samples": 33600,
+   "peak_pa": 11246.826503806982,
+   "max_error_db_re_peak": -321.8
+  },
+  "smoke_ignite": {
+   "samples": 24000,
+   "python_samples": 24000,
+   "peak_pa": 15.886564694485644,
+   "max_error_db_re_peak": -331.1
+  },
+  "smoke_hiss_loop": {
+   "samples": 96000,
+   "python_samples": 96000,
+   "peak_pa": 0.18973327482789548,
+   "max_error_db_re_peak": -5985.6
+  },
+  "bounce:frag|concrete|5.0": {
+   "samples": 12000,
+   "python_samples": 12000,
+   "peak_pa": 0.3418657942001805,
+   "max_error_db_re_peak": -315.8
+  },
+  "bounce:frag|packed_dirt|8.0": {
+   "samples": 12000,
+   "python_samples": 12000,
+   "peak_pa": 0.06804527407195861,
+   "max_error_db_re_peak": -313.8
+  },
+  "bounce:smoke|concrete|6.0": {
+   "samples": 12000,
+   "python_samples": 12000,
+   "peak_pa": 1.11493200729251,
+   "max_error_db_re_peak": -320.0
+  },
+  "bounce:flash|wood_floor|4.0": {
+   "samples": 12000,
+   "python_samples": 12000,
+   "peak_pa": 0.2420240044487417,
+   "max_error_db_re_peak": -318.8
+  },
+  "bounce:smoke-white|grass|9.0": {
+   "samples": 12000,
+   "python_samples": 12000,
+   "peak_pa": 0.05929533535578036,
+   "max_error_db_re_peak": -312.6
+  }
+ }
+}
