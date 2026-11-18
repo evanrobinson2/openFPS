@@ -7,7 +7,7 @@ Rest pose is stowed; the clip 'lift_lower' takes it down."""
 import math
 import numpy as np
 import spec, kit
-from kit import MB, finish, empty, key, smooth_keys
+from kit import MB, finish, empty, key, smooth_keys, set_rest
 
 Lf = spec.LIFT
 S0, S1, HW = Lf['s0'], Lf['s1'], Lf['half_w']
@@ -89,6 +89,42 @@ def chassis(H):
     mb.obox((s_b - 0.32, y_in - 0.24, ZD + 1.09), (0.11, 0, 0), (0, 0.13, 0.0), (0, -0.01, 0.04), 'machinery_dark')
     mb.cyl((s_b - 0.36, y_in - 0.24, ZD + 1.12), (s_b - 0.36, y_in - 0.24, ZD + 1.17), 0.03, 'armour_paint_red', n=10)
     mb.cyl((s_b - 0.27, y_in - 0.24, ZD + 1.12), (s_b - 0.27, y_in - 0.24, ZD + 1.15), 0.022, 'hazard_yellow', n=10)
+    # pedestal: key switch, deck-level lamps, a status display on its inboard face, conduit down to the deck
+    mb.cyl((s_b - 0.32, y_in - 0.31, ZD + 1.10), (s_b - 0.32, y_in - 0.31, ZD + 1.125), 0.014, 'machinery_bare', n=8)
+    for q, mm in enumerate(('screen_glow', 'hazard_yellow', 'light_red')):
+        mb.cyl((s_b - 0.37 + 0.05 * q, y_in - 0.17, ZD + 1.135), (s_b - 0.37 + 0.05 * q, y_in - 0.17, ZD + 1.15), 0.012, mm, n=8)
+    mb.box(s_b - 0.40, s_b - 0.24, y_in - 0.364, y_in - 0.36, ZD + 0.78, ZD + 0.98, 'screen_glow')
+    mb.box(s_b - 0.41, s_b - 0.23, y_in - 0.362, y_in - 0.36, ZD + 0.55, ZD + 0.72, 'placard_white')
+    for (dx, dz) in ((-0.40, 0.06), (-0.24, 0.06), (-0.40, 1.0), (-0.24, 1.0)):
+        bolts.bolt((s_b + dx, y_in - 0.36, ZD + dz), (0, -1, 0), r=0.008, h=0.005, washer=False)
+    # toe boards down both sides and across the aft end posts
+    for sy in (-1, 1):
+        y = sy * (y_in - 0.04)
+        mb.box(s_a + 0.08, s_b - 0.08, y - 0.006, y + 0.006, ZD, ZD + 0.11, 'structure_steel')
+        # guide shoes on the top frame that run on the rails fixed in the hold
+        for s in (S0 + 0.55, S1 - 0.55):
+            mb.box(s - 0.07, s + 0.07, sy * y_in, sy * (HW + 0.015), TOP + 0.005, TOP + 0.065, st)
+            mb.cyl((s - 0.04, sy * (HW + 0.005), TOP + 0.035), (s + 0.04, sy * (HW + 0.005), TOP + 0.035), 0.028, 'rubber_black', n=10)
+            bolts.bolt((s - 0.05, sy * (y_in + 0.03), TOP + 0.065), (0, 0, 1), r=0.008, h=0.005); bolts.bolt((s + 0.05, sy * (y_in + 0.03), TOP + 0.065), (0, 0, 1), r=0.008, h=0.005)
+        # diagonal braces in the end bays of the harness, above head height
+        for (sa, sb) in ((s_a + 0.04, s_a + 0.55), (s_b - 0.04, s_b - 0.55)):
+            mb.cyl((sa, y, TOP - 0.42), (sb, y, TOP), 0.018, st, n=8)
+        # work lights under the top frame, travel beacons on top of the aft posts
+        mb.box(s_a + 0.5, s_b - 0.5, sy * (y_in - 0.07), sy * (y_in - 0.01), TOP - 0.012, TOP, 'light_panel')
+        mb.cyl((s_b - 0.04, y, TOP + 0.07), (s_b - 0.04, y, TOP + 0.13), 0.035, 'light_red', n=10)
+        mb.cyl((s_b - 0.04, y, TOP + 0.07), (s_b - 0.04, y, TOP + 0.085), 0.045, st, n=10)
+        # deck tie-down rings, recessed pans
+        for s in (s_a + 0.55, s_b - 0.55):
+            mb.cyl((s, sy * 0.75, ZD - 0.004), (s, sy * 0.75, ZD + 0.002), 0.07, st, n=12)
+            mb.tube((s - 0.012, sy * 0.75, ZD + 0.022), (s + 0.012, sy * 0.75, ZD + 0.022), 0.035, 0.022, 'machinery_bare', n=10)
+        # rod end clevis and pin at each ram bracket
+        for s in RAM_S:
+            for dy in (-0.05, 0.05):
+                mb.box(s - 0.035, s + 0.035, sy * RAM_Y + dy - 0.01, sy * RAM_Y + dy + 0.01, ZD + 0.05, ZD + 0.16, st)
+            mb.cyl((s, sy * RAM_Y - 0.075, ZD + 0.11), (s, sy * RAM_Y + 0.075, ZD + 0.11), 0.016, 'machinery_bare', n=8)
+    for q in range(6):                                # load limit chevrons at the hold-side threshold
+        yq = -0.75 + 0.30 * q
+        mb.prism([(s_b - 0.20, yq, ZD), (s_b - 0.10, yq + 0.10, ZD), (s_b - 0.20, yq + 0.20, ZD)], (0, 0, 0.002), 'hazard_yellow')
     return mb, bolts
 
 RAMP_Z = ZD - 0.165               # top of the ramp while it is stored in its drawer under the deck
@@ -140,6 +176,17 @@ def build(H):
         g.cyl((S0 + 0.09, sy * 0.06, ZD + 0.55), (S0 + 0.09, sy * 0.06, ZD + 1.05), 0.014, 'machinery_bare', n=8)
         finish(f'lift_gate_{sn}', g, 'lift_cage', pivot=(S0 + 0.09, yh, ZD + 0.8), group='lift_chassis')
         key('lift_lower', f'lift_gate_{sn}', 0, rot=(0, 0, 0)); smooth_keys('lift_lower', f'lift_gate_{sn}', 124, 138, rot=(0, 0, -sy * math.pi / 2))
+    for sy, sn in ((1, 'stbd'), (-1, 'port')):                        # hold-side gate: open when stowed, closed for travel
+        g = MB(); yh = sy * (HW - 0.14); sg = S1 - 0.09
+        g.cyl((sg, yh, ZD + 0.45), (sg, yh, ZD + 1.05), 0.024, 'machinery_bare', n=10)
+        for z in (ZD + 0.50, ZD + 1.00):
+            g.cyl((sg, yh, z), (sg, sy * 0.04, z), 0.02, 'hazard_yellow', n=8)
+        g.cyl((sg, sy * 0.06, ZD + 0.50), (sg, sy * 0.06, ZD + 1.00), 0.014, 'machinery_bare', n=8)
+        name = f'lift_gate_aft_{sn}'
+        finish(name, g, 'lift_cage', pivot=(sg, yh, ZD + 0.75), group='lift_chassis')
+        op = -sy * math.pi / 2                                        # swung forward, lying inside the side rail
+        set_rest(name, rot=(0, 0, op))
+        key('lift_lower', name, 0, rot=(0, 0, 0)); smooth_keys('lift_lower', name, 0, 14, rot=(0, 0, -op))
     finish('lift_ramp', ramp(), 'lift_cage', pivot=(RAMP_S + RAMP_LEN - 0.02, 0, RAMP_Z - 0.03), group='lift_chassis')
     # rams: fixed barrel in the hold ceiling, a middle stage, and a rod pinned to the cage
     fixed = MB(); zc = spec.Z_MAIN - spec.DECK_T
@@ -162,6 +209,26 @@ def build(H):
     # hold-side fixtures: hazard border round the opening and stanchions with a chain line
     for (a0, a1, b0, b1) in ((S0 - 0.12, S1 + 0.12, -HW - 0.12, -HW), (S0 - 0.12, S1 + 0.12, HW, HW + 0.12), (S0 - 0.12, S0, -HW, HW), (S1, S1 + 0.12, -HW, HW)):
         fixed.box(a0, a1, b0, b1, ZD, ZD + 0.006, 'hazard_yellow')
+    # guide rails in the hold for the cage's shoes, ram gland rings, and the hydraulic manifold across the ceiling
+    for sy in (-1, 1):
+        for s in (S0 + 0.55, S1 - 0.55):
+            fixed.box(s - 0.03, s + 0.03, sy * (HW + 0.035), sy * (HW + 0.075), ZD + 0.006, zc - 0.10, 'structure_steel')
+            fixed.box(s - 0.06, s + 0.06, sy * (HW + 0.075), sy * (HW + 0.085), ZD + 0.006, zc - 0.10, 'structure_steel')
+            for z in (ZD + 0.3, ZD + 1.0, ZD + 1.7):
+                fixed.bolt((s + 0.045, sy * (HW + 0.075), z), (0, -sy, 0), r=0.009, h=0.006); fixed.bolt((s - 0.045, sy * (HW + 0.075), z), (0, -sy, 0), r=0.009, h=0.006)
+            fixed.box(s - 0.06, s + 0.06, sy * (HW + 0.03), sy * (HW + 0.085), ZD + 0.006, ZD + 0.30, 'hazard_yellow')
+        y = sy * RAM_Y
+        fixed.pipe([(RAM_S[0], y + sy * 0.13, zc - 0.13), (RAM_S[1], y + sy * 0.13, zc - 0.13)], 0.022, 'copper_pipe', n=8)
+        fixed.pipe([(RAM_S[0], y + sy * 0.19, zc - 0.13), (RAM_S[1], y + sy * 0.19, zc - 0.13)], 0.016, 'machinery_bare', n=8)
+        for s in RAM_S:
+            fixed.pipe([(s, y + sy * 0.13, zc - 0.13), (s, y + sy * 0.10, zc - 0.22), (s, y + sy * 0.072, zc - 0.30)], 0.014, 'copper_pipe', n=6)
+            fixed.box(s - 0.05, s + 0.05, y + sy * 0.072, y + sy * 0.12, zc - 0.36, zc - 0.28, 'machinery_dark')       # valve on the barrel
+            fixed.box(s - 0.012, s + 0.012, y - sy * 0.074, y - sy * 0.086, ZD + 0.30, zc - 0.20, 'placard_white')   # position sensor strip
+        sm = 0.5 * (RAM_S[0] + RAM_S[1])
+        fixed.box(sm - 0.16, sm + 0.16, y + sy * 0.08, y + sy * 0.26, zc - 0.24, zc - 0.10, 'machinery_dark')          # manifold block
+        for q in range(3):
+            fixed.cyl((sm - 0.10 + 0.10 * q, y + sy * 0.17, zc - 0.24), (sm - 0.10 + 0.10 * q, y + sy * 0.17, zc - 0.29), 0.022, 'machinery_bare', n=8)
+    fixed.pipe([(0.5 * (RAM_S[0] + RAM_S[1]), -RAM_Y - 0.17, zc - 0.17), (0.5 * (RAM_S[0] + RAM_S[1]) + 0.25, -0.5, zc - 0.14), (0.5 * (RAM_S[0] + RAM_S[1]) + 0.25, 0.5, zc - 0.14), (0.5 * (RAM_S[0] + RAM_S[1]), RAM_Y + 0.17, zc - 0.17)], 0.02, 'copper_pipe', n=8)
     finish('lift_rams_fixed', fixed, parent, group='lift_chassis')
     smooth_keys('lift_lower', 'lift_cage', 0, 96, loc=(0, 0, -Lf['travel']))
     drop = (ZD - 0.06 - Lf['travel']) - spec.Z_GROUND           # how far the toe has to fall once the cage is down

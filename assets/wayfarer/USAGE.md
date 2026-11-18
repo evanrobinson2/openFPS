@@ -12,7 +12,7 @@ to places inside, hide modules, slide a cutaway through the hull and run every m
 ## Status
 
 This is the **structure stage**: the whole ship exists at true size with real walls, decks, doors and mechanisms, in
-a first pass of detail. The cockpit, the engine section and the landing gear have had their full-detail pass; the rest has not. It is not finished art.
+its detail pass. Every section has now had one: cockpit, engine section, landing gear, lift chassis, lander bay and the crew spaces. The outer hull and its gadgets are still first pass. It is not finished art.
 
 | Part | State |
 |---|---|
