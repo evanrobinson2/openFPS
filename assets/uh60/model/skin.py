@@ -92,6 +92,7 @@ class Painter:
         self.chip = Image.new('L', (W, W), 0); self.dc = ImageDraw.Draw(self.chip)          # where paint wears through
         self.drip = Image.new('L', (W, W), 0); self.dq = ImageDraw.Draw(self.drip)          # where runs start
         self.rng = np.random.default_rng(60)
+        self.rivets = []; self.screws = []          # (region, sta, v): hardware.py stands real heads on these at LOD0
 
     # ---- primitives, all in aircraft inches
     def seam(self, region, pts, rivets=True, pitch=1.25, off=0.7, width=2, drip=True):
@@ -108,6 +109,7 @@ class Painter:
                     for d in np.arange(pitch * 0.5, L, pitch):
                         q = a + t * d + n * off * sgn
                         x, y = px(region, q[0], q[1]); self.dr.ellipse([x - 1.3, y - 1.3, x + 1.3, y + 1.3], fill=255)
+                        self.rivets.append((region, q[0], q[1]))
 
     def panel(self, region, s0, v0, s1, v1, r=1.5, screws=True, pitch=2.2, chip=0.5):
         """Removable access panel: gap all round, screw ring just inside, a little chipping at the edge."""
@@ -124,6 +126,7 @@ class Painter:
                 for i in range(n):
                     q = a + (b - a) * (i + 0.5) / n; x, y = px(region, q[0], q[1])
                     self.ds.ellipse([x - 1.8, y - 1.8, x + 1.8, y + 1.8], fill=255)
+                    self.screws.append((region, q[0], q[1]))
 
     def doubler(self, region, poly, grow=2.2):
         from shapely.geometry import Polygon

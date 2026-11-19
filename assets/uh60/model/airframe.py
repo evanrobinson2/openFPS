@@ -231,12 +231,16 @@ def engine_ends(ctx, sign):
     for i in range(12):                                   # inlet struts / swirl vanes
         a = 2 * math.pi * i / 12
         stl.merge(lib.box((4.9, 0, 6.5), (3.4, 0.16, 3.0)), M @ R('wl', math.degrees(a)) @ R('sta', 18))
-    # exhaust ejector: an oval duct turned outboard and aft, standing proud of the cowl
-    e0 = np.array((425.0, sign * 37.0, 278.5)); d = np.array((0.52, sign * 0.84, 0.12)); d /= np.linalg.norm(d)
+    # exhaust: the tailpipe leaves the back of the cowl turned a little outboard [F6-1 top view]; the cowl ends in a lip
+    e0 = np.array((440.0, sign * 35.6, 278.0)); d = np.array((0.90, sign * 0.42, 0.06)); d /= np.linalg.norm(d)
     Me, _ = lib.frame_to(e0, e0 + d)
-    Me = Me @ S(1.0, 1.0, 1.0)
-    od.merge(lib.revolve([(11.2, 7.0), (11.4, 12.6), (11.0, 13.3), (10.4, 13.3)], n, Me, cap0=False, cap1=False))
-    dark.merge(lib.revolve([(10.4, 13.3), (10.0, 6.0), (0, 5.0)], n, Me, cap0=False, cap1=False))
+    Me = Me @ S(1.0, 1.12, 1.0)
+    od.merge(lib.revolve([(9.6, -1.0), (9.9, 5.0), (9.7, 6.4), (9.2, 6.6)], n, Me, cap0=False, cap1=False))                # cowl lip
+    stl.merge(lib.revolve([(8.6, 2.0), (8.5, 15.5), (8.3, 16.2), (7.9, 16.2), (8.0, 6.0)], n, Me, cap0=False, cap1=False))   # tailpipe, heat-stained
+    dark.merge(lib.revolve([(8.0, 6.2), (7.2, 2.0), (4.0, 1.0), (0, 0.6)], n, Me, cap0=False, cap1=False))
+    for i in range(4):                                                                                                   # exhaust centre-body struts
+        stl.merge(lib.box((4.4, 0, 6.0), (7.4, 0.2, 3.0)), Me @ R('wl', 45 + 90 * i))
+    stl.merge(lib.revolve([(0, 9.0), (1.6, 8.0), (2.2, 5.0), (2.0, 2.0)], 12, Me, cap0=False, cap1=False))
     return od, dark, stl
 
 

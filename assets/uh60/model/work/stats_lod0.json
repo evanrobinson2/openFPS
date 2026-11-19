@@ -1,16 +1,32 @@
 {
  "lod": 0,
- "tris": 51420,
- "parts": 23,
+ "tris": 577936,
+ "parts": 129,
  "nodes": [
   "airframe",
+  "cabin_door_L",
+  "cockpit_door_L",
+  "cabin_door_R",
+  "cockpit_door_R",
+  "stabilator",
   "main_rotor",
   "main_blade_1",
   "main_blade_2",
   "main_blade_3",
   "main_blade_4",
-  "tail_rotor"
+  "tail_rotor",
+  "cyclic_L",
+  "collective_L",
+  "cyclic_R",
+  "collective_R"
  ],
- "sockets": [],
- "glb_mb": 1.6
+ "sockets": [
+  "eye_pilot",
+  "eye_copilot",
+  "spawn_cabin",
+  "spawn_ground_left",
+  "seat_gunner_left",
+  "seat_gunner_right"
+ ],
+ "glb_mb": 21.64
 }
