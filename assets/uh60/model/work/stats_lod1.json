@@ -1,0 +1,15 @@
+{
+ "lod": 1,
+ "tris": 80396,
+ "parts": 33,
+ "nodes": [
+  "airframe",
+  "cabin_door_L",
+  "cockpit_door_L",
+  "cabin_door_R",
+  "cockpit_door_R",
+  "stabilator"
+ ],
+ "sockets": [],
+ "glb_mb": 1.72
+}
