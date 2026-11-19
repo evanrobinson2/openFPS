@@ -29,7 +29,7 @@ LIB = {
     'quilt':             ((0.250, 0.265, 0.220), 0.0, 0.92, 1.0),   # cabin soundproofing blankets
     'floor':             ((0.090, 0.095, 0.090), 0.0, 0.90, 1.0),   # non-skid cabin floor
     'armor':             ((0.120, 0.125, 0.115), 0.0, 0.70, 1.0),   # crew seat armour buckets
-    'panel_face':        ((0.045, 0.047, 0.050), 0.0, 0.55, 1.0),   # instrument and console faces
+    'panel_face':        ((0.045, 0.047, 0.050), 0.0, 0.92, 1.0),   # instrument and console faces
     'instrument':        ((0.010, 0.010, 0.012), 0.0, 0.20, 1.0),   # gauge dials (texture)
     'placard':           ((0.700, 0.700, 0.650), 0.0, 0.60, 1.0),
     'wire':              ((0.060, 0.060, 0.060), 0.0, 0.70, 1.0),
@@ -46,5 +46,5 @@ def setup(ctx):
             b.inputs['Alpha'].default_value = alpha
             try: m.surface_render_method = 'BLENDED'
             except Exception: m.blend_method = 'BLEND'
-        m.use_backface_culling = alpha >= 1.0
+        m.use_backface_culling = alpha >= 1.0 and name != 'instrument'
         ctx.mats[name] = m

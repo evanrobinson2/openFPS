@@ -222,7 +222,7 @@ def build_tiles(out_dir, log=print):
     specs = {}
     # plain-weave nylon duck: 64 threads across a 4 in tile
     wv = np.sin(xx * 2 * np.pi * 64 / n) * np.where(np.sin(yy * 2 * np.pi * 32 / n) > 0, 1, -1) * 0.5 + np.sin(yy * 2 * np.pi * 64 / n) * 0.5
-    specs['fabric_seat'] = (wv * 0.5 + 0.25 * (_tile_noise(n, 64, 1) - 0.5), (0.230, 0.250, 0.190), 0.10, 2.2, 4.0)
+    specs['fabric_seat'] = (wv * 0.5 + 0.08 * (_tile_noise(n, 64, 1) - 0.5), (0.230, 0.250, 0.190), 0.10, 2.2, 4.0)
     # webbing: herringbone ribs, 2 in tile
     rib = np.sin((xx + np.abs(((yy * 8 / n) % 2) - 1) * 24) * 2 * np.pi * 40 / n)
     specs['fabric_belt'] = (rib * 0.6, (0.300, 0.300, 0.270), 0.09, 2.4, 2.0)
@@ -232,14 +232,14 @@ def build_tiles(out_dir, log=print):
     puff = np.sqrt(np.clip(du * dv * 4, 0, 1)); stitch = np.minimum(du, dv) < 0.012
     dash = (np.sin((xx + yy) * 2 * np.pi * 24 / n) > -0.2) | (np.sin((xx - yy) * 2 * np.pi * 24 / n) > -0.2)
     hq = puff * 1.0 - 0.25 * (stitch & dash) + 0.05 * np.sin(xx * 2 * np.pi * 128 / n) * np.sin(yy * 2 * np.pi * 128 / n)
-    specs['quilt'] = (hq * 3.0 + 0.3 * (_tile_noise(n, 32, 2) - 0.5), (0.250, 0.265, 0.220), 0.07, 3.0, 8.0)
+    specs['quilt'] = (hq * 3.0 + 0.1 * (_tile_noise(n, 32, 2) - 0.5), (0.250, 0.265, 0.220), 0.07, 3.0, 8.0)
     # non-skid floor coating: sharp grit in paint, scuffed (12 in tile)
     grit = (np.random.default_rng(3).random((n, n)).astype(np.float32) > 0.86).astype(np.float32)
     grit = skin.blur(np.pad(grit, 4, mode='wrap'), 0.8)[4:-4, 4:-4]
     specs['floor'] = (grit * 1.6 + 0.4 * (_tile_noise(n, 64, 4) - 0.5), (0.090, 0.095, 0.090), 0.22, 2.6, 12.0)
     for name, (h, base, cvar, k, tile) in specs.items():
         c = np.array(base, np.float32)[None, None, :] * (1 + cvar * (h - h.mean()) / (h.std() + 1e-6) * 0.5)[..., None]
-        c *= (0.9 + 0.2 * _tile_noise(n, 128, sum(map(ord, name)) % 97))[..., None]
+        c *= (0.965 + 0.07 * _tile_noise(n, 128, sum(map(ord, name)) % 97))[..., None]
         pc = os.path.join(out_dir, f'{name}_color.jpg'); pn = os.path.join(out_dir, f'{name}_normal.png')
         Image.fromarray((np.clip(c, 0, 1) * 255).astype(np.uint8)).save(pc, quality=92)
         Image.fromarray((_normal(h, k) * 255).astype(np.uint8)).save(pn)

@@ -187,6 +187,8 @@ export class UH60Flight {
     const antic = (lerp(0.42, 1.25, coll) * 1400 * HP) * 0;
     let demand = nOn ? clamp(Pload + 9e5 * err + this.govI + antic, 0, nOn * Pavail) : 0;
     demand = Math.min(demand, 2828 * HP * 1.2);
+    // run-up: below flight rotor speed the engines are held to about 30 percent torque, as when the power control levers are advanced on the ground (INF rate)
+    const nrNow = this.omega / p.omega100; if (nrNow < 0.97) demand = Math.min(demand, lerp(0.30, 1.2, clamp((nrNow - 0.90) / 0.07, 0, 1)) * 2 * p.shpTorque100 * HP * Math.max(nrNow, 0.08));
     let Peng = 0;
     for (const en of this.eng) {
       const tgt = en.on ? demand / nOn : 0;

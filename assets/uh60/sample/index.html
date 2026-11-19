@@ -1,0 +1,298 @@
+<title>UH-60 Black Hawk</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the aircraft fills the screen; a flight-line placard top left, mode tabs beside it, a strip of
+   instruments along the bottom when flying. One dark look, olive drab and stencil amber, like the airframe. */
+:root {
+  color-scheme: dark;
+  --bg: #0d0f0c; --panel: rgba(18, 21, 16, .82); --line: #3a4132; --fg: #e4e3d4; --dim: #9a9c88;
+  --accent: #c8601f; --amber: #e2a431; --ok: #58c46a; --warn: #e04a36;
+  --display: 'Barlow Condensed', 'Arial Narrow', sans-serif; --mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+}
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--fg); font: 13px/1.4 var(--mono); overflow: hidden; }
+#view { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+.ui { position: fixed; inset: 0; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between;
+  padding-block: calc(env(safe-area-inset-top, 0px) + 12px) calc(env(safe-area-inset-bottom, 0px) + 12px);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.ui > * { pointer-events: auto; }
+.top { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-start; }
+.placard { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--accent); padding: 8px 12px; max-width: 100%; }
+.placard h1 { font: 600 22px/1 var(--display); letter-spacing: .06em; text-transform: uppercase; margin: 0 0 3px; }
+.placard p { margin: 0; color: var(--dim); font-size: 11px; }
+.tabs, .row { display: flex; flex-wrap: wrap; gap: 6px; }
+button { font: 600 14px/1 var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--fg); background: var(--panel);
+  border: 1px solid var(--line); padding: 9px 12px; cursor: pointer; }
+button:hover { border-color: var(--amber); }
+button:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.side { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; margin-top: 10px; }
+.help { background: var(--panel); border: 1px solid var(--line); padding: 8px 12px; color: var(--dim); font-size: 11.5px; max-width: 420px; }
+.help b { color: var(--fg); font-weight: 500; }
+.gauges { display: flex; flex-wrap: wrap; gap: 6px; }
+.g { background: var(--panel); border: 1px solid var(--line); padding: 6px 10px; min-width: 78px; }
+.g span { display: block; font: 500 11px/1 var(--display); letter-spacing: .1em; color: var(--dim); text-transform: uppercase; }
+.g b { font: 500 19px/1.2 var(--mono); font-variant-numeric: tabular-nums; }
+.g.warn b { color: var(--warn); } .g.ok b { color: var(--ok); }
+.bar { height: 4px; background: var(--line); margin-top: 3px; } .bar i { display: block; height: 100%; background: var(--amber); width: 0; }
+#load { position: fixed; inset: 0; display: grid; place-items: center; background: var(--bg); font: 600 18px var(--display); letter-spacing: .12em; text-transform: uppercase; text-align: center; padding: 16px; }
+#msg { color: var(--amber); min-height: 1.4em; }
+@media (max-width: 560px) { .help { display: none; } .g { min-width: 64px; } .g b { font-size: 15px; } }
+</style>
+<canvas id="view"></canvas>
+<div class="ui">
+  <div>
+    <div class="top">
+      <div class="placard"><h1>UH-60A Black Hawk</h1><p>Built by code from TM 1-1520-237-10. Flight and sound are simulated.</p></div>
+      <div class="tabs" role="group" aria-label="View">
+        <button id="m-studio" aria-pressed="true">Studio</button><button id="m-walk" aria-pressed="false">Walk</button><button id="m-fly" aria-pressed="false">Fly</button>
+      </div>
+    </div>
+    <div class="side">
+      <div class="row">
+        <button id="b-doors" aria-pressed="false">Cabin doors</button><button id="b-cdoors" aria-pressed="false">Cockpit doors</button>
+        <button id="b-eng" aria-pressed="false">Engines</button><button id="b-sound" aria-pressed="false">Sound</button>
+        <button id="b-mode" aria-pressed="false">Cinematic</button><button id="b-lod" aria-pressed="true">Bolt detail</button>
+      </div>
+      <div class="help" id="help"></div>
+      <div id="msg" role="status"></div>
+    </div>
+  </div>
+  <div class="gauges" id="gauges" hidden>
+    <div class="g" id="g-trq"><span>Torque %</span><b>0</b></div><div class="g" id="g-nr"><span>Rotor %</span><b>0</b></div>
+    <div class="g"><span>Airspeed kt</span><b id="v-ias">0</b></div><div class="g"><span>Height ft</span><b id="v-agl">0</b></div>
+    <div class="g"><span>Climb ft/min</span><b id="v-vs">0</b></div><div class="g"><span>Heading</span><b id="v-hdg">000</b></div>
+    <div class="g"><span>Collective</span><b id="v-col">0</b><div class="bar"><i id="v-colbar"></i></div></div>
+  </div>
+</div>
+<div id="load">Loading the aircraft…</div>
+<script type="importmap">{"imports": {"three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { UH60Flight } from './uh60-flight.js';
+import { UH60Sound } from './uh60-sound.js';
+
+const $ = (id) => document.getElementById(id);
+const canvas = $('view');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+const scene = new THREE.Scene();
+scene.fog = new THREE.Fog(0xb9c3c6, 600, 5200);
+const camera = new THREE.PerspectiveCamera(50, 1, 0.08, 9000);
+camera.position.set(11, 4.2, 12);
+const orbit = new OrbitControls(camera, canvas); orbit.target.set(0, 1.7, -1.5); orbit.enableDamping = true; orbit.maxDistance = 60; orbit.minDistance = 1.2;
+
+// ---- light and sky
+const pm = new THREE.PMREMGenerator(renderer); scene.environment = pm.fromScene(new RoomEnvironment(), 0.04).texture;
+const sky = new THREE.Mesh(new THREE.SphereGeometry(8000, 32, 16), new THREE.ShaderMaterial({ side: THREE.BackSide, depthWrite: false, fog: false,
+  vertexShader: 'varying vec3 d; void main(){ d = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.); }',
+  fragmentShader: 'varying vec3 d; void main(){ float h = clamp(d.y, -0.05, 1.); vec3 c = mix(vec3(.73,.77,.78), vec3(.24,.40,.62), pow(h, .5)); float s = pow(max(dot(normalize(d), normalize(vec3(.45,.55,.7))), 0.), 180.); gl_FragColor = vec4(c + s * vec3(1., .9, .7), 1.); }' }));
+scene.add(sky);
+scene.add(new THREE.HemisphereLight(0xcfdbe6, 0x6a6452, 0.9));
+const sun = new THREE.DirectionalLight(0xfff1dc, 3.0); sun.castShadow = true; sun.shadow.mapSize.set(4096, 4096);
+Object.assign(sun.shadow.camera, { left: -16, right: 16, top: 16, bottom: -16, near: 1, far: 120 }); sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.03; sun.shadow.camera.updateProjectionMatrix();
+scene.add(sun, sun.target);
+
+// ---- airfield: concrete apron (drawn here), helipad markings, low hills for a horizon when flying
+function canvasTex(n, draw, rep) { const c = document.createElement('canvas'); c.width = c.height = n; draw(c.getContext('2d'), n); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; if (rep) { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rep, rep); } return t; }
+let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+const concrete = canvasTex(1024, (g, n) => {
+  g.fillStyle = '#8a8a82'; g.fillRect(0, 0, n, n);
+  for (let i = 0; i < 26000; i++) { const v = 110 + rnd() * 60 | 0; g.fillStyle = `rgba(${v},${v},${v - 6},.22)`; g.fillRect(rnd() * n, rnd() * n, 1 + rnd() * 3, 1 + rnd() * 3); }
+  for (let i = 0; i < 60; i++) { g.fillStyle = `rgba(40,38,34,${rnd() * .10})`; g.beginPath(); g.ellipse(rnd() * n, rnd() * n, 20 + rnd() * 90, 10 + rnd() * 40, rnd() * 3, 0, 7); g.fill(); }
+  g.strokeStyle = 'rgba(30,30,28,.75)'; g.lineWidth = 3; g.strokeRect(0, 0, n, n); g.beginPath(); g.moveTo(n / 2, 0); g.lineTo(n / 2, n); g.moveTo(0, n / 2); g.lineTo(n, n / 2); g.stroke();
+  for (let i = 0; i < 14; i++) { g.strokeStyle = 'rgba(25,25,24,.5)'; g.lineWidth = 1; g.beginPath(); let x = rnd() * n, y = rnd() * n; g.moveTo(x, y); for (let k = 0; k < 6; k++) { x += (rnd() - .5) * 80; y += (rnd() - .5) * 80; g.lineTo(x, y); } g.stroke(); }
+}, 500);
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(6000, 6000), new THREE.MeshStandardMaterial({ map: concrete, color: 0x8d8d88, roughness: .95, metalness: 0, envMapIntensity: 0.3 }));
+ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
+const pad = new THREE.Mesh(new THREE.PlaneGeometry(36, 36), new THREE.MeshStandardMaterial({ transparent: true, color: 0xa0a09a, envMapIntensity: 0.3, roughness: .9, polygonOffset: true, polygonOffsetFactor: -2, map: canvasTex(1024, (g, n) => {
+  g.strokeStyle = 'rgba(226,190,60,.85)'; g.lineWidth = 14; g.beginPath(); g.arc(n / 2, n / 2, n * .42, 0, 7); g.stroke();
+  g.strokeStyle = 'rgba(235,235,225,.85)'; g.lineWidth = 34; g.beginPath(); g.moveTo(n * .38, n * .3); g.lineTo(n * .38, n * .7); g.moveTo(n * .62, n * .3); g.lineTo(n * .62, n * .7); g.moveTo(n * .38, n * .5); g.lineTo(n * .62, n * .5); g.stroke();
+  g.globalCompositeOperation = 'destination-out'; for (let i = 0; i < 9000; i++) { g.fillStyle = `rgba(0,0,0,${rnd() * .5})`; g.beginPath(); g.arc(rnd() * n, rnd() * n, .6 + rnd() * 2.2, 0, 7); g.fill(); }
+}) }));
+pad.rotation.x = -Math.PI / 2; pad.position.y = 0.01; pad.receiveShadow = true; scene.add(pad);
+{ // hills ring
+  const g = new THREE.CylinderGeometry(3400, 3600, 1, 96, 6, true); const p = g.attributes.position;
+  for (let i = 0; i < p.count; i++) { const a = Math.atan2(p.getZ(i), p.getX(i)), t = p.getY(i) + .5; p.setY(i, t * (160 + 120 * Math.sin(a * 3) + 70 * Math.sin(a * 7 + 1) + 40 * Math.sin(a * 13 + 2))); const r = 1 + (1 - t) * .12; p.setX(i, p.getX(i) * r); p.setZ(i, p.getZ(i) * r); }
+  g.computeVertexNormals(); scene.add(new THREE.Mesh(g, new THREE.MeshStandardMaterial({ color: 0x5c6650, roughness: 1, side: THREE.BackSide })));
+}
+
+// ---- model
+const ac = new THREE.Group(); scene.add(ac);
+let model = null, mixer = null, clips = {}, nodes = {}, blades = [], lod = 0, base = {};
+const b64 = (s) => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+async function fetchModel(l) {
+  const head = await (await fetch(`uh60_lod${l}.gltf.json`)).json();
+  const parts = [b64(head.bin)];
+  for (const name of head.more || []) parts.push(b64((await (await fetch(name)).json()).bin));
+  const bin = new Uint8Array(parts.reduce((s, p) => s + p.length, 0)); let o = 0; for (const p of parts) { bin.set(p, o); o += p.length; }
+  let js = new TextEncoder().encode(JSON.stringify(head.gltf)); const pad = (4 - js.length % 4) % 4, padB = (4 - bin.length % 4) % 4;
+  const out = new Uint8Array(12 + 8 + js.length + pad + 8 + bin.length + padB), dv = new DataView(out.buffer);
+  dv.setUint32(0, 0x46546C67, true); dv.setUint32(4, 2, true); dv.setUint32(8, out.length, true);
+  dv.setUint32(12, js.length + pad, true); dv.setUint32(16, 0x4E4F534A, true); out.set(js, 20); out.fill(0x20, 20 + js.length, 20 + js.length + pad);
+  const b0 = 20 + js.length + pad; dv.setUint32(b0, bin.length + padB, true); dv.setUint32(b0 + 4, 0x004E4942, true); out.set(bin, b0 + 8);
+  return new Promise((res, rej) => new GLTFLoader().parse(out.buffer, '', res, rej));
+}
+async function loadModel(l) {
+  const g = await fetchModel(l);
+  if (model) { ac.remove(model); mixer.stopAllAction(); }
+  model = g.scene; lod = l; ac.add(model); nodes = {}; blades = []; clips = {}; base = {};
+  model.traverse(o => {
+    nodes[o.name] = o;
+    if (o.isMesh) {
+      o.castShadow = o.receiveShadow = true; const m = o.material; m.envMapIntensity = 0.55;
+      if (m.transparent || /glass|lens/.test(m.name)) { m.transparent = true; m.depthWrite = false; o.renderOrder = 2; o.castShadow = false; }
+      if (o.morphTargetDictionary && 'droop' in o.morphTargetDictionary) blades.push(o);
+    }
+  });
+  for (const n of ['main_rotor', 'tail_rotor', 'stabilator', 'cyclic_L', 'cyclic_R', 'collective_L', 'collective_R']) if (nodes[n]) base[n] = nodes[n].quaternion.clone();
+  mixer = new THREE.AnimationMixer(model);
+  for (const c of g.animations) { const a = mixer.clipAction(c); a.loop = THREE.LoopOnce; a.clampWhenFinished = true; clips[c.name] = a; }
+  for (const k in doorState) setDoors(k, doorState[k], true);
+  buildDiscs();
+}
+const doorState = { cabin: false, cockpit: false };
+function setDoors(kind, open, snap) {
+  doorState[kind] = open;
+  for (const s of ['L', 'R']) { const a = clips[`${kind}_door_${s}_open`]; if (!a) continue; a.paused = false; a.timeScale = open ? 1 : -1; if (!a.isRunning() || snap) { a.time = snap ? (open ? a.getClip().duration : 0) : (open ? 0 : a.getClip().duration); a.play(); } }
+}
+// rotor discs: what the eye sees of blades at speed (drawn here, shown as the rotor speeds up)
+let discMain = null, discTail = null;
+function discTex(streaks) { return canvasTex(512, (g, n) => { const c = n / 2; const gr = g.createRadialGradient(c, c, n * .04, c, c, c); gr.addColorStop(0, 'rgba(20,20,20,0)'); gr.addColorStop(.08, 'rgba(20,20,20,.5)'); gr.addColorStop(.9, 'rgba(22,22,20,.34)'); gr.addColorStop(.955, 'rgba(190,140,30,.4)'); gr.addColorStop(1, 'rgba(20,20,20,0)'); g.fillStyle = gr; g.fillRect(0, 0, n, n);
+  g.globalCompositeOperation = 'destination-out'; for (let i = 0; i < streaks; i++) { g.fillStyle = `rgba(0,0,0,${.05 + rnd() * .12})`; g.beginPath(); g.moveTo(c, c); const a = rnd() * 7, w = .05 + rnd() * .25; g.arc(c, c, c, a, a + w); g.fill(); } }); }
+function buildDiscs() {
+  const mk = (r, parent) => { const m = new THREE.Mesh(new THREE.CircleGeometry(r, 64), new THREE.MeshBasicMaterial({ map: discTex(40), transparent: true, depthWrite: false, side: THREE.DoubleSide, opacity: 0 })); m.rotation.x = -Math.PI / 2; m.renderOrder = 3; m.name = 'rotor_disc'; parent.add(m); return m; };
+  if (nodes.main_rotor) { discMain = mk(8.18, nodes.main_rotor); discMain.position.y = 0.12; }
+  if (nodes.tail_rotor) { discTail = mk(1.68, nodes.tail_rotor); }
+}
+
+// ---- flight, sound, input
+const flight = new UH60Flight({ running: false });
+const sound = new UH60Sound(); let soundOn = false;
+const keys = new Set(); let mode = 'studio', flyView = 0, yaw = 0, pitch = 0, collective = 0, stick = { lon: 0, lat: 0, pedal: 0 };
+const walker = { p: new THREE.Vector3(-3.2, 1.68, 0.2), inside: false };
+addEventListener('keydown', e => { if (e.target.tagName === 'BUTTON' && (e.code === 'Space' || e.code === 'Enter')) return; keys.add(e.code); if (mode !== 'studio' && ['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) e.preventDefault(); onKey(e.code); });
+addEventListener('keyup', e => keys.delete(e.code)); addEventListener('blur', () => keys.clear());
+canvas.addEventListener('click', () => { if (mode !== 'studio' && canvas.requestPointerLock) { try { const p = canvas.requestPointerLock(); if (p && p.catch) p.catch(() => {}); } catch (e) {} } });
+let drag = null;
+canvas.addEventListener('pointerdown', e => { drag = [e.clientX, e.clientY]; }); addEventListener('pointerup', () => drag = null);
+addEventListener('pointermove', e => {
+  if (mode === 'studio') return; let dx = 0, dy = 0;
+  if (document.pointerLockElement === canvas) { dx = e.movementX; dy = e.movementY; } else if (drag) { dx = e.clientX - drag[0]; dy = e.clientY - drag[1]; drag = [e.clientX, e.clientY]; } else return;
+  yaw -= dx * 0.0024; pitch = Math.max(-1.45, Math.min(1.45, pitch - dy * 0.0024));
+});
+const HELP = {
+  studio: '<b>Drag</b> to orbit, <b>wheel</b> to zoom. Open the doors, start the engines, switch the sound on.',
+  walk: '<b>Click</b> to look, <b>W A S D</b> to walk, <b>Shift</b> to run. Open a cabin door and step in. <b>F</b> takes the pilot seat.',
+  fly: '<b>Shift / Ctrl</b> collective up / down. <b>W S A D</b> cyclic. <b>Q E</b> pedals. <b>V</b> changes seat. <b>G</b> engines. <b>R</b> back to the pad. Raise the collective slowly to lift off.',
+};
+function setMode(m) {
+  mode = m; for (const k of ['studio', 'walk', 'fly']) $('m-' + k).setAttribute('aria-pressed', k === m);
+  $('help').innerHTML = HELP[m]; $('gauges').hidden = m !== 'fly'; orbit.enabled = m === 'studio';
+  if (m !== 'studio') { yaw = m === 'walk' ? -Math.PI / 2 : 0; pitch = m === 'fly' ? -0.16 : 0; } else if (document.pointerLockElement) document.exitPointerLock();
+  if (m === 'walk' && !flight.out.onGround) say('Land first to walk around.');
+  if (m === 'fly' && !flight.eng[0].on) say('Engines are off. Press G or the Engines button.');
+}
+let msgT = 0; function say(t) { $('msg').textContent = t; msgT = 5; }
+function setEngines(on) { flight.eng.forEach(e => e.on = on); $('b-eng').setAttribute('aria-pressed', on); if (on && !soundOn) say('Sound is off. Press Sound to hear it.'); }
+function onKey(c) {
+  if (c === 'KeyV' && mode === 'fly') flyView = (flyView + 1) % 3;
+  if (c === 'KeyG') setEngines(!flight.eng[0].on);
+  if (c === 'KeyR' && mode === 'fly') { const run = flight.eng[0].on; flight.reset({ running: run }); collective = 0; }
+  if (c === 'KeyF' && mode === 'walk') { flyView = 0; setMode('fly'); }
+}
+$('m-studio').onclick = () => setMode('studio'); $('m-walk').onclick = () => setMode('walk'); $('m-fly').onclick = () => setMode('fly');
+$('b-doors').onclick = (e) => { setDoors('cabin', !doorState.cabin); e.currentTarget.setAttribute('aria-pressed', doorState.cabin); };
+$('b-cdoors').onclick = (e) => { setDoors('cockpit', !doorState.cockpit); e.currentTarget.setAttribute('aria-pressed', doorState.cockpit); };
+$('b-eng').onclick = () => setEngines(!flight.eng[0].on);
+$('b-sound').onclick = async (e) => { const b = e.currentTarget; try { if (!sound.node) await sound.start(); soundOn = !soundOn; sound.setVolume(soundOn ? 0.8 : 0); b.setAttribute('aria-pressed', soundOn); } catch (err) { say('This browser would not start the sound.'); } };
+$('b-mode').onclick = (e) => { const real = sound.mode === 'cinematic'; sound.setMode(real ? 'realistic' : 'cinematic'); e.currentTarget.textContent = real ? 'Realistic' : 'Cinematic'; };
+$('b-lod').onclick = async (e) => { const b = e.currentTarget, want = lod === 0 ? 1 : 0; say('Loading…'); try { await loadModel(want); b.setAttribute('aria-pressed', want === 0); say(want === 0 ? 'Every rivet and screw head is geometry.' : 'Light model: small heads are in the surface maps.'); } catch (err) { say('That model did not load.'); } };
+
+// ---- walking: the cabin floor, the hull and the door openings, from the recipe's own stations
+const IN = 0.0254, zOf = (sta) => (341.2 - sta) * IN, FLOOR_Y = (206.75 - 183.7) * IN;
+const HULL = [[162, 0], [175, 27], [200, 40], [240, 46.5], [400, 46.5], [448, 39], [488, 22.5], [560, 15], [645, 9.5]];
+function hullHalf(z) { const sta = 341.2 - z / IN; if (sta < 162 || sta > 760) return -1; if (sta > 645) return 6; for (let i = 1; i < HULL.length; i++) if (sta <= HULL[i][0]) { const [a, b] = [HULL[i - 1], HULL[i]]; return (a[1] + (b[1] - a[1]) * (sta - a[0]) / (b[0] - a[0])) * IN; } return 0.2; }
+function walkStep(dt) {
+  const sp = (keys.has('ShiftLeft') ? 4.2 : 1.9) * (walker.inside ? 0.6 : 1), f = (keys.has('KeyW') ? 1 : 0) - (keys.has('KeyS') ? 1 : 0), s = (keys.has('KeyD') ? 1 : 0) - (keys.has('KeyA') ? 1 : 0);
+  const p = walker.p, nx = p.x + (-Math.sin(yaw) * f + Math.cos(yaw) * s) * sp * dt, nz = p.z + (-Math.cos(yaw) * f - Math.sin(yaw) * s) * sp * dt;
+  const inDoorZ = (z) => z < zOf(310) && z > zOf(374), cabZ = (z) => z < zOf(250) && z > zOf(395);
+  let x = nx, z = nz;
+  if (walker.inside) {
+    z = Math.max(zOf(394), Math.min(zOf(251), z));
+    if (Math.abs(x) > 0.86) { const sideOpen = doorState.cabin && inDoorZ(z); if (sideOpen && Math.abs(x) > 1.25) walker.inside = false; else if (!sideOpen) x = Math.sign(x) * 0.86; }
+  } else {
+    const h = hullHalf(z);
+    if (h > 0 && Math.abs(x) < h + 0.25) { if (doorState.cabin && inDoorZ(z) && inDoorZ(p.z)) { if (Math.abs(x) < 1.0) walker.inside = true; } else { if (Math.abs(p.x) >= h + 0.25) x = Math.sign(p.x) * (h + 0.25); else z = p.z; } }
+    const r = Math.hypot(x, z); if (r > 120) { x *= 120 / r; z *= 120 / r; }
+  }
+  p.x = x; p.z = z; const ty = walker.inside ? FLOOR_Y + 1.12 : 1.68; p.y += (ty - p.y) * Math.min(1, dt * 8);
+}
+
+// ---- frame
+const clock = new THREE.Clock(), tmpM = new THREE.Matrix4(), qY = new THREE.Quaternion(), Y = new THREE.Vector3(0, 1, 0), X = new THREE.Vector3(1, 0, 0), v3 = new THREE.Vector3();
+const spin = (name, axis, ang) => { const n = nodes[name]; if (n && base[name]) n.quaternion.copy(base[name]).multiply(qY.setFromAxisAngle(axis, ang)); };
+function frame() {
+  const dt = Math.min(clock.getDelta(), 0.05);
+  // controls
+  const ax = (a, b) => (keys.has(a) ? 1 : 0) - (keys.has(b) ? 1 : 0), flying = mode === 'fly';
+  if (flying) { collective = Math.max(0, Math.min(1, collective + ax('ShiftLeft', 'ControlLeft') * dt * 0.28 + ax('KeyF', 'KeyC') * dt * 0.28)); }
+  const tgt = flying ? { lon: ax('KeyW', 'KeyS') * 0.55, lat: ax('KeyD', 'KeyA') * 0.55, pedal: ax('KeyE', 'KeyQ') * 0.7 } : { lon: 0, lat: 0, pedal: 0 };
+  for (const k in stick) stick[k] += (tgt[k] - stick[k]) * Math.min(1, dt * 5);
+  if (!flying && flight.out.onGround) collective = Math.max(0, collective - dt * 0.3);
+  for (let i = 0; i < 4; i++) flight.step(dt / 4, { collective, lon: stick.lon, lat: stick.lat, pedal: stick.pedal, fps: true });
+  const o = flight.out;
+  if (o.crashed && flying) { say('Hard landing. Press R to return to the pad.'); }
+  // aircraft pose
+  const t = flight.toThree(); tmpM.makeBasis(v3.fromArray(t.basis[0]).clone(), v3.fromArray(t.basis[1]).clone(), v3.fromArray(t.basis[2]).clone()); ac.quaternion.setFromRotationMatrix(tmpM); ac.position.fromArray(t.position);
+  // moving parts
+  spin('main_rotor', Y, o.psi); spin('tail_rotor', Y, o.psiTail);
+  spin('stabilator', X, -(o.stabilator || 0) * Math.PI / 180);
+  for (const s of ['L', 'R']) { const n = nodes['cyclic_' + s]; if (n && base['cyclic_' + s]) n.quaternion.copy(base['cyclic_' + s]).multiply(qY.setFromAxisAngle(X, stick.lon * 0.16)).multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), stick.lat * 0.16)); spin('collective_' + s, X, -collective * 0.3); }
+  const nr = o.rotorPct / 100, lift = Math.min(1.2, Math.abs(o.thrust) / 16260);
+  for (const b of blades) b.morphTargetInfluences[b.morphTargetDictionary.droop] = Math.max(-0.3, 0.8 * (1 - Math.min(1, nr * nr * 1.6)) - 0.3 * lift * nr);
+  const blur = Math.max(0, Math.min(1, (nr - 0.25) / 0.5));
+  if (discMain) { discMain.material.opacity = blur * 0.9; discMain.rotation.z = -o.psi * 0.07; discTail.material.opacity = blur * 0.9; }
+  for (const b of blades) { b.visible = blur < 0.98; }
+  if (mixer) mixer.update(dt);
+  // camera
+  if (mode === 'studio') { orbit.update(); }
+  else if (mode === 'walk') { if (o.onGround) walkStep(dt); camera.position.copy(walker.p).applyMatrix4(ac.matrixWorld.identity().compose(ac.position, ac.quaternion, ac.scale)); camera.quaternion.copy(ac.quaternion).multiply(new THREE.Quaternion().setFromEuler(new THREE.Euler(pitch, yaw, 0, 'YXZ'))); }
+  else {
+    ac.updateMatrixWorld(true);
+    const seat = flyView === 0 ? nodes.eye_pilot : flyView === 1 ? nodes.seat_gunner_left : null;
+    if (seat) { seat.getWorldPosition(camera.position); if (flyView === 1) camera.position.addScaledVector(v3.set(0, 1, 0).applyQuaternion(ac.quaternion), 0.75); camera.quaternion.copy(ac.quaternion).multiply(new THREE.Quaternion().setFromEuler(new THREE.Euler(pitch, yaw + Math.PI + (flyView === 1 ? Math.PI / 2 : 0), 0, 'YXZ'))); }
+    else { const h = Math.atan2(t.basis[2][0], t.basis[2][2]); v3.set(-Math.sin(h + yaw) * 22, 6 - pitch * 14, -Math.cos(h + yaw) * 22); camera.position.copy(ac.position).add(v3); camera.lookAt(ac.position.x, ac.position.y + 2.4, ac.position.z); }
+  }
+  camera.fov = mode === 'fly' && flyView === 0 ? 68 : mode === 'walk' ? 66 : 50; camera.updateProjectionMatrix();
+  sun.target.position.copy(ac.position); sun.position.copy(ac.position).add(v3.set(26, 42, 34));
+  sky.position.copy(camera.position);
+  // sound
+  if (sound.node) {
+    const dist = camera.position.distanceTo(ac.position), inside = mode === 'fly' ? flyView < 2 : mode === 'walk' && walker.inside;
+    sound.setListener({ view: inside ? (mode === 'fly' && flyView === 0 ? 'cockpit' : 'cabin') : 'outside', distance: dist, doorsOpen: doorState.cabin ? 1 : 0 });
+    sound.update(o);
+  }
+  // instruments
+  if (flying) {
+    const trq = (o.torquePct[0] + o.torquePct[1]) / 2; $('g-trq').lastElementChild.textContent = trq.toFixed(0); $('g-trq').className = 'g' + (trq > 100 ? ' warn' : '');
+    $('g-nr').lastElementChild.textContent = o.rotorPct.toFixed(0); $('g-nr').className = 'g' + (o.rotorPct > 105 || (o.rotorPct < 95 && !o.onGround) ? ' warn' : o.rotorPct > 95 ? ' ok' : '');
+    $('v-ias').textContent = Math.max(0, o.ias).toFixed(0); $('v-agl').textContent = Math.max(0, o.agl).toFixed(0); $('v-vs').textContent = (Math.round(o.vs / 10) * 10).toFixed(0);
+    $('v-hdg').textContent = String(Math.round(((o.heading * 180 / Math.PI) % 360 + 360) % 360) % 360).padStart(3, '0'); $('v-col').textContent = (collective * 100).toFixed(0); $('v-colbar').style.width = collective * 100 + '%';
+  }
+  if (msgT > 0 && (msgT -= dt) <= 0) $('msg').textContent = '';
+  renderer.render(scene, camera);
+  requestAnimationFrame(frame);
+}
+function resize() { const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
+addEventListener('resize', resize); resize(); setMode('studio');
+window.uh60 = { flight, setMode, setDoors, setEngines, camera, orbit, get lod() { return lod; }, set collective(v) { collective = v; }, set view(v) { flyView = v; } };
+loadModel(matchMedia('(max-width: 700px)').matches ? 1 : 0).then(() => { $('load').hidden = true; $('b-lod').setAttribute('aria-pressed', lod === 0); frame(); })
+  .catch(e => { $('load').textContent = 'The aircraft did not load. Reload the page to try again.'; console.error(e); });
+</script>
