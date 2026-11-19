@@ -244,7 +244,8 @@ def thrusters_and_lights(H):
     return mb
 
 # ------------------------------------------------------------------ outer hull detail: what a ground crew touches
-SEG = {'0': 'abcdef', '1': 'bc', '2': 'abged', '7': 'abc', 'F': 'aefg', '-': 'g'}
+SEG = {'0': 'abcdef', '1': 'bc', '2': 'abged', '3': 'abgcd', '4': 'fgbc', '5': 'afgcd', '6': 'afgedc', '7': 'abc', '8': 'abcdefg',
+       '9': 'abcdfg', 'F': 'aefg', '-': 'g'}
 
 def hull_details(H):
     """Seam straps, access panels with latches, a rung ladder, lifting lugs, louvres, walkway rails, belly fittings and
@@ -486,6 +487,86 @@ def strakes(H):
                 bolts.bolt(tuple(p0 + u * a * 0.335 + v * b * 0.075 + n * 0.02), tuple(n), r=0.008, h=0.006, washer=False)
     return mb, bolts
 
+def markings(H):
+    """Stencilled paint and hand-holds, sized to people: frame numbers at every ring frame, a dashed no-step line along
+    the roof walkway, a number under every equipment bay, a rescue arrow at the crew hatch, grab handles between
+    the bays. Paint is 3 mm of geometry standing on whatever plate is there."""
+    import fuselage
+    mb = MB(); bolts = MB()
+    segs = dict(a=(0, 1, 1, 0), d=(0, -1, 1, 0), g=(0, 0, 1, 0), f=(-1, 0.5, 0, 1), b=(1, 0.5, 0, 1), e=(-1, -0.5, 0, 1), c=(1, -0.5, 0, 1))
+    def top(j):
+        bt = fuselage.belt(j + 0.01); return (bt[0] if bt else 0.0) + 0.002
+    def heavy(i, j):
+        s = H.st[i]; return (11 <= j < 14 or 23 <= j < 26) and (4.2 < s < 7.4 or 18.8 < s < 21.8)
+    def free(i, j, sd, di=1):
+        return all(0 <= a < H.ni - 1 and not H.tag[sd][a, b] for a in range(i - di, i + di + 1) for b in (j - 1, j)) and not heavy(i, j)
+    def frame(i, j, sd):
+        p = np.array(H.pt(i, j, 0.0, sd)); n = np.array(H.nrm(i, j, sd)); n = n / np.linalg.norm(n)
+        u = np.array((1.0, 0.0, 0.0)) - n * n[0]; u = u / np.linalg.norm(u)
+        v = np.cross(n, u)
+        if v[2] < 0 and abs(n[2]) < 0.9: v = -v
+        return p, n, u, v
+    def slab(c, n, u, v, hu, hv, z0, m):
+        P = [c + u * a * hu + v * b * hv + n * z for z in (z0, z0 + 0.003) for a, b in ((-1, -1), (1, -1), (1, 1), (-1, 1))]
+        ix = [mb.v(tuple(q)) for q in P]
+        for q in ((4, 5, 6, 7), (0, 1, 5, 4), (1, 2, 6, 5), (2, 3, 7, 6), (3, 0, 4, 7)):
+            a, b, c2 = P[q[0]], P[q[1]], P[q[2]]
+            f = [ix[t] for t in q]
+            mb.f(f if np.dot(np.cross(b - a, c2 - a), (a + c2) / 2 - (c - n)) > 0 else f[::-1], m)
+    def text(c, n, rd, v, s, hh, z0, m='stencil_white'):
+        ww = hh * 0.55; pitch = hh * 1.8; t = max(0.012, hh * 0.13)
+        for k, ch in enumerate(s):
+            c0 = c + rd * (k - (len(s) - 1) / 2) * pitch
+            for sg in SEG[ch]:
+                cx, cy, hor, ver = segs[sg]
+                slab(c0 + rd * cx * ww + v * cy * hh, n, rd, v, ww * 0.8 if hor else t, t if hor else hh * 0.42, z0, m)
+    frames = [(s, H.si(s)) for s in np.arange(2.0, 28.5, 2.0)]
+    for sd in (1, -1):
+        # frame numbers, just aft of each ring frame on the upper flank and the lower flank
+        for s, i in frames:
+            for j in (12,):
+                ii = i + 1
+                if not free(ii, j, sd): continue
+                p, n, u, v = frame(ii, j, sd); rd = u if sd < 0 else -u
+                text(p + u * 0.10, n, rd, v, 'F%d' % int(round(s)), 0.045, top(j))
+        # the no-step line along the edge of the roof walkway: dashes, and a red block at each frame
+        for i in range(H.si(3.0), H.si(27.0)):
+            if not free(i, 5, sd, 0) or i % 2: continue
+            p, n, u, v = frame(i, 5, sd)
+            slab(p, n, u, v, 0.09, 0.016, top(5), 'stencil_red')
+        # a number under every equipment bay
+        nb = 0
+        for name, r in sorted(H.openings.items()):
+            if not name.startswith('bay_'): continue
+            i0, i1, j0, j1 = H.rect(name)[:4]; nb += 1
+            im = i0 + 1; j = j1 + 1
+            if j < H.nr and not H.tag[sd][im, j] and not H.tag[sd][im, j - 1] and fuselage.belt(j + 0.01):
+                p, n, u, v = frame(im, j, sd); rd = u if sd < 0 else -u
+                text(p - v * 0.06, n, rd, v, '%d-%d' % (2 if sd > 0 else 1, nb), 0.04, top(j))
+            # a grab handle each side of the bay, for whoever is up on a stand
+            jm = (j0 + j1) // 2
+            for i in (i1 + 1,):
+                if not (1 < i < H.ni - 2) or any(H.tag[sd][a, b] for a in (i - 1, i) for b in (jm - 1, jm)): continue
+                p, n, u, v = frame(i, jm, sd); z = top(jm) - 0.002
+                a = p + v * 0.16 + n * z; b = p - v * 0.16 + n * z
+                mb.cyl(tuple(a), tuple(a + n * 0.07), 0.011, 'machinery_bare', n=8); mb.cyl(tuple(b), tuple(b + n * 0.07), 0.011, 'machinery_bare', n=8)
+                mb.cyl(tuple(a + n * 0.07), tuple(b + n * 0.07), 0.014, 'hazard_yellow', n=8)
+                for q in (a, b):
+                    slab(q - n * 0.0, n, u, v, 0.035, 0.035, 0.0, 'machinery_dark')
+                    bolts.bolt(tuple(q + u * 0.024 + n * 0.003), tuple(n), r=0.007, h=0.005, washer=False)
+                    bolts.bolt(tuple(q - u * 0.024 + n * 0.003), tuple(n), r=0.007, h=0.005, washer=False)
+    # rescue arrow pointing at the crew hatch (port side), from forward of it
+    if 'crew_hatch' in H.openings:
+        i0, i1, j0, j1 = H.rect('crew_hatch')[:4]; sd = spec.CREW_HATCH['side'] if hasattr(spec, 'CREW_HATCH') else -1
+        i = i0 - 3; j = (j0 + j1) // 2
+        if i > 2 and not H.tag[sd][i, j]:
+            p, n, u, v = frame(i, j, sd); z = top(j) + (0.036 if heavy(i, j) else 0.0)
+            slab(p - u * 0.06, n, u, v, 0.14, 0.022, z, 'stencil_red')
+            for sgn in (1, -1):
+                d = (u * 0.75 + v * sgn * 0.66); d = d / np.linalg.norm(d); w = np.cross(n, d)
+                slab(p + u * 0.10 - d * 0.07 + v * 0.0, n, d, w, 0.08, 0.02, z, 'stencil_red')
+    return mb, bolts
+
 def build(H):
     parent = empty('gadgets', 'wayfarer')
     allb = MB()
@@ -499,5 +580,6 @@ def build(H):
     finish('thruster_quads_and_lights', thrusters_and_lights(H), parent, group='gadgets')
     mb, b = hull_details(H); finish('hull_details', mb, parent, group='gadgets'); allb.merge(b)
     mb, b = strakes(H); finish('hull_strakes', mb, parent, group='gadgets'); allb.merge(b)
+    mb, b = markings(H); finish('hull_markings', mb, parent, group='gadgets'); allb.merge(b)
     finish('gadget_bolts', allb, parent, sharp=60, group='fasteners')
     return dict(bays=len([n for n in H.openings if n.startswith('bay_')]) * 2)

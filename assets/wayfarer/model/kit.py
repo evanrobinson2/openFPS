@@ -48,6 +48,10 @@ PALETTE = {
     'armour_gunmetal_c': (0.275, 0.285, 0.300, 0.65, 0.50, 0, 1),
     'armour_gunmetal_d': (0.120, 0.125, 0.135, 0.55, 0.68, 0, 1),
     'hull_skin': (0.090, 0.094, 0.102, 0.45, 0.66, 0, 1),
+    'armour_edge_worn': (0.400, 0.410, 0.425, 0.90, 0.40, 0, 1),
+    'stencil_white': (0.700, 0.700, 0.680, 0.00, 0.70, 0, 1),
+    'stencil_red': (0.560, 0.070, 0.045, 0.00, 0.65, 0, 1),
+    'stencil_yellow': (0.720, 0.520, 0.060, 0.00, 0.65, 0, 1),
     'armour_paint_red': (0.520, 0.060, 0.035, 0.35, 0.50, 0, 1),
     'armour_paint_red_dark': (0.300, 0.040, 0.030, 0.35, 0.55, 0, 1),
     'substructure_dark': (0.030, 0.031, 0.034, 0.60, 0.70, 0, 1),
@@ -88,7 +92,7 @@ PALETTE = {
 EXTERIOR = ('armour_', 'substructure_', 'recess_floors', 'opening_coamings', 'coaming_bolts', 'canopy_', 'engine_', 'gear_',
             'chin_', 'dorsal_', 'hull_', 'keel_', 'nose_', 'thruster_', 'ventral_', 'waist_', 'equipment_bay',
             'gadget_bolts', 'lander_door', 'crew_hatch', 'viewport_trim')
-SURFACED = ('armour_gunmetal_a', 'armour_gunmetal_b', 'armour_gunmetal_c', 'armour_gunmetal_d', 'hull_skin', 'armour_paint_red',
+SURFACED = ('armour_edge_worn', 'armour_gunmetal_a', 'armour_gunmetal_b', 'armour_gunmetal_c', 'armour_gunmetal_d', 'hull_skin', 'armour_paint_red',
             'armour_paint_red_dark', 'substructure_dark', 'structure_steel', 'structure_primer', 'lining_panel', 'lining_panel_dark',
             'deck_plate', 'machinery_dark', 'machinery_heat', 'hazard_yellow')      # roles that carry the surface tile, on outside objects only
 SURFACE_TILE = 2.0      # metres per repeat

@@ -85,7 +85,7 @@ def colours(o, exterior):
         if o.name.startswith(('armour_plates', 'recess_floors')) or 'bolts' in o.name:
             lab = _islands(nv, lv, lf, starts)
             isl = _hash(lab, lab * 0 + 7, lab * 0 + 3, zlib.crc32(o.name.encode()) % 1000)
-            f *= 1 + 0.14 * (isl - 0.5)
+            f *= 1 + 0.34 * (isl - 0.5)
             f *= np.where(isl > 0.95, 1.10, np.where(isl < 0.05, 0.86, 1.0))            # the odd replaced plate, the odd scorched one
         belly = np.clip((-0.8 - P[:, 2]) / 2.2, 0, 1)
         f *= 1 - 0.40 * belly * (0.4 + 0.6 * fbm(P, 0.9, 3))

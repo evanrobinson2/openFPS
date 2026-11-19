@@ -140,7 +140,8 @@ def _armour(mb, bolts, H, r, side, h, m, base=0.0):
         return 0
     M = H.nodes(i0, i1, j0, j1, base + h - BEVEL * 0.8, side, margin=ARMOUR_GAP)
     B = H.nodes(i0, i1, j0, j1, base - 0.004, side, margin=ARMOUR_GAP)
-    H.sheet(mb, A, m, flip=fl); H.skirt(mb, A, M, m, flip=fl); H.skirt(mb, M, B, m, flip=fl)
+    # the bevel is where paint goes first: it is bare, rubbed metal
+    H.sheet(mb, A, m, flip=fl); H.skirt(mb, A, M, 'armour_edge_worn', flip=fl); H.skirt(mb, M, B, m, flip=fl)
     Bn = H.nodes(i0, i1, j0, j1, base + h, side, margin=0.085)
     ni, nj, _ = Bn.shape
     if np.linalg.norm(Bn[0, 0] - Bn[0, -1]) < 0.24 or np.linalg.norm(Bn[0, 0] - Bn[-1, 0]) < 0.24:
@@ -252,6 +253,12 @@ def build_plating(H, parent):
                 if 3 <= 0.5 * (j0 + j1) < 7 and 19.4 < sm < 21.6: m = 'armour_paint_red_dark'          # identification band on the shoulder
                 if (tg[i0:i1, j0:j1] != 0).any():
                     continue
+                # the odd plate has been replaced: a different batch of paint, and one or two still in primer
+                key = (i0 * 7 + j0 * 13 + (3 if side > 0 else 0)) % 11
+                if m.startswith('armour_gunmetal'):
+                    if key in (0, 3): m = 'armour_gunmetal_c' if m != 'armour_gunmetal_c' else 'armour_gunmetal_a'
+                    elif key in (5, 9): m = 'armour_gunmetal_d' if m != 'armour_gunmetal_d' else 'armour_gunmetal_b'
+                    elif key == 8 and (i0 + j0) % 4 == 0: m = 'structure_primer'
                 counts['plates'] += _armour(plates, bolts, H, (i0, i1, j0, j1), side, h, m)
                 # applique: a second plate over the crew and the machinery, never at random
                 heavy = (11 <= 0.5 * (j0 + j1) < 14 or 23 <= 0.5 * (j0 + j1) < 26) and (4.4 < sm < 7.2 or 19.0 < sm < 21.6)

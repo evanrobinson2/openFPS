@@ -12,6 +12,10 @@
   stops and on the ring frames, alternate belts half a bay out of step, and no joint is closer than 0.7 m to another,
   so there are no slivers (1,514 plates became 285). Applique plates go over the crew and the machinery, never at
   random. Three bare strakes between the belts carry the conduits, clamped to the skin, with junction boxes.
+- **Hull polish (2026-11-19).** The sealed hull read uniformly grey. Added: bare metal on every plate bevel, replaced
+  plates in other paint batches, stencils (seven-segment frame and bay numbers, a no-step line, a rescue arrow) and
+  grab handles on the pillars between bays. Hazard corners round the bays were tried and removed: they landed on the
+  waistline strake and fought the conduits.
 - **Surface.** Roughness, scratches and dents come from three tiling textures made by rule at build time
   (`model/surface.py`), box-projected, shared by every painted role. A texture file is never committed. The exporter
   only sees flat materials plus the wear colours; the build adds the maps to the GLB afterwards and wires the same
@@ -28,7 +32,7 @@
   than through it. That set the lander's width at 2.2 m.
 - **Lower deck doors** part in the middle, because a single leaf could not slide past the gear wells.
 - **Landing gear.** Front pair folds aft, rear pair folds forward, each into a real well with two doors.
-- **Level of detail.** `--lod 1` leaves out fasteners (627,000 triangles down to 335,000).
+- **Level of detail.** `--lod 1` leaves out fasteners (634,000 triangles down to 341,000).
 
 ## Limits, plainly
 
