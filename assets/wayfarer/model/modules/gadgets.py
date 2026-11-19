@@ -121,7 +121,7 @@ def bay_contents(H):
     names = sorted(n for n in H.openings if n.startswith('bay_'))
     for name in names:
         i0, i1, j0, j1, _ = H.rect(name)
-        kind = int(name.split('_')[1]) % 4
+        kind = (0, 4, 1, 2, 4, 0, 3, 2)[int(name.split('_')[1]) % 8]      # not a repeating row: two bays are closed by armoured covers
         for sd in (1, -1):
             G = H.nodes(i0, i1, j0, j1, -spec.BAYS['depth'], sd, margin=0.10)
             p00, p10, p01 = G[0, 0], G[-1, 0], G[0, -1]       # top-forward, top-aft, bottom-forward
@@ -134,6 +134,35 @@ def bay_contents(H):
                 return tuple(p01 + es * a + ev * b + en * c)
             def obox(a0, a1, b0, b1, c0, c1, m):
                 mb.obox(P((a0 + a1) / 2, (b0 + b1) / 2, (c0 + c1) / 2), tuple(es * (a1 - a0) / 2), tuple(ev * (b1 - b0) / 2), tuple(en * (c1 - c0) / 2 * (1 if np.dot(np.cross(es, ev), en) > 0 else -1)), m)
+            D = spec.BAYS['depth']
+            if kind == 4:                                      # closed bay: an armoured cover flush with the hull, hinged below, latched above
+                obox(-0.085, Ls + 0.085, -0.085, Lv + 0.085, D - 0.05, D + 0.012, 'armour_gunmetal_a')
+                obox(0.03, Ls - 0.03, 0.03, Lv - 0.03, D + 0.012, D + 0.034, 'armour_gunmetal_c')
+                for k in range(3):
+                    a = Ls * (0.18 + 0.32 * k)
+                    mb.cyl(P(a - 0.07, -0.085, D + 0.02), P(a + 0.07, -0.085, D + 0.02), 0.02, 'machinery_bare', n=8)
+                    obox(a - 0.05, a + 0.05, -0.085, 0.02, D + 0.012, D + 0.02, 'structure_steel')
+                    c = P(a, Lv + 0.02, D + 0.012)
+                    mb.cyl(c, tuple(np.array(c) + en * 0.012), 0.03, 'machinery_bare', n=10)
+                    obox(a - 0.022, a + 0.022, Lv + 0.016, Lv + 0.024, D + 0.024, D + 0.028, 'machinery_dark')
+                nb = 6
+                for k in range(nb + 1):
+                    a = 0.0 + Ls * k / nb
+                    bolts.bolt(P(a, 0.0, D + 0.034), tuple(en), r=0.014, h=0.01); bolts.bolt(P(a, Lv, D + 0.034), tuple(en), r=0.014, h=0.01)
+                for k in range(1, 4):
+                    bolts.bolt(P(0.0, Lv * k / 4, D + 0.034), tuple(en), r=0.014, h=0.01); bolts.bolt(P(Ls, Lv * k / 4, D + 0.034), tuple(en), r=0.014, h=0.01)
+                obox(Ls * 0.36, Ls * 0.64, Lv * 0.70, Lv * 0.78, D + 0.034, D + 0.037, 'placard_white')
+                obox(Ls * 0.10, Ls * 0.90, Lv * 0.16, Lv * 0.22, D + 0.034, D + 0.037, 'hazard_yellow')
+                for k in range(6):
+                    obox(Ls * (0.14 + 0.14 * k), Ls * (0.14 + 0.14 * k) + 0.05, Lv * 0.16, Lv * 0.22, D + 0.037, D + 0.039, 'machinery_dark')
+                continue
+            if kind in (1, 3):                                 # open bays get a guard: bars across at the hull line
+                for f in (0.22, 0.5, 0.78):
+                    mb.cyl(P(-0.09, Lv * f, D + 0.02), P(Ls + 0.09, Lv * f, D + 0.02), 0.016, 'structure_steel', n=8)
+                for a in (-0.06, Ls + 0.06):
+                    obox(a - 0.025, a + 0.025, 0.0, Lv, D - 0.005, D + 0.012, 'structure_steel')
+                    for f in (0.22, 0.5, 0.78):
+                        bolts.bolt(P(a, Lv * f + 0.05, D + 0.012), tuple(en), r=0.010, h=0.007)
             if kind == 0:                                      # louvre vents
                 obox(0.05, Ls - 0.05, 0.05, Lv - 0.05, 0.0, 0.03, 'machinery_dark')
                 nl = 9
@@ -386,6 +415,77 @@ def hull_details(H):
                 slab(c, n, rd, v, (ww * (0.6 if ch == '-' else 1.0)) if hor else 0.022, 0.022 if hor else hh / 2, TOPP, TOPP + 0.004, 'placard_white')
     return mb, bolts
 
+def strakes(H):
+    """The bare strakes between the armour belts carry the ship's services: conduit runs clamped to the skin that
+    disappear into junction boxes, and ribbed stiffener panels between them."""
+    mb = MB(); bolts = MB()
+    def pt(i, jf, off, sd):
+        j = int(math.floor(jf)); f = jf - j
+        a = np.array(H.pt(i, j, off, sd)); b = np.array(H.pt(i, min(j + 1, H.nr), off, sd))
+        n = np.array(H.nrm(i, j, sd)) * (1 - f) + np.array(H.nrm(i, min(j + 1, H.nr), sd)) * f
+        return a + (b - a) * f, n / np.linalg.norm(n)
+    def free(i, jf, sd):
+        j = int(math.floor(jf))
+        return 0 <= i < H.ni - 1 and not H.tag[sd][i, j] and not H.tag[sd][max(i - 1, 0), j]
+    def box(c, n, u, v, hu, hv, z0, z1, m):
+        cc = c + n * 0.5 * (z0 + z1); a, b, d = u * hu, v * hv, n * 0.5 * (z1 - z0)
+        if np.dot(np.cross(a, b), d) < 0: b = -b
+        mb.obox(tuple(cc), tuple(a), tuple(b), tuple(d), m)
+    runs = (   # row (fractional), pipes as (offset across in rows, radius, material), from s, to s, junction box pitch
+        (10.5, ((-0.22, 0.026, 'machinery_dark'), (0.0, 0.019, 'copper_pipe'), (0.20, 0.022, 'machinery_bare')), 4.9, 21.2, 3.2),
+        (27.0, ((-0.30, 0.030, 'machinery_dark'), (-0.05, 0.020, 'machinery_bare'), (0.22, 0.017, 'copper_pipe')), 5.0, 21.2, 4.0),
+        (18.0, ((-0.62, 0.018, 'machinery_dark'), (0.46, 0.018, 'machinery_bare')), 7.4, 20.9, 0.0),
+    )
+    for jf, pipes, sa, sb, pitch in runs:
+        ia, ib = H.si(sa), H.si(sb)
+        jb = set(H.si(sa + 0.6 + k * pitch) for k in range(int((sb - sa) / pitch) + 1)) if pitch else set()
+        for sd in (1, -1):
+            for (dj, r, m) in pipes:
+                seg = []
+                def flush():
+                    if len(seg) >= 2:
+                        mb.pipe([tuple(x) for x in seg], r, m, n=6)
+                    seg.clear()
+                for i in range(ia, ib + 1):
+                    if not free(i, jf + dj, sd): flush(); continue
+                    p, n = pt(i, jf + dj, r + 0.014, sd)
+                    seg.append(p)
+                    if (i - ia) % 4 == 2 and i not in jb:                    # saddle clamp
+                        p0, _ = pt(i, jf + dj, 0.0, sd)
+                        u = np.array((1.0, 0, 0)); v = np.cross(n, u); v /= np.linalg.norm(v)
+                        box(p0, n, u, v, 0.022, r + 0.022, 0.0, 2 * r + 0.022, 'structure_steel')
+                        for sg in (-1, 1):
+                            bolts.bolt(tuple(p0 + v * sg * (r + 0.012) + n * (2 * r + 0.022)), tuple(n), r=0.007, h=0.005, washer=False)
+                flush()
+            for i in jb:                                                    # junction boxes the runs pass through
+                if not all(free(i + d, jf + dj, sd) for d in (-1, 0, 1) for dj in (-0.3, 0.3)): continue
+                p0, n = pt(i, jf, 0.0, sd)
+                u = np.array((1.0, 0, 0)) - n * n[0]; u /= np.linalg.norm(u); v = np.cross(n, u)
+                hv = 0.5 * np.linalg.norm(np.array(H.pt(i, int(jf) + 1, 0, sd)) - np.array(H.pt(i, int(jf), 0, sd))) * 0.86
+                box(p0, n, u, v, 0.20, hv, 0.0, 0.085, 'armour_gunmetal_d')
+                box(p0, n, u, v, 0.17, hv - 0.03, 0.085, 0.097, 'armour_gunmetal_c')
+                box(p0 + u * 0.06, n, u, v, 0.06, 0.02, 0.097, 0.099, 'placard_white')
+                for (a, b) in ((-1, -1), (1, -1), (-1, 1), (1, 1)):
+                    bolts.bolt(tuple(p0 + u * a * 0.15 + v * b * (hv - 0.05) + n * 0.097), tuple(n), r=0.010, h=0.007)
+                for sg in (-1, 1):                                          # glands where the pipes enter
+                    for (dj, r, m) in pipes:
+                        g, gn = pt(i, jf + dj, r + 0.014, sd)
+                        mb.cyl(tuple(g + u * sg * 0.20), tuple(g + u * sg * 0.235), r + 0.012, 'machinery_bare', n=8)
+    # ribbed stiffener panels on the waistline strake, between the bays' pillars
+    for s in np.arange(8.3, 20.4, 1.6):
+        if min(abs(s - x) for x in (10.2, 14.0, 17.9)) < 0.95: continue          # leave the lights clear
+        i = H.si(float(s))
+        for sd in (1, -1):
+            if not all(free(i + d, 17.2, sd) and free(i + d, 18.6, sd) for d in (-2, 0, 2)): continue
+            p0, n = pt(i, 18.0, 0.0, sd)
+            u = np.array((1.0, 0, 0)) - n * n[0]; u /= np.linalg.norm(u); v = np.cross(n, u)
+            box(p0, n, u, v, 0.36, 0.10, 0.0, 0.02, 'armour_gunmetal_d')
+            for k in range(7):
+                box(p0 + u * (-0.30 + 0.10 * k), n, u, v, 0.022, 0.085, 0.02, 0.038, 'armour_gunmetal_b')
+            for (a, b) in ((-1, -1), (1, -1), (-1, 1), (1, 1)):
+                bolts.bolt(tuple(p0 + u * a * 0.335 + v * b * 0.075 + n * 0.02), tuple(n), r=0.008, h=0.006, washer=False)
+    return mb, bolts
+
 def build(H):
     parent = empty('gadgets', 'wayfarer')
     allb = MB()
@@ -398,5 +498,6 @@ def build(H):
     mb, b = waist_conduits(H); finish('waist_conduits', mb, parent, group='gadgets'); allb.merge(b)
     finish('thruster_quads_and_lights', thrusters_and_lights(H), parent, group='gadgets')
     mb, b = hull_details(H); finish('hull_details', mb, parent, group='gadgets'); allb.merge(b)
+    mb, b = strakes(H); finish('hull_strakes', mb, parent, group='gadgets'); allb.merge(b)
     finish('gadget_bolts', allb, parent, sharp=60, group='fasteners')
     return dict(bays=len([n for n in H.openings if n.startswith('bay_')]) * 2)

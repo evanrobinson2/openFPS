@@ -93,10 +93,10 @@ def _split(rng, i0, i1, j0, j1, H, out, max_len, max_rows):
 
 def _plate(mb, bolts, H, r, side, off, h, m, bolt_every=2):
     i0, i1, j0, j1 = r; fl = side < 0
-    A = H.nodes(i0, i1, j0, j1, off + h, side, margin=spec.PANEL_GAP)
+    A = H.nodes(i0, i1, j0, j1, off + h, side, margin=0.0015)
     if np.linalg.norm(A[0, 0] - A[-1, -1]) < 0.12:
         return 0
-    B = H.nodes(i0, i1, j0, j1, min(spec.OFF_BASE, off - 0.12) - 0.02, side, margin=spec.PANEL_GAP)
+    B = H.nodes(i0, i1, j0, j1, min(spec.OFF_BASE, off - 0.12) - 0.02, side, margin=0.0015)
     H.sheet(mb, A, m, flip=fl); H.skirt(mb, A, B, m, flip=fl)
     if bolts is None:
         return 1
@@ -113,43 +113,154 @@ def _plate(mb, bolts, H, r, side, off, h, m, bolt_every=2):
             bolts.bolt(tuple(Bn[a, b]), H.nrm(i0 + a, j0 + b, side), r=0.016, h=0.010, washer=False)
     return 1
 
+ARMOUR_GAP = 0.007          # half-gap between armour plates; the sealed skin and a seam strap sit behind every gap
+BEVEL = 0.022
+
+def belt(jm):
+    """What covers the hull at a row (jm = mid row of a band): (plate thickness, material) or None for a bare strake
+    where the skin, its seams and the conduit runs show."""
+    if jm < 3: return None                           # spine strip: walkway and cable duct
+    if jm < 7: return (0.050, 'armour_gunmetal_a')
+    if jm < 10: return (0.060, 'armour_gunmetal_b')
+    if jm < 11: return None                          # upper conduit strake
+    if jm < 14: return (0.070, 'armour_gunmetal_a')
+    if jm < 17: return (0.050, 'armour_gunmetal_c')
+    if jm < 19: return None                          # waistline strake (signal red forward)
+    if jm < 23: return (0.060, 'armour_gunmetal_b')
+    if jm < 26: return (0.070, 'armour_gunmetal_a')
+    if jm < 28: return None                          # lower conduit strake
+    if jm < 31: return (0.040, 'armour_gunmetal_d')
+    return (0.040, 'armour_gunmetal_b')
+
+def _armour(mb, bolts, H, r, side, h, m, base=0.0):
+    """One armour plate: a slab with real thickness and a bevelled edge, standing on the skin, bolted round its edge."""
+    i0, i1, j0, j1 = r; fl = side < 0
+    A = H.nodes(i0, i1, j0, j1, base + h, side, margin=ARMOUR_GAP + BEVEL)
+    if np.linalg.norm(A[0, 0] - A[-1, -1]) < 0.30 or np.linalg.norm(A[0, 0] - A[0, -1]) < 0.10 or np.linalg.norm(A[0, 0] - A[-1, 0]) < 0.10:
+        return 0
+    M = H.nodes(i0, i1, j0, j1, base + h - BEVEL * 0.8, side, margin=ARMOUR_GAP)
+    B = H.nodes(i0, i1, j0, j1, base - 0.004, side, margin=ARMOUR_GAP)
+    H.sheet(mb, A, m, flip=fl); H.skirt(mb, A, M, m, flip=fl); H.skirt(mb, M, B, m, flip=fl)
+    Bn = H.nodes(i0, i1, j0, j1, base + h, side, margin=0.085)
+    ni, nj, _ = Bn.shape
+    if np.linalg.norm(Bn[0, 0] - Bn[0, -1]) < 0.24 or np.linalg.norm(Bn[0, 0] - Bn[-1, 0]) < 0.24:
+        return 1
+    for a in range(ni):
+        for b in range(nj):
+            edge = a in (0, ni - 1) or b in (0, nj - 1)
+            corner = a in (0, ni - 1) and b in (0, nj - 1)
+            if not edge or not (corner or (a + b) % 2 == 0):
+                continue
+            bolts.bolt(tuple(Bn[a, b]), H.nrm(i0 + a, j0 + b, side), r=0.017, h=0.010, washer=True)
+    return 1
+
+def _skin(H, side):
+    """The sealed hull: one continuous skin over everything that is not an opening or a recess, with walls down into
+    every recess, so no gap anywhere looks through to the inside."""
+    mb = MB(); fl = side < 0
+    G = H.nodes(0, H.ni - 1, 0, H.nr, 0.0, side); Gb = H.nodes(0, H.ni - 1, 0, H.nr, spec.OFF_BASE - 0.02, side)
+    idx = [[mb.v(G[a, b]) for b in range(H.nr + 1)] for a in range(H.ni)]
+    tag = H.tag[side]
+    for a in range(H.ni - 1):
+        for b in range(H.nr):
+            if tag[a, b]: continue
+            if np.linalg.norm(np.cross(G[a + 1, b + 1] - G[a, b], G[a, b + 1] - G[a + 1, b])) < 1e-6: continue
+            red = H.chin[0] <= b < H.chin[1] and H.st[a + 1] <= 5.3
+            q = (idx[a][b], idx[a + 1][b], idx[a + 1][b + 1], idx[a][b + 1])
+            mb.f(q if fl else q[::-1], 'armour_paint_red' if red else 'hull_skin')
+            c = (G[a, b] + G[a + 1, b + 1]) / 2
+            for (da, db, e0, e1) in ((-1, 0, (a, b), (a, b + 1)), (1, 0, (a + 1, b), (a + 1, b + 1)), (0, -1, (a, b), (a + 1, b)), (0, 1, (a, b + 1), (a + 1, b + 1))):
+                na, nb = a + da, b + db
+                if not (0 <= na < H.ni - 1 and 0 <= nb < H.nr) or not tag[na, nb]: continue
+                P = [G[e0], G[e1], Gb[e1], Gb[e0]]
+                if np.linalg.norm(P[0] - P[1]) < 1e-6: continue
+                n = np.cross(P[1] - P[0], P[3] - P[0]); out = (G[min(na, H.ni - 2), nb] + G[min(na + 1, H.ni - 1), min(nb + 1, H.nr)]) / 2 - c
+                w = mb.vs(P)
+                mb.f(w if np.dot(n, out) > 0 else w[::-1], 'hull_skin')
+    return mb
+
+def _seams(H, side, frame_i, j_lines):
+    """Seam straps: a batten over every skin joint (ring frames and the long strake lines), bolted both sides on the
+    bare strakes. Under the armour the same straps back every plate gap."""
+    mb = MB(); bolts = MB(); tag = H.tag[side]
+    def bare(jm): return belt(jm) is None
+    for i in frame_i:
+        if not 1 <= i < H.ni - 1: continue
+        j = 1
+        while j < H.nr:
+            k = j
+            while k < H.nr and not tag[i - 1, k] and not tag[i, k]: k += 1
+            if k > j:
+                H.rib_s(mb, i, j, k, side, 0.012, -0.004, 0.05, 'structure_steel')
+                for q in range(j, k + 1):
+                    if bare(q - 0.5) or bare(q + 0.5):
+                        p = np.array(H.pt(i, q, 0.012, side)); n = H.nrm(i, q, side)
+                        for ds in (-0.028, 0.028):
+                            bolts.bolt(tuple(p + np.array((ds, 0, 0))), n, r=0.010, h=0.007, washer=False)
+            j = k + 1
+    for jl in j_lines:
+        if not 1 <= jl < H.nr: continue
+        i = 2
+        while i < H.ni - 2:
+            k = i
+            while k < H.ni - 2 and not tag[k, jl - 1] and not tag[k, jl] and np.linalg.norm(H.P[k + 1, jl] - H.P[k, jl]) > 1e-4: k += 1
+            if k - i >= 2:
+                H.rib_j(mb, jl, i, k, side, 0.012, -0.004, 0.04, 'structure_steel')
+            i = k + 1
+    return mb, bolts
+
 def build_plating(H, parent):
-    rng = random.Random(27)
     frame_i = sorted(set(H.si(s) for s in np.arange(2.0, 28.5, 2.0)))
     s_lines = sorted(H.s_split | set(frame_i) | {0, H.ni - 1})
-    j_lines = sorted(H.j_split | {0, H.nr})
+    j_lines = sorted(H.j_split | {0, 3, 7, H.nr})
     counts = dict(plates=0, bolts=0)
+    stag_i = sorted(set(H.si(s) for s in np.arange(3.0, 28.5, 2.0)))
     for side, sname in ((1, 'stbd'), (-1, 'port')):
         plates = MB(); bolts = MB(); recess = MB()
-        for a in range(len(s_lines) - 1):
-            for b in range(len(j_lines) - 1):
-                i0, i1, j0, j1 = s_lines[a], s_lines[a + 1], j_lines[b], j_lines[b + 1]
-                if i1 <= i0 or j1 <= j0:
+        tg = H.tag[side]
+        for b in range(len(j_lines) - 1):
+            j0, j1 = j_lines[b], j_lines[b + 1]
+            if j1 <= j0:
+                continue
+            # joints for this belt: where an opening or recess starts or stops in these rows, then the ring frames (every
+            # other belt half a bay out of step), and never a sliver: a frame joint closer than 0.7 m to another is dropped
+            need = {0, H.ni - 1} | {i for i in range(1, H.ni - 1) if (tg[i - 1, j0:j1] != tg[i, j0:j1]).any()}
+            lines = set(need)
+            for i in (stag_i if b % 2 else frame_i):
+                if all(abs(H.st[i] - H.st[k]) >= 0.7 for k in lines):
+                    lines.add(i)
+            lines = sorted(lines)
+            for a in range(len(lines) - 1):
+                i0, i1 = lines[a], lines[a + 1]
+                if i1 <= i0:
                     continue
                 tag = int(H.tag[side][i0, j0])
                 if tag == 1:
                     continue
-                if tag == 2:        # waist channel floor: long red plates
-                    m = 'armour_paint_red' if rng.random() < 0.8 else 'armour_paint_red_dark'
+                if tag == 2:        # waist channel floor: long red plates, laid edge to edge
+                    m = 'armour_paint_red'
                     counts['plates'] += _plate(recess, bolts, H, (i0, i1, j0, j1), side, -spec.WAIST['depth'], 0.0, m)
                     continue
                 if tag == 3:        # equipment bay floor
                     counts['plates'] += _plate(recess, bolts, H, (i0, i1, j0, j1), side, -spec.BAYS['depth'], 0.0, 'machinery_dark')
                     continue
-                rects = []
-                _split(rng, i0, i1, j0, j1, H, rects, (1.1, 2.6), (3, 6))
-                for r in rects:
-                    h = rng.choice(spec.PANEL_LAYERS)
-                    m = rng.choice(GUNMETAL)
-                    chin = (H.chin[0] <= r[2] and r[3] <= H.chin[1] and H.st[r[1]] <= 5.3)
-                    if chin:
-                        m = 'armour_paint_red'; h = 0.03
-                    elif rng.random() < 0.025:
-                        m = 'armour_paint_red_dark'
-                    counts['plates'] += _plate(plates, bolts, H, r, side, 0.0, h, m)
-                    # applique armour: a second, smaller plate bolted on top
-                    if not chin and r[1] - r[0] >= 5 and r[3] - r[2] >= 4 and rng.random() < 0.16:
-                        counts['plates'] += _plate(plates, bolts, H, (r[0] + 1, r[1] - 1, r[2] + 1, r[3] - 1), side, 0.0, h + 0.04, rng.choice(GUNMETAL))
+                bt = belt(0.5 * (j0 + j1))
+                if bt is None:
+                    continue
+                h, m = bt
+                sm = 0.5 * (H.st[i0] + H.st[i1])
+                if 3 <= 0.5 * (j0 + j1) < 7 and 19.4 < sm < 21.6: m = 'armour_paint_red_dark'          # identification band on the shoulder
+                if (tg[i0:i1, j0:j1] != 0).any():
+                    continue
+                counts['plates'] += _armour(plates, bolts, H, (i0, i1, j0, j1), side, h, m)
+                # applique: a second plate over the crew and the machinery, never at random
+                heavy = (11 <= 0.5 * (j0 + j1) < 14 or 23 <= 0.5 * (j0 + j1) < 26) and (4.4 < sm < 7.2 or 19.0 < sm < 21.6)
+                if heavy and i1 - i0 >= 5 and j1 - j0 >= 3:
+                    counts['plates'] += _armour(plates, bolts, H, (i0 + 1, i1 - 1, j0 + 1, j1 - 1) if j1 - j0 >= 4 else (i0 + 1, i1 - 1, j0, j1), side, 0.035, 'armour_gunmetal_c', base=h)
+        seams, sbolts = _seams(H, side, frame_i, j_lines)
+        bolts.merge(sbolts)
+        finish(f'hull_skin_{sname}', _skin(H, side), parent, group='fuselage')
+        finish(f'hull_seams_{sname}', seams, parent, group='fuselage')
         finish(f'armour_plates_{sname}', plates, parent, group='fuselage')
         finish(f'recess_floors_{sname}', recess, parent, group='fuselage')
         finish(f'armour_bolts_{sname}', bolts, parent, sharp=60, group='fasteners')

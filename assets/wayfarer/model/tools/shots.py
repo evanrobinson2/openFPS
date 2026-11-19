@@ -48,6 +48,8 @@ PERSP = {
     'flank': dict(eye=(2.0, -8.5, 0.6), target=(8.5, -2.9, -0.2), lens=40),
     'roof': dict(eye=(6.5, -3.2, 5.6), target=(12.5, -0.3, 3.0), lens=26),
     'belly_fwd': dict(eye=(1.0, -5.5, -4.3), target=(7.5, -0.8, -2.6), lens=28),
+    'flank_side': dict(eye=(13.6, 19.0, 0.4), target=(13.6, 3.0, -0.3), lens=50),
+    'flank_close': dict(eye=(11.0, 7.5, 0.9), target=(13.2, 3.0, -0.2), lens=35),
     'under_lift': dict(eye=(3.2, -6.0, -3.3), target=(10.8, 0.0, -3.6), lens=26),
     'ramp_top': dict(eye=(12.4, -0.35, -2.75), target=(8.6, 0.0, -4.5), lens=16),
     'hold': dict(eye=(13.55, -1.0, -0.75), target=(10.6, 0.3, -1.9), lens=14),

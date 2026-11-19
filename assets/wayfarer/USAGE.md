@@ -12,15 +12,16 @@ to places inside, hide modules, slide a cutaway through the hull and run every m
 ## Status
 
 This is the **structure stage**: the whole ship exists at true size with real walls, decks, doors and mechanisms, in
-its detail pass. Every section has now had one: cockpit, engine section, landing gear, lift chassis, lander bay and the crew spaces. The outer hull has had one too, and a first wear layer is on. It is not finished art.
+its detail pass. Every section has now had one: cockpit, engine section, landing gear, lift chassis, lander bay and the crew spaces. The outer hull was then rebuilt as a sealed hull (19 November 2026): a continuous skin, bolted seam straps, bevelled armour belts, conduit strakes, and a surface texture layer. It is not finished art.
 
 | Part | State |
 |---|---|
-| Geometry (`model/`) | A recipe in Blender Python. 158 named objects in eight modules, 1,514 armour plates, 525,000 triangles of which 208,000 are fasteners. It writes `out/wayfarer.glb`, a build output that is never committed. |
+| Geometry (`model/`) | A recipe in Blender Python. 163 named objects in eight modules, 285 bolted armour plates on a sealed skin, 627,000 triangles of which 258,000 are fasteners. It writes `out/wayfarer.glb`, a build output that is never committed. |
 | Mechanisms | 11 keyed clips: landing gear, lift chassis with its ramp, lander bay doors and cradle, crew hatch, seven sliding doors. Kinematic only: the linkages are solved by geometry, not by forces. |
 | Sockets | 14 named points for the game: eyes, thresholds, muzzles, exhausts, ground. |
 | Checks (`model/tools/checks.py`) | 30 checks pass: the envelope, standing headroom on both decks, door and hatch sizes, the lift and lander fitting their openings, clip lengths. |
-| Materials | Flat colours by role (30 named materials), times a wear layer: one colour attribute per mesh (`wear`, glTF `COLOR_0`) computed by rule in `model/wear.py` from where each vertex is: tone variation, plate-to-plate tint, belly grime, streaks, soot towards the nozzles, scuffing above the decks. Build with `--no-wear` to leave it off. No textures: scratches, chipped paint and fine streaks are not there, because a plate only has vertices at its corners. Markings are geometry (the hull number, placards). |
+| Hull build-up | Four layers, inside out: the pressure lining; a continuous sealed skin (`hull_skin_*`, with walls down into every recess, so no joint looks through to the inside); seam straps over every ring frame and strake line (`hull_seams_*`); armour belts standing on the skin (`armour_plates_*`: slabs 40 to 70 mm thick with a bevelled edge and a bolt row, joints out of step from belt to belt, a second applique plate over the crew and the machinery). Three bare strakes between the belts carry the conduit runs, junction boxes and stiffener panels (`hull_strakes`). |
+| Materials | Colours by role (31 named materials), times two rule-made layers. The wear layer is one colour attribute per mesh (`wear`, glTF `COLOR_0`) computed in `model/wear.py` from where each vertex is: tone variation, plate-to-plate tint, belly grime, soot towards the nozzles, scuffing above the decks. The surface layer (`model/surface.py`) is three 1024 px tiling textures generated at build time and never committed: a base-colour overlay (grime, scratches, specks), a roughness map (scratches and rubbed patches are shinier) and a normal map (dents, scratches, paint texture). One 2 m tile is box-projected in the ship frame (UV set `surface`) and shared by the 16 painted and bare-metal roles; it is embedded in the GLB. Build with `--no-wear` or `--no-surface` to leave either off. Still missing: chipped paint that follows plate edges, and streaks that follow gravity from a fitting. Markings are geometry (the hull number, placards). |
 | Lander | A stub of the right size (5.6 x 2.2 x 1.7 m) hanging in the cradle. A real lander is a later asset. |
 | Simulation | **None yet.** No mass, thrust, flight, gear loads or sound. This is the main gap against the repository's simulation-grade rule and is the next layer after detail. |
 | Collision | Not made yet. The decks, bulkheads and lining are separate named objects, so a collision set can be cut from the recipe. |
@@ -32,8 +33,9 @@ Needs a Python that `bpy` (Blender as a module) installs on, and `numpy`. Built 
 ```
 pip install bpy numpy
 cd assets/wayfarer/model
-python3 build.py --glb             # work/wayfarer.blend, out/wayfarer.glb (25 MB, every bolt)
-python3 build.py --glb --lod 1 --tag wayfarer_lod1   # out/wayfarer_lod1.glb (14 MB, no fasteners)
+python3 build.py --glb             # work/wayfarer.blend, out/wayfarer.glb (35 MB, every bolt)
+python3 build.py --glb --lod 1 --tag wayfarer_lod1   # out/wayfarer_lod1.glb (21 MB, no fasteners)
+python3 tools/web_parts.py out/wayfarer_lod1.glb DIR   # split it into JSON parts under 14 MB each for a static page
 python3 build.py --only engines    # one module, for working on it
 python3 tools/checks.py            # sizes, clearances and clips
 python3 blockout.py                # the stage-3 blockout
@@ -73,7 +75,7 @@ Each module is one file in `model/modules/` and one node under the root `wayfare
 
 | Node | What is in it |
 |---|---|
-| `fuselage` | Armour plates, substructure shell, lining, ring frames and longerons, both decks, seven bulkheads, ceilings and light strips, opening coamings. |
+| `fuselage` | Sealed skin, seam straps, armour belts, substructure shell, lining, ring frames and longerons, both decks, seven bulkheads, ceilings and light strips, opening coamings. |
 | `cockpit` | Canopy glazing and frame, instrument panel with displays and standby gauges, mode panel, pedestal with keypads and throttle quadrant, side consoles, pedals, overhead panel, two flight seats, two rear stations. The side sticks (`stick_pilot`, `stick_copilot`) and throttles (`throttle_port`, `throttle_stbd`) are their own nodes, pivoted where they turn, for the game to drive. |
 | `engines` | Two main pods (octagonal intake, vanes, ribbed barrel, conduits, fuel manifold, accessory gearbox, nozzle with outer flaps and unison ring), two upper pods with cowls, the centre nozzle and thrust plate, pylons, struts and plumbing. `engine_fan_port` and `engine_fan_stbd` (compressor faces) and `engine_core_bell` (pivoted at its gimbal) are their own nodes for the game to spin and steer. |
 | `landing_gear` | Four legs, each `gear_<pos>_leg` > `_piston` > `_pad`, with torque links, a landing light, an uplock roller, an actuator and two doors, in four wells fitted with an uplock jaw, accumulator, valve block and hydraulic lines. |
@@ -116,7 +118,7 @@ Empty nodes named `socket_*`, parented to the part they ride on, so they follow 
 ## Materials
 
 Material names are shading roles, so a game can replace them wholesale. The main ones: `armour_gunmetal_a` to `_d`,
-`armour_paint_red`, `armour_paint_red_dark`, `substructure_dark`, `structure_steel`, `structure_primer`,
+`hull_skin`, `armour_paint_red`, `armour_paint_red_dark`, `substructure_dark`, `structure_steel`, `structure_primer`,
 `lining_panel`, `lining_panel_dark`, `deck_plate`, `deck_grating`, `glass_canopy`, `glass_port`, `machinery_dark`,
 `machinery_bare`, `machinery_heat`, `hydraulic_chrome`, `fastener_steel`, `rubber_black`, `hazard_yellow`,
 `seat_fabric`, `copper_pipe`, `cable_black`, `placard_white`, `screen_glow`, `light_panel`, `light_red`,

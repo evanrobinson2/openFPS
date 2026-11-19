@@ -43,10 +43,11 @@ def SEG(n):
 # ------------------------------------------------------------------ materials (named by role; the game reads the names)
 PALETTE = {
     # name: (r, g, b, metallic, roughness, emission strength, alpha)
-    'armour_gunmetal_a': (0.215, 0.225, 0.240, 0.85, 0.42, 0, 1),
-    'armour_gunmetal_b': (0.165, 0.172, 0.185, 0.85, 0.48, 0, 1),
-    'armour_gunmetal_c': (0.275, 0.285, 0.300, 0.85, 0.38, 0, 1),
-    'armour_gunmetal_d': (0.120, 0.125, 0.135, 0.80, 0.55, 0, 1),
+    'armour_gunmetal_a': (0.215, 0.225, 0.240, 0.60, 0.56, 0, 1),
+    'armour_gunmetal_b': (0.165, 0.172, 0.185, 0.60, 0.62, 0, 1),
+    'armour_gunmetal_c': (0.275, 0.285, 0.300, 0.65, 0.50, 0, 1),
+    'armour_gunmetal_d': (0.120, 0.125, 0.135, 0.55, 0.68, 0, 1),
+    'hull_skin': (0.090, 0.094, 0.102, 0.45, 0.66, 0, 1),
     'armour_paint_red': (0.520, 0.060, 0.035, 0.35, 0.50, 0, 1),
     'armour_paint_red_dark': (0.300, 0.040, 0.030, 0.35, 0.55, 0, 1),
     'substructure_dark': (0.030, 0.031, 0.034, 0.60, 0.70, 0, 1),
@@ -83,6 +84,10 @@ PALETTE = {
     'blockout_shell': (0.60, 0.62, 0.66, 0.0, 0.7, 0, 0.22),
 }
 
+SURFACED = ('armour_gunmetal_a', 'armour_gunmetal_b', 'armour_gunmetal_c', 'armour_gunmetal_d', 'hull_skin', 'armour_paint_red',
+            'armour_paint_red_dark', 'substructure_dark', 'structure_steel', 'structure_primer', 'lining_panel', 'lining_panel_dark',
+            'deck_plate', 'machinery_dark', 'machinery_heat', 'hazard_yellow')      # roles that carry the surface tile (surface.py)
+SURFACE_TILE = 2.0      # metres per repeat
 WEAR_CLEAN = ('placard_white', 'figure_grey', 'seat_fabric')     # kept clean by the wear layer
 
 def mat(name):
@@ -330,6 +335,15 @@ def finish(name, mb, parent, pivot=None, sharp=35.0, group=None):
     for m in mb.mats:
         me.materials.append(mat(m))
     me.polygons.foreach_set('material_index', np.asarray(mb.FM, dtype=np.int32))
+    if any(m in SURFACED for m in mb.mats):
+        # box-projected UVs in the ship frame for the shared surface tile (surface.py): the face's dominant axis picks the plane
+        li = np.fromiter((i for f in mb.F for i in f), dtype=np.int64, count=nloops)
+        i0, i1, i2 = li[starts], li[starts + 1], li[starts + 2]
+        fnrm = np.abs(np.cross(V[i1] - V[i0], V[i2] - V[i0])); ax = np.argmax(fnrm, axis=1)
+        la = np.repeat(ax, tot); P = V[li]
+        uu = np.where(la == 0, P[:, 1], P[:, 0]); vv = np.where(la == 2, P[:, 1], P[:, 2])
+        uvl = me.uv_layers.new(name='surface')
+        uvl.data.foreach_set('uv', (np.stack([uu, vv], axis=1) / SURFACE_TILE).astype(np.float32).ravel())
     me.update(calc_edges=True)
     me.validate(clean_customdata=False)
     me.polygons.foreach_set('use_smooth', np.ones(len(me.polygons), dtype=bool))

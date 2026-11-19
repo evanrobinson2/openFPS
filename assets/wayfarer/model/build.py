@@ -74,6 +74,10 @@ def build():
     os.makedirs(os.path.join(HERE, 'work'), exist_ok=True)
     tag = arg('--tag', 'wayfarer')
     bpy.ops.wm.save_as_mainfile(filepath=os.path.join(HERE, 'work', tag + '.blend'))
+    pngs = None
+    if '--no-surface' not in ARGV:
+        import surface
+        pngs = surface.make(os.path.join(HERE, 'work', 'surface'))
     groups = {}
     for k, v in kit.STATS.items():
         g = groups.setdefault(v['group'], dict(objects=0, tris=0)); g['objects'] += 1; g['tris'] += v['tris']
@@ -87,7 +91,15 @@ def build():
         bpy.ops.export_scene.gltf(filepath=out, export_format='GLB', export_apply=True, export_yup=True, export_animations=True,
                                   export_animation_mode='NLA_TRACKS', export_extras=True,
                                   export_vertex_color='ACTIVE', export_all_vertex_colors=False)
+        if pngs:
+            print('SURFACE textures on', surface.patch_glb(out, pngs, kit.SURFACED), 'glTF materials')
         print('GLB', out, round(os.path.getsize(out) / 1e6, 1), 'MB')
+    if pngs:
+        # the renders get the same three maps as Cycles nodes; wired after the export, which reads the plain graph
+        # (the saved file is reopened first: the exporter leaves the scene posed in whichever clip it wrote last)
+        bpy.ops.wm.open_mainfile(filepath=os.path.join(HERE, 'work', tag + '.blend'))
+        print('SURFACE textures on', surface.wire_blender(pngs, kit.SURFACED), 'Blender materials')
+        bpy.ops.wm.save_as_mainfile(filepath=os.path.join(HERE, 'work', tag + '.blend'))
 
 if __name__ == '__main__':
     build()

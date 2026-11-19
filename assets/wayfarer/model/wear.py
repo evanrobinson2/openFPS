@@ -17,7 +17,7 @@ import spec, kit
 
 NAME = 'wear'
 EXTERIOR = ('armour_', 'substructure_', 'recess_floors', 'opening_coamings', 'coaming_bolts', 'canopy_', 'engine_', 'gear_',
-            'chin_', 'dorsal_', 'hull_details', 'keel_', 'nose_', 'thruster_', 'ventral_', 'waist_', 'equipment_bay',
+            'chin_', 'dorsal_', 'hull_', 'keel_', 'nose_', 'thruster_', 'ventral_', 'waist_', 'equipment_bay',
             'gadget_bolts', 'lander_door', 'crew_hatch', 'viewport_trim')
 CLEAN = kit.WEAR_CLEAN
 NOMINAL = 0.82          # a clean vertex sits a little under 1 so that lighter patches have room
@@ -83,17 +83,17 @@ def colours(o, exterior):
     f = np.ones(nv)
     if exterior:
         f *= 1 + 0.30 * (tone - 0.5)
-        f *= 1 + 0.07 * (fine - 0.5)
-        if any(n.startswith('armour_') or n == 'fastener_steel' for n in names):
+        f *= 1 + 0.03 * (fine - 0.5)
+        if o.name.startswith(('armour_plates', 'recess_floors')) or 'bolts' in o.name:
             lab = _islands(nv, lv, lf, starts)
             isl = _hash(lab, lab * 0 + 7, lab * 0 + 3, zlib.crc32(o.name.encode()) % 1000)
-            f *= 1 + 0.30 * (isl - 0.5)
-            f *= np.where(isl > 0.93, 1.22, np.where(isl < 0.06, 0.72, 1.0))            # the odd replaced plate, the odd scorched one
+            f *= 1 + 0.14 * (isl - 0.5)
+            f *= np.where(isl > 0.95, 1.10, np.where(isl < 0.05, 0.86, 1.0))            # the odd replaced plate, the odd scorched one
         belly = np.clip((-0.8 - P[:, 2]) / 2.2, 0, 1)
         f *= 1 - 0.40 * belly * (0.4 + 0.6 * fbm(P, 0.9, 3))
         side = 1 - np.abs(nz)
-        streak = np.clip((vnoise(P, (5.0, 0.0, 0.35), 4) - 0.52) / 0.48, 0, 1)
-        f *= 1 - 0.26 * streak * side
+        streak = np.clip((vnoise(P, (1.6, 0.0, 0.30), 4) - 0.52) / 0.48, 0, 1)
+        f *= 1 - 0.10 * streak * side
         soot = np.clip((P[:, 0] - 25.2) / 3.6, 0, 1)
         f *= 1 - 0.50 * soot * (0.55 + 0.45 * tone)
         f *= 1 + 0.05 * np.clip(nz, 0, 1)

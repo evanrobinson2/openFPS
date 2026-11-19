@@ -5,8 +5,17 @@
 - **Hull.** A super-ellipse section lofted on a grid (stations by 36 rows a side). The exponent rises from 2.25 at
   the nose to 3.2 amidships: a rounder barrel left the lower deck too narrow to stand on. Openings are tagged on the
   grid, so plates, substructure, lining and coamings all agree about where a hole is.
-- **Plating.** Plates come from a seeded recursive split of the grid, with gaps, three heights, skirts and bolts. The
-  same seed gives the same ship.
+- **Plating (rebuilt 2026-11-19).** The first plating was a seeded recursive split with gaps between plates over a dark
+  shell. Reviewed on the flank it read as loose tiles with air gaps and too many joints, and plates had no thickness.
+  It is now a sealed hull in layers: a continuous skin, seam straps over each ring frame (every 2 m) and strake line,
+  and armour belts standing on the skin as bevelled, bolted slabs. A belt's joints fall only where an opening starts or
+  stops and on the ring frames, alternate belts half a bay out of step, and no joint is closer than 0.7 m to another,
+  so there are no slivers (1,514 plates became 285). Applique plates go over the crew and the machinery, never at
+  random. Three bare strakes between the belts carry the conduits, clamped to the skin, with junction boxes.
+- **Surface.** Roughness, scratches and dents come from three tiling textures made by rule at build time
+  (`model/surface.py`), box-projected, shared by every painted role. A texture file is never committed. The exporter
+  only sees flat materials plus the wear colours; the build adds the maps to the GLB afterwards and wires the same
+  maps into the Blender materials for the renders.
 - **Canopy.** A 0.80 m slit. A taller glazed band read as an airliner and put glass over the pilots' heads.
 - **Two decks.** 2.30 m clear on the main deck and 2.20 m on the lower. The ladder well sits at station 6.9 to 7.7 to
   miss the forward gear wells.
@@ -19,7 +28,7 @@
   than through it. That set the lander's width at 2.2 m.
 - **Lower deck doors** part in the middle, because a single leaf could not slide past the gear wells.
 - **Landing gear.** Front pair folds aft, rear pair folds forward, each into a real well with two doors.
-- **Level of detail.** `--lod 1` leaves out fasteners (525,000 triangles down to 283,000).
+- **Level of detail.** `--lod 1` leaves out fasteners (627,000 triangles down to 335,000).
 
 ## Limits, plainly
 
