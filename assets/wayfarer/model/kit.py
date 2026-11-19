@@ -84,9 +84,13 @@ PALETTE = {
     'blockout_shell': (0.60, 0.62, 0.66, 0.0, 0.7, 0, 0.22),
 }
 
+# objects on the outside of the ship, by name: they weather (wear.py) and carry the surface tile (surface.py)
+EXTERIOR = ('armour_', 'substructure_', 'recess_floors', 'opening_coamings', 'coaming_bolts', 'canopy_', 'engine_', 'gear_',
+            'chin_', 'dorsal_', 'hull_', 'keel_', 'nose_', 'thruster_', 'ventral_', 'waist_', 'equipment_bay',
+            'gadget_bolts', 'lander_door', 'crew_hatch', 'viewport_trim')
 SURFACED = ('armour_gunmetal_a', 'armour_gunmetal_b', 'armour_gunmetal_c', 'armour_gunmetal_d', 'hull_skin', 'armour_paint_red',
             'armour_paint_red_dark', 'substructure_dark', 'structure_steel', 'structure_primer', 'lining_panel', 'lining_panel_dark',
-            'deck_plate', 'machinery_dark', 'machinery_heat', 'hazard_yellow')      # roles that carry the surface tile (surface.py)
+            'deck_plate', 'machinery_dark', 'machinery_heat', 'hazard_yellow')      # roles that carry the surface tile, on outside objects only
 SURFACE_TILE = 2.0      # metres per repeat
 WEAR_CLEAN = ('placard_white', 'figure_grey', 'seat_fabric')     # kept clean by the wear layer
 
@@ -335,7 +339,7 @@ def finish(name, mb, parent, pivot=None, sharp=35.0, group=None):
     for m in mb.mats:
         me.materials.append(mat(m))
     me.polygons.foreach_set('material_index', np.asarray(mb.FM, dtype=np.int32))
-    if any(m in SURFACED for m in mb.mats):
+    if name.startswith(EXTERIOR) and any(m in SURFACED for m in mb.mats):
         # box-projected UVs in the ship frame for the shared surface tile (surface.py): the face's dominant axis picks the plane
         li = np.fromiter((i for f in mb.F for i in f), dtype=np.int64, count=nloops)
         i0, i1, i2 = li[starts], li[starts + 1], li[starts + 2]

@@ -4,7 +4,8 @@
     surface_orm.png     glTF occlusion/roughness/metallic: roughness varies, scratches and rubbed patches are shinier
     surface_normal.png  fine dents, scratches and paint texture
 
-One 2 m tile, box-projected in the ship frame (kit.finish writes the UVs), shared by every painted or bare-metal role.
+One 2 m tile, box-projected in the ship frame (kit.finish writes the UVs), shared by every painted or bare-metal role on the outside of the ship
+(inside, the same roles stay plain: a hull-grade tile made the crew spaces look battered).
 The wear colour attribute (wear.py) rides on top and gives the large-scale variation, so the tile does not read as a
 repeat. Seeds are fixed: a rebuild gives the same pixels.
 
@@ -104,12 +105,20 @@ def patch_glb(path, pngs, material_names, normal_scale=0.7):
         j['textures'].append(dict(sampler=smp, source=len(j['images']) - 1, name=f'surface_{key}')); tex[key] = len(j['textures']) - 1
     while len(b) % 4: b.append(0)
     j['buffers'][0]['byteLength'] = len(b)
-    n = 0
-    for m in j.get('materials', []):
-        if m.get('name') in material_names:
-            pbr = m.setdefault('pbrMetallicRoughness', {})
-            pbr['baseColorTexture'] = dict(index=tex['base']); pbr['metallicRoughnessTexture'] = dict(index=tex['orm'])
-            m['normalTexture'] = dict(index=tex['normal'], scale=normal_scale); n += 1
+    # outside primitives (the ones with the UV set) get a textured twin of their role material, under the same name;
+    # inside the ship the same roles stay plain
+    twin = {}; n = 0
+    for me in j.get('meshes', []):
+        for pr in me['primitives']:
+            k = pr.get('material')
+            if k is None or 'TEXCOORD_0' not in pr['attributes'] or j['materials'][k].get('name') not in material_names: continue
+            if k not in twin:
+                m = json.loads(json.dumps(j['materials'][k]))
+                pbr = m.setdefault('pbrMetallicRoughness', {})
+                pbr['baseColorTexture'] = dict(index=tex['base']); pbr['metallicRoughnessTexture'] = dict(index=tex['orm'])
+                m['normalTexture'] = dict(index=tex['normal'], scale=normal_scale)
+                j['materials'].append(m); twin[k] = len(j['materials']) - 1; n += 1
+            pr['material'] = twin[k]
     js = json.dumps(j, separators=(',', ':')).encode(); js += b' ' * ((4 - len(js) % 4) % 4)
     out = struct.pack('<III', 0x46546C67, 2, 12 + 8 + len(js) + 8 + len(b)) + struct.pack('<II', len(js), 0x4E4F534A) + js + struct.pack('<II', len(b), 0x004E4942) + bytes(b)
     open(path, 'wb').write(out)
@@ -123,9 +132,15 @@ def wire_blender(pngs, material_names, normal_scale=0.7):
     for im in img.values():
         try: im.pack()
         except Exception: pass
-    n = 0
-    for m in bpy.data.materials:
-        if m.name not in material_names or not m.use_nodes: continue
+    n = 0; twin = {}
+    for o in bpy.data.objects:
+        if o.type != 'MESH' or 'surface' not in o.data.uv_layers: continue
+        for k, m0 in enumerate(o.data.materials):
+            if m0 is None or m0.name not in material_names: continue
+            if m0.name not in twin:
+                twin[m0.name] = m0.copy(); twin[m0.name].name = m0.name + '.outside'
+            o.data.materials[k] = twin[m0.name]
+    for m in twin.values():
         nt = m.node_tree; N = nt.nodes; L = nt.links
         bsdf = next(x for x in N if x.type == 'BSDF_PRINCIPLED')
         def tex(key):

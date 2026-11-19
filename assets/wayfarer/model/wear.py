@@ -16,9 +16,7 @@ import bpy
 import spec, kit
 
 NAME = 'wear'
-EXTERIOR = ('armour_', 'substructure_', 'recess_floors', 'opening_coamings', 'coaming_bolts', 'canopy_', 'engine_', 'gear_',
-            'chin_', 'dorsal_', 'hull_', 'keel_', 'nose_', 'thruster_', 'ventral_', 'waist_', 'equipment_bay',
-            'gadget_bolts', 'lander_door', 'crew_hatch', 'viewport_trim')
+EXTERIOR = kit.EXTERIOR
 CLEAN = kit.WEAR_CLEAN
 NOMINAL = 0.82          # a clean vertex sits a little under 1 so that lighter patches have room
 
