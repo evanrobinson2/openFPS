@@ -103,6 +103,12 @@ def colours(o, exterior):
     d = np.clip((NOMINAL - f) * 2.5, 0, 1)                                              # darker reads warmer: dust and oil, not grey paint
     C = np.stack([f, f * (1 - 0.07 * d), f * (1 - 0.16 * d), np.ones(nv)], axis=1)
     L = C[lv]
+    if exterior and 'armour_edge_worn' in names:
+        # dirt gathers where a plate's face meets its bevel and fades inwards; the bevel itself stays rubbed bright
+        ek = names.index('armour_edge_worn'); onb = fm[lf] == ek
+        edge = np.zeros(nv, dtype=bool); edge[lv[onb]] = True
+        grime = 0.62 + 0.20 * vnoise(P, 0.8, 9)
+        L[:, :3] *= np.where(edge[lv] & ~onb, grime[lv], 1.0)[:, None]
     skip = np.array([clean(n) for n in names] or [False], dtype=bool)
     L[skip[np.minimum(fm, len(skip) - 1)][lf]] = 1.0
     return L

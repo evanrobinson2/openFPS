@@ -70,7 +70,7 @@ def fields(n=SIZE, seed=27):
 def make(out_dir, n=SIZE):
     os.makedirs(out_dir, exist_ok=True)
     F = fields(n)
-    base = 0.86 + 0.10 * (F['blotch'] - 0.5) * 2 * 0.9 + 0.03 * (F['grain'] - 0.5)
+    base = 0.86 + 0.19 * (F['blotch'] - 0.5) * 2 * 0.9 + 0.03 * (F['grain'] - 0.5)
     base = base * (1 - 0.30 * F['speck']) * (1 - 0.10 * F['dent'])
     base = np.clip(base + 0.22 * F['scr'] + 0.05 * F['rub'], 0, 1)
     warm = np.clip((0.86 - base) * 3, 0, 1)                         # darker reads warmer

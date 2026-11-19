@@ -43,10 +43,10 @@ def SEG(n):
 # ------------------------------------------------------------------ materials (named by role; the game reads the names)
 PALETTE = {
     # name: (r, g, b, metallic, roughness, emission strength, alpha)
-    'armour_gunmetal_a': (0.215, 0.225, 0.240, 0.60, 0.56, 0, 1),
-    'armour_gunmetal_b': (0.165, 0.172, 0.185, 0.60, 0.62, 0, 1),
-    'armour_gunmetal_c': (0.275, 0.285, 0.300, 0.65, 0.50, 0, 1),
-    'armour_gunmetal_d': (0.120, 0.125, 0.135, 0.55, 0.68, 0, 1),
+    'armour_gunmetal_a': (0.235, 0.245, 0.262, 0.60, 0.56, 0, 1),
+    'armour_gunmetal_b': (0.140, 0.146, 0.158, 0.60, 0.62, 0, 1),
+    'armour_gunmetal_c': (0.320, 0.328, 0.340, 0.65, 0.50, 0, 1),
+    'armour_gunmetal_d': (0.095, 0.100, 0.110, 0.55, 0.68, 0, 1),
     'hull_skin': (0.090, 0.094, 0.102, 0.45, 0.66, 0, 1),
     'armour_edge_worn': (0.400, 0.410, 0.425, 0.90, 0.40, 0, 1),
     'stencil_white': (0.700, 0.700, 0.680, 0.00, 0.70, 0, 1),

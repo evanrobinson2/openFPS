@@ -16,6 +16,8 @@
   plates in other paint batches, stencils (seven-segment frame and bay numbers, a no-step line, a rescue arrow) and
   grab handles on the pillars between bays. Hazard corners round the bays were tried and removed: they landed on the
   waistline strake and fought the conduits.
+  A second pass the same day pushed the tone: dirt gathers where a plate's face meets its bevel (wear.py), the four
+  gunmetal tones were spread further apart, and the tile's blotches were doubled.
 - **Surface.** Roughness, scratches and dents come from three tiling textures made by rule at build time
   (`model/surface.py`), box-projected, shared by every painted role. A texture file is never committed. The exporter
   only sees flat materials plus the wear colours; the build adds the maps to the GLB afterwards and wires the same
