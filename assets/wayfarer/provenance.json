@@ -1,0 +1,24 @@
+{
+  "asset": "wayfarer",
+  "credit": "carpetshark",
+  "modelled_by": [
+    {
+      "part": "geometry recipe, all modules (model/build.py, model/modules/)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-18"
+    },
+    {
+      "part": "mechanism clips: landing gear, lift chassis, lander bay, crew hatch, doors (keyed in the module recipes)",
+      "model": "Claude Fable 5.2",
+      "date": "2026-11-18"
+    }
+  ],
+  "concept": [
+    {
+      "part": "concept image (not in the repository)",
+      "made_by": "carpetshark, with Midjourney",
+      "date": "2026-11-18"
+    }
+  ],
+  "status": "Structure stage: parametric geometry recipe (Blender Python) for a boardable 30 m gunship, in eight modules, with kinematic clips. No flight, mass, thrust or sound simulation yet."
+}

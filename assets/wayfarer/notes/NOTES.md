@@ -1,0 +1,96 @@
+# Wayfarer: decisions, limits and open questions
+
+## Decisions
+
+- **Hull.** A super-ellipse section lofted on a grid (stations by 36 rows a side). The exponent rises from 2.25 at
+  the nose to 3.2 amidships: a rounder barrel left the lower deck too narrow to stand on. Openings are tagged on the
+  grid, so plates, substructure, lining and coamings all agree about where a hole is.
+- **Plating (rebuilt 2026-11-19).** The first plating was a seeded recursive split with gaps between plates over a dark
+  shell. Reviewed on the flank it read as loose tiles with air gaps and too many joints, and plates had no thickness.
+  It is now a sealed hull in layers: a continuous skin, seam straps over each ring frame (every 2 m) and strake line,
+  and armour belts standing on the skin as bevelled, bolted slabs. A belt's joints fall only where an opening starts or
+  stops and on the ring frames, alternate belts half a bay out of step, and no joint is closer than 0.7 m to another,
+  so there are no slivers (1,514 plates became 285). Applique plates go over the crew and the machinery, never at
+  random. Three bare strakes between the belts carry the conduits, clamped to the skin, with junction boxes.
+- **Hull polish (2026-11-19).** The sealed hull read uniformly grey. Added: bare metal on every plate bevel, replaced
+  plates in other paint batches, stencils (seven-segment frame and bay numbers, a no-step line, a rescue arrow) and
+  grab handles on the pillars between bays. Hazard corners round the bays were tried and removed: they landed on the
+  waistline strake and fought the conduits.
+  A second pass the same day pushed the tone: dirt gathers where a plate's face meets its bevel (wear.py), the four
+  gunmetal tones were spread further apart, and the tile's blotches were doubled.
+- **Surface.** Roughness, scratches and dents come from three tiling textures made by rule at build time
+  (`model/surface.py`), box-projected, shared by every painted role. A texture file is never committed. The exporter
+  only sees flat materials plus the wear colours; the build adds the maps to the GLB afterwards and wires the same
+  maps into the Blender materials for the renders.
+- **Canopy.** A 0.80 m slit. A taller glazed band read as an airliner and put glass over the pilots' heads.
+- **Two decks.** 2.30 m clear on the main deck and 2.20 m on the lower. The ladder well sits at station 6.9 to 7.7 to
+  miss the forward gear wells.
+- **Lift chassis.** Four rams, 1.70 m of travel, belly plate lands on the ground. A hinged ramp would have struck the
+  belly on the way up, so the ramp is a drawer: it slides forward from under the lift deck. A drawer ramp alone left a
+  0.165 m step up to the deck, so the deck's forward edge is a sill flap: it drops, the ramp's hinge end rises into
+  that slot on two horns until it is flush with the deck, and then the toe tilts to the ground. The ramp is 2.60 m
+  long and lies at about 14 degrees.
+- **Lander bay.** Jack screws at y = 1.22 m with clamp arms reaching in, so the screws pass beside the lander rather
+  than through it. That set the lander's width at 2.2 m.
+- **Lower deck doors** part in the middle, because a single leaf could not slide past the gear wells.
+- **Landing gear.** Front pair folds aft, rear pair folds forward, each into a real well with two doors.
+- **Level of detail.** `--lod 1` leaves out fasteners (634,000 triangles down to 341,000).
+
+## Limits, plainly
+
+- Every section has had a detail pass: cockpit (flight seats, displays with bezel keys, standby gauges, keypads,
+  throttle quadrant, switch panels, overhead panel, pedals), engine section (conduits, fuel manifolds, accessory
+  gearboxes, nozzle flaps and unison rings, compressor faces, struts, feed lines), landing gear (uplocks, well
+  hydraulics, landing lights, stroke marks, pad springs), lift chassis (control pedestal, hold-side gates, guide
+  rails and shoes, work lights, beacons, tie-downs, ram valves), lander bay (cradle bracing, sway pads and clamp rams,
+  jack drive motors and cross shaft, control pedestal, hose reel, service panel, tool board) and the crew spaces
+  (bunk bedding, curtains and ladders, galley, lockers, pack stowage, first aid, oxygen, ready lights, gauge board
+  and valve manifold, breaker cabinet, workbench, expansion tank, battery boxes, cable trays, intercoms,
+  extinguishers). The outer hull has its pass too (seam straps, access panels, rung ladders, lifting lugs, vents, walkway rails, belly fittings, hull number).
+- The crew-space fittings are placed by rule (against the lining, clear of doors and gear wells) and looked at in
+  renders. Nothing checks that a crew member can reach or use them.
+- Wear is a per-vertex colour layer made by rule (`model/wear.py`), not textures. It gives tone, grime and plate
+  variation but no scratches, chips or fine streaks; next to the concept image the ship still reads clean. Getting
+  closer needs textures, which would be generated at build time and never committed.
+- The reactor compartment is a crawl space: 0.3 m between the door and the end of the vessel. It was looked at in a
+  render (`renders/reactor.jpg`) and left, since moving the vessel changes the engineering layout.
+- Clips are kinematic. Nothing is simulated: no mass, thrust, flight, gear loads, hydraulics or sound.
+- The lander is a stub.
+- No collision meshes.
+- The interior is my design. The concept image shows none of it.
+- The pilot's view out is narrow. The slit is 0.80 m tall but the wall is 0.40 m thick, so from the seat the glass
+  reads as a low band under a deep brow. Raising the seat, thinning the brow lining or deepening the slit would each
+  help; none has been done because each changes the look from outside.
+- Checks are numeric (sizes, clearances, clip lengths). Part-against-part interference has been looked at in renders
+  and cutaways, not tested automatically.
+- The sample page needs a local build. The repository holds no mesh.
+
+## Working defaults, 2026-11-18
+
+carpetshark was away, so these were taken as defaults and can all be reversed: keep both the retractable gear and the
+stowed lander; keep the interior as drafted; keep the engine reading below; make the ramp flush (done); detail the
+cockpit first (done), then the engine section, the landing gear, the lift chassis, the lander bay and the crew spaces, then the outer hull and a wear layer (all done); keep the heavy brow as in the image, with the slit height now
+  one number (`CANOPY_SLIT` in `model/spec.py`) so the view can be opened later. The questions below still want a real
+  answer.
+
+## Open questions for carpetshark
+
+1. **"Hidden landing craft."** Built both readings: retractable landing gear behind hull doors, and a small lander
+   stowed in a belly bay. Which did you mean, or both?
+2. **Interior layout.** Is the arrangement on the sheet right (cockpit, vestibule and ladder, crew deck, mission bay,
+   engineering above; avionics, hold with the lift, lander bay, reactor below)?
+3. **Engines.** I read the image as one large pod with an octagonal intake and a smaller pod above it under a cowl,
+   on each side, plus a centre nozzle. Is that your reading?
+4. **Ramp.** It now finishes flush with the lift deck, by way of a sill flap. Is that what you want?
+5. **Pilot's view.** From the seat the canopy slit is a low band (see `renders/pilot_eye.jpg`). Keep the heavy brow
+   as in the image, or open the view up?
+6. **What next.** Every section has had its detail pass. The outer hull and a first wear layer are done too. Held for
+   you: the real lander and simulation. Also open: textures for real scratches and streaks, and collision. Which first?
+7. **The lander.** Its own asset later, or part of this one?
+
+## Next
+
+1. Textures for wear, if wanted (generated at build time).
+2. The real lander.
+3. Collision set and distance levels.
+4. Simulation layers: mass and balance, thrust and flight, gear loads, mechanism timing, sound.

@@ -24,7 +24,8 @@ for aid in sorted(os.listdir(ASSETS)):
         if not os.path.exists(os.path.join(adir, rel)):
             errors.append(f'{aid}: missing {rel}')
     for dp, dn, fn in os.walk(adir):
-        dn[:] = [d for d in dn if d not in ('refs-local', '__pycache__', 'masters', 'audio')]
+        dn[:] = [d for d in dn if d not in ('refs-local', '__pycache__', 'masters', 'audio')
+                 and not (d in ('work', 'out') and os.path.basename(dp) == 'model')]    # git-ignored build output folders
         for f in fn:
             if os.path.splitext(f)[1].lower() in BANNED:
                 errors.append(f'{aid}: banned file {os.path.relpath(os.path.join(dp, f), ROOT)} (rules 2 and 3)')

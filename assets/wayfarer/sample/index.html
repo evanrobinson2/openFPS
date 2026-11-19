@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wayfarer sample</title>
+<style>
+  :root { --fg:#e9eef2; --dim:#9aa6b0; --acc:#ff6a55; --bg:#0d1014; --panel:#161b21; --line:#2a323b; }
+  html,body { margin:0; background:var(--bg); color:var(--fg); font:14px/1.45 ui-monospace,Menlo,monospace; }
+  main { max-width:1180px; margin:0 auto; padding:20px 16px 48px; }
+  h1 { font-size:20px; margin:0 0 4px; } h2 { font-size:15px; margin:22px 0 6px; } p { color:var(--dim); margin:4px 0 12px; }
+  code { color:var(--fg); }
+  #stage { height:min(66vh,680px); min-height:320px; border:1px solid var(--line); border-radius:8px; overflow:hidden; background:#15181c; }
+  #stage canvas { display:block; width:100%; height:100%; touch-action:none; }
+  .row { display:flex; flex-wrap:wrap; gap:8px 10px; align-items:center; background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:10px 12px; margin-top:10px; }
+  .row b { color:var(--dim); font-weight:normal; min-width:84px; }
+  button,input[type=range] { font:inherit; color:var(--fg); background:#0f1318; border:1px solid var(--line); border-radius:6px; padding:5px 9px; }
+  button { cursor:pointer; } button:hover { border-color:var(--acc); }
+  label { display:flex; gap:6px; align-items:center; font-size:13px; }
+  .clip { display:grid; grid-template-columns:minmax(150px,230px) 1fr auto auto; gap:8px; align-items:center; width:100%; }
+  .clip input { padding:0; width:100%; }
+  #status { color:var(--dim); margin:8px 0; }
+  #missing { display:none; } #missing img { width:100%; border:1px solid var(--line); border-radius:8px; margin-top:10px; }
+  pre { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:10px 12px; overflow-x:auto; }
+</style>
+</head>
+<body>
+<main>
+  <h1>F-27 Wayfarer: sample</h1>
+  <p>A boardable 30 m gunship built by code. The mesh is a build output and is never in the repository, so this page loads the one you build yourself. Drag to orbit, scroll to zoom, right-drag to pan.</p>
+  <div id="status">Looking for a local build...</div>
+  <div id="viewer">
+    <div id="stage"></div>
+    <div class="row" id="views"><b>Go to</b></div>
+    <div class="row" id="mods"><b>Show</b></div>
+    <div class="row"><b>Cutaway</b><input id="cut" type="range" min="0" max="1" step="0.01" value="0" style="flex:1;min-width:160px;padding:0"></div>
+    <div class="row" id="clips"><b>Mechanisms</b></div>
+  </div>
+  <div id="missing">
+    <h2>No local build found</h2>
+    <p>Build the model, then reload. It takes a few seconds and needs Python with <code>bpy</code> (Blender as a module).</p>
+<pre>pip install bpy numpy
+cd assets/wayfarer/model
+python3 build.py --glb            # out/wayfarer.glb, every bolt
+python3 build.py --glb --lod 1 --tag wayfarer_lod1    # out/wayfarer_lod1.glb, no fasteners
+cd ../../.. &amp;&amp; python3 -m http.server 8790
+# open http://127.0.0.1:8790/assets/wayfarer/sample/</pre>
+    <p>Renders of a build, for now:</p>
+    <img src="../renders/sheet_structure.jpg" alt="General arrangement sheet of the Wayfarer">
+    <img src="../renders/three_quarter.jpg" alt="The Wayfarer from the port bow">
+    <img src="../renders/under_lift.jpg" alt="The lift chassis lowered to the ground with a figure for scale">
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/three@0.146.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.146.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.146.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.146.0/examples/js/environments/RoomEnvironment.js"></script>
+<script src="viewer.js"></script>
+<script src="ui.js"></script>
+<script>
+  WayfarerUI.start({ urls: ['../model/out/wayfarer.glb', '../model/out/wayfarer_lod1.glb'] });
+</script>
+</body>
+</html>
