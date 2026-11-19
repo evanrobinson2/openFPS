@@ -52,33 +52,89 @@ def seat_frame(facing):
     return M
 
 
+def ribbon(pts, width, thick, side=(0, 1, 0)):
+    """Flat webbing along a path: a width x thick rectangle swept with its width along `side`."""
+    pts = np.array(pts, float); side = np.array(side, float); rings = []
+    for i, p in enumerate(pts):
+        t = pts[min(i + 1, len(pts) - 1)] - pts[max(i - 1, 0)]; t /= np.linalg.norm(t)
+        w = side - t * side.dot(t); w /= np.linalg.norm(w); u = np.cross(t, w)
+        rings.append([p + w * width / 2 + u * thick / 2, p - w * width / 2 + u * thick / 2, p - w * width / 2 - u * thick / 2, p + w * width / 2 - u * thick / 2])
+    return lib.loft(np.array(rings), cap0=True, cap1=True)
+
+
+def smooth_path(pts, r, k=5):
+    """Round the corners of a polyline with radius r (k points per bend), as a bent tube would be."""
+    pts = [np.array(p, float) for p in pts]; out = [pts[0]]
+    for a, b, c in zip(pts[:-2], pts[1:-1], pts[2:]):
+        u = (a - b) / np.linalg.norm(a - b); v = (c - b) / np.linalg.norm(c - b)
+        d = min(r, 0.45 * np.linalg.norm(a - b), 0.45 * np.linalg.norm(c - b))
+        p0 = b + u * d; p1 = b + v * d
+        for t in np.linspace(0, 1, k):
+            out.append((1 - t) ** 2 * p0 + 2 * t * (1 - t) * b + t ** 2 * p1)
+    out.append(pts[-1]); return out
+
+
+def fabric_sheet(grid, thick=0.14):
+    """A thin sheet through a (rows, cols, 3) grid of points: both faces and a hemmed edge."""
+    g = np.array(grid, float)
+    du = np.gradient(g, axis=0); dv = np.gradient(g, axis=1); nrm = np.cross(dv, du); nrm /= np.linalg.norm(nrm, axis=2, keepdims=True) + 1e-9
+    top = g + nrm * thick / 2; bot = g - nrm * thick / 2
+    return lib.loft(np.concatenate([top, bot[:, ::-1]], axis=1), cap0=True, cap1=True)
+
+
 def troop_seat(ctx, out, M, hi):
-    """Tube-and-fabric troop seat hung from the ceiling, steadied by floor cables. Origin: floor under the pan centre."""
-    al, fab, belt, st = out; n = ctx.n(8, 5); pan_z = 16.5; w = 9.0
-    frame = [(7.5, w, pan_z), (-7.5, w, pan_z), (-7.5, -w, pan_z), (7.5, -w, pan_z), (7.5, w, pan_z)]
-    al.merge(lib.tube(frame, 0.5, n, cap=False), M)
+    """Troop seat [F2-10]: bent-tube frame with a laced fabric pan and back, hung from the cabin ceiling on two
+    tubes and held to the floor by two cables, with lap belt and shoulder straps to a rotary buckle.
+    Origin: floor under the pan centre; local x = the way the occupant faces."""
+    al, fab, belt, st = out; n = ctx.n(10, 8); pan_z = 16.5; w = 9.4; rt = 0.42
+    top_z = pan_z + 25.0; ceil_z = CEIL - FLOOR - 0.4
+    # frame: one tube round the pan, one up and over the back
+    loop = [(float(x), float(y), pan_z) for x, y in lib.rrect(15.2, 2 * w, 2.2, 4)]
+    al.merge(lib.tube(loop + loop[:2], rt, n, cap=False), M)
+    back = smooth_path([(-7.6, w, pan_z), (-9.0, w, pan_z + 12.0), (-9.6, w, top_z), (-9.6, -w, top_z), (-9.0, -w, pan_z + 12.0), (-7.6, -w, pan_z)], 2.4)
+    al.merge(lib.tube(back, rt, n), M)
     for sy in (1, -1):
-        al.merge(lib.tube([(-7.5, sy * w, pan_z), (-8.6, sy * w, pan_z + 12), (-9.2, sy * w, pan_z + 24.5)], 0.5, n), M)
-        al.merge(lib.tube([(-9.2, sy * w, pan_z + 24.5), (-9.0, sy * w, CEIL - FLOOR - 0.6)], 0.22, 6), M)      # ceiling hanger
-        st.merge(lib.tube([(6.5, sy * w, pan_z), (11.0, sy * (w + 1.0), 0.3)], 0.11, 5), M)                         # floor cables
-        st.merge(lib.tube([(-7.5, sy * w, pan_z), (-12.5, sy * (w + 1.0), 0.3)], 0.11, 5), M)
-        st.merge(lib.revolve([(0.9, 0), (0.9, 0.3), (0, 0.3)], 8), M @ T(11.0, sy * (w + 1.0), 0))
-    al.merge(lib.tube([(-9.2, w, pan_z + 24.5), (-9.2, -w, pan_z + 24.5)], 0.5, n), M)
-    # fabric pan and back, slightly sagged
-    rows = []
-    for x in np.linspace(-7.3, 7.3, 6):
-        rows.append([(x, y, pan_z + 0.25 - 1.1 * (1 - (y / (w - 0.2)) ** 2) * (1 - (x / 7.6) ** 2)) for y in np.linspace(-(w - 0.2), w - 0.2, 7)])
-    g = np.array(rows); top = g.copy(); bot = g.copy(); bot[:, :, 2] -= 0.18
-    fab.merge(lib.loft(np.concatenate([top, bot[:, ::-1]], axis=1), cap0=True, cap1=True), M)
-    rows = []
-    for t in np.linspace(0.04, 0.97, 6):
-        cx = -7.6 - 1.6 * t - 0.9 * math.sin(math.pi * t); z = pan_z + 1.0 + 23.5 * t
-        rows.append([(cx - 0.6 * (1 - (y / w) ** 2), y, z) for y in np.linspace(-(w - 0.3), w - 0.3, 7)])
-    g = np.array(rows); bk = g.copy(); bk[:, :, 0] -= 0.18
-    fab.merge(lib.loft(np.concatenate([g, bk[:, ::-1]], axis=1), cap0=True, cap1=True), M)
-    # lap belt with buckle
-    belt.merge(lib.tube([(-5.5, w - 0.4, pan_z + 0.4), (-2.0, 5.0, pan_z + 0.9), (-1.0, 0, pan_z + 1.0), (-2.0, -5.0, pan_z + 0.9), (-5.5, -(w - 0.4), pan_z + 0.4)], 0.5, 4), M @ S(1, 1, 1))
-    st.merge(lib.box((-1.0, 0, pan_z + 1.25), (2.2, 2.6, 0.5)), M)
+        al.merge(lib.tube([(-9.6, sy * (w - 2.6), top_z), (-9.3, sy * (w - 2.6), ceil_z)], 0.3, n), M)           # ceiling hangers
+        st.merge(lib.revolve([(0.75, 0), (0.75, 0.5), (0.4, 0.9), (0, 0.9)], n), M @ T(-9.3, sy * (w - 2.6), ceil_z + 0.4) @ S(1, 1, -1))
+        st.merge(lib.revolve([(0.5, 0), (0.5, 1.6), (0, 1.6)], n), M @ T(-9.6, sy * (w - 2.6), top_z - 0.8))     # wire-bender energy attenuator housing
+        for (x0, x1) in ((6.6, 10.5), (-7.6, -12.0)):                                                              # floor cables and fittings
+            st.merge(lib.tube([(x0, sy * w, pan_z - rt), (x1, sy * (w + 0.8), 0.5)], 0.09, 5), M)
+            st.merge(lib.revolve([(0.85, 0), (0.85, 0.22), (0.4, 0.5), (0, 0.5)], n), M @ T(x1, sy * (w + 0.8), 0))
+            st.merge(lib.revolve([(0.22, 0), (0.22, 1.1), (0, 1.1)], 6), M @ T(x0 + (x1 - x0) * 0.12, sy * (w + 0.1), pan_z - rt - 1.5))
+    # pan: sagged between the tubes, wrapped over them at the sides
+    ys = np.linspace(-(w + 0.1), w + 0.1, ctx.n(13, 9)); xs = np.linspace(-7.5, 7.5, ctx.n(11, 7)); g = []
+    for x in xs:
+        row = []
+        for y in ys:
+            e = abs(y) / (w + 0.1); sag = 1.7 * (1 - e ** 2.2) * (1 - (x / 8.6) ** 2)
+            z = pan_z + rt + 0.1 - sag + 0.10 * math.sin(3.1 * x + 1.3 * y) * (1 - e)
+            row.append((x, y, z))
+        g.append(row)
+    fab.merge(fabric_sheet(g), M)
+    # back: sagged, with a lumbar curve
+    ts = np.linspace(0.02, 0.985, ctx.n(13, 8)); g = []
+    for t in ts:
+        cx = -7.6 - 2.0 * t; z = pan_z + 1.2 + (top_z - pan_z - 1.0) * t
+        row = []
+        for y in ys:
+            e = abs(y) / (w + 0.1); sag = 1.5 * (1 - e ** 2.2) * math.sin(math.pi * min(1, t * 1.02)) ** 0.7
+            row.append((cx - rt - 0.1 + (0.0 if e > 0.97 else -sag) + 0.08 * math.sin(2.6 * z + 1.7 * y) * (1 - e), y, z))
+        g.append(row)
+    fab.merge(fabric_sheet(g), M)
+    # hems laced round the side tubes: a sleeve every few inches
+    for sy in (1, -1):
+        for x in np.linspace(-6.0, 6.0, 5):
+            fab.merge(lib.tube([(x - 0.7, sy * w, pan_z), (x + 0.7, sy * w, pan_z)], rt + 0.09, n, cap=False), M)
+        for t in np.linspace(0.12, 0.9, 6):
+            z = pan_z + (top_z - pan_z) * t; x = -7.6 - 2.0 * t + (0.25 if t < 0.5 else 0.0)
+            fab.merge(lib.tube([(x, sy * w, z - 0.7), (x - 0.06, sy * w, z + 0.7)], rt + 0.09, n, cap=False), M)
+    # restraint: lap belt halves lying on the pan, shoulder straps down the back, rotary buckle
+    for sy in (1, -1):
+        belt.merge(ribbon([(-6.8, sy * (w - 0.3), pan_z + 0.6), (-5.0, sy * 6.5, pan_z - 0.3), (-3.6, sy * 3.2, pan_z - 0.75), (-3.2, sy * 1.0, pan_z - 0.8)], 1.75, 0.09, (1, 0, 0)), M)
+        belt.merge(ribbon([(-10.0, sy * 3.0, top_z + 0.4), (-9.9, sy * 3.0, top_z - 1.0), (-9.6, sy * 2.9, pan_z + 14.0), (-9.0, sy * 2.6, pan_z + 5.0), (-7.4, sy * 1.6, pan_z + 0.4), (-4.0, sy * 0.9, pan_z - 0.7)], 1.75, 0.09, (0, 1, 0)), M)
+        st.merge(lib.box((-9.8, sy * 3.0, top_z - 2.4), (0.5, 2.1, 1.3)), M)                                     # strap adjusters
+    st.merge(lib.revolve([(1.25, 0), (1.25, 0.45), (0.9, 0.7), (0, 0.7)], ctx.n(16, 10)), M @ T(-3.2, 0, pan_z - 0.85))
+    st.merge(lib.box((-3.2, 0, pan_z - 0.05), (0.5, 1.6, 0.25)), M)
 
 
 def crew_seat(ctx, out, M, hi):
@@ -137,7 +193,7 @@ def cockpit(ctx):
     for sg in (1, -1):
         cy = sg * 21.0
         # flight instruments: airspeed, attitude (VSI), altimeter over clock, HSI, vertical speed, radar altimeter
-        for (dy, z, r) in ((-6.2, 11.0, 1.7), (0.0, 10.6, 2.45), (6.2, 11.0, 1.7), (-6.2, 5.0, 1.7), (0.0, 4.3, 2.45), (6.2, 5.0, 1.7), (-9.6, 8.0, 1.0), (9.6, 8.0, 1.0)):
+        for (dy, z, r) in RC.FLIGHT_GAUGES:
             gauge((blk, face, None), P(cy + dy, z), r, hi)
         for dy in (-7.5, -4.5):                                      # mode select / CIS panels under the flight instruments
             grey.merge(lib.box((0.12, cy + dy * sg, 1.3), (0.25, 2.4, 1.6)), Mp)
@@ -209,7 +265,9 @@ def cockpit(ctx):
                          ('cockpit_steel', st, 'steel'), ('cockpit_frames', al, 'aluminium'), ('instrument_panel', blk, 'panel_face'),
                          ('instrument_faces', face, 'instrument'), ('console_panels', grey, 'paint_grey'),
                          ('cockpit_yellow', yel, 'paint_yellow'), ('cockpit_red', red, 'paint_red')):
-        ctx.part('airframe', name, m, mat, 35)
+        o = ctx.part('airframe', name, m, mat, 35)
+        if name == 'instrument_faces' and o is not None and getattr(ctx, 'box_uv', None) is not None:
+            import detail; detail.instrument_uv(o, Mp, Mc)
 
 
 def cabin(ctx):

@@ -159,6 +159,12 @@ WINDSHIELD_CTR = dict(poly=[(-5.6, 247.0), (5.6, 247.0), (5.6, 269.0), (-5.6, 26
 # Top-view outline (STA, BL), cut down through the roof
 EYEBROW_WIN = dict(poly=[(222.0, 6.0), (241.0, 6.0), (241.0, 29.5), (232.0, 30.5), (224.0, 22.0)], r=2.5, wl=(262.0, 280.0))
 
+# flight instruments on each pilot's side of the panel [F2-9]: (BL offset from the seat centre line, height up the panel
+# face, case radius) for airspeed, vertical situation indicator, altimeter, radar altimeter, HSI, vertical speed, clock,
+# standby attitude
+FLIGHT_GAUGES = ((-6.2, 11.0, 1.7), (0.0, 10.6, 2.45), (6.2, 11.0, 1.7), (-6.2, 5.0, 1.7), (0.0, 4.3, 2.45), (6.2, 5.0, 1.7),
+                 (-9.6, 8.0, 1.0), (9.6, 8.0, 1.0))
+
 # ------------------------------------------------------------------ build context
 class Context:
     def __init__(self, lod, fast, log, here):
@@ -191,6 +197,9 @@ class Context:
                 o.data.polygons.foreach_set('material_index', [0] * len(o.data.polygons))
             if smooth is not None:
                 lib.shade(o, smooth)
+        tile = getattr(self, 'box_uv', {}).get(mat)
+        if tile:
+            import detail; detail.box_uv(o, tile)
         o['uh60_part'] = name
         self.nodes[node]['objs'].append(o)
         return o

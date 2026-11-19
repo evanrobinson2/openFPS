@@ -1,7 +1,7 @@
 """Airframe: body skin (nose to fold hinge), upper deck, engine nacelles, tailcone, tail pylon, stabilator."""
 import math
 import numpy as np
-import lib, recipe as RC
+import lib, recipe as RC, skin
 from lib import Mesh, T, R, S
 
 
@@ -202,20 +202,20 @@ def build_shell(ctx):
     lib.boolean(shell, cutobj(top_cutter(rounded(RC.EYEBROW_WIN['poly'], RC.EYEBROW_WIN['r']), RC.EYEBROW_WIN['wl'])), 'DIFFERENCE')
     for o in (glass_src, gasket_src, door_src):
         bpy.data.objects.remove(o, do_unlink=True)
-    ctx.part('airframe', 'body_shell', shell, 'paint_od', 50)
+    skinned(ctx, 'airframe', 'body_shell', shell, inner=True)
     for g in glass_parts: ctx.part('airframe', 'glazing', g, 'glass', 50)
     for k in gasket_parts: ctx.part('airframe', 'window_seal', k, 'rubber', 50)
     # ---- door nodes
     for sg, side in ((1, 'L'), (-1, 'R')):
         d, cd = doors[side]; gl, gk = door_glass[side]
         n = ctx.node(f'cabin_door_{side}', 'airframe', pivot=(342.0, sg * 46.5, 234.0))
-        ctx.part(n, 'cabin_door_panel', d, 'paint_od', 50)
+        skinned(ctx, n, 'cabin_door_panel', d, inner=True)
         for g, k in gl:
             ctx.part(n, 'cabin_door_glass', g, 'glass', 50); ctx.part(n, 'cabin_door_seal', k, 'rubber', 50)
         ctx.clip(n, f'cabin_door_{side}_open', [(1, (0, 0, 0), None), (8, (2.0, sg * 3.2, 0), None), (40, (66.0, sg * 3.6, 0), None)])
         # cockpit door: hinged on its forward edge, swings outboard
         n = ctx.node(f'cockpit_door_{side}', 'airframe', pivot=(207.8, sg * float(RC.body_surface_bl(207.8, 236.0)), 220.0))
-        ctx.part(n, 'cockpit_door_panel', cd, 'paint_od', 50)
+        skinned(ctx, n, 'cockpit_door_panel', cd, inner=True)
         for g, k in gk:
             ctx.part(n, 'cockpit_door_glass', g, 'glass', 50); ctx.part(n, 'cockpit_door_seal', k, 'rubber', 50)
         ctx.clip(n, f'cockpit_door_{side}_open', [(1, None, ('z', 0.0)), (40, None, ('z', -sg * 78.0))])
@@ -287,15 +287,23 @@ def equipment(ctx):
         ctx.part('airframe', name, m, mat, 40)
 
 
+def skinned(ctx, node, name, mesh, inner=False, smooth=50):
+    """A painted exterior part: atlas UVs from its place on the aircraft (skin.py); inward faces get interior paint."""
+    o = ctx.part(node, name, mesh, 'skin_od' if 'skin_od' in ctx.mats else 'paint_od', smooth)
+    if o is not None and 'skin_od' in ctx.mats:
+        skin.unwrap(o, ctx.mats['paint_od_interior'] if inner else None)
+    return o
+
+
 def build(ctx):
     build_shell(ctx)
-    ctx.part('airframe', 'upper_deck', build_deck(ctx), 'paint_od', 50)
-    ctx.part('airframe', 'tail_shaft_cover', build_shaft_cover(ctx), 'paint_od', 50)
-    ctx.part('airframe', 'tail_pylon', build_pylon(ctx), 'paint_od', 50)
+    skinned(ctx, 'airframe', 'upper_deck', build_deck(ctx))
+    skinned(ctx, 'airframe', 'tail_shaft_cover', build_shaft_cover(ctx))
+    skinned(ctx, 'airframe', 'tail_pylon', build_pylon(ctx))
     ctx.node('stabilator', 'airframe', pivot=(712.0, 0.0, RC.WL_STAB))
-    ctx.part('stabilator', 'stabilator_skin', build_stabilator(ctx), 'paint_od', 50)
+    skinned(ctx, 'stabilator', 'stabilator_skin', build_stabilator(ctx))
     for sign, side in ((1, 'L'), (-1, 'R')):
-        ctx.part('airframe', f'nacelle_{side}', build_nacelle(ctx, sign), 'paint_od', 50)
+        skinned(ctx, 'airframe', f'nacelle_{side}', build_nacelle(ctx, sign))
         od, dark, stl = engine_ends(ctx, sign)
         ctx.part('airframe', f'engine_ends_{side}', od, 'paint_od', 40)
         ctx.part('airframe', f'engine_ducts_{side}', dark, 'exhaust_dark', 40)
