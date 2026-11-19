@@ -36,7 +36,7 @@ w = bpy.data.worlds.new('w'); sc.world = w; w.use_nodes = True
 nt = w.node_tree; bg = nt.nodes['Background']
 try:
     sky = nt.nodes.new('ShaderNodeTexSky'); sky.sun_elevation = math.radians(38); sky.sun_rotation = math.radians(float(arg('--sun', 140)))
-    nt.links.new(sky.outputs[0], bg.inputs[0]); bg.inputs[1].default_value = 0.35
+    nt.links.new(sky.outputs[0], bg.inputs[0]); bg.inputs[1].default_value = float(arg('--sky', 0.09))
 except Exception as e:
     bg.inputs[0].default_value = (0.8, 0.85, 0.9, 1)
 # ground

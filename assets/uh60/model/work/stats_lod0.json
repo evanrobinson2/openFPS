@@ -1,0 +1,16 @@
+{
+ "lod": 0,
+ "tris": 51420,
+ "parts": 23,
+ "nodes": [
+  "airframe",
+  "main_rotor",
+  "main_blade_1",
+  "main_blade_2",
+  "main_blade_3",
+  "main_blade_4",
+  "tail_rotor"
+ ],
+ "sockets": [],
+ "glb_mb": 1.6
+}

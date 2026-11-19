@@ -235,8 +235,18 @@ class Context:
                 j.parent = e; j.matrix_parent_inverse = Matrix.Identity(4)
                 j.matrix_world = e.matrix_world.copy()
                 j.data.update(); j.data.calc_loop_triangles(); tris += len(j.data.loop_triangles)
+            if objs and nd.get('morph'):
+                kname, fn = nd['morph']
+                j.shape_key_add(name='Basis'); sk = j.shape_key_add(name=kname)
+                co = np.zeros(len(j.data.vertices) * 3); j.data.vertices.foreach_get('co', co); co = co.reshape(-1, 3)
+                # node-local Blender axes are (bl, sta, wl) of the node frame: hand the function (radial, lead, up)
+                loc = co[:, [1, 0, 2]]; d = fn(loc)
+                sk.data.foreach_set('co', (co + d[:, [1, 0, 2]]).ravel()); sk.value = 0.0
             for cname, frames in nd['clips']:
-                e.rotation_mode = 'XYZ'
+                axes = [f[2][0] for f in frames if f[2] is not None]
+                mw = e.matrix_world.copy()
+                e.rotation_mode = {'x': 'XYZ', 'y': 'YXZ', 'z': 'ZYX'}[axes[0]] if axes else 'XYZ'
+                e.matrix_world = mw; bpy.context.view_layer.update()
                 base_loc = e.location.copy(); base_rot = e.rotation_euler.copy()
                 e.animation_data_create()
                 act = bpy.data.actions.new(f'{cname}__{name}')
