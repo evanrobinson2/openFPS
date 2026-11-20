@@ -50,7 +50,7 @@ UH-60 simulation model reports (Howlett, NASA CR-166309). The paint is the Army'
 
 ## Rule for visible parts (Evan, 2026-11-19)
 
-Every part a camera can see must be shown in a manual figure, photograph or rendering before it is modelled. Still built only from figure 2-4's small perspective view, with estimated sizes, and to be replaced when a proper reference is in hand: crew seat buckets, frames and tracks, cyclic and collective sticks and boots, glare shield depth, console body, fire extinguisher, utility light, cockpit floor surface.
+Every part a camera can see must be shown in a manual figure, photograph or rendering before it is modelled. Still built only from figure 2-4's small perspective view, with estimated sizes, and to be replaced when a proper reference is in hand: cyclic and collective sticks and boots, glare shield depth, console body, fire extinguisher, utility light, cockpit floor surface.
 
 Round 2 (2026-11-20): the upper console, engine control quadrant and collective grip now come from figures 2-7, 2-13
 and 2-14 as listed above, so the placeholder upper console is gone. Searched for the maintenance and parts manuals
@@ -73,3 +73,18 @@ cyclic), boot heights and the amount of bow in the stick are estimates. Not yet 
 and its NO STEP cover assembly) and 11-41 (collective stick socket, drag strut and support). Crew seats are in another
 volume: the 2006 edition's volumes 2 to 7 are downloadable from liberatedmanuals.com (volume 1 is general information,
 volume 2 troubleshooting).
+
+Round 3, crew seats: third manual in use. TM 1-1520-237-23 (17 April 2006 edition, volume with chapter 5; public
+copy at liberatedmanuals.com `TM-1-1520-237-23-5.pdf`, vector drawings; kept out of git), work package 0231 00.
+
+| Figure | Used for |
+|---|---|
+| 28 sheet 1, 'seat looking to front' | Widths and heights: bucket, headrest pad (10.4 in wide), guide tubes 18.8 in apart, attenuators, yoke, stowage panel band 24.6 x 6.2 in, crossed lower braces, base tube, track fittings. Read at 18 px per inch on a 3.6x render; the view's own routing dimensions (7, 5-3/4, 3 and 4-1/16 in) give 16 to 22, so sizes are good to about 15 % |
+| 7, 9, 24 whole-seat perspectives | Bucket with seat and back cushions, five-strap harness into a rotary buckle, strap adjusters, guide tube caps, diagonal struts to the front track fittings, track tubes |
+| 14 seat bucket | The bare shell: pan with side walls sweeping up into a flanged back |
+| 27 armoured wing | Stationary and movable wing on the outboard side, on an upper and a lower tube |
+
+Estimated: everything along the seat's fore-aft axis (pan length, back lean 10 degrees, how far the frame stands
+behind the back), wing outlines and sizes. Seat centre moved to BL 22.5 (from 21) and STA 230.5 so the collective
+passes between seat and console and the guide tubes clear the STA 247 frame; both are estimates. Not built: the
+three openings at the top of the bare bucket, frangible strut, inertia reel, ICS cables, vertical adjust spring.

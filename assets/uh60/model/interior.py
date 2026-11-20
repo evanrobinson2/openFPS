@@ -147,31 +147,6 @@ def troop_seat(ctx, out, M, hi, studs=()):
     st.merge(lib.box((-3.2, 0, pan_z - 0.05), (0.5, 1.6, 0.25)), M)
 
 
-def crew_seat(ctx, out, M, hi):
-    """Armoured crew seat bucket, cushions and harness; its frame and tracks are cockpit_floor.seat_mount.
-    Origin: cockpit floor under the pan centre."""
-    arm, fab, belt, st, al = out; pan_z = 12.5
-    bucket = lib.rrect(19.5, 18.5, 2.5, 4)
-    arm.merge(lib.prism(bucket, pan_z - 2.6, pan_z), M)
-    back = lib.rrect(19.5, 27.0, 3.0, 4)
-    # back plate: local sketch (y, z) -> seat (bl, wl), extruded along seat x
-    Mb = M @ T(-9.6, 0, pan_z - 2.0) @ R('bl', 12.0)
-    plate = Mesh(); plate.merge(lib.prism(back, -1.2, 0.0), np.array([[0, 0, 1, 0], [1, 0, 0, 0], [0, 1, 0, 13.5], [0, 0, 0, 1.0]]))
-    arm.merge(plate, Mb)
-    for sy in (1, -1):                                   # side armour wings
-        arm.merge(lib.box((-2.5, sy * 10.3, pan_z + 6.0), (15.0, 0.9, 13.0)), M)
-    hr = Mesh(); hr.merge(lib.prism(lib.rrect(9.0, 6.5, 2.0, 4), -1.6, 0.6), np.array([[0, 0, 1, 0], [1, 0, 0, 0], [0, 1, 0, 30.5], [0, 0, 0, 1.0]]))
-    fab.merge(hr, Mb)
-    cush = Mesh(); cush.merge(lib.prism(lib.rrect(16.5, 22.0, 2.5, 4), 0.0, 1.8), np.array([[0, 0, 1, 0], [1, 0, 0, 0], [0, 1, 0, 13.0], [0, 0, 0, 1.0]]))
-    fab.merge(cush, Mb)
-    fab.merge(lib.prism(lib.rrect(16.5, 16.5, 2.5, 4), pan_z, pan_z + 2.2), M @ T(0.5, 0, 0))
-    # harness: two shoulder straps, lap belt, rotary buckle
-    for sy in (1, -1):
-        belt.merge(lib.tube([(-11.5, sy * 3.2, pan_z + 27.0), (-8.6, sy * 3.4, pan_z + 16.0), (-5.2, sy * 2.2, pan_z + 6.0), (-1.5, sy * 0.6, pan_z + 3.2)], 0.55, 4), M)
-        belt.merge(lib.tube([(-6.5, sy * 9.0, pan_z + 1.8), (-3.5, sy * 5.0, pan_z + 2.9), (-1.5, sy * 0.8, pan_z + 3.1)], 0.55, 4), M)
-    st.merge(lib.revolve([(1.5, 0), (1.5, 0.7), (0, 0.7)], 12), M @ T(-1.5, 0, pan_z + 2.9))
-
-
 def gauge(out, M, r, hi, n=18):
     blk, face, lens = out
     blk.merge(lib.revolve([(r, 0), (r, 0.35), (r - 0.22, 0.35), (r - 0.22, 0.12)], n, M, cap0=False, cap1=False))
@@ -188,9 +163,6 @@ UP_AFT, UP_TILT = (246.5, 0.0, 265.0), 0.0
 def cockpit(ctx):
     hi = ctx.lod == 0
     arm, fab, belt, st, al, blk, face, grey, yel, red = (Mesh() for _ in range(10))
-    for sg in (1, -1):
-        M = T(232.5, sg * 21.0, CFLOOR) @ seat_frame('fwd')
-        crew_seat(ctx, (arm, fab, belt, st, al), M, hi)
     # ---- instrument panel: one piece across the cockpit, tilted back 30 deg, glare shield on top
     Mp = T(207.0, 0, 235.0) @ R('bl', -30.0)     # panel plane: local y = BL, local z = up along the panel face, local x = normal (aft)
     art = getattr(ctx, 'art', None); knb = Mesh()
@@ -211,13 +183,13 @@ def cockpit(ctx):
     ctx.part('airframe', 'cockpit_knobs', knb, 'paint_black', 40)
     # ---- flight controls: cyclic, collective and pedals for each seat (own nodes so the sim can move them)
     for sg, side in ((1, 'L'), (-1, 'R')):
-        cy = sg * 21.0
+        cy = sg * CK.SEAT_BL
         nd = ctx.node(f'cyclic_{side}', 'airframe', pivot=(222.0, cy, CFLOOR + 1.0))
         m = Mesh(); g = Mesh()
         m.merge(lib.tube(smooth_path([(222.0, cy, CFLOOR + 1.0), (220.9, cy, CFLOOR + 6.0), (221.2, cy, CFLOOR + 10.5), (223.6, cy, CFLOOR + 13.8), (225.6, cy, CFLOOR + 15.4)], 3.0), 0.55, 10))   # bowed forward [TM 55-1520-237-23 fig 11-34]
         g.merge(PN.cyclic_grip(ctx, art['cyclic'], (225.6, cy, CFLOOR + 15.2)))
         ctx.part(nd, 'cyclic_tube', m, 'steel_dark', 40); ctx.part(nd, 'cyclic_grip', g, 'paint_black', 40)
-        bl_c = cy + 10.6
+        bl_c = cy + 12.2
         nd = ctx.node(f'collective_{side}', 'airframe', pivot=(240.0, bl_c, CFLOOR + 4.0))
         m = Mesh(); g = Mesh()
         m.merge(lib.tube([(240.0, bl_c, CFLOOR + 4.0), (229.0, bl_c, CFLOOR + 9.4)], 0.6, 8))
@@ -232,7 +204,7 @@ def cockpit(ctx):
         fr = Mesh(); fr.merge(lib.cyl(p0 + d * 0.66, p0 + d * 0.76, 1.05, ctx.n(14, 10)))          # friction control collar [F2-4 item 37]
         ctx.part(nd, 'collective_friction', fr, 'steel_dark', 40)
         CK.collective_mount((240.0, bl_c, CFLOOR + 4.0), (al, st))
-    CK.build(ctx, wall_bl)
+    CK.build(ctx, wall_bl, (arm, fab, belt))
     for name, m, mat in (('crew_seat_armour', arm, 'armor'), ('crew_seat_cushions', fab, 'fabric_seat'), ('crew_harness', belt, 'fabric_belt'),
                          ('cockpit_steel', st, 'steel'), ('cockpit_brackets', al, 'frame_grey'), ('instrument_panel', blk, 'panel_face'),
                          ('instrument_faces', face, 'instrument'), ('console_panels', grey, 'paint_grey'),
@@ -281,7 +253,7 @@ def cabin(ctx):
                          ('troop_seat_fabric', fab, 'fabric_seat'), ('troop_belts', belt, 'fabric_belt'), ('cabin_steel', st, 'steel'),
                          ('dome_lenses', lens, 'glass_lens'), ('cabin_grey', grey, 'paint_grey')):
         ctx.part('airframe', name, m, mat, 35)
-    ctx.socket('eye_pilot', (229.0, -21.0, 258.0)); ctx.socket('eye_copilot', (229.0, 21.0, 258.0))
+    ctx.socket('eye_pilot', (229.0, -CK.SEAT_BL, 258.0)); ctx.socket('eye_copilot', (229.0, CK.SEAT_BL, 258.0))
     ctx.socket('spawn_cabin', (330.0, 0.0, FLOOR)); ctx.socket('spawn_ground_left', (330.0, 110.0, RC.WL_GROUND))
     ctx.socket('seat_gunner_left', (270.0, 27.0, FLOOR + 16.5)); ctx.socket('seat_gunner_right', (270.0, -27.0, FLOOR + 16.5))
 

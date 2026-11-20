@@ -11,6 +11,7 @@ audio file is an input or is stored in git.
 | `model/build.py` | Entry point. Builds `model/work/uh60_lod0.glb` and `uh60_lod1.glb` (git-ignored). |
 | `model/recipe.py` | Every dimension, with its source tag, and the build context (nodes, clips, sockets). |
 | `model/airframe.py`, `rotors.py`, `gear.py`, `interior.py`, `hardware.py` | The assemblies. |
+| `model/crew_seat.py` | Pilot's and copilot's armoured seats from the maintenance manual's seat drawings (bucket, cushions, harness, guide tubes, attenuators, struts, tracks, armoured wings). |
 | `model/manual_art.py`, `panel.py` | The instrument panel, lower and upper consoles, engine control quadrant, cyclic and collective grips, built on the manual's own drawings (figures 2-9, 2-8, 2-7, 2-13, 2-14). Needs PyMuPDF and OpenCV (`pip install pymupdf opencv-python-headless`) and the manual at `model/refs-local/tm10.pdf`. |
 | `model/floor.py`, `cockpit_floor.py` | Cabin floor from figure 6-11 (tie-down and seat-stud pans, hook door, sills, kick strips) and the cockpit floor from figure 2-4 (pedals, lower console, seat tracks and frames, boots). Each paints its own floor map. |
 | `model/skin.py`, `detail.py` | Surface maps painted by code: panel seams, rivets, markings, wear; instrument faces; fabric, quilt, floor. |

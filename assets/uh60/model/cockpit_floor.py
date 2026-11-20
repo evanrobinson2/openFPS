@@ -16,7 +16,7 @@ from lib import Mesh, T, R, S
 
 CF = RC.WL_COCKPIT_FLOOR
 C0, C1, CHALF = 194.0, 247.0, 47.0
-SEAT_STA, SEAT_BL = 232.5, 21.0
+SEAT_STA, SEAT_BL = 230.5, 22.5     # BL widened from 21 so the collective passes between seat and console [EST]
 CYC_STA = 222.0
 PED_STA = 204.0
 CON_HW = 9.25                              # the drawn console top is 18.0 in wide [F2-8 at 5.75 in per control head]
@@ -152,49 +152,6 @@ def console(ctx, out):
 
 
 # ------------------------------------------------------------------ crew seat frame and tracks
-def seat_mount(ctx, M, out):
-    """Tracks bolted to the floor, a carriage on four roller blocks, two guide tubes the bucket rides down in a
-    crash, a diagonal energy attenuator each side. Local: x forward, y to the occupant's left, z up from the floor."""
-    frm, trk, stl, dull, blk = out; n = ctx.n(12, 8); hi = ctx.lod == 0
-    prof = [(-0.85, 0.0), (0.85, 0.0), (0.85, 0.85), (0.3, 0.85), (0.3, 0.5), (-0.3, 0.5), (-0.3, 0.85), (-0.85, 0.85)]
-    for sy in (1, -1):
-        y = sy * 7.0
-        rings = [[(x, y + py, 0.1 + pz) for py, pz in prof] for x in (-15.5, 9.5)]
-        trk.merge(outward(lib.loft(np.array(rings, float), cap0=True, cap1=True)), M)
-        trk.merge(lib.box((-3.0, y, 0.05), (26.4, 3.1, 0.1)), M)
-        for x in np.arange(-15.0, 9.6, 2.7):
-            for e in (-1.22, 1.22): stl.merge(screw((x, y + e, 0.1), (0, 0, 1), 0.2, 0.13), M)
-        for x in (-15.2, 9.2): dull.merge(lib.box((x, y, 0.75), (0.6, 1.9, 1.3)), M)
-        for x in (-12.0, 6.0):                                                        # roller blocks
-            dull.merge(outward(lib.prism(lib.rrect(3.0, 2.3, 0.45, 3), 0.75, 2.2, T(x, y, 0))), M)
-            stl.merge(lib.cyl((x, y - 1.3, 1.5), (x, y + 1.3, 1.5), 0.3, 8), M)
-        frm.merge(lib.tube([(-12.0, y, 2.5), (6.0, y, 2.5)], 0.5, n), M)
-        g0 = np.array((-12.0, y, 2.2)); g1 = np.array((-12.5, y, 9.0)); g2 = np.array((-13.6, y, PAN_Z + 22.5))
-        frm.merge(lib.tube([g0, g1, g2], 0.8, n), M)
-        dull.merge(lib.revolve([(0.86, 0), (0.86, 0.5), (0.5, 0.8), (0, 0.8)], n, lib.frame_to(g2, g2 + (g2 - g1))[0]), M)
-        for t in (0.22, 0.72):                                                       # bucket carriers sliding on the guide tube
-            c = g1 + (g2 - g1) * t; u = (g2 - g1) / np.linalg.norm(g2 - g1)
-            dull.merge(lib.cyl(c - u * 1.1, c + u * 1.1, 1.14, n), M)
-            dull.merge(lib.box(c + (1.3, -sy * 0.2, 0), (2.4, 1.3, 1.6)), M)
-            stl.merge(lib.cyl(c + (0.6, -0.9, 0), c + (0.6, 0.9, 0), 0.22, 6), M)
-        # diagonal energy attenuator, outboard of the armour wing
-        a = np.array((6.0, sy * 10.6, 2.6)); b = np.array((-13.2, sy * 12.2, PAN_Z + 19.0)); d = b - a
-        frm.merge(lib.cyl(a, b, 0.48, n), M); dull.merge(lib.cyl(a + d * 0.06, a + d * 0.3, 0.86, n), M)
-        dull.merge(lib.cyl(a + d * 0.3, a + d * 0.33, 0.62, n), M)
-        for p in (a, b): stl.merge(lib.cyl(p - (0, 0.75, 0), p + (0, 0.75, 0), 0.3, 8), M)
-        for x, s in ((8.6, 1), (8.6, -1)):                                           # height and fore-aft adjust levers under the pan
-            pass
-    frm.merge(lib.tube([(6.0, -11.3, 2.6), (6.0, 11.3, 2.6)], 0.55, n), M)
-    frm.merge(lib.tube([(-12.1, -7.0, 3.4), (-12.1, 7.0, 3.4)], 0.55, n), M)
-    frm.merge(lib.tube([(-13.3, -12.9, PAN_Z + 19.4), (-13.3, 12.9, PAN_Z + 19.4)], 0.6, n), M)
-    for sy in (1, -1):
-        p0 = np.array((7.2, sy * 5.5, PAN_Z - 3.1)); p1 = p0 + (3.6, sy * 0.6, -0.3)
-        stl.merge(lib.cyl(p0, p1, 0.2, 6), M)
-        blk.merge(lib.revolve([(0.3, 0), (0.5, 0.3), (0.5, 1.1), (0.3, 1.4), (0, 1.4)], 8, lib.frame_to(p1, p1 + (p1 - p0))[0]), M)
-    # under-pan beam the bucket sits on
-    frm.merge(lib.box((0.0, 0.0, PAN_Z - 3.0), (3.0, 16.0, 0.8)), M)
-
-
 def collective_mount(pivot, out):
     """Clevis bracket for the collective's torque tube, bolted to the floor."""
     frm, stl = out; s, bl, wl = pivot
@@ -230,7 +187,7 @@ def door_sill(ctx, wall_bl, out):
             stl.merge(screw((s, sg * (wall_bl(s, CF) + 0.3 - 2.9), CF + 0.14), (0, 0, 1), 0.2, 0.06, 8))
 
 
-def build(ctx, wall_bl):
+def build(ctx, wall_bl, seat_out):
     hi = ctx.lod == 0; textured = 'cockpit_floor' in ctx.mats
     half = lambda s: float(wall_bl(s, CF)) + 0.4
     sts = np.linspace(C0, C1, 10)
@@ -241,7 +198,8 @@ def build(ctx, wall_bl):
     for sg in (1, -1):
         cy = sg * SEAT_BL
         pedals(ctx, cy, (blk, frm, stl, dull, rub))
-        seat_mount(ctx, T(SEAT_STA, cy, CF) @ np.array([[-1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1.0]]), (frm, trk, stl, dull, blk))
+        import crew_seat
+        crew_seat.build(ctx, T(SEAT_STA, cy, CF) @ np.array([[-1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1.0]]), seat_out + (stl, frm, dull, trk, blk), 1 if sg > 0 else -1)
         boot(ctx, CYC_STA, cy, 7.0, 7.0, (CYC_STA - 0.6, cy), 5.6, 0.95, (rub, dull, stl), (5, 5))     # cyclic boot and retainer [F11-34]
     console(ctx, (body, frm, stl, grey, blk, yel, red, dull))
     door_sill(ctx, wall_bl, (od, dull, stl))
