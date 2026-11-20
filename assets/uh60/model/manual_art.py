@@ -37,6 +37,23 @@ C_INSET = (1170, 2550)                       # a separate inset view overlaps th
 C_ARROW = (1078, 338, 1598, 374)             # callout arrow C across the top section: erased, crossing lines healed
 C_HEAD_W = 5.75                              # in, standard control head width
 C_COL_PX = 85.0 * ZOOM                       # one column of the drawing, px
+# ---- upper console, figure 2-7 sheet 1 (page 54): a plan seen from below, aft at the top, aircraft right on the right
+U_CLIP = (105, 56, 538, 620)                 # page points
+U_FRAME = (26, 26, 2572)                     # left, top and right of the console outline in the rendered clip, px
+U_W = 18.5                                   # in [fitted: its toggle-switch nuts drawn the same size as figure 2-8's]
+U_STRIP = (800, 1000)                        # rows of the scalloped strip; callout arrow A crosses its right half (mirrored from the left)
+U_HEAD_A = (1708, 1006, 1900, 1031)          # arrow A's head between the centre and right panels
+U_MARGIN = (1010, 3000, 82, 92)                # rows, and width inside each side of the frame, holding only arrows B, C and E
+U_ARROW_D = ((2315, 3384), (2105, 2870), 30) # arrow D: tail, tip, half width
+U_HEAL_D = ((2937, 2941, 2060, 2170),)       # the panel border it crosses, redrawn
+U_NOTCH = ((521, 863), 3020)                 # forward centre is cut away round the engine control quadrant: x at the front edge, x and row at its root
+U_QUAD = dict(drum=(919, 2423, 1694, 3167), power=((1161, 2500), (1450, 2500)), power_size=(144, 193),
+              fuel=((903, 2527), (1707, 2527)), fuel_r=60, fuel_arm=(1019, 1581),
+              tee=((842, 3240), (1774, 3240)), tee_size=(297, 80), tee_dir=(-188, 120), tee_stem=((1023, 2927), (1023, 3127)))
+U_QUAD_BOX = (700, 2380, 1900)               # the quadrant's levers are drawn in grey here; modelled in 3D, so cleared from the face
+G_LEADERS = [((262, 494), (288, 461), 5), ((331, 232), (346, 262), 5), ((507, 322), (488, 349), 5), ((448, 548), (440, 489), 8)]   # 2x page px
+G_TRIGGER = (341, 615, 420, 775)             # the HUD switch of detail A (a modification) drawn solid black on the grip: left off
+U_DOME = (600, 262, 1963, 750)               # cockpit dome light unit (raised plate)
 
 
 def _render(doc, page, rect):
@@ -90,8 +107,8 @@ def _face(img, plate_mask=None):
 def build(out_dir, pdf, log=print):
     """Returns the parsed manual_art.json (building it and the images if they are missing or stale)."""
     os.makedirs(out_dir, exist_ok=True)
-    pj = os.path.join(out_dir, 'manual_art.json'); pp = os.path.join(out_dir, 'panel_art.png'); pc = os.path.join(out_dir, 'console_art.png')
-    if all(os.path.exists(p) and os.path.getmtime(p) > os.path.getmtime(__file__) for p in (pj, pp, pc)):
+    pj = os.path.join(out_dir, 'manual_art.json'); pp = os.path.join(out_dir, 'panel_art.png'); pc = os.path.join(out_dir, 'console_art.png'); pu = os.path.join(out_dir, 'upper_art.png')
+    if all(os.path.exists(p) and os.path.getmtime(p) > os.path.getmtime(__file__) for p in (pj, pp, pc, pu)):
         return json.load(open(pj))
     import fitz, cv2
     doc = fitz.open(pdf)
@@ -142,9 +159,50 @@ def build(out_dir, pdf, log=print):
     g = _render(doc, 88, (0, 0, doc[87].rect.width, doc[87].rect.height))
     side = _silhouette(g, (150, 340, 400, 725), [(640, 725, 256, 360), (340, 640, 150, 385)])
     front = _silhouette(g, (500, 340, 720, 725), [(340, 470, 520, 720), (470, 610, 548, 720), (630, 725, 500, 652)])
-    art = dict(panel=panel, console=dict(ppi=float(cppi), w=float(cw), l=float(cl), knobs=ck), cyclic=dict(side=_extents(side), front=_extents(front)))
+    # ---------------- upper console
+    u = _render(doc, 54, U_CLIP); xl, yt, xr = U_FRAME; xc = (xl + xr) / 2.0
+    yb = int(np.where(u[:, int(xc + 700)] < 100)[0].max())                      # bottom (forward) edge of the outline
+    r0, r1 = U_STRIP; half = u[r0:r1, xl + 6:int(xc)]; u[r0:r1, int(2 * xc) - int(xc) + 0:int(2 * xc) - (xl + 6)] = half[:, ::-1][:, :int(2 * xc) - (xl + 6) - int(xc)]
+    ax0, ay0, ax1, ay1 = U_HEAD_A; u[ay0:ay1, ax0:ax1] = 255; u[r1 + 1:r1 + 5, ax0 - 10:ax1 + 10] = 20
+    m0, m1, mw, mr = U_MARGIN; u[m0:m1, xl + 6:xl + mw] = 255; u[m0:m1, xr - mr:xr - 4] = 255
+    (tx, ty), (hx, hy), hw = U_ARROW_D; dv = np.array((hx - tx, hy - ty), float); nv = np.array((-dv[1], dv[0])) / np.linalg.norm(dv) * hw
+    cv2.fillPoly(u, [np.array([(tx, ty) + nv, (tx, ty) - nv, (hx, hy) - nv + dv * 0.04, (hx, hy) + nv + dv * 0.04], np.int32)], 255)
+    for (ya, yb_, xa, xb) in U_HEAL_D: u[ya:yb_ + 1, xa:xb] = 20
+    u[yb - 3:yb + 1, 2200:2420] = 20
+    qx0, qy0, qx1 = U_QUAD_BOX; reg = u[qy0:yb - 6, qx0:qx1]; near_black = cv2.erode(reg, np.ones((5, 5), np.uint8)) < 70
+    reg[~near_black] = 255
+    uppi = (xr - xl) / U_W; ul = (yb - yt) / uppi
+    U = lambda px, py: (round((py - yt) / uppi, 3), round((xc - px) / uppi, 3))                 # px -> (forward from the aft edge, BL), inches
+    (nf, nr), ny = U_NOTCH
+    outline = [U(xl, yt), U(xl, yb - 30), U(xl + 30, yb), U(nf, yb), U(nr, ny), U(2 * xc - nr, ny), U(2 * xc - nf, yb), U(xr - 30, yb), U(xr, yb - 30), U(xr, yt)]
+    uk = [U(x, y) + (round(r / uppi, 3),) for x, y, r in _circles(u, 9, 60)
+          if not (qx0 < x < qx1 and y > qy0) and not (U_DOME[0] < x < U_DOME[2] and U_DOME[1] < y < U_DOME[3])]
+    q = U_QUAD; d0 = U(*q['drum'][:2]); d1 = U(*q['drum'][2:])
+    quad = dict(drum=(d0[0], d1[0], d1[1], d0[1]), power=[U(*p) for p in q['power']], power_size=[v / uppi for v in q['power_size']],
+                fuel=[U(*p) for p in q['fuel']], fuel_r=q['fuel_r'] / uppi, fuel_arm=[U(x, 0)[1] for x in q['fuel_arm']],
+                tee=[U(*p) for p in q['tee']], tee_size=[v / uppi for v in q['tee_size']],
+                tee_dir=(q['tee_dir'][1], -q['tee_dir'][0]), tee_stem=[U(*p) for p in q['tee_stem']])
+    dm0 = U(*U_DOME[:2]); dm1 = U(*U_DOME[2:])
+    cv2.imwrite(pu, _face(u[yt:yb, xl:xr]))
+    upper = dict(ppi=float(uppi), w=U_W, l=float(ul), outline=outline, knobs=uk, quad=quad, dome=(dm0[0], dm1[0], dm1[1], dm0[1]))
+    # ---------------- collective stick grip: the one view of figure 2-14 sheet 1 (its switch face)
+    g1 = _render(doc, 87, (0, 0, doc[86].rect.width, doc[86].rect.height)); k = 4.8; bx = (84, 137, 341, 575)
+    cs = _silhouette(g1, bx, [(350, 575, 147, 250), (137, 350, 84, 341)])
+    cimg = g1[int(bx[1] * k):int(bx[3] * k), int(bx[0] * k):int(bx[2] * k)].copy()
+    P2 = lambda x, y: (int(x * 3.0 - bx[0] * k), int(y * 3.0 - bx[1] * k))                    # 2x page px -> crop px
+    for (a, b, hw) in G_LEADERS:
+        a = np.array(P2(*a), float); b = np.array(P2(*b), float); nv = np.array((-(b - a)[1], (b - a)[0])); nv = nv / np.linalg.norm(nv) * hw * 3
+        cv2.fillPoly(cimg, [np.array([a + nv, a - nv, b - nv, b + nv], np.int32)], 255)
+    (gx0, gy0), (gx1, gy1) = P2(*G_TRIGGER[:2]), P2(*G_TRIGGER[2:]); cimg[gy0:gy1, gx0:gx1] = 255
+    cimg[cv2.erode(cs, np.ones((9, 9), np.uint8)) == 0] = 255
+    ys = np.where(cs.any(1))[0]; xs = np.where(cs.any(0))[0]; top, bot = ys.min(), ys.max(); Hc = float(bot - top)
+    base = np.where(cs[bot - 3])[0]; c0 = (base.min() + base.max()) / 2
+    pg = os.path.join(out_dir, 'collective_art.png'); cv2.imwrite(pg, _face(cimg[top:bot, xs.min():xs.max()]))
+    gk = [((x - c0) / Hc, (bot - y) / Hc, r / Hc) for x, y, r in _circles(cimg, 40, 110) if cs[int(y), int(x)]]
+    coll = dict(profile=_extents(cs), x0=float((xs.min() - c0) / Hc), x1=float((xs.max() - c0) / Hc), knobs=gk)
+    art = dict(upper=upper, collective=coll, panel=panel, console=dict(ppi=float(cppi), w=float(cw), l=float(cl), knobs=ck), cyclic=dict(side=_extents(side), front=_extents(front)))
     json.dump(art, open(pj, 'w'))
-    log(f'manual art: panel {x_hi - x_lo}x{y_hi - y_lo} px, {len(plist)} instruments, {len(knobs)} knobs; console {cw:.1f} x {cl:.1f} in, {len(ck)} circles')
+    log(f'manual art: panel {x_hi - x_lo}x{y_hi - y_lo} px, {len(plist)} instruments, {len(knobs)} knobs; console {cw:.1f} x {cl:.1f} in, {len(ck)} circles; upper console {U_W:.1f} x {ul:.1f} in, {len(uk)} circles')
     return art
 
 

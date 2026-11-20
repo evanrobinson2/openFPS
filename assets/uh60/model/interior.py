@@ -182,6 +182,9 @@ def gauge(out, M, r, hi, n=18):
             blk.merge(lib.revolve([(0.14, 0), (0.14, 0.18), (0, 0.18)], 6), M @ T((r + 0.32) * math.cos(a), (r + 0.32) * math.sin(a), 0))
 
 
+UP_AFT, UP_TILT = (246.5, 0.0, 265.0), 0.0
+
+
 def cockpit(ctx):
     hi = ctx.lod == 0
     arm, fab, belt, st, al, blk, face, grey, yel, red = (Mesh() for _ in range(10))
@@ -201,21 +204,11 @@ def cockpit(ctx):
     # parking brake lever in the slot the drawing letters PARKING BRAKE [F2-8; lever shape F2-4 item 16]
     p0 = (Mc @ np.array((27.6, -2.35, 0.0, 1.0)))[:3]; p1 = (Mc @ np.array((26.4, -2.35, 3.4, 1.0)))[:3]
     st.merge(lib.cyl(p0, p1, 0.2, 6)); yel.merge(lib.cyl(p1 + (0, -1.2, 0), p1 + (0, 1.2, 0), 0.36, ctx.n(12, 8)))
+    # ---- upper console and engine control quadrant [F2-7 plan, F2-13]; where it hangs is read from figure 2-4 [EST]
+    th = math.radians(UP_TILT); Mu = np.eye(4)
+    Mu[:3, 0] = (-math.cos(th), 0, -math.sin(th)); Mu[:3, 2] = (math.sin(th), 0, -math.cos(th)); Mu[:3, 3] = UP_AFT
+    PN.upper_console(ctx, Mu, art['upper'], (blk, knb, st))
     ctx.part('airframe', 'cockpit_knobs', knb, 'paint_black', 40)
-    # ---- upper (overhead) console and the engine control quadrant
-    grey.merge(lib.box((234.0, 0, 266.2), (25.0, 18.0, 2.4)))
-    for i, sx in enumerate(np.linspace(226.0, 243.0, 6)):
-        for yc in (-4.4, 4.4):
-            face.merge(lib.box((sx, yc, 264.9), (2.4, 7.4, 0.14)))
-            if hi:
-                for k in range(5):
-                    st.merge(lib.cyl((sx, yc - 2.8 + k * 1.4, 264.9), (sx + 0.2, yc - 2.8 + k * 1.4, 264.1), 0.12, 6))
-    for sg in (1, -1):                                               # power control levers, fuel selectors, fire T-handles
-        blk.merge(lib.cyl((222.5, sg * 2.2, 265.2), (220.5, sg * 2.2, 260.6), 0.3, 8))
-        yel.merge(lib.revolve([(0.75, 0), (0.75, 1.5), (0, 1.5)], 10, lib.frame_to((220.6, sg * 2.2, 260.8), (220.0, sg * 2.2, 259.4))[0]))
-        blk.merge(lib.cyl((222.5, sg * 5.0, 265.2), (221.0, sg * 5.0, 261.8), 0.25, 8))
-        red.merge(lib.box((220.9, sg * 5.0, 261.4), (0.9, 2.6, 0.9)))
-        yel.merge(lib.cyl((222.5, sg * 7.4, 265.2), (221.4, sg * 7.4, 262.6), 0.25, 8))
     # ---- flight controls: cyclic, collective and pedals for each seat (own nodes so the sim can move them)
     for sg, side in ((1, 'L'), (-1, 'R')):
         cy = sg * 21.0
@@ -228,8 +221,11 @@ def cockpit(ctx):
         nd = ctx.node(f'collective_{side}', 'airframe', pivot=(240.0, bl_c, CFLOOR + 4.0))
         m = Mesh(); g = Mesh()
         m.merge(lib.tube([(240.0, bl_c, CFLOOR + 4.0), (229.0, bl_c, CFLOOR + 9.4)], 0.6, 8))
-        g.merge(lib.tube([(229.0, bl_c, CFLOOR + 9.4), (224.6, bl_c, CFLOOR + 11.6)], 0.85, 10))
-        g.merge(lib.box((223.8, bl_c, CFLOOR + 12.3), (2.6, 2.2, 2.0)))
+        dd = np.array((229.0 - 240.0, 0, 9.4 - 4.0)); dd /= np.linalg.norm(dd); Mg = np.eye(4)
+        Mg[:3, 0] = (0, -1, 0); Mg[:3, 1] = (-dd[2], 0, dd[0]) if dd[0] > 0 else (dd[2], 0, -dd[0]); Mg[:3, 2] = dd; Mg[:3, 3] = (229.0, bl_c, CFLOOR + 9.4)
+        gb, gf, gk = PN.collective_grip(ctx, art['collective'], Mg); g.merge(gb); g.merge(gk)
+        of = ctx.part(nd, 'collective_face', gf, 'collective_art' if 'collective_art' in ctx.mats else 'paint_black', 40)
+        if of is not None and 'collective_art' in ctx.mats: PN.collective_uv(of, art['collective'], Mg)
         ctx.part(nd, 'collective_tube', m, 'steel_dark', 40); ctx.part(nd, 'collective_grip', g, 'paint_black', 40)
         p0 = np.array((240.0, bl_c, CFLOOR + 4.0)); d = np.array((229.0, bl_c, CFLOOR + 9.4)) - p0
         ctx.part(nd, 'collective_boot', CK.bellows(p0 + d * 0.16, p0 + d * 0.62, 1.5, 0.95, 7, ctx.n(14, 10), 0.3), 'rubber', 40)
