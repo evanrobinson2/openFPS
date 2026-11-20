@@ -19,3 +19,7 @@ work/*.npz
 work/*.log
 __pycache__/
 .DS_Store
+
+# UH-60 build outputs (maps and web pack are rebuilt by model/build.py and tools/pack_web.py)
+assets/uh60/model/work/tex/
+assets/uh60/model/work/web/

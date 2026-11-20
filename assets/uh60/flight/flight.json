@@ -1,0 +1,55 @@
+{
+ "source": "TM 1-1520-237-10 chapter 7 worked examples (UH-60A, T700-GE-700)",
+ "torque": [
+  {
+   "name": "hover OGE, 19,500 lb, 2000 ft PA, 30 C",
+   "manual_pct": 94,
+   "model_pct": 92.1,
+   "tolerance": 4,
+   "pitch_deg": 0.8,
+   "roll_deg": -2.4,
+   "ok": true
+  },
+  {
+   "name": "hover 10-ft wheel height, same day",
+   "manual_pct": 80,
+   "model_pct": 74.9,
+   "tolerance": 7,
+   "pitch_deg": 1.4,
+   "roll_deg": -1.9,
+   "ok": true
+  },
+  {
+   "name": "cruise 135 KTAS, 17,000 lb, 6000 ft, 30 C",
+   "manual_pct": 62,
+   "model_pct": 61.5,
+   "tolerance": 4,
+   "pitch_deg": -4,
+   "roll_deg": 0,
+   "ok": true
+  },
+  {
+   "name": "cruise 82 KTAS (max endurance), same",
+   "manual_pct": 41,
+   "model_pct": 41.4,
+   "tolerance": 4,
+   "pitch_deg": -3.1,
+   "roll_deg": 0,
+   "ok": true
+  }
+ ],
+ "pass": true,
+ "takeoff": {
+  "agl_ft": 101.4,
+  "rotor_pct": 100,
+  "heading_deg": 0.3,
+  "torque_pct": 69,
+  "ok": true
+ },
+ "autorotation": {
+  "ias_kt": 80,
+  "descent_fpm": 2409,
+  "rotor_pct": 109.9,
+  "ok": true
+ }
+}
