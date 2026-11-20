@@ -1,0 +1,98 @@
+[
+ {
+  "check": "US shell exterior length = ACH size L maximum",
+  "value": 266.7,
+  "target": 266.7,
+  "pass_band": [
+   264.7,
+   267.2
+  ],
+  "unit": "mm",
+  "pass": true,
+  "source": "TM 10-8470-204-10 (2008) WP 0002 Table 1, Large: 10.5 x 9.5 x 7.0 in"
+ },
+ {
+  "check": "US shell exterior width = ACH size L maximum",
+  "value": 241.3,
+  "target": 241.29999999999998,
+  "pass_band": [
+   239.3,
+   241.8
+  ],
+  "unit": "mm",
+  "pass": true,
+  "source": "TM 10-8470-204-10 (2008) WP 0002 Table 1, Large: 10.5 x 9.5 x 7.0 in"
+ },
+ {
+  "check": "US shell exterior height = ACH size L maximum",
+  "value": 177.8,
+  "target": 177.79999999999998,
+  "pass_band": [
+   175.8,
+   178.3
+  ],
+  "unit": "mm",
+  "pass": true,
+  "source": "TM 10-8470-204-10 (2008) WP 0002 Table 1, Large: 10.5 x 9.5 x 7.0 in"
+ },
+ {
+  "check": "US inner length less two 3/4 in pads fits the largest L head (8 1/4 in)",
+  "value": 213.4,
+  "target": 209.54999999999998,
+  "pass_band": [
+   209.55,
+   224.55
+  ],
+  "unit": "mm",
+  "pass": true,
+  "source": "TM 10-8470-204-10 WP 0004 Table 1 (L head length 7 3/4 to 8 1/4 in); pads 3/4 in"
+ },
+ {
+  "check": "US bare shell mass plausible under the 53 oz system weight (shell + retention + pads)",
+  "value": 1052.48,
+  "target": 1502.5500000000002,
+  "pass_band": [
+   901.53,
+   1277.17
+  ],
+  "unit": "g",
+  "pass": true,
+  "source": "TM 10-8470-204-10 WP 0002 Table 1 (L: 53 oz with retention and suspension)"
+ },
+ {
+  "check": "Contractor shell coverage = FAST XP high cut, size L",
+  "value": 1021.6,
+  "target": 994,
+  "pass_band": [
+   964.18,
+   1023.82
+  ],
+  "unit": "cm2",
+  "pass": true,
+  "source": "Ops-Core FAST XP data sheet (REV.20251203): L high cut 154 in2 / 994 cm2, +/-3 %"
+ },
+ {
+  "check": "Contractor shell mass = FAST XP high cut L (841 g with paint and edge band)",
+  "value": 828.3,
+  "target": 841,
+  "pass_band": [
+   756.9,
+   925.1
+  ],
+  "unit": "g",
+  "pass": true,
+  "source": "Ops-Core FAST XP data sheet: shell 841 g (L, high cut), 7.37 mm thick"
+ },
+ {
+  "check": "Eastern shell mass within the published \"no more than 1 kg\"",
+  "value": 986.38,
+  "target": 1000,
+  "pass_band": [
+   700,
+   1000
+  ],
+  "unit": "g",
+  "pass": true,
+  "source": "6B47 published weight <= 1 kg (Armokom via Wikipedia \"6B47 helmet\"; Army Recognition, 23 Aug 2014)"
+ }
+]

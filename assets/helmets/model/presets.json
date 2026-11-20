@@ -1,0 +1,718 @@
+{
+ "_doc": "Helmet presets for helmetkit.py. Millimetres. 'a' = azimuth in degrees (0 front, 90 wearer's left, 180 back); 't' = down a meridian from the crown (0) through the widest line (1). 'cut' = depth of the rim below the crown at each azimuth (0..180, mirrored). Every number's source is in ../notes/SOURCES.md.",
+ "presets": [
+  {
+   "id": "helmet_us_highcut",
+   "name": "US high-cut ballistic helmet",
+   "size": "L",
+   "shell": {
+    "cut_kind": "high",
+    "length": 266.7,
+    "width": 241.3,
+    "height": 177.8,
+    "thickness": 7.6,
+    "dome_height": 112.0,
+    "crown_standoff": 19.05,
+    "plan_n": 2.12,
+    "dome_m": 2.18,
+    "egg": 0.06,
+    "front_taper": 0.1,
+    "crown_back": 8.0,
+    "flare": 0.05,
+    "flare_back": 0.05,
+    "cut": [
+     [
+      0,
+      129
+     ],
+     [
+      18,
+      130
+     ],
+     [
+      34,
+      132
+     ],
+     [
+      46,
+      131
+     ],
+     [
+      52,
+      124
+     ],
+     [
+      57,
+      106
+     ],
+     [
+      63,
+      93
+     ],
+     [
+      72,
+      88
+     ],
+     [
+      90,
+      87
+     ],
+     [
+      108,
+      88
+     ],
+     [
+      117,
+      94
+     ],
+     [
+      124,
+      110
+     ],
+     [
+      133,
+      136
+     ],
+     [
+      148,
+      160
+     ],
+     [
+      165,
+      174
+     ],
+     [
+      180,
+      177.8
+     ]
+    ]
+   },
+   "colours": {
+    "shell": "#525742",
+    "rails": "#2f312b",
+    "loop": "#555a45",
+    "shroud": "#2b2b29",
+    "webbing": "#4d4f3f",
+    "pads": "#3a3c34",
+    "bungee": "#2a2a26",
+    "headset": "#2a2b2a",
+    "trim": "#1c1c1b"
+   },
+   "rails": {
+    "from": 50,
+    "to": 140,
+    "above": 9.0,
+    "width": 22.0,
+    "height": 7.6,
+    "slot": 9.0,
+    "slot_depth": 3.0,
+    "screws": [
+     0.1,
+     0.5,
+     0.9
+    ]
+   },
+   "shroud": {
+    "above_rim": 5.0,
+    "plate_w": 72.0,
+    "plate_h": 44.0,
+    "plate_r": 10.0,
+    "plate_t": 3.0,
+    "recv_w": 38.0,
+    "recv_h": 30.0,
+    "recv_d": 13.0,
+    "hole_w": 17.0,
+    "hole_h": 9.5,
+    "metal": true,
+    "three_hole": false,
+    "bungee": true,
+    "bungee_to": 150.0,
+    "bungee_d": 4.0
+   },
+   "loop_panels": [
+    {
+     "a": 0,
+     "t": 0.4,
+     "w": 112,
+     "h": 58,
+     "r": 14
+    },
+    {
+     "a": 180,
+     "t": 0.32,
+     "w": 84,
+     "h": 50,
+     "r": 14
+    },
+    {
+     "a": 96,
+     "t": 0.58,
+     "w": 96,
+     "h": 32,
+     "r": 10,
+     "mirror": true
+    },
+    {
+     "a": 180,
+     "t": 0.78,
+     "w": 104,
+     "h": 52,
+     "r": 12
+    }
+   ],
+   "marker": {
+    "a": 180,
+    "t": 0.78
+   },
+   "pads": [
+    {
+     "a": 180,
+     "t": 0.16,
+     "w": 72,
+     "h": 72,
+     "r": 36
+    },
+    {
+     "a": 0,
+     "t_frac": 0.72,
+     "w": 104,
+     "h": 46,
+     "r": 20
+    },
+    {
+     "a": 180,
+     "t_frac": 0.66,
+     "w": 96,
+     "h": 46,
+     "r": 20
+    },
+    {
+     "a": 88,
+     "t_frac": 0.5,
+     "w": 82,
+     "h": 42,
+     "r": 20,
+     "mirror": true
+    },
+    {
+     "a": 140,
+     "t_frac": 0.62,
+     "w": 62,
+     "h": 52,
+     "r": 16,
+     "mirror": true
+    }
+   ],
+   "retention": {
+    "front": [
+     52,
+     15.0
+    ],
+    "rear": [
+     127,
+     14.0
+    ],
+    "bolts": true,
+    "worn": {
+     "chin": [
+      0,
+      -96,
+      -228
+     ],
+     "jaw": [
+      60,
+      -38,
+      -176
+     ],
+     "nape": [
+      0,
+      90,
+      -148
+     ],
+     "cup_w": 28
+    },
+    "hang": {
+     "chin": [
+      0,
+      -62,
+      -178
+     ],
+     "jaw": [
+      64,
+      -24,
+      -138
+     ],
+     "nape": [
+      0,
+      86,
+      -132
+     ],
+     "cup_w": 26
+    },
+    "webbing_w": 19.0
+   },
+   "comm_groove": {
+    "y": 14.0,
+    "w": 20.0,
+    "depth": 1.8,
+    "z_min": -30.0
+   }
+  },
+  {
+   "id": "helmet_pmc_highcut",
+   "name": "Contractor high-cut helmet with headset",
+   "size": "L",
+   "shell": {
+    "cut_kind": "high",
+    "length": 262.0,
+    "width": 236.0,
+    "height": 170.0,
+    "thickness": 7.37,
+    "dome_height": 108.0,
+    "crown_standoff": 19.05,
+    "plan_n": 2.32,
+    "dome_m": 2.32,
+    "egg": 0.05,
+    "front_taper": 0.12,
+    "crown_back": 10.0,
+    "flare": 0.03,
+    "flare_back": 0.03,
+    "cut": [
+     [
+      0,
+      120
+     ],
+     [
+      20,
+      121
+     ],
+     [
+      36,
+      124
+     ],
+     [
+      47,
+      122
+     ],
+     [
+      53,
+      113
+     ],
+     [
+      58,
+      96
+     ],
+     [
+      65,
+      84
+     ],
+     [
+      74,
+      79
+     ],
+     [
+      90,
+      78
+     ],
+     [
+      108,
+      79
+     ],
+     [
+      117,
+      86
+     ],
+     [
+      125,
+      104
+     ],
+     [
+      135,
+      130
+     ],
+     [
+      150,
+      152
+     ],
+     [
+      166,
+      166
+     ],
+     [
+      180,
+      170
+     ]
+    ]
+   },
+   "colours": {
+    "shell": "#857559",
+    "rails": "#2a2a29",
+    "loop": "#7a6d55",
+    "shroud": "#262625",
+    "webbing": "#6d6250",
+    "pads": "#2e2e2c",
+    "bungee": "#1f1f1e",
+    "headset": "#252627",
+    "pouch": "#6f6450",
+    "trim": "#1b1b1a"
+   },
+   "rails": {
+    "from": 52,
+    "to": 142,
+    "above": 8.0,
+    "width": 22.0,
+    "height": 7.6,
+    "slot": 9.0,
+    "slot_depth": 3.0,
+    "screws": [
+     0.1,
+     0.5,
+     0.9
+    ]
+   },
+   "shroud": {
+    "above_rim": 5.0,
+    "plate_w": 70.0,
+    "plate_h": 42.0,
+    "plate_r": 10.0,
+    "plate_t": 3.0,
+    "recv_w": 36.0,
+    "recv_h": 30.0,
+    "recv_d": 13.0,
+    "hole_w": 17.0,
+    "hole_h": 9.5,
+    "metal": false,
+    "three_hole": true,
+    "bungee": true,
+    "bungee_to": 152.0,
+    "bungee_d": 4.0
+   },
+   "loop_panels": [
+    {
+     "a": 0,
+     "t": 0.42,
+     "w": 116,
+     "h": 56,
+     "r": 14
+    },
+    {
+     "a": 180,
+     "t": 0.32,
+     "w": 90,
+     "h": 50,
+     "r": 14
+    },
+    {
+     "a": 96,
+     "t": 0.56,
+     "w": 100,
+     "h": 30,
+     "r": 10,
+     "mirror": true
+    }
+   ],
+   "pouch": {
+    "t": 0.76,
+    "w": 104,
+    "h": 62,
+    "d": 30
+   },
+   "headset": {
+    "ear": [
+     78,
+     10,
+     -122
+    ],
+    "cup_d": 86,
+    "cup_h": 80,
+    "cup_w": 36,
+    "mouth": [
+     0,
+     -92,
+     -190
+    ],
+    "mic_side": 1,
+    "arm_at": 0.44
+   },
+   "pads": [
+    {
+     "a": 180,
+     "t": 0.16,
+     "w": 74,
+     "h": 74,
+     "r": 37
+    },
+    {
+     "a": 0,
+     "t_frac": 0.72,
+     "w": 100,
+     "h": 44,
+     "r": 20
+    },
+    {
+     "a": 180,
+     "t_frac": 0.66,
+     "w": 96,
+     "h": 46,
+     "r": 20
+    },
+    {
+     "a": 88,
+     "t_frac": 0.5,
+     "w": 80,
+     "h": 40,
+     "r": 20,
+     "mirror": true
+    },
+    {
+     "a": 140,
+     "t_frac": 0.62,
+     "w": 60,
+     "h": 50,
+     "r": 16,
+     "mirror": true
+    }
+   ],
+   "retention": {
+    "front": [
+     52,
+     15.0
+    ],
+    "rear": [
+     128,
+     14.0
+    ],
+    "bolts": true,
+    "worn": {
+     "chin": [
+      0,
+      -96,
+      -228
+     ],
+     "jaw": [
+      60,
+      -38,
+      -176
+     ],
+     "nape": [
+      0,
+      90,
+      -146
+     ],
+     "cup_w": 28
+    },
+    "hang": {
+     "chin": [
+      0,
+      -62,
+      -178
+     ],
+     "jaw": [
+      64,
+      -24,
+      -138
+     ],
+     "nape": [
+      0,
+      86,
+      -132
+     ],
+     "cup_w": 26
+    },
+    "webbing_w": 19.0
+   },
+   "comm_groove": {
+    "y": 14.0,
+    "w": 20.0,
+    "depth": 1.8,
+    "z_min": -30.0
+   }
+  },
+  {
+   "id": "helmet_east_midcut",
+   "name": "Eastern European mid-cut helmet with digital cover",
+   "size": "L",
+   "shell": {
+    "cut_kind": "mid",
+    "length": 272.0,
+    "width": 242.0,
+    "height": 182.0,
+    "thickness": 6.8,
+    "dome_height": 114.0,
+    "crown_standoff": 19.05,
+    "plan_n": 2.02,
+    "dome_m": 2.06,
+    "egg": 0.07,
+    "front_taper": 0.07,
+    "crown_back": 6.0,
+    "flare": 0.13,
+    "flare_back": 0.09,
+    "cut": [
+     [
+      0,
+      128
+     ],
+     [
+      22,
+      130
+     ],
+     [
+      40,
+      134
+     ],
+     [
+      56,
+      132
+     ],
+     [
+      68,
+      124
+     ],
+     [
+      82,
+      118
+     ],
+     [
+      96,
+      118
+     ],
+     [
+      110,
+      124
+     ],
+     [
+      124,
+      140
+     ],
+     [
+      140,
+      160
+     ],
+     [
+      158,
+      176
+     ],
+     [
+      180,
+      182
+     ]
+    ]
+   },
+   "colours": {
+    "shell": "#4a4d36",
+    "shroud": "#262624",
+    "webbing": "#3e4032",
+    "pads": "#30312b",
+    "trim": "#1d1d1b"
+   },
+   "cover": {
+    "seed": 47,
+    "gap": 2.0,
+    "wrinkle": 1.0,
+    "tuck": 20.0,
+    "colours": [
+     "#575d47",
+     "#3d462d",
+     "#3f3227",
+     "#1b1b18"
+    ]
+   },
+   "front_plate": {
+    "above_rim": 9.0,
+    "w": 66.0,
+    "h": 40.0,
+    "r": 11.0,
+    "boss_w": 32.0,
+    "boss_h": 22.0,
+    "boss_d": 9.0
+   },
+   "pads": [
+    {
+     "a": 180,
+     "t": 0.16,
+     "w": 74,
+     "h": 74,
+     "r": 37
+    },
+    {
+     "a": 0,
+     "t_frac": 0.72,
+     "w": 104,
+     "h": 46,
+     "r": 20
+    },
+    {
+     "a": 180,
+     "t_frac": 0.68,
+     "w": 100,
+     "h": 46,
+     "r": 20
+    },
+    {
+     "a": 88,
+     "t_frac": 0.62,
+     "w": 84,
+     "h": 44,
+     "r": 20,
+     "mirror": true
+    },
+    {
+     "a": 140,
+     "t_frac": 0.64,
+     "w": 62,
+     "h": 52,
+     "r": 16,
+     "mirror": true
+    }
+   ],
+   "retention": {
+    "front": [
+     70,
+     16.0
+    ],
+    "rear": [
+     138,
+     16.0
+    ],
+    "bolts": false,
+    "worn": {
+     "chin": [
+      0,
+      -96,
+      -228
+     ],
+     "jaw": [
+      60,
+      -38,
+      -176
+     ],
+     "nape": [
+      0,
+      90,
+      -150
+     ],
+     "cup_w": 28
+    },
+    "hang": {
+     "chin": [
+      0,
+      -62,
+      -178
+     ],
+     "jaw": [
+      64,
+      -24,
+      -138
+     ],
+     "nape": [
+      0,
+      86,
+      -132
+     ],
+     "cup_w": 26
+    },
+    "webbing_w": 19.0
+   }
+  }
+ ]
+}

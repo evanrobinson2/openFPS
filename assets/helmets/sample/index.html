@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>openFPS helmets</title>
+<style>
+  :root { --bg:#16181b; --fg:#e8e6e1; --mut:#9a978f; --acc:#c8601f; }
+  html,body { margin:0; height:100%; background:var(--bg); color:var(--fg); font:14px/1.4 system-ui,sans-serif; }
+  #ui { position:fixed; left:16px; top:16px; right:16px; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+  button { background:#24272b; color:var(--fg); border:1px solid #3a3d42; border-radius:8px; padding:8px 12px; cursor:pointer; }
+  button.on { border-color:var(--acc); color:#fff; }
+  #note { position:fixed; left:16px; bottom:16px; right:16px; color:var(--mut); }
+  canvas { display:block; }
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}</script>
+</head><body>
+<div id="ui"></div>
+<div id="note">Build first: <code>cd assets/helmets/model && python3 build.py</code> (add <code>--random 6</code> for a family), then serve the repo over http and open this page.</div>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { setStrapsVisible, HELMET_FACTS } from '../runtime/helmets.js';
+
+const ids = ['helmet_us_highcut', 'helmet_pmc_highcut', 'helmet_east_midcut', ...[1, 2, 3, 4, 5, 6].map((s) => 'helmet_rand_' + s)];
+const r = new THREE.WebGLRenderer({ antialias: true });
+r.setPixelRatio(devicePixelRatio); r.setSize(innerWidth, innerHeight);
+r.toneMapping = THREE.ACESFilmicToneMapping; r.shadowMap.enabled = true;
+document.body.appendChild(r.domElement);
+const scene = new THREE.Scene(); scene.background = new THREE.Color(0x16181b);
+scene.environment = new THREE.PMREMGenerator(r).fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environmentIntensity = 0.8;
+const key = new THREE.DirectionalLight(0xfff1e0, 2.4); key.position.set(0.6, 1, 0.8); scene.add(key);
+const cam = new THREE.PerspectiveCamera(30, innerWidth / innerHeight, 0.01, 10); cam.position.set(0.45, 0.12, 0.6);
+const ctl = new OrbitControls(cam, r.domElement); ctl.target.set(0, -0.06, 0); ctl.update();
+const loader = new GLTFLoader(); let cur = null, straps = true;
+const ui = document.getElementById('ui');
+async function show(id, btn) {
+  try {
+    const g = await loader.loadAsync('../model/work/' + id + '.glb');
+    if (cur) scene.remove(cur);
+    cur = g.scene; scene.add(cur); setStrapsVisible(cur, straps);
+    ui.querySelectorAll('button[data-id]').forEach((b) => b.classList.toggle('on', b === btn));
+    const f = HELMET_FACTS[id]; document.getElementById('note').textContent = f ? JSON.stringify(f) : id;
+  } catch (e) { document.getElementById('note').textContent = 'Not built yet: ' + id; }
+}
+ids.forEach((id, i) => {
+  const b = document.createElement('button'); b.dataset.id = id;
+  b.textContent = id.replace('helmet_', '').replace('_', ' '); b.onclick = () => show(id, b); ui.appendChild(b);
+  if (i === 0) show(id, b);
+});
+const s = document.createElement('button'); s.textContent = 'Straps'; s.className = 'on';
+s.onclick = () => { straps = !straps; s.classList.toggle('on', straps); if (cur) setStrapsVisible(cur, straps); }; ui.appendChild(s);
+addEventListener('resize', () => { r.setSize(innerWidth, innerHeight); cam.aspect = innerWidth / innerHeight; cam.updateProjectionMatrix(); });
+r.setAnimationLoop(() => { ctl.update(); r.render(scene, cam); });
+</script>
+</body></html>
