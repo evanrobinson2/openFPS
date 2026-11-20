@@ -5,7 +5,7 @@ arrangement follows figure 2-10; each fitting's own size is inferred from what i
 """
 import math
 import numpy as np
-import lib, recipe as RC
+import lib, recipe as RC, floor as FL, cockpit_floor as CK
 from lib import Mesh, T, R, S
 
 INSET = RC.SHELL_T + 0.05
@@ -82,7 +82,7 @@ def fabric_sheet(grid, thick=0.14):
     return lib.loft(np.concatenate([top, bot[:, ::-1]], axis=1), cap0=True, cap1=True)
 
 
-def troop_seat(ctx, out, M, hi):
+def troop_seat(ctx, out, M, hi, studs=()):
     """Troop seat [F2-10]: bent-tube frame with a laced fabric pan and back, hung from the cabin ceiling on two
     tubes and held to the floor by two cables, with lap belt and shoulder straps to a rotary buckle.
     Origin: floor under the pan centre; local x = the way the occupant faces."""
@@ -97,9 +97,19 @@ def troop_seat(ctx, out, M, hi):
         al.merge(lib.tube([(-9.6, sy * (w - 2.6), top_z), (-9.3, sy * (w - 2.6), ceil_z)], 0.3, n), M)           # ceiling hangers
         st.merge(lib.revolve([(0.75, 0), (0.75, 0.5), (0.4, 0.9), (0, 0.9)], n), M @ T(-9.3, sy * (w - 2.6), ceil_z + 0.4) @ S(1, 1, -1))
         st.merge(lib.revolve([(0.5, 0), (0.5, 1.6), (0, 1.6)], n), M @ T(-9.6, sy * (w - 2.6), top_z - 0.8))     # wire-bender energy attenuator housing
-        for (x0, x1) in ((6.6, 10.5), (-7.6, -12.0)):                                                              # floor cables and fittings
-            st.merge(lib.tube([(x0, sy * w, pan_z - rt), (x1, sy * (w + 0.8), 0.5)], 0.09, 5), M)
-            st.merge(lib.revolve([(0.85, 0), (0.85, 0.22), (0.4, 0.5), (0, 0.5)], n), M @ T(x1, sy * (w + 0.8), 0))
+        for (x0, x1) in ((6.6, 10.5), (-7.6, -12.0)):                                                              # floor cables to the seat studs
+            top = (M @ np.array((x0, sy * w, pan_z - rt, 1.0)))[:3]; foot = None
+            for (ss, sb) in studs:
+                d = math.hypot(ss - top[0], sb - top[1])
+                if d < 11.0 and (foot is None or d < foot[0]): foot = (d, ss, sb)
+            if foot:                                                                                               # quick-release fitting on the floor stud
+                p = np.array((foot[1], foot[2], FLOOR - FL.PAN_DEPTH + 0.74))
+                st.merge(lib.revolve([(0.55, -0.1), (0.62, 0.25), (0.5, 0.7), (0.3, 0.95), (0, 0.95)], n), T(*p))
+                st.merge(lib.tube([p + (0, 0, 0.9), p + (top - p) * 0.25 + (0, 0, 0.4), top], 0.09, 5))
+                st.merge(lib.revolve([(0.2, 0), (0.2, 1.3), (0, 1.3)], 6, lib.frame_to(p + (top - p) * 0.2 + (0, 0, 0.5), top)[0]))
+            else:                                                                                                  # outboard legs: fitting on the floor by the wall
+                st.merge(lib.tube([(x0, sy * w, pan_z - rt), (x1, sy * (w + 0.8), 0.5)], 0.09, 5), M)
+                st.merge(lib.revolve([(0.85, 0), (0.85, 0.22), (0.4, 0.5), (0, 0.5)], n), M @ T(x1, sy * (w + 0.8), 0))
             st.merge(lib.revolve([(0.22, 0), (0.22, 1.1), (0, 1.1)], 6), M @ T(x0 + (x1 - x0) * 0.12, sy * (w + 0.1), pan_z - rt - 1.5))
     # pan: sagged between the tubes, wrapped over them at the sides
     ys = np.linspace(-(w + 0.1), w + 0.1, ctx.n(13, 9)); xs = np.linspace(-7.5, 7.5, ctx.n(11, 7)); g = []
@@ -138,7 +148,8 @@ def troop_seat(ctx, out, M, hi):
 
 
 def crew_seat(ctx, out, M, hi):
-    """Armoured, crash-attenuating crew seat on floor rails. Origin: cockpit floor under the pan centre."""
+    """Armoured crew seat bucket, cushions and harness; its frame and tracks are cockpit_floor.seat_mount.
+    Origin: cockpit floor under the pan centre."""
     arm, fab, belt, st, al = out; pan_z = 12.5
     bucket = lib.rrect(19.5, 18.5, 2.5, 4)
     arm.merge(lib.prism(bucket, pan_z - 2.6, pan_z), M)
@@ -149,6 +160,10 @@ def crew_seat(ctx, out, M, hi):
     arm.merge(plate, Mb)
     for sy in (1, -1):                                   # side armour wings
         arm.merge(lib.box((-2.5, sy * 10.3, pan_z + 6.0), (15.0, 0.9, 13.0)), M)
+        for (bx, bz) in ((-9.0, 1.0), (-9.0, 11.5), (4.0, 1.0), (4.0, 11.5), (-2.5, 1.0), (-2.5, 11.5)):   # wing attachment bolts
+            st.merge(CK.screw((bx, sy * 10.75, pan_z + bz), (0, sy, 0), 0.3, 0.14, 8), M)
+        arm.merge(lib.box((-2.5, sy * 10.55, pan_z + 12.3), (15.4, 1.4, 0.5)), M)                          # rolled top edge
+    arm.merge(lib.box((9.6, 0, pan_z - 1.3), (0.5, 18.9, 3.0)), M)                                           # front lip of the bucket
     hr = Mesh(); hr.merge(lib.prism(lib.rrect(9.0, 6.5, 2.0, 4), -1.6, 0.6), np.array([[0, 0, 1, 0], [1, 0, 0, 0], [0, 1, 0, 30.5], [0, 0, 0, 1.0]]))
     fab.merge(hr, Mb)
     cush = Mesh(); cush.merge(lib.prism(lib.rrect(16.5, 22.0, 2.5, 4), 0.0, 1.8), np.array([[0, 0, 1, 0], [1, 0, 0, 0], [0, 1, 0, 13.0], [0, 0, 0, 1.0]]))
@@ -159,11 +174,6 @@ def crew_seat(ctx, out, M, hi):
         belt.merge(lib.tube([(-11.5, sy * 3.2, pan_z + 27.0), (-8.6, sy * 3.4, pan_z + 16.0), (-5.2, sy * 2.2, pan_z + 6.0), (-1.5, sy * 0.6, pan_z + 3.2)], 0.55, 4), M)
         belt.merge(lib.tube([(-6.5, sy * 9.0, pan_z + 1.8), (-3.5, sy * 5.0, pan_z + 2.9), (-1.5, sy * 0.8, pan_z + 3.1)], 0.55, 4), M)
     st.merge(lib.revolve([(1.5, 0), (1.5, 0.7), (0, 0.7)], 12), M @ T(-1.5, 0, pan_z + 2.9))
-    # frame: two vertical guide tubes behind the bucket, floor rails
-    for sy in (1, -1):
-        al.merge(lib.tube([(-12.5, sy * 7.0, 0.8), (-13.5, sy * 7.0, pan_z + 22.0)], 0.9, 8), M)
-        al.merge(lib.box((-2.0, sy * 7.0, 0.5), (26.0, 1.6, 1.0)), M)
-        al.merge(lib.tube([(6.0, sy * 7.0, 1.0), (-11.0, sy * 7.0, pan_z - 2.4)], 0.6, 6), M)
 
 
 def gauge(out, M, r, hi, n=18):
@@ -208,7 +218,6 @@ def cockpit(ctx):
     red.merge(lib.box((0.2, -11.2, 14.4), (0.3, 3.0, 1.0)), Mp); yel.merge(lib.box((0.2, 11.2, 14.4), (0.3, 3.0, 1.0)), Mp)   # master warning panels
     # ---- lower console between the seats: radios on rails
     con = [(212.0, 226.5), (224.0, 229.5), (246.0, 223.0), (246.0, CFLOOR), (212.0, CFLOOR)]
-    blk.merge(lib.prism(np.array(con)[::-1], -8.6, 8.6, lib.plane_basis('side_l')))
     top0 = np.array((224.0, 0, 229.5)); top1 = np.array((246.0, 0, 223.0)); L = np.linalg.norm(top1 - top0)
     ang = math.degrees(math.atan2(top0[2] - top1[2], top1[0] - top0[0]))
     Mc = T(*top0) @ R('bl', -ang)
@@ -219,9 +228,9 @@ def cockpit(ctx):
         for yc in y_cols:
             grey.merge(lib.box((x + hgt / 2, yc, 0.08), (hgt - 0.25, 5.75, 0.16)), Mc)
             face.merge(lib.box((x + hgt / 2, yc + 1.2, 0.18), (min(1.0, hgt - 0.9), 2.4, 0.1)), Mc)
+            for k in range(3):
+                blk.merge(lib.revolve([(0.36, 0), (0.3, 0.55), (0, 0.55)], ctx.n(8, 6)), Mc @ T(x + hgt / 2, yc - 2.2 + k * 0.95, 0.16))
             if hi:
-                for k in range(3):
-                    blk.merge(lib.revolve([(0.36, 0), (0.3, 0.55), (0, 0.55)], 8), Mc @ T(x + hgt / 2, yc - 2.2 + k * 0.95, 0.16))
                 for sx in (-1, 1):
                     for sy in (-1, 1):
                         st.merge(lib.revolve([(0.16, 0), (0.16, 0.08), (0, 0.08)], 6), Mc @ T(x + hgt / 2 + sx * (hgt / 2 - 0.35), yc + sy * 2.6, 0.16))
@@ -244,13 +253,11 @@ def cockpit(ctx):
     for sg, side in ((1, 'L'), (-1, 'R')):
         cy = sg * 21.0
         nd = ctx.node(f'cyclic_{side}', 'airframe', pivot=(222.0, cy, CFLOOR + 1.0))
-        m = Mesh(); g = Mesh(); boot = Mesh()
+        m = Mesh(); g = Mesh()
         m.merge(lib.tube([(222.0, cy, CFLOOR + 1.0), (222.0, cy, CFLOOR + 9.0), (223.4, cy, CFLOOR + 13.0), (225.6, cy, CFLOOR + 15.5)], 0.55, 8))
         g.merge(lib.tube([(225.6, cy, CFLOOR + 15.5), (226.4, cy, CFLOOR + 17.5), (226.6, cy, CFLOOR + 20.4)], [0.75, 0.85, 0.8], 10))
         g.merge(lib.box((226.2, cy, CFLOOR + 21.0), (1.9, 1.7, 1.5)))
-        boot.merge(lib.revolve([(2.6, 0), (1.6, 1.6), (0.8, 2.8)], 12, T(222.0, cy, CFLOOR + 0.2), cap0=False, cap1=False))
         ctx.part(nd, 'cyclic_tube', m, 'steel_dark', 40); ctx.part(nd, 'cyclic_grip', g, 'paint_black', 40)
-        ctx.part('airframe', 'cyclic_boot', boot, 'rubber', 40)
         bl_c = cy + 10.6
         nd = ctx.node(f'collective_{side}', 'airframe', pivot=(240.0, bl_c, CFLOOR + 4.0))
         m = Mesh(); g = Mesh()
@@ -258,11 +265,14 @@ def cockpit(ctx):
         g.merge(lib.tube([(229.0, bl_c, CFLOOR + 9.4), (224.6, bl_c, CFLOOR + 11.6)], 0.85, 10))
         g.merge(lib.box((223.8, bl_c, CFLOOR + 12.3), (2.6, 2.2, 2.0)))
         ctx.part(nd, 'collective_tube', m, 'steel_dark', 40); ctx.part(nd, 'collective_grip', g, 'paint_black', 40)
-        for dy in (-4.6, 4.6):
-            al.merge(lib.box((203.5, cy + dy, CFLOOR + 6.4), (0.8, 4.4, 5.0), None))
-            al.merge(lib.tube([(203.9, cy + dy, CFLOOR + 4.2), (205.5, cy + dy, CFLOOR + 0.6)], 0.4, 6))
+        p0 = np.array((240.0, bl_c, CFLOOR + 4.0)); d = np.array((229.0, bl_c, CFLOOR + 9.4)) - p0
+        ctx.part(nd, 'collective_boot', CK.bellows(p0 + d * 0.16, p0 + d * 0.62, 1.5, 0.95, 7, ctx.n(14, 10), 0.3), 'rubber', 40)
+        fr = Mesh(); fr.merge(lib.cyl(p0 + d * 0.66, p0 + d * 0.76, 1.05, ctx.n(14, 10)))          # friction control collar [F2-4 item 37]
+        ctx.part(nd, 'collective_friction', fr, 'steel_dark', 40)
+        CK.collective_mount((240.0, bl_c, CFLOOR + 4.0), (al, st))
+    CK.build(ctx, wall_bl, Mc, L)
     for name, m, mat in (('crew_seat_armour', arm, 'armor'), ('crew_seat_cushions', fab, 'fabric_seat'), ('crew_harness', belt, 'fabric_belt'),
-                         ('cockpit_steel', st, 'steel'), ('cockpit_frames', al, 'aluminium'), ('instrument_panel', blk, 'panel_face'),
+                         ('cockpit_steel', st, 'steel'), ('cockpit_brackets', al, 'frame_grey'), ('instrument_panel', blk, 'panel_face'),
                          ('instrument_faces', face, 'instrument'), ('console_panels', grey, 'paint_grey'),
                          ('cockpit_yellow', yel, 'paint_yellow'), ('cockpit_red', red, 'paint_red')):
         o = ctx.part('airframe', name, m, mat, 35)
@@ -272,11 +282,9 @@ def cockpit(ctx):
 
 def cabin(ctx):
     hi = ctx.lod == 0
-    fl, quilt, od, al, fab, belt, st, lens, grey = (Mesh() for _ in range(9))
+    quilt, od, al, fab, belt, st, lens, grey = (Mesh() for _ in range(8))
     cs = np.arange(RC.STA_CABIN[0], RC.STA_CABIN[1] + 0.1, 151.0 / 16)
-    fl.merge(slab(cs, FLOOR, 1.4))
-    fl.merge(slab(np.linspace(194.0, 247.0, 10), CFLOOR, 1.2))
-    grey.merge(lib.box((246.6, 0, (FLOOR + CFLOOR) / 2 - 0.6), (0.8, 2 * wall_bl(247.0, FLOOR) - 0.5, CFLOOR - FLOOR + 0.1)))   # step riser
+    FL.build(ctx, wall_bl)
     quilt.merge(slab(cs, CEIL + 0.9, 0.9))
     quilt.merge(lib.box((342.0, 0, CEIL - 1.0), (46.0, 32.0, 2.0)))        # transmission drip pan, 2 in lower [F6-9]
     od.merge(bulkhead(RC.STA_CABIN[1], 1.5, FLOOR - 1.0, CEIL + 1.5))
@@ -293,28 +301,21 @@ def cabin(ctx):
     for s in (270.0, 305.0, 385.0):
         grey.merge(lib.revolve([(2.6, 0), (2.6, 0.5)], 14, T(s, 0, CEIL - 0.5), cap0=False, cap1=False))
         lens.merge(lib.revolve([(2.4, 0.1), (1.6, -0.5), (0, -0.7)], 14, T(s, 0, CEIL - 0.35), cap0=False, cap1=False))
-    # cargo tiedown fittings: recessed rings in the floor on a 20 in grid [figure 6-11 shows the grid; spacing inferred]
-    for s in np.arange(257.0, 392.0, 19.0):
-        for bl in (-30.0, -10.0, 10.0, 30.0):
-            if abs(bl) > wall_bl(s, FLOOR) - 3: continue
-            st.merge(lib.revolve([(1.9, 0.02), (1.9, 0.1), (1.5, 0.1), (1.5, 0.02)], 12, T(s, bl, FLOOR), cap0=False, cap1=False))
-            if hi:
-                a = np.linspace(0, math.pi, 7)
-                st.merge(lib.tube([(s + 1.1 * math.cos(t), bl, FLOOR + 0.1 + 0.9 * math.sin(t)) for t in a], 0.16, 5))
     # ---- seats [figure 2-10]
     troop = (al, fab, belt, st)
     seats = [(270.0, 27.0, 'left'), (270.0, -27.0, 'right'), (266.0, 0.0, 'fwd')]
     seats += [(301.0, bl, 'aft') for bl in (-20.0, 0.0, 20.0)]
-    seats += [(349.0, bl, 'fwd') for bl in (-30.0, -10.0, 10.0, 30.0)]
-    seats += [(385.5, bl, 'fwd') for bl in (-30.0, -10.0, 10.0, 30.0)]
+    seats += [(341.5, bl, 'fwd') for bl in (-30.0, -10.0, 10.0, 30.0)]
+    seats += [(387.0, bl, 'fwd') for bl in (-30.0, -10.0, 10.0, 30.0)]
+    studs = FL.stud_points()
     for s, bl, facing in seats:
-        troop_seat(ctx, troop, T(s, bl, FLOOR) @ seat_frame(facing), hi)
+        troop_seat(ctx, troop, T(s, bl, FLOOR) @ seat_frame(facing), hi, studs)
     # first-aid kits and a fire extinguisher on the aft bulkhead
     for bl in (-22.0, 22.0):
         od.merge(lib.box((396.2, bl, 250.0), (2.0, 9.0, 6.0)))
     rd = Mesh(); rd.merge(lib.revolve([(1.7, 0), (1.7, 9.0), (0.9, 10.5), (0.6, 12.0), (0, 12.0)], 12, T(253.5, -33.0, FLOOR + 14.0)))
     ctx.part('airframe', 'fire_extinguisher', rd, 'paint_red', 40)
-    for name, m, mat in (('floors', fl, 'floor'), ('soundproofing', quilt, 'quilt'), ('bulkheads', od, 'paint_od_interior'), ('cabin_frames', al, 'aluminium'),
+    for name, m, mat in (('soundproofing', quilt, 'quilt'), ('bulkheads', od, 'paint_od_interior'), ('cabin_frames', al, 'aluminium'),
                          ('troop_seat_fabric', fab, 'fabric_seat'), ('troop_belts', belt, 'fabric_belt'), ('cabin_steel', st, 'steel'),
                          ('dome_lenses', lens, 'glass_lens'), ('cabin_grey', grey, 'paint_grey')):
         ctx.part('airframe', name, m, mat, 35)

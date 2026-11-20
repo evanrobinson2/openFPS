@@ -21,6 +21,8 @@ LIB = {
     'steel_dark':        ((0.110, 0.112, 0.118), 1.0, 0.55, 1.0),   # cadmium / phosphate hardware, exhaust
     'chrome':            ((0.780, 0.790, 0.800), 1.0, 0.12, 1.0),   # oleo pistons, servo rods
     'aluminium':         ((0.560, 0.570, 0.580), 1.0, 0.48, 1.0),   # bare structure, seat frames, floor edges
+    'alu_dull':          ((0.210, 0.215, 0.220), 1.0, 0.52, 1.0),   # anodised fittings, sills, seat carriers
+    'frame_grey':        ((0.085, 0.090, 0.088), 0.0, 0.48, 1.0),   # seat frames, pedal arms, console structure: dark grey enamel
     'titanium':          ((0.360, 0.355, 0.345), 1.0, 0.50, 1.0),   # rotor hub, spindles
     'elastomer':         ((0.080, 0.070, 0.060), 0.0, 0.80, 1.0),   # hub bearings
     'exhaust_dark':      ((0.018, 0.016, 0.015), 0.6, 0.85, 1.0),   # duct interiors, soot

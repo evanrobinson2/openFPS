@@ -53,6 +53,8 @@ def build(lod):
     if not FAST:
         import skin, detail
         detail.materials(ctx, os.path.join(HERE, 'work', 'tex'), log)
+        import floor, cockpit_floor
+        floor.material(ctx, os.path.join(HERE, 'work', 'tex')); cockpit_floor.material(ctx, os.path.join(HERE, 'work', 'tex'))
         skin.material(ctx, skin.build_maps(os.path.join(HERE, 'work', 'tex', str(4096 if lod == 0 else 2048)), 4096 if lod == 0 else 2048, log))
     for name, mod in (('airframe', airframe), ('rotors', rotors), ('gear', gear), ('interior', interior), ('hardware', hardware)):
         if ONLY and name not in ONLY:

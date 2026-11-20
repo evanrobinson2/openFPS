@@ -11,6 +11,7 @@ audio file is an input or is stored in git.
 | `model/build.py` | Entry point. Builds `model/work/uh60_lod0.glb` and `uh60_lod1.glb` (git-ignored). |
 | `model/recipe.py` | Every dimension, with its source tag, and the build context (nodes, clips, sockets). |
 | `model/airframe.py`, `rotors.py`, `gear.py`, `interior.py`, `hardware.py` | The assemblies. |
+| `model/floor.py`, `cockpit_floor.py` | Cabin floor from figure 6-11 (tie-down and seat-stud pans, hook door, sills, kick strips) and the cockpit floor from figure 2-4 (pedals, lower console, seat tracks and frames, boots). Each paints its own floor map. |
 | `model/skin.py`, `detail.py` | Surface maps painted by code: panel seams, rivets, markings, wear; instrument faces; fabric, quilt, floor. |
 | `model/tools/` | `fit_drawing.py` (overlay the manual's station diagram on a render), `render.py`, `pack_web.py`. |
 | `flight/uh60-flight.js` | Flight model (browser and node). `flight/verify.mjs` checks it against the manual; results in `flight.json`. |

@@ -12,7 +12,8 @@ be measured. It is kept out of git (`model/refs-local/tm10.pdf`).
 | 6-1 Compartment and station diagram | The whole outside shape. Calibration 0.5775 pt per inch; side view x = 157.85 + (STA - 162) k, y = 444.45 - (WL - 150) k; reading accuracy about 1.5 in. Hub at STA 341.2 / WL 315, tail rotor at STA 732 / WL 324.7, static ground line WL 183.7, frame stations 204, 247, 270, 315.5, 343, 370.5, 398, 443.5, 485, 644.6 |
 | 6-9 Cabin dimensions | Cabin 151 in long, floor WL 206.75, ceiling WL 261, inside width 72 / 85 / 69 in, door 68 x 54 in |
 | 2-1 General arrangement | Which exterior equipment exists and roughly where |
-| 2-4, 2-5 Cockpit and cabin | Layout of seats, consoles, controls |
+| 2-4, 2-5 Cockpit and cabin | Layout of seats, consoles, controls. 2-4 also gives what stands on the cockpit floor: ribbed pedal pads on arms, the lower console with its circuit breaker panel, parking brake lever, utility light and fire extinguisher, the crew seat frames and the collective boot (`model/cockpit_floor.py`; sizes inferred, the figure is an undimensioned perspective) |
+| 6-11 Cargo tiedown arrangement | Dimensioned plan of the cabin floor: STA 247 to 398, BL 36.5 each side, compartment lines at STA 288 and 343, the position and type of all 34 tie-down and seat-stud pans, the cargo hook access door. Text 6.18: fittings rated 5,000 lb with studs for the troop seats, eight net restraint rings at STA 308 and 379, floor 300 lb per sq ft (`model/floor.py`; pan depth, ring and stud sizes, extra panel joints, screw pitch and wear inferred) |
 | 2-9 Instrument panel | Which instruments, and their arrangement |
 | 2-10 Troop seats | Seat arrangement and construction |
 | Chapter 7 examples | Hover and cruise torque used to check the flight model |
