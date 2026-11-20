@@ -53,14 +53,57 @@ def srgb(hexstr):
 
 # --- the maps -------------------------------------------------------------------------------------------------
 
+def _scratches(n, seed, count, len_mm, tile_mm, width_px=1.2):
+    """Periodic field (0..1) of thin random scratches and their burnished halo, drawn with wrap-around."""
+    r = _rng(seed)
+    acc = np.zeros((n, n))
+    halo = np.zeros((n, n))
+    px = n / tile_mm
+    for _ in range(count):
+        L = r.uniform(*len_mm) * px
+        x0, y0 = r.uniform(0, n, 2)
+        ang = r.uniform(0, np.pi)
+        bend = r.uniform(-0.25, 0.25)
+        steps = max(4, int(L * 1.5))
+        t = np.linspace(0, 1, steps)
+        a = ang + bend * (t - 0.5)
+        xs = (x0 + np.cumsum(np.cos(a)) * L / steps) % n
+        ys = (y0 + np.cumsum(np.sin(a)) * L / steps) % n
+        depth = np.sin(np.pi * t) ** 0.5 * r.uniform(0.4, 1.0)
+        xi, yi = xs.astype(int), ys.astype(int)
+        np.maximum.at(acc, (yi, xi), depth)
+        np.maximum.at(halo, (yi, xi), depth)
+    # widen: scratch core ~width_px, halo a few px
+    k = np.fft.fftfreq(n)
+    kx, ky = np.meshgrid(k, k)
+    def blur(a, s):
+        return np.real(np.fft.ifft2(np.fft.fft2(a) * np.exp(-2 * (np.pi * s) ** 2 * (kx ** 2 + ky ** 2))))
+    core = np.clip(blur(acc, width_px * 0.5) * width_px * 2.2, 0, 1)
+    halo = np.clip(blur(halo, width_px * 3.0) * width_px * 9.0, 0, 1)
+    return core, halo
+
+
 def paint(n=1024, seed=1):
-    """Textured ballistic-shell paint: orange peel plus fine grit; tile is 120 mm."""
-    peel = band_noise(n, 60, 120, seed)
-    grit = band_noise(n, 220, n // 2, seed + 1)
-    h = 0.25 * peel + 0.75 * grit
-    rough = 0.84 + 0.1 * (band_noise(n, 2, 8, seed + 2) - 0.5) + 0.1 * (grit - 0.5)
-    tint = 0.97 + 0.03 * band_noise(n, 3, 12, seed + 3) - 0.04 * grit   # (dust and wear, multiplied in)
-    return {'height': h, 'normal': normal_from_height(h, 0.9), 'rough': rough, 'tint': tint}
+    """Textured ballistic-shell coating, worn: sand-grit stipple, orange peel, scuffs, scratches and dust.
+    Tile is 120 mm (0.12 mm a texel at 1024)."""
+    sc = n / 1024
+    peel = band_noise(n, 25, 60, seed)                                  # 2-5 mm orange peel
+    grain = band_noise(n, 140, 330, seed + 1)                           # 0.35-0.85 mm sand grit in the coat
+    grit = np.clip((grain - 0.5) * 3.2 + 0.5, 0, 1) ** 1.6              # sharpened: discrete bumps, not fuzz
+    fine = band_noise(n, 330, n // 2, seed + 4) if n >= 512 else np.zeros((n, n))
+    # scuffs: patches where the grit tops are rubbed flat and slightly polished (handling, rifle slings, kit)
+    scuff = np.clip((band_noise(n, 3, 9, seed + 5) - 0.6) * 4.0, 0, 1) * np.clip((band_noise(n, 10, 30, seed + 6) - 0.35) * 2.5, 0, 1)
+    core, halo = _scratches(n, seed + 7, int(30), (4, 30), 120.0, width_px=max(1.0, 1.4 * sc))
+    hair, _ = _scratches(n, seed + 8, int(90), (2, 9), 120.0, width_px=max(0.8, 0.9 * sc))
+    dust = np.clip((band_noise(n, 4, 14, seed + 3) - 0.45) * 2.0, 0, 1)
+    h = 0.30 * peel + 0.55 * grit * (1 - 0.55 * scuff) + 0.08 * fine - 0.35 * core - 0.12 * hair
+    rough = 0.86 - 0.10 * grit * scuff - 0.22 * scuff * 0.6 - 0.10 * core + 0.06 * dust + 0.05 * (fine - 0.5)
+    tint = (0.95 + 0.06 * (band_noise(n, 2, 7, seed + 2) - 0.5)       # uneven coat
+            - 0.07 * (1 - grit) * 0.5                                    # dirt held between the grit
+            + 0.10 * grit * scuff                                        # rubbed tops lighter
+            + 0.14 * core + 0.05 * hair + 0.01 * halo                    # scratches through to the lighter coat
+            + 0.06 * dust)                                               # dried dust
+    return {'height': h, 'normal': normal_from_height(h, 5.0 * sc + 1.0), 'rough': np.clip(rough, 0.45, 0.97), 'tint': tint}
 
 
 def loop_fabric(n=512, seed=11):
@@ -105,10 +148,17 @@ def foam_fabric(n=512, seed=41):
 
 
 def polymer(n=512, seed=51):
-    """Moulded glass-filled polymer (rails, shroud body, buckles, ear cups): fine stipple; tile is 30 mm."""
-    st = band_noise(n, 70, 200, seed)
-    h = st
-    return {'normal': normal_from_height(h, 1.2), 'rough': 0.55 + 0.2 * st, 'tint': 0.95 + 0.05 * st}
+    """Moulded glass-filled polymer (rails, shroud body, buckles, ear cups): a matte mould texture (spark-eroded
+    stipple) with handling wear; tile is 30 mm."""
+    st = band_noise(n, 60, 160, seed)                                    # 0.2-0.5 mm mould stipple
+    st = np.clip((st - 0.5) * 2.6 + 0.5, 0, 1)
+    sw = band_noise(n, 12, 30, seed + 1)                                 # 1-2.5 mm sink and flow marks
+    rub = np.clip((band_noise(n, 2, 6, seed + 2) - 0.55) * 3.0, 0, 1)    # worn shiny where handled
+    core, _ = _scratches(n, seed + 3, 22, (2, 10), 30.0, width_px=1.0)
+    h = 0.75 * st * (1 - 0.5 * rub) + 0.25 * sw - 0.25 * core
+    rough = 0.78 - 0.12 * rub - 0.08 * st * rub + 0.06 * (st - 0.5) - 0.1 * core
+    return {'normal': normal_from_height(h, 3.2), 'rough': np.clip(rough, 0.4, 0.95),
+            'tint': 0.94 + 0.05 * st + 0.02 * rub + 0.12 * core}
 
 
 def cast_metal(n=512, seed=61):
@@ -118,11 +168,24 @@ def cast_metal(n=512, seed=61):
 
 
 def leatherette(n=512, seed=71):
-    """Protein-leather ear seals: pebbled grain; tile is 30 mm."""
+    """Protein-leather ear seals: pebbled grain plus soft creases where the seal folds; tile is 30 mm."""
     cells = band_noise(n, 40, 90, seed)
-    h = 1 - np.abs(cells - 0.5) * 2
-    h = h ** 3
-    return {'normal': normal_from_height(h, 2.0), 'rough': 0.45 + 0.25 * h, 'tint': 0.9 + 0.1 * h}
+    peb = (1 - np.abs(cells - 0.5) * 2) ** 3
+    crease = band_noise(n, 4, 12, seed + 1, aniso=(1.0, 0.25))
+    crease = np.exp(-((crease - 0.5) / 0.035) ** 2)                      # thin creases along the seal
+    h = 0.75 * peb - 0.45 * crease + 0.1 * band_noise(n, 8, 20, seed + 2)
+    rough = 0.5 + 0.22 * peb + 0.12 * crease
+    return {'normal': normal_from_height(h, 3.0), 'rough': np.clip(rough, 0.3, 0.9), 'tint': 0.88 + 0.1 * peb - 0.08 * crease}
+
+
+def grille(n=256, seed=95):
+    """Perforated speaker / ambient-microphone grille: a hex hole pattern; tile is 6 mm."""
+    y, x = np.mgrid[0:n, 0:n] / n
+    k = 6
+    a = np.cos(2 * np.pi * k * x) + np.cos(2 * np.pi * k * (x / 2 + y)) + np.cos(2 * np.pi * k * (x / 2 - y))
+    holes = np.clip((a - 1.2) * 1.2, 0, 1)
+    h = 1 - holes
+    return {'normal': normal_from_height(h, 4.0), 'rough': 0.6 + 0.3 * holes, 'tint': 1.0 - 0.9 * holes}
 
 
 def digital_camo(n=1024, seed=81, colours=('#8b9474', '#5f6a47', '#463b2c', '#232220'), px=8):
@@ -159,5 +222,5 @@ def foam_ball(n=256, seed=91):
 
 MAPS = {
     'paint': paint, 'loop': loop_fabric, 'webbing': webbing, 'braid': braid, 'foam_fabric': foam_fabric,
-    'polymer': polymer, 'metal': cast_metal, 'leatherette': leatherette, 'foam_ball': foam_ball,
+    'polymer': polymer, 'metal': cast_metal, 'leatherette': leatherette, 'foam_ball': foam_ball, 'grille': grille,
 }

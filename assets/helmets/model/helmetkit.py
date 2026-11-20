@@ -18,6 +18,7 @@ import bmesh
 import bpy
 import numpy as np
 from mathutils import Matrix, Vector
+from mathutils.bvhtree import BVHTree
 
 import textures as TX
 
@@ -126,8 +127,9 @@ class MeshBuilder:
         self.f.append(tuple(idx))
         self.uv.append(tuple(uvs) if uvs is not None else tuple((0.0, 0.0) for _ in idx))
 
-    def grid(self, P, UV=None, close_cols=False, close_rows=False, flip=False):
-        """Quads over a (rows, cols, 3) array. UV per point (rows, cols, 2); wrapped columns get u + period."""
+    def grid(self, P, UV=None, close_cols=False, close_rows=False, flip=False, uv_wrap_period=True):
+        """Quads over a (rows, cols, 3) array. UV per point (rows, cols, 2); wrapped columns get u + period
+        (or, with uv_wrap_period=False, the first column's own uv: for maps that are continuous round the loop)."""
         R, C = P.shape[:2]
         base = self.add_vs(P)
         idx = lambda r, c: base + (r % R) * C + (c % C)
@@ -141,7 +143,7 @@ class MeshBuilder:
                 uvs = []
                 for (qr, qc) in cs:
                     u, v = UV[qr % R, qc % C]
-                    if qc >= C:
+                    if qc >= C and uv_wrap_period:
                         u = UV[qr % R, C - 1, 0] + uper
                     uvs.append((float(u), float(v)))
                 if flip:
@@ -490,7 +492,8 @@ class Materials:
     """One Blender material per role, with tileable maps written next to the build."""
 
     TILE = {'paint': 120.0, 'loop': 40.0, 'webbing': 25.4, 'braid': 12.0, 'foam_fabric': 30.0,
-            'polymer': 30.0, 'metal': 30.0, 'leatherette': 30.0, 'foam_ball': 20.0, 'camo': 300.0, 'rubber': 30.0}
+            'polymer': 30.0, 'metal': 30.0, 'leatherette': 30.0, 'foam_ball': 20.0, 'camo': 300.0, 'rubber': 30.0,
+            'grille': 6.0}
 
     def __init__(self, workdir, fast=False, tex_size=1024):
         self.dir = os.path.join(workdir, 'tex')
@@ -575,6 +578,16 @@ def box_uv(o, tile_mm):
     uv.foreach_set('uv', out.ravel())
 
 
+def planar_uv(o, u_axis, v_axis, tile_mm):
+    """Project UVs onto a plane (for moulded faces seen head-on, where a superquadric's own UVs pinch)."""
+    me = o.data
+    co = np.empty(len(me.vertices) * 3); me.vertices.foreach_get('co', co); co = co.reshape(-1, 3) / MM
+    li = np.empty(len(me.loops), int); me.loops.foreach_get('vertex_index', li)
+    P = co[li]
+    out = np.stack([P @ np.asarray(u_axis, float), P @ np.asarray(v_axis, float)], -1) / tile_mm
+    me.uv_layers.active.data.foreach_set('uv', out.ravel())
+
+
 def tile(mat):
     return float(mat.get('tile_mm', 30.0))
 
@@ -612,6 +625,8 @@ class Helmet:
             'bungee_elastic': ('braid', c.get('bungee', '#1e1e1d'), 0.0, 1.0),
             'headset_polymer': ('polymer', c.get('headset', '#232425'), 0.0, 0.85),
             'ear_seal_leatherette': ('leatherette', '#161616', 0.0, 1.0),
+            'headset_rubber': ('rubber', '#151515', 0.0, 1.2),
+            'grille_metal': ('grille', '#1c1c1c', 0.3, 1.0),
             'mic_foam': ('foam_ball', '#141414', 0.0, 1.0),
             'pouch_fabric': ('webbing', c.get('pouch', c.get('loop', c['shell'])), 0.0, 1.0),
             'cover_fabric': ('camo', None, 0.0, 1.0),
@@ -659,18 +674,28 @@ class Helmet:
             q = math.pi * k / n_rim
             rim.append(C + (th / 2) * (Nr * math.cos(q) + D * math.sin(q)))
         rows = np.concatenate([O, np.array(rim), I[::-1]], 0)
-        # uv: around (integer number of tiles) x along the surface
-        circ = 2 * math.pi * 120.0
-        k = max(1, round(circ / tile(self.mat('shell_paint'))))
-        u = (A[0] / 360.0) * k
-        seg = np.linalg.norm(np.diff(rows, axis=0), axis=-1)
-        v = np.r_[np.zeros((1, na)), np.cumsum(seg, axis=0)] / tile(self.mat('shell_paint'))
-        UV = np.stack([np.broadcast_to(u, v.shape), v], -1)
+        # uv: one seamless disc chart centred on the crown (no seams, no pinch). The radius in the chart grows with
+        # arc length from the crown, blended halfway towards the conformal map of the dome, so the paint grain
+        # keeps nearly the same size and shape from crown to rim.
+        tl = tile(self.mat('shell_paint'))
+        nO = O.shape[0]
+        outer = rows[:nO + n_rim - 1]
+        seg = np.linalg.norm(np.diff(outer, axis=0), axis=-1).mean(axis=1)
+        s_arc = np.r_[0.0, np.cumsum(seg)]
+        rho = np.array([np.linalg.norm(np.diff(np.vstack([rw, rw[:1]]), axis=0), axis=-1).sum() / (2 * math.pi) for rw in outer])
+        r_conf = np.zeros_like(s_arc)
+        r_conf[1] = s_arc[1]
+        for i in range(2, len(s_arc)):
+            r_conf[i] = r_conf[i - 1] * math.exp(seg[i - 1] / max(0.5 * (rho[i] + rho[i - 1]), 1e-6))
+        r_chart = np.sqrt(np.maximum(s_arc, 0) * np.maximum(r_conf, 0))
+        r_rows = np.r_[r_chart, r_chart[:nO][::-1]]               # the inside reuses the outside's chart
+        ang = np.radians(A[0])
+        UV = np.stack([np.cos(ang)[None, :] * r_rows[:, None], np.sin(ang)[None, :] * r_rows[:, None]], -1) / tl
         mb = MeshBuilder()
-        base = mb.grid(rows[1:], UV[1:], close_cols=True)
+        base = mb.grid(rows[1:], UV[1:], close_cols=True, uv_wrap_period=False)
         R = rows.shape[0] - 1
-        mb.cap([base + c for c in range(na)][::-1], rows[0, 0], flip=False)
-        mb.cap([base + (R - 1) * na + c for c in range(na)], rows[-1, 0], flip=False)
+        mb.cap([base + c for c in range(na)][::-1], rows[0, 0], uvs=[(0.0, 0.0)] + [tuple(UV[1, c]) for c in range(na)][::-1], flip=False)
+        mb.cap([base + (R - 1) * na + c for c in range(na)], rows[-1, 0], uvs=[(0.0, 0.0)] + [tuple(UV[-1, c]) for c in range(na)], flip=False)
         o = mb.make('shell', self.mat('shell_paint'), smooth_angle=80)
         # the inside is bare laminate, not paint
         o.data.materials.append(self.mat('shell_laminate'))
@@ -680,7 +705,6 @@ class Helmet:
             mi += [1 if r >= first_inner else 0] * na
         mi += [0] * na + [1] * na
         o.data.polygons.foreach_set('material_index', mi)
-        box_uv(o, tile(self.mat('shell_paint')))
         self.add(o, 'shell')
         self.shell_obj = o
         return o
@@ -1179,33 +1203,93 @@ class Helmet:
             place(cup, ear + out * (cfg['cup_w'] / 2 + 14.0), out, np.array([0, -1.0, 0]))
             # the cup's local frame: N=out, T=-Y (front) -> local y is up
             bake_transform(cup); self.add(cup, 'ear_cup')
+            planar_uv(cup, (0, -1.0, 0), (0.3 * side, 0, 1.0), 30.0)
             # the outer face plate: a raised oval with a parting line round it
             face = superquadric('ear_cup_face', (cfg['cup_d'] * 0.78, cfg['cup_h'] * 0.74, 10.0), (0.35, 0.8),
                                 (int(56 * self.res + 8), 14), self.mat('headset_polymer'))
             place(face, ear + out * (cfg['cup_w'] + 9.5), out, np.array([0, -1.0, 0]))
             bake_transform(face); self.add(face, 'ear_cup')
-            # ear seal: a soft ring against the head
-            seal = superquadric('ear_seal', (cfg['cup_d'] * 0.98, cfg['cup_h'] * 0.98, 16.0), (0.6, 0.5),
-                                (int(64 * self.res + 8), 16), self.mat('ear_seal_leatherette'))
-            place(seal, ear + out * 9.0, out, np.array([0, -1.0, 0]))
-            bake_transform(seal); self.add(seal, 'ear_seal')
-            # a ribbed volume knob and a battery door outline on the outside
-            # ribbed volume knob: radius modulated round its edge (14 ribs)
-            th_ = np.linspace(0, 2 * np.pi, 112, endpoint=False)
-            zs = np.array([0.0, 7.0, 8.2, 9.0])
-            rr = 7.0 + 0.55 * np.clip(np.cos(th_ * 14) * 2.5, -1, 1)
+            planar_uv(face, (0, -1.0, 0), (0, 0, 1.0), 30.0)
+            # base ring between the seal and the cup: a stepped moulding, so the cup isn't one smooth blob
+            ring_ = superquadric('ear_cup_base', (cfg['cup_d'] * 1.03, cfg['cup_h'] * 1.03, 7.0), (0.25, 0.78),
+                                 (int(64 * self.res + 8), 10), self.mat('headset_rubber'))
+            place(ring_, ear + out * 16.5, out, np.array([0, -1.0, 0]))
+            bake_transform(ring_); self.add(ring_, 'ear_cup')
+            planar_uv(ring_, (0, -1.0, 0), (0.5 * side, 0, 1.0), 30.0)
+            # ear seal: a pleated leatherette donut against the head (the cover gathers where it meets the base)
+            seal = self._ear_seal(ear, out, cfg)
+            self.add(seal, 'ear_seal')
+            # cup details, found by casting rays at the cup and face plate
+            fwd, up = np.array([0, -1.0, 0]), np.array([0, 0, 1.0])
+            C = ear + out * (cfg['cup_w'] / 2 + 14.0)
+            d, h = cfg['cup_d'], cfg['cup_h']
+            bvh = self._bvh([cup, face])
+            def hit(o, dirn):
+                o = np.asarray(o, float); dirn = np.asarray(dirn, float); dirn = dirn / np.linalg.norm(dirn)
+                loc, nrm, _, _ = bvh.ray_cast(Vector(o * MM), Vector(dirn))
+                if loc is None:
+                    return None, None
+                n = np.array(nrm)
+                if np.dot(n, dirn) > 0:
+                    n = -n
+                return np.array(loc) / MM, n
+            # parting line round the face plate: a thin rubber gasket bead
             ring = []
-            for zi, z in enumerate(zs):
-                rz = rr * (1.0 if zi < 2 else (0.93 if zi == 2 else 0.8))
-                ring.append(np.stack([rz * np.cos(th_), rz * np.sin(th_), np.full_like(th_, z)], -1))
-            P = np.array(ring)
-            mb = MeshBuilder()
-            b0 = mb.grid(P, None, close_cols=True, flip=True)
-            mb.cap([b0 + c for c in range(len(th_))], (0, 0, 0.0))
-            mb.cap([b0 + 3 * len(th_) + c for c in range(len(th_))][::-1], (0, 0, 9.0))
-            knob = mb.make('volume_knob', self.mat('buckle_polymer'), smooth_angle=40)
-            place(knob, ear + out * (cfg['cup_w'] + 12.5) + np.array([0, 22.0, 18.0]), out, np.array([0, -1.0, 0]))
-            bake_transform(knob); self.add(knob, 'headset_knob')
+            for q in np.linspace(0, 2 * np.pi, 96, endpoint=False):
+                cq, sq = math.cos(q), math.sin(q)
+                fu = np.sign(cq) * abs(cq) ** 0.8 * d * 0.78 / 2 * 1.015
+                uu = np.sign(sq) * abs(sq) ** 0.8 * h * 0.74 / 2 * 1.015
+                p, _ = hit(C + fwd * fu + up * uu + out * 90.0, -out)
+                if p is not None:
+                    ring.append(p)
+            if len(ring) > 40:
+                ring = np.array(ring)
+                rr = 1.0
+                prof = [(rr * math.cos(q), rr * math.sin(q)) for q in np.linspace(0, 2 * math.pi, 8, endpoint=False)]
+                o = sweep('ear_cup_gasket', ring, np.broadcast_to(out, ring.shape), prof, self.mat('headset_rubber'),
+                          closed_path=True, caps=False, uv_tile=(6.0, 6.0))
+                self.add(o, 'ear_cup')
+            # push buttons on the rear of the face plate: volume up and down, and a round power / mode button
+            for k, (fu, uu, kind) in enumerate([(-0.27, 0.17, 'plus'), (-0.27, -0.03, 'minus'), (-0.25, -0.24, 'mode')]):
+                p, n = hit(C + fwd * fu * d + up * uu * h + out * 90.0, -out)
+                if p is None:
+                    continue
+                size = (12.0, 12.0, 3.4) if kind == 'mode' else (15.0, 10.5, 3.2)
+                ex = (0.5, 1.0) if kind == 'mode' else (0.3, 0.3)
+                bt = superquadric('headset_button', size, ex, (36, 12), self.mat('headset_rubber'), uv_tile=12.0)
+                place(bt, p + n * 0.6, n, up); bake_transform(bt); self.add(bt, 'headset_button')
+                bars = [((7.0, 1.6, 1.4), 0.0)] if kind == 'minus' else ([((7.0, 1.6, 1.4), 0.0), ((1.6, 7.0, 1.4), 0.0)] if kind == 'plus' else [])
+                for bs, _ in bars:
+                    br = superquadric('headset_button', bs, (0.3, 0.3), (16, 6), self.mat('headset_rubber'), uv_tile=12.0)
+                    place(br, p + n * 2.4, n, up); bake_transform(br); self.add(br, 'headset_button')
+                if kind == 'mode':
+                    dot = superquadric('headset_button', (3.0, 3.0, 1.4), (0.6, 1.0), (16, 6), self.mat('headset_rubber'))
+                    place(dot, p + n * 2.5, n, up); bake_transform(dot); self.add(dot, 'headset_button')
+            # ambient microphone port on the front of the cup: a recessed grille in a raised bezel
+            p, n = hit(C + fwd * 120.0 - up * h * 0.08 + out * cfg['cup_w'] * 0.18, -fwd)
+            if p is not None:
+                bz = lathe('mic_port_bezel', [(4.8, -1.0), (7.2, -1.0), (7.4, 0.6), (6.6, 1.6), (5.2, 1.4), (4.8, 0.4)],
+                           40, self.mat('headset_rubber'), close_ends=False, uv_tile=12.0)
+                place(bz, p, n, up); bake_transform(bz); self.add(bz, 'mic_port')
+                gr = superquadric('mic_port_grille', (10.0, 10.0, 1.2), (0.2, 1.0), (32, 6), self.mat('grille_metal'), uv_tile=6.0)
+                place(gr, p + n * 0.1, n, up); bake_transform(gr); self.add(gr, 'mic_port')
+            # battery door under the cup: a raised panel with grip ribs
+            p, n = hit(C - up * 120.0 + out * cfg['cup_w'] * 0.12 + fwd * d * 0.05, up)
+            if p is not None:
+                dr = superquadric('battery_door', (30.0, 18.0, 2.4), (0.15, 0.25), (40, 10), self.mat('headset_polymer'), uv_tile=12.0)
+                place(dr, p + n * 0.5, n, fwd); bake_transform(dr); self.add(dr, 'battery_door')
+                for j in range(5):
+                    rb = superquadric('battery_door', (1.6, 12.0, 1.3), (0.4, 0.4), (12, 6), self.mat('headset_polymer'))
+                    place(rb, p + n * 1.8 + fwd * (j - 2) * 3.2 - fwd * 6.0, n, fwd); bake_transform(rb); self.add(rb, 'battery_door')
+            # cable exit at the rear of the cup, for the lead to the other cup
+            p, n = hit(C - fwd * 120.0 - up * h * 0.22, fwd)
+            if p is not None:
+                setattr(self, f'_cup_exit_{"L" if side > 0 else "R"}', (p, n))
+                boot = catmull([p - n * 2.0, p + n * 6.0, p + n * 12.0 - up * 3.0], 10)
+                prof = [(3.4 * math.cos(q), 3.4 * math.sin(q)) for q in np.linspace(0, 2 * math.pi, 12, endpoint=False)]
+                o = sweep('cable_boot', boot, np.broadcast_to(up, boot.shape), prof, self.mat('headset_rubber'),
+                          scale=np.linspace(1.0, 0.7, len(boot)), uv_tile=(12.0, 12.0))
+                self.add(o, 'headset_cable')
             # the rail arm: from the rail adapter down to the cup's top
             rp = getattr(self, f'rail_path_{"L" if side > 0 else "R"}', None)
             if rp is not None:
@@ -1238,6 +1322,60 @@ class Helmet:
                 pivot = superquadric('boom_pivot', (16, 16, 9), (0.5, 1.0), (28, 10), self.mat('headset_polymer'))
                 place(pivot, base + out * 3.0, out, np.array([0, -1.0, 0]))
                 bake_transform(pivot); self.add(pivot, 'boom_pivot')
+
+        # the lead between the cups, run round the back under the rim
+        eL, eR = getattr(self, '_cup_exit_L', None), getattr(self, '_cup_exit_R', None)
+        if eL is not None and eR is not None:
+            up = np.array([0, 0, 1.0])
+            pts = [eL[0] + eL[1] * 12.0 - up * 3.0, eL[0] + eL[1] * 24.0 - up * 12.0]
+            for a_ in np.linspace(140, 220, 5):
+                pts.append(sh.S(np.array([a_]), sh.t_cut(np.array([a_])), 9.0)[0] - up * 16.0)
+            pts += [eR[0] + eR[1] * 24.0 - up * 12.0, eR[0] + eR[1] * 12.0 - up * 3.0]
+            path = catmull(pts, 120)
+            prof = [(2.1 * math.cos(q), 2.1 * math.sin(q)) for q in np.linspace(0, 2 * math.pi, 10, endpoint=False)]
+            o = sweep('headset_cable', path, np.broadcast_to(up, path.shape), prof, self.mat('headset_rubber'),
+                      uv_tile=(8.0, 8.0))
+            self.add(o, 'headset_cable')
+
+    def _bvh(self, objs):
+        vs, fs = [], []
+        for o in objs:
+            me = o.data
+            base = len(vs)
+            vs += [v.co.copy() for v in me.vertices]
+            fs += [tuple(base + i for i in p.vertices) for p in me.polygons]
+        return BVHTree.FromPolygons(vs, fs)
+
+    def _ear_seal(self, ear, out, cfg):
+        """Leatherette ear seal: an oval donut with soft pleats on the inner wall and the head side."""
+        fwd, up = np.array([0, -1.0, 0]), np.array([0, 0, 1.0])
+        d, h = cfg['cup_d'], cfg['cup_h']
+        A, B = d * 0.37, h * 0.36                     # centreline of the ring
+        rw, th = d * 0.12, 8.0                        # tube half-width (radial) and half-thickness (out)
+        nu, nv = int(120 * self.res + 24), int(28 * self.res + 8)
+        U = np.linspace(0, 2 * np.pi, nu, endpoint=False)
+        V = np.linspace(0, 2 * np.pi, nv, endpoint=False)
+        uu, vv = np.meshgrid(U, V, indexing='ij')
+        cu, su = np.cos(uu), np.sin(uu)
+        R = cu[..., None] * A * fwd + su[..., None] * B * up
+        g = np.stack([cu / A, su / B], -1); g /= np.linalg.norm(g, axis=-1, keepdims=True)
+        nrad = g[..., :1] * fwd + g[..., 1:] * up
+        cv, sv = np.cos(vv), np.sin(vv)
+        sp = lambda x, m: np.sign(x) * np.abs(x) ** m
+        rad, z = rw * sp(cv, 0.55), th * sp(sv, 0.7)
+        inner = np.clip(-cv, 0, 1) ** 1.5 + 0.6 * np.clip(-sv, 0, 1) ** 2
+        rng = np.random.default_rng(int(abs(out[0]) * 7 + (out[0] > 0)))
+        jit = np.cumsum(rng.uniform(0.6, 1.4, nu)); jit = jit / jit[-1] * 2 * np.pi * 23     # uneven pleat spacing
+        amp = 0.045 + 0.035 * np.sin(uu * 3 + rng.uniform(0, 6)) ** 2
+        pleat = 1.0 + amp * inner * np.sin(jit[:, None] + 0 * vv) ** 3
+        rad = rad * np.where(cv < 0, pleat, 1.0)
+        z = z * np.where(sv < 0, 1.0 + 0.6 * amp * inner * np.sin(jit[:, None] + 0.5) ** 3, 1.0)
+        P = ear + out * (th + 1.0) + R + nrad * rad[..., None] + out * z[..., None]
+        circ = np.linspace(0, 1, nu) * np.pi * (A + B)
+        UV = np.stack(np.meshgrid(circ / 30.0, np.linspace(0, 1, nv) * 2 * (rw + th) * 1.5 / 30.0, indexing='ij'), -1)
+        mb = MeshBuilder()
+        mb.grid(P, UV, close_cols=True, close_rows=True, flip=out[0] < 0)
+        return mb.make('ear_seal', self.mat('ear_seal_leatherette'), smooth_angle=70)
 
     # -- 10. cover --------------------------------------------------------------------------------------------
     def build_cover(self):
