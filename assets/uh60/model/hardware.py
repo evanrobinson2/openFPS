@@ -79,10 +79,7 @@ def door_hardware(ctx):
         stl.merge(lib.revolve([(0.6, 0), (0.6, 0.35), (0.3, 0.5), (0, 0.5)], 12), M @ T(1.6, 0, 0.1))
         blk.merge(lib.prism(lib.rrect(4.6, 1.0, 0.45, 3), 0.42, 0.72, M @ T(-0.4, 0, 0)))
         blk.merge(lib.cyl((M @ np.array((1.6, 0, 0.1, 1)))[:3], (M @ np.array((1.6, 0, 0.75, 1)))[:3], 0.34, 10))
-        p, n = surface(236.0, 231.0, sg)                              # inside: jettison handle, yellow with black bands
-        a = p - n * 3.2; yel.merge(lib.tube([a + (-2.5, 0, 0), a - n * 1.3 + (-2.5, 0, 0), a - n * 1.3 + (2.5, 0, 0), a + (2.5, 0, 0)], 0.3, 8))
-        for dx in (-1.2, 0.0, 1.2): blk.merge(lib.cyl(a - n * 1.3 + (dx - 0.3, 0, 0), a - n * 1.3 + (dx + 0.3, 0, 0), 0.32, 8))
-        for nm, m, mat in (('hinges', od, 'paint_od'), ('hardware', stl, 'steel'), ('handle', blk, 'paint_black'), ('jettison_handle', yel, 'paint_yellow')):
+        for nm, m, mat in (('hinges', od, 'paint_od'), ('hardware', stl, 'steel'), ('handle', blk, 'paint_black')):
             ctx.part(nd, f'cockpit_door_{nm}', m, mat, 40)
         # ---- cabin door: paddle handle forward, upper rollers on the track, lower guide shoe, inside handle and latch
         nd = f'cabin_door_{side}'; stl, blk, yel, od = Mesh(), Mesh(), Mesh(), Mesh()
@@ -180,6 +177,7 @@ def lib_path(pts):
 
 def build(ctx):
     door_hardware(ctx)
+    import cockpit_door; cockpit_door.build(ctx)
     fittings(ctx)
     if ctx.lod == 0 and not ctx.fast:
         skin_fasteners(ctx)

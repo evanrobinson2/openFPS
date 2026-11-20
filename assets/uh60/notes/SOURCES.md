@@ -126,3 +126,27 @@ further forward: needs a side view with stations. Pad radius 0.85 in, gusset dro
 off the figure. Not built: master warning panels under the shield's lip (shown in figure 1, but their faces need the
 operator's manual drawing), instrument light assemblies, air bag modules (MWO 50-82). Removed: the invented hood.
 
+
+Round 6, cockpit door inside face and armoured wing lever: TM 1-1520-237-23 (2006), volume 5, door work packages.
+Evan's note on a cockpit screenshot: "interior can be improved". The door's inside was a bare painted face with one
+invented yellow hoop handle.
+
+| Figure | Used for |
+|---|---|
+| 0201 00 figure 1, Replace Cockpit Door Jettison Components | Jettison handle (a round knob on a short arm at the window's lower forward corner), control rod, jettison lever, upper and lower arms on their pins, tube assembly between the arms along the hinge edge, spring, jettison pin down to the fitting at the door's foot, gaskets at the hinges |
+| 0203 00 figure 1, Replace Cockpit Door Stationary Window | Forward doubler (the wider one) and rear doubler round the window with their screw rows, seal round the door, lockwire clip on the lower forward edge of the window frame |
+| 0204 00 figure 1, Replace Cockpit Door Vent Window | Plastic vent pane in a cut-out of the main window, doubler round the cut-out, upper and lower tracks running aft with seals under them, upper and lower retainers with knurled knobs |
+| 0206 00 figure 1, Replace Cockpit Door Front Crank Mechanism | Inside handle on a shaft through a doubler and bearing, just under the window sill |
+| 0207 00 figure 1, Replace Cockpit Door Latches | Upper and lower latch housings on the rear edge with latch bolts and bellcranks, upper and lower horizontal rods from the front crank, vertical rod between the latches |
+| 0208 00 figure 1, Replace Cockpit Door Rear Crank Mechanism | Support, bellcrank and link behind the outside door handle |
+| 0231 00 figure 27 detail B, Replace Armored Wing | Release lever on the movable wing's forward edge with the upper cable end rising from it |
+
+Estimated: every size and exact position (the figures are isometric with no dimensions; parts are placed by proportion
+inside the door opening of figure 6-1). Colours: the manual gives none. The inside handle is black and the jettison
+knob yellow by the usual convention for emergency controls, both unconfirmed. Whether a trim panel covers the rods on
+the real door is not shown in these figures, so they are left exposed as drawn. The door here is 3 in thick (the
+shell depth, itself an estimate), so the window sits in a deeper reveal than the drawings suggest.
+Not built: door check lever and strut (0200 00), upper door retainer and clip (0202 00), jettisonable window with its
+emergency strap and snap vent (0205 00, a different effectivity from the vent window built here), striker on the
+frame, lock cylinder detail, the three-hole bracket and lower cable latch of the armoured wing (figure 27 detail C).
+Removed: the invented yellow hoop handle on the door. Armoured wings now have eased edges instead of square-cut ones.

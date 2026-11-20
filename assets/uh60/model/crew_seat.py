@@ -126,7 +126,14 @@ def build(ctx, M, out, outboard):
     stat = np.array([(-9.5, PAN_Z + 1.0), (-0.5, PAN_Z + 1.0), (-0.5, PAN_Z + 9.0), (-5.5, PAN_Z + 15.0), (-8.5, PAN_Z + 27.0), (-13.5, PAN_Z + 27.0), (-12.0, PAN_Z + 12.0)])
     move = np.array([(-0.2, PAN_Z + 0.6), (9.2, PAN_Z + 0.6), (9.2, PAN_Z + 3.4), (6.6, PAN_Z + 9.0), (5.0, PAN_Z + 20.6), (-0.2, PAN_Z + 20.6)])
     for poly, dy in ((stat, 0.0), (move, outboard * 0.75)):
-        w = Mesh(); w.merge(lib.prism(poly, -0.32, 0.32), XZ @ T(0, 0, yw + dy)); arm.merge(outward(w), M)
+        for z1 in (0.32, -0.32):                                                                                 # plate with eased edges, not a square-cut slab
+            w = Mesh(); w.merge(lib.prism(poly, 0.0, z1, taper=0.978), XZ @ T(0, 0, yw + dy)); arm.merge(outward(w), M)
+    # release lever on the movable wing's forward edge, on its channel, with the upper cable end rising from it [F27 detail B]
+    ym = yw + outboard * 0.75
+    dull.merge(lib.tube([(6.45, ym, PAN_Z + 9.4), (4.95, ym, PAN_Z + 20.3)], 0.36, 6), M)
+    lv = Mesh(); lv.merge(lib.prism(np.array([(5.2, PAN_Z + 14.6), (6.1, PAN_Z + 14.8), (7.3, PAN_Z + 11.6), (6.5, PAN_Z + 11.2)]), -0.12, 0.12), XZ @ T(0, 0, ym + outboard * 0.5)); blk.merge(outward(lv), M)
+    frm.merge(lib.cyl((5.7, ym - outboard * 0.1, PAN_Z + 14.4), (5.7, ym + outboard * 0.75, PAN_Z + 14.4), 0.16, 6), M)
+    frm.merge(lib.tube([(5.75, ym + outboard * 0.3, PAN_Z + 14.9), (5.3, ym + outboard * 0.3, PAN_Z + 18.0), (5.0, ym + outboard * 0.3, PAN_Z + 21.2)], 0.07, 5), M)
     frm.merge(lib.cyl((-12.5, yw + outboard * 0.4, PAN_Z + 21.4), (6.0, yw + outboard * 0.4, PAN_Z + 21.4), 0.4, 8), M)       # upper tube
     frm.merge(lib.cyl((-9.0, yw + outboard * 0.4, PAN_Z + 0.2), (9.0, yw + outboard * 0.4, PAN_Z + 0.2), 0.4, 8), M)          # lower tube
     for x in (-9.0, -1.5):
