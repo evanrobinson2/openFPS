@@ -214,7 +214,7 @@ def cockpit(ctx):
         cy = sg * 21.0
         nd = ctx.node(f'cyclic_{side}', 'airframe', pivot=(222.0, cy, CFLOOR + 1.0))
         m = Mesh(); g = Mesh()
-        m.merge(lib.tube([(222.0, cy, CFLOOR + 1.0), (222.0, cy, CFLOOR + 9.0), (223.4, cy, CFLOOR + 13.0), (225.6, cy, CFLOOR + 15.5)], 0.55, 8))
+        m.merge(lib.tube(smooth_path([(222.0, cy, CFLOOR + 1.0), (220.9, cy, CFLOOR + 6.0), (221.2, cy, CFLOOR + 10.5), (223.6, cy, CFLOOR + 13.8), (225.6, cy, CFLOOR + 15.4)], 3.0), 0.55, 10))   # bowed forward [TM 55-1520-237-23 fig 11-34]
         g.merge(PN.cyclic_grip(ctx, art['cyclic'], (225.6, cy, CFLOOR + 15.2)))
         ctx.part(nd, 'cyclic_tube', m, 'steel_dark', 40); ctx.part(nd, 'cyclic_grip', g, 'paint_black', 40)
         bl_c = cy + 10.6

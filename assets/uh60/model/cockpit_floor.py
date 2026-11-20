@@ -46,7 +46,6 @@ def spec():
         cy = sg * SEAT_BL
         b = sorted((cy - 7.5, cy + 7.5))
         wear += [(209.0, cy, 6.0, 8.0, 255), (226.0, sg * 38.0, 12.0, 7.0, 210), (224.0, sg * 11.5, 16.0, 4.0, 140)]
-        pans.append(circle(CYC_STA, cy, 3.3))
     return dict(lines=lines, covers=covers, plates=plates, wear=wear, pans=pans)
 
 
@@ -70,34 +69,60 @@ def screw(p, nrm, r=0.16, h=0.07, n=6):
 
 
 # ------------------------------------------------------------------ pedals
+def rect_ring(cx, cy, lx, ly, z, k=4, e=8.0):
+    """Superellipse ring (lx along STA, ly along BL); e = 2 is an ellipse, large e a rounded rectangle."""
+    out = []
+    for t in np.linspace(0, 2 * math.pi, 4 * k, endpoint=False):
+        c, s_ = math.cos(t), math.sin(t)
+        out.append((cx + lx / 2 * math.copysign(abs(c) ** (2 / e), c), cy + ly / 2 * math.copysign(abs(s_) ** (2 / e), s_), z))
+    return out
+
+
+def boot(ctx, cx, cy, lx, ly, top, h, r_top, out, screws):
+    """Zippered fabric boot on a screwed-down retainer frame [TM 55-1520-237-23 figs 11-22 (pedal) and 11-34 (cyclic)].
+    cx, cy: centre of the base; top: (STA, BL) the boot closes round at height h. Sizes are not dimensioned [EST]."""
+    fab, frame, stl = out; k = ctx.n(6, 4); z0 = CF
+    frame.merge(outward(lib.prism(np.array([p[:2] for p in rect_ring(cx, cy, lx, ly, 0, 2, 14.0)]), z0, z0 + 0.1)))
+    frame.merge(outward(lib.prism(np.array([p[:2] for p in rect_ring(cx, cy, lx - 0.5, ly - 0.5, 0, 2, 14.0)]), z0 + 0.1, z0 + 0.2)))
+    nx, ny = screws
+    pts = [(cx + sx * (lx / 2 - 0.3), cy - ly / 2 + 0.3 + (ly - 0.6) * i / (ny - 1)) for sx in (-1, 1) for i in range(ny)]
+    pts += [(cx - lx / 2 + 0.3 + (lx - 0.6) * i / (nx - 1), cy + sy * (ly / 2 - 0.3)) for sy in (-1, 1) for i in range(1, nx - 1)]
+    for (x, y) in pts: stl.merge(screw((x, y, z0 + 0.1), (0, 0, 1), 0.13, 0.06))
+    rings = []
+    for t in (0.0, 0.1, 0.3, 0.55, 0.8, 0.94, 1.0):
+        u = t ** 0.8; e = 8.0 - 6.0 * u
+        rings.append(rect_ring(cx + (top[0] - cx) * u, cy + (top[1] - cy) * u, (lx - 1.3) * (1 - u) + 2 * r_top * u, (ly - 1.3) * (1 - u) + 2 * r_top * u,
+                               z0 + 0.2 + (h - 0.2) * t + 0.25 * math.sin(math.pi * t), k, e))
+    fab.merge(outward(lib.loft(np.array(rings), cap0=False, cap1=True)))
+    zip_ = [np.array(r[0]) + (0.05, 0, 0.02) for r in rings]                      # zipper up the aft face
+    stl.merge(lib.tube(zip_, 0.06, 5))
+
+
+PED_W, PED_H = 4.4, 5.9      # in, pedal plate [EST: figures 11-23 and 11-27 are undimensioned perspectives]
+
+
 def pedals(ctx, cy, out):
-    blk, frm, stl, dull = out; n = ctx.n(10, 7)
-    B = np.array([[0, 0, 1, 0], [1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1.0]])     # pad local: x = BL, y = up the pad, z = toward the pilot
+    """Yaw pedals as TM 55-1520-237-23 figures 11-22, 11-23 and 11-27 draw them: a cast plate with six lightening
+    pockets, pivoted on the top of a tubular pedal support that comes up through its own zippered boot in the floor.
+    The master cylinders, pivot shaft and control rods of figure 11-27 are under the floor and boot, and not built."""
+    blk, frm, stl, dull, fab = out; n = ctx.n(10, 7)
+    B = np.array([[0, 0, 1, 0], [1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1.0]])     # plate local: x = BL, y = up the plate, z = toward the pilot
     for dy in (-4.6, 4.6):
         y0 = cy + dy
         Mp = T(PED_STA, y0, CF + 8.2) @ R('bl', -22.0) @ B
         if (Mp @ np.array((0, 0, 1.0, 0)))[2] < 0: Mp = T(PED_STA, y0, CF + 8.2) @ R('bl', 22.0) @ B
-        pad = Mesh()
-        pad.merge(lib.prism(lib.rrect(4.4, 5.9, 0.9, 3), -0.32, 0.0))
-        for sx in (-1, 1): pad.merge(lib.box((sx * 2.02, 0, 0.1), (0.24, 4.3, 0.26)))                 # side cheeks keep the boot on
-        pad.merge(lib.box((0, 2.72, 0.14), (3.2, 0.3, 0.34)))                                         # toe lip
-        for yy in np.linspace(-2.3, 2.1, 7): pad.merge(lib.box((0, yy, 0.06), (3.55, 0.3, 0.14)))     # ribs
-        pad.merge(lib.box((0, -0.3, -0.75), (1.7, 2.6, 0.9)))                                         # boss on the back
+        pad = Mesh(); w, h = PED_W, PED_H
+        pad.merge(lib.prism(lib.rrect(w, h, 0.35, 3), -0.3, -0.12))
+        for x in (-w / 2 + 0.15, -w / 6, w / 6, w / 2 - 0.15): pad.merge(lib.box((x, 0, -0.03), (0.3, h, 0.2)))         # ribs between the three columns of pockets
+        for y in (-h / 2 + 0.15, 0.0, h / 2 - 0.15): pad.merge(lib.box((0, y, -0.03), (w, 0.3, 0.2)))                   # and the two rows
+        for sx in (-1, 1): pad.merge(lib.box((sx * 1.2, -1.2, -0.62), (0.3, 1.5, 0.7)))                                 # pivot lugs on the back
         blk.merge(pad, Mp)
         P = lambda x, y, z: (Mp @ np.array((x, y, z, 1.0)))[:3]
-        stl.merge(lib.cyl(P(-2.45, -3.0, -0.4), P(2.45, -3.0, -0.4), 0.3, n))                         # toe-brake hinge pin
-        for sx in (-1, 1): frm.merge(lib.cyl(P(sx * 1.9, -3.0, -0.4), P(sx * 1.9, -1.6, -0.5), 0.34, 6))
-        foot = np.array((PED_STA - 3.6, y0, CF + 1.5))
-        arm = [P(0, -3.0, -0.45), np.array((PED_STA - 1.0, y0, CF + 3.4)), foot]
-        import interior
-        frm.merge(lib.tube(interior.smooth_path(arm, 2.2), 0.52, n))
-        # pivot bracket: two lugs on a base plate, bolted to the floor
-        for sy in (-0.82, 0.82):
-            lug = [(foot[0] - 1.5, CF), (foot[0] + 1.5, CF), (foot[0] + 0.7, CF + 2.2), (foot[0] - 0.7, CF + 2.2)]
-            frm.merge(outward(lib.prism(np.array(lug), y0 + sy - 0.13, y0 + sy + 0.13, lib.plane_basis('side_l'))))
-        frm.merge(lib.box((foot[0], y0, CF + 0.07), (3.8, 3.0, 0.14)))
-        for sx in (-1.5, 1.5):
-            for sy in (-1.15, 1.15): stl.merge(screw((foot[0] + sx, y0 + sy, CF + 0.14), (0, 0, 1), 0.2, 0.12))
+        hp = P(0, -1.2, -0.85); post = np.array((hp[0], y0, CF))
+        stl.merge(lib.cyl(P(-1.75, -1.2, -0.85), P(1.75, -1.2, -0.85), 0.2, n))                                         # pivot bolt
+        frm.merge(lib.cyl(P(-0.95, -1.2, -0.85), P(0.95, -1.2, -0.85), 0.5, n))                                         # boss on the pedal support
+        frm.merge(lib.cyl(post + (0, 0, 3.6), hp, 0.62, n))                                                             # pedal support tube
+        boot(ctx, post[0] + 1.6, y0, 8.0, 4.4, (post[0], y0), 4.4, 0.8, (fab, dull, stl), (5, 3))
 
 
 # ------------------------------------------------------------------ lower console
@@ -215,17 +240,13 @@ def build(ctx, wall_bl):
     blk, frm, stl, dull, trk, body, grey, yel, red, rub, od = (Mesh() for _ in range(11))
     for sg in (1, -1):
         cy = sg * SEAT_BL
-        pedals(ctx, cy, (blk, frm, stl, dull))
+        pedals(ctx, cy, (blk, frm, stl, dull, rub))
         seat_mount(ctx, T(SEAT_STA, cy, CF) @ np.array([[-1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1.0]]), (frm, trk, stl, dull, blk))
-        # cyclic boot: retaining ring screwed to the floor, convoluted boot up the stick
-        dull.merge(lib.revolve([(3.25, 0.0), (3.25, 0.12), (2.7, 0.16), (2.7, 0.0)], ctx.n(20, 12), T(CYC_STA, cy, CF), cap0=False, cap1=False))
-        for k in range(8):
-            a = k * math.pi / 4 + 0.39; stl.merge(screw((CYC_STA + 2.98 * math.cos(a), cy + 2.98 * math.sin(a), CF + 0.13), (0, 0, 1), 0.15, 0.06))
-        rub.merge(bellows((CYC_STA, cy, CF + 0.12), (CYC_STA, cy, CF + 5.2), 2.65, 0.95, 5, ctx.n(18, 12)))
+        boot(ctx, CYC_STA, cy, 7.0, 7.0, (CYC_STA - 0.6, cy), 5.6, 0.95, (rub, dull, stl), (5, 5))     # cyclic boot and retainer [F11-34]
     console(ctx, (body, frm, stl, grey, blk, yel, red, dull))
     door_sill(ctx, wall_bl, (od, dull, stl))
     for name, m, mat in (('pedal_pads', blk, 'paint_black'), ('cockpit_frames', frm, 'frame_grey'), ('cockpit_floor_steel', stl, 'steel'),
                          ('cockpit_fittings', dull, 'alu_dull'), ('seat_tracks', trk, 'steel_dark'), ('lower_console', body, 'panel_face'),
                          ('console_side_panels', grey, 'frame_grey'), ('cockpit_floor_yellow', yel, 'paint_yellow'), ('fire_bottle', red, 'paint_red'),
-                         ('cyclic_boots', rub, 'rubber'), ('cockpit_sills', od, 'paint_od_interior')):
+                         ('control_boots', rub, 'fabric_boot' if 'fabric_boot' in ctx.mats else 'rubber'), ('cockpit_sills', od, 'paint_od_interior')):
         ctx.part('airframe', name, m, mat, 40)

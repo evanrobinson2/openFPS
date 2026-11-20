@@ -50,10 +50,26 @@ UH-60 simulation model reports (Howlett, NASA CR-166309). The paint is the Army'
 
 ## Rule for visible parts (Evan, 2026-11-19)
 
-Every part a camera can see must be shown in a manual figure, photograph or rendering before it is modelled. Still built only from figure 2-4's small perspective view, with estimated sizes, and to be replaced when a proper reference is in hand: pedals and their arms, crew seat buckets, frames and tracks, cyclic and collective sticks and boots, glare shield depth, console body, fire extinguisher, utility light, cockpit floor surface.
+Every part a camera can see must be shown in a manual figure, photograph or rendering before it is modelled. Still built only from figure 2-4's small perspective view, with estimated sizes, and to be replaced when a proper reference is in hand: crew seat buckets, frames and tracks, cyclic and collective sticks and boots, glare shield depth, console body, fire extinguisher, utility light, cockpit floor surface.
 
 Round 2 (2026-11-20): the upper console, engine control quadrant and collective grip now come from figures 2-7, 2-13
 and 2-14 as listed above, so the placeholder upper console is gone. Searched for the maintenance and parts manuals
 (TM 1-1520-237-23 and -23P) for pedals, crew seats and stick linkages: archive.org item `micro_IA41152635_0522`
 (1989 aviation unit and intermediate maintenance manual, UH-60A / EH-60A) and liberatedmanuals.com
 `TM-1-1520-237-23-1.pdf` exist but their hosts were not reachable from the build machine when this was written.
+
+Round 3 (2026-11-20): second manual in use. TM 55-1520-237-23-5 (Aviation Unit and Intermediate Maintenance, UH-60A
+and EH-60A, chapters 11 to 15, 29 August 1989 with change 1; public release; archive.org item
+`micro_IA41152635_0522`, a page scan, kept out of git at `model/refs-local/tm23/`).
+
+| Figure | Used for |
+|---|---|
+| 11-22 Replace boots | Each pedal's support comes up through its own zippered boot on a rectangular screwed-down frame |
+| 11-23, 11-27 Pedal assembly and pedal support assembly | Pedal: a cast plate with six lightening pockets (three columns, two rows), pivoted on the top of a tubular pedal support. Master cylinders, pivot shaft, support arms and control rods are below the floor and boot and are not built |
+| 11-34, 11-35 Cyclic stick boot and stick | Square boot retainer with screws, tapered zippered boot, stick tube bowed forward ("curve in stick facing front") |
+
+These figures are undimensioned perspectives: pedal plate 4.4 x 5.9 in, boot frames (8.0 x 4.4 in pedal, 7.0 in square
+cyclic), boot heights and the amount of bow in the stick are estimates. Not yet applied: figure 11-40 (collective boot
+and its NO STEP cover assembly) and 11-41 (collective stick socket, drag strut and support). Crew seats are in another
+volume: the 2006 edition's volumes 2 to 7 are downloadable from liberatedmanuals.com (volume 1 is general information,
+volume 2 troubleshooting).
