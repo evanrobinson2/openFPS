@@ -210,6 +210,20 @@ def plane_basis(view):
     return M
 
 
+def text_mesh(body, h, depth=0.012):
+    """Stencil lettering as flat geometry in the XY plane, centred, capitals h tall (Blender's built-in font)."""
+    cu = bpy.data.curves.new('txt', 'FONT'); cu.body = body; cu.align_x = 'CENTER'; cu.resolution_u = 2
+    o = bpy.data.objects.new('txt', cu); bpy.context.scene.collection.objects.link(o)
+    me = o.to_mesh(); v = np.array([tuple(x.co) for x in me.vertices], float); f = [tuple(q.vertices) for q in me.polygons]
+    o.to_mesh_clear(); bpy.data.objects.remove(o); bpy.data.curves.remove(cu)
+    m = Mesh()
+    if len(v):
+        k = h / max(v[:, 1].max() - v[:, 1].min(), 1e-6)
+        v = (v - [(v[:, 0].max() + v[:, 0].min()) / 2, (v[:, 1].max() + v[:, 1].min()) / 2, 0]) * k; v[:, 2] = depth
+        m.add(v, f)
+    return m
+
+
 def hexnut(across, h, n_hole=0.0):
     r = across / 2 / math.cos(math.pi / 6)
     return prism(np.array([(r * math.cos(a), r * math.sin(a)) for a in np.linspace(0, 2 * np.pi, 6, endpoint=False)]), 0, h)

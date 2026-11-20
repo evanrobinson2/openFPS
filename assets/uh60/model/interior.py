@@ -189,21 +189,28 @@ def cockpit(ctx):
         m.merge(lib.tube(smooth_path([(222.0, cy, CFLOOR + 1.0), (220.9, cy, CFLOOR + 6.0), (221.2, cy, CFLOOR + 10.5), (223.6, cy, CFLOOR + 13.8), (225.6, cy, CFLOOR + 15.4)], 3.0), 0.55, 10))   # bowed forward [TM 55-1520-237-23 fig 11-34]
         g.merge(PN.cyclic_grip(ctx, art['cyclic'], (225.6, cy, CFLOOR + 15.2)))
         ctx.part(nd, 'cyclic_tube', m, 'steel_dark', 40); ctx.part(nd, 'cyclic_grip', g, 'paint_black', 40)
-        bl_c = cy + 12.2
-        nd = ctx.node(f'collective_{side}', 'airframe', pivot=(240.0, bl_c, CFLOOR + 4.0))
-        m = Mesh(); g = Mesh()
-        m.merge(lib.tube([(240.0, bl_c, CFLOOR + 4.0), (229.0, bl_c, CFLOOR + 9.4)], 0.6, 8))
-        dd = np.array((229.0 - 240.0, 0, 9.4 - 4.0)); dd /= np.linalg.norm(dd); Mg = np.eye(4)
-        Mg[:3, 0] = (0, -1, 0); Mg[:3, 1] = (-dd[2], 0, dd[0]) if dd[0] > 0 else (dd[2], 0, -dd[0]); Mg[:3, 2] = dd; Mg[:3, 3] = (229.0, bl_c, CFLOOR + 9.4)
+        bl_c = CK.collective_bl(sg); p0 = np.array((241.5, bl_c, CFLOOR + 3.6)); g0 = np.array((229.0, bl_c, CFLOOR + 9.6))
+        nd = ctx.node(f'collective_{side}', 'airframe', pivot=tuple(p0))
+        m = Mesh(); g = Mesh(); d = g0 - p0; Ls = np.linalg.norm(d); dd = d / Ls
+        m.merge(lib.tube([p0, g0], 0.6, 8)); Mg = np.eye(4)
+        Mg[:3, 0] = (0, -1, 0); Mg[:3, 1] = (dd[2], 0, -dd[0]); Mg[:3, 2] = dd; Mg[:3, 3] = g0
         gb, gf, gk = PN.collective_grip(ctx, art['collective'], Mg); g.merge(gb); g.merge(gk)
         of = ctx.part(nd, 'collective_face', gf, 'collective_art' if 'collective_art' in ctx.mats else 'paint_black', 40)
         if of is not None and 'collective_art' in ctx.mats: PN.collective_uv(of, art['collective'], Mg)
+        # the thicker sleeve ahead of the boot; the pilot's is the fluted friction grip [TM 55-1520-237-23 fig 11-40 sheet 1, para 11-7.4]
+        fr = Mesh(); a, b = p0 + dd * (Ls - 4.6), p0 + dd * (Ls - 0.9)
+        fr.merge(lib.cyl(a, b, 0.82, ctx.n(14, 10)))
+        if sg < 0:
+            Mf, _ = lib.frame_to(a + dd * 0.5, b)
+            for i in range(12):
+                t = i * math.tau / 12; fr.merge(lib.box((0.9 * math.cos(t), 0.9 * math.sin(t), 1.0), (0.16, 0.16, 2.0), lib.R('z', math.degrees(t))), Mf)
         ctx.part(nd, 'collective_tube', m, 'steel_dark', 40); ctx.part(nd, 'collective_grip', g, 'paint_black', 40)
-        p0 = np.array((240.0, bl_c, CFLOOR + 4.0)); d = np.array((229.0, bl_c, CFLOOR + 9.4)) - p0
-        ctx.part(nd, 'collective_boot', CK.bellows(p0 + d * 0.16, p0 + d * 0.62, 1.5, 0.95, 7, ctx.n(14, 10), 0.3), 'rubber', 40)
-        fr = Mesh(); fr.merge(lib.cyl(p0 + d * 0.66, p0 + d * 0.76, 1.05, ctx.n(14, 10)))          # friction control collar [F2-4 item 37]
-        ctx.part(nd, 'collective_friction', fr, 'steel_dark', 40)
-        CK.collective_mount((240.0, bl_c, CFLOOR + 4.0), (al, st))
+        ctx.part(nd, 'collective_friction', fr, 'paint_black', 40)
+        cov, cfab, cst, cwht = CK.collective_cover(ctx, sg, p0, g0)
+        ctx.part('airframe', f'collective_cover_{side}', cov, 'paint_black', 40)
+        ctx.part('airframe', f'collective_boot_{side}', cfab, 'fabric_boot' if 'fabric_boot' in ctx.mats else 'rubber', 40)
+        ctx.part('airframe', f'collective_cover_screws_{side}', cst, 'steel', 40)
+        if cwht.n: ctx.part('airframe', f'collective_no_step_{side}', cwht, 'paint_white' if 'paint_white' in ctx.mats else 'steel', 40)
     CK.build(ctx, wall_bl, (arm, fab, belt))
     for name, m, mat in (('crew_seat_armour', arm, 'armor'), ('crew_seat_cushions', fab, 'fabric_seat'), ('crew_harness', belt, 'fabric_belt'),
                          ('cockpit_steel', st, 'steel'), ('cockpit_brackets', al, 'frame_grey'), ('instrument_panel', blk, 'panel_face'),

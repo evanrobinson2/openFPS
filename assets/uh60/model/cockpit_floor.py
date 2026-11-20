@@ -16,7 +16,7 @@ from lib import Mesh, T, R, S
 
 CF = RC.WL_COCKPIT_FLOOR
 C0, C1, CHALF = 194.0, 247.0, 47.0
-SEAT_STA, SEAT_BL = 230.5, 22.5     # BL widened from 21 so the collective passes between seat and console [EST]
+SEAT_STA, SEAT_BL = 230.5, 24.2     # BL leaves room for the pilot's collective cover between seat and console [EST]
 CYC_STA = 222.0
 PED_STA = 204.0
 CON_HW = 9.25                              # the drawn console top is 18.0 in wide [F2-8 at 5.75 in per control head]
@@ -152,16 +152,83 @@ def console(ctx, out):
 
 
 # ------------------------------------------------------------------ crew seat frame and tracks
-def collective_mount(pivot, out):
-    """Clevis bracket for the collective's torque tube, bolted to the floor."""
-    frm, stl = out; s, bl, wl = pivot
-    for sy in (-1.0, 1.0):
-        lug = [(s - 1.6, CF), (s + 1.6, CF), (s + 0.8, wl + 0.9), (s - 0.8, wl + 0.9)]
-        frm.merge(outward(lib.prism(np.array(lug), bl + sy - 0.14, bl + sy + 0.14, lib.plane_basis('side_l'))))
-    frm.merge(lib.box((s, bl, CF + 0.08), (4.2, 3.4, 0.16)))
-    stl.merge(lib.cyl((s, bl - 1.35, wl), (s, bl + 1.35, wl), 0.34, 8))
-    for sx in (-1.6, 1.6):
-        for sy in (-1.3, 1.3): stl.merge(screw((s + sx, bl + sy, CF + 0.16), (0, 0, 1), 0.2, 0.12))
+COLL_K = 1.55                              # stick centre line off the console side / the seat's wing [EST]
+
+
+def collective_bl(sg):
+    """Both sticks are at the crew member's left: the pilot's between the console and the seat, the copilot's
+    outboard of the seat by the door [TM 55-1520-237-23 fig 11-40 sheet 1, locators A and B]."""
+    return -(CON_HW + COLL_K) if sg < 0 else SEAT_BL + 15.5
+
+
+def _sleeve(p, d, r0, r1, L, n):
+    """Fabric top panel: a cone of cloth round the stick, gathered under a cord at the small end [F11-40 sheet 2]."""
+    M, _ = lib.frame_to(p, np.asarray(p) + np.asarray(d))
+    prof = [(r0, 0.0), (r0 * 0.97, L * 0.12), (r1 + (r0 - r1) * 0.45, L * 0.55), (r1 + 0.1, L * 0.9), (r1 + 0.16, L * 0.94), (r1 + 0.1, L), (r1 - 0.12, L)]
+    return lib.revolve(prof, n, M, cap0=False, cap1=False)
+
+
+def collective_cover(ctx, sg, p0, g0):
+    """Cover and boot over the collective's support [TM 55-1520-237-23 fig 11-40, both sheets]. Pilot: a box screwed to
+    the side of the centre console, NO STEP on top, open at the front top corner where two fabric half panels and a
+    conical top panel close it round the stick. Copilot: a taller box with a sloped front screwed to the floor and the
+    rear bulkhead; on the slope a bottom panel under a retainer, a fabric centre panel and the conical top panel.
+    The drawing gives no dimensions and no colours: every size here is scaled off the stick [EST]."""
+    cov, fab, stl, wht = (Mesh() for _ in range(4)); n = ctx.n(18, 10); hi = ctx.lod == 0
+    p0 = np.asarray(p0, float); d = np.asarray(g0, float) - p0; d /= np.linalg.norm(d); bl = p0[1]
+    at = lambda s: p0 + d * ((s - p0[0]) / d[0])                    # point on the stick axis at a station
+    if sg < 0:
+        s0, s1, H = 235.2, 243.6, 5.8; y0 = -CON_HW; W = 2 * (abs(bl) - CON_HW) - 0.3; yc = y0 - W / 2; sm = 239.0
+        cov.merge(lib.box(((sm + s1) / 2, yc, CF + H / 2), (s1 - sm, W, H)))                          # closed aft part, NO STEP on top
+        cov.merge(lib.box(((s0 + sm) / 2, yc, CF + 0.3), (sm - s0, W, 0.6)))                          # sill under the opening
+        cov.merge(lib.box(((s0 + sm) / 2, yc - W / 2 + 0.06, CF + H / 2), (sm - s0, 0.12, H)))        # outboard wall carries forward
+        cov.merge(lib.box(((s0 + s1) / 2, y0 - 0.05, CF + H / 2 + 0.35), (s1 - s0 + 1.4, 0.1, H + 0.7)))   # flange on the console side
+        for s in np.linspace(s0 + 0.3, s1 - 0.3, 4): stl.merge(screw((s, y0 - 0.1, CF + H + 0.4), (0, -1, 0), 0.17, 0.06))
+        for s in (s0 - 0.4, s1 + 0.4):
+            for z in (1.4, 4.2): stl.merge(screw((s, y0 - 0.1, CF + z), (0, -1, 0), 0.17, 0.06))
+        # fabric: bottom half panel across the front, top half panel over the top, both cut round the stick
+        e = at(s0 + 1.5); ring_n = 12
+        fab.merge(lib.box((s0 + 0.05, yc + 0.03, CF + 0.6 + (e[2] - CF - 0.6) / 2 - 0.5), (0.1, W - 0.2, max(e[2] - CF - 1.6, 0.5))))
+        fab.merge(lib.box(((s0 + 2.7 + sm) / 2, yc + 0.03, CF + H - 0.05), (sm - s0 - 2.7, W - 0.2, 0.1)))
+        rect = [(s0 + 0.05, yc + sy * (W / 2 - 0.12), z) for sy, z in ((1, CF + 0.9), (-1, CF + 0.9))] + [(s0 + 3.4, yc - (W / 2 - 0.12), CF + H - 0.05), (s0 + 3.4, yc + (W / 2 - 0.12), CF + H - 0.05)]
+        c = at(s0 + 1.2); M, _ = lib.frame_to(c, c + d)
+        ra = np.array(lib.resample(np.array(rect + rect[:1], float), ring_n + 1)[:-1]); ctr = ra.mean(0)
+        ang = lambda q: math.atan2(*(np.linalg.inv(M) @ np.append(q, 1.0))[[1, 0]])
+        ra = ra[np.argsort([ang(q) for q in ra])]
+        rb = np.array([(M @ np.array((1.3 * math.cos(a), 1.3 * math.sin(a), 0.6, 1.0)))[:3] for a in sorted(ang(q) for q in ra)])
+        fab.merge(outward(lib.loft(np.array([ra, rb]), cap0=False, cap1=False)))
+        fab.merge(_sleeve(c + d * 0.6, d, 1.3, 0.72, 3.6, n))
+        if hi: wht.merge(lib.text_mesh('NO STEP', 0.6), T((sm + s1) / 2, yc, CF + H) @ lib.S(-1, 1, 1))
+    else:
+        W, H, s1, st, sf = 3.6, 8.2, C1 - 0.2, 240.0, 235.8
+        side = np.array([(sf, CF), (s1, CF), (s1, CF + H), (st, CF + H)])
+        cov.merge(outward(lib.prism(side, bl - W / 2, bl + W / 2, lib.plane_basis('side_l'))))
+        cov.merge(lib.box(((sf - 0.9 + s1) / 2, bl, CF + 0.05), (s1 - sf + 0.9, W + 1.1, 0.1)))            # floor flange
+        for s in (sf - 0.5, sf + 2.6, sf + 5.4, s1 - 1.4):
+            for sy in (-1, 1): stl.merge(screw((s, bl + sy * (W / 2 + 0.3), CF + 0.1), (0, 0, 1), 0.17, 0.06))
+        for sy in (-1, 1):                                                                                # tabs on to the rear bulkhead
+            for z in (2.4, 6.2):
+                cov.merge(lib.box((s1 + 0.05, bl + sy * (W / 2 + 0.5), CF + z), (0.1, 1.3, 1.5)))
+                stl.merge(screw((s1, bl + sy * (W / 2 + 0.6), CF + z), (-1, 0, 0), 0.17, 0.06))
+        v = np.array((st - sf, 0.0, H)); Ls = np.linalg.norm(v); v /= Ls; nr = np.array((-v[2], 0.0, v[0]))
+        x = np.array((sf, bl, CF)) + v * (p0[2] - CF + (sf - p0[0]) * d[2] / d[0]) / (v[2] - v[0] * d[2] / d[0])   # stick through the slope
+        Ms = np.eye(4); Ms[:3, 0] = (0, 1, 0); Ms[:3, 1] = v; Ms[:3, 2] = nr; Ms[:3, 3] = x
+        fw, fl = W - 0.5, min(2 * (Ls - np.dot(x - (sf, bl, CF), v)) - 0.8, 5.6)
+        fab.merge(lib.box((0, 0, 0.03), (fw - 0.2, fl - 0.2, 0.06)), Ms)                                  # bottom panel
+        for sx in (-1, 1): cov.merge(lib.box((sx * (fw / 2 - 0.25), 0, 0.09), (0.5, fl, 0.1)), Ms)       # retainer
+        cov.merge(lib.box((0, -(fl / 2 - 0.25), 0.09), (fw - 1.0, 0.5, 0.1)), Ms)
+        for sx in (-1, 1):
+            for y in (-(fl / 2 - 0.25), 0.0, fl / 2 - 0.25): stl.merge(screw((Ms @ np.array((sx * (fw / 2 - 0.25), y, 0.14, 1.0)))[:3], nr, 0.14, 0.05))
+        ring_n = 12; rect = [(-(fw / 2 - 0.55), -(fl / 2 - 0.6), 0.1), (fw / 2 - 0.55, -(fl / 2 - 0.6), 0.1), (fw / 2 - 0.55, fl / 2 - 0.3, 0.1), (-(fw / 2 - 0.55), fl / 2 - 0.3, 0.1)]
+        ra = np.array([(Ms @ np.append(q, 1.0))[:3] for q in lib.resample(np.array(rect + rect[:1], float), ring_n + 1)[:-1]])
+        c = x + d * 2.4; M, _ = lib.frame_to(c, c + d)
+        ang = lambda q: math.atan2(*(np.linalg.inv(M) @ np.append(q, 1.0))[[1, 0]])
+        ra = ra[np.argsort([ang(q) for q in ra])]
+        rb = np.array([(M @ np.array((1.45 * math.cos(a), 1.45 * math.sin(a), 0.0, 1.0)))[:3] for a in sorted(ang(q) for q in ra)])
+        fab.merge(outward(lib.loft(np.array([ra, rb]), cap0=False, cap1=False)))                          # centre panel
+        fab.merge(_sleeve(c, d, 1.45, 0.72, 3.0, n))
+        if hi: wht.merge(lib.text_mesh('NO STEP', 0.7), T((st + s1) / 2, bl, CF + H) @ lib.R('z', 90.0) @ lib.S(-1, 1, 1))
+    return cov, fab, stl, wht
 
 
 def door_sill(ctx, wall_bl, out):

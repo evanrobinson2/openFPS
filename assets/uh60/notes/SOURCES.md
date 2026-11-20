@@ -69,8 +69,8 @@ and EH-60A, chapters 11 to 15, 29 August 1989 with change 1; public release; arc
 | 11-34, 11-35 Cyclic stick boot and stick | Square boot retainer with screws, tapered zippered boot, stick tube bowed forward ("curve in stick facing front") |
 
 These figures are undimensioned perspectives: pedal plate 4.4 x 5.9 in, boot frames (8.0 x 4.4 in pedal, 7.0 in square
-cyclic), boot heights and the amount of bow in the stick are estimates. Not yet applied: figure 11-40 (collective boot
-and its NO STEP cover assembly) and 11-41 (collective stick socket, drag strut and support). Crew seats are in another
+cyclic), boot heights and the amount of bow in the stick are estimates. Figures 11-40 and 11-41 were applied in
+round 4, below. Crew seats are in another
 volume: the 2006 edition's volumes 2 to 7 are downloadable from liberatedmanuals.com (volume 1 is general information,
 volume 2 troubleshooting).
 
@@ -85,6 +85,22 @@ copy at liberatedmanuals.com `TM-1-1520-237-23-5.pdf`, vector drawings; kept out
 | 27 armoured wing | Stationary and movable wing on the outboard side, on an upper and a lower tube |
 
 Estimated: everything along the seat's fore-aft axis (pan length, back lean 10 degrees, how far the frame stands
-behind the back), wing outlines and sizes. Seat centre moved to BL 22.5 (from 21) and STA 230.5 so the collective
+behind the back), wing outlines and sizes. Seat centre moved to BL 22.5 (from 21; now 24.2, see round 4) and STA 230.5 so the collective
 passes between seat and console and the guide tubes clear the STA 247 frame; both are estimates. Not built: the
 three openings at the top of the bare bucket, frangible strut, inertia reel, ICS cables, vertical adjust spring.
+
+
+Round 4, collective covers and boots: TM 55-1520-237-23 (1989), paragraph 11-7.1.
+
+| Figure | Used for |
+|---|---|
+| 11-40 sheet 1, locators A and B | Where each stick is: the pilot's between the centre console and the seat, the copilot's outboard of the seat by the door. Pilot's cover screwed to the side of the centre console; copilot's cover screwed to the floor and the rear bulkhead, the stick leaving through a fabric cone on its sloped front. The thicker sleeve on the stick ahead of the boot |
+| 11-40 sheet 2, details C and D | Pilot: box cover lettered NO STEP, open at the front top corner, closed by a top half panel, a bottom half panel and a conical top panel round the stick. Copilot: cover with a flat NO STEP top and sloped front, floor flanges, tabs to the bulkhead; bottom panel under a U-shaped retainer, centre panel and conical top panel |
+| 11-41 | Socket assembly, drag strut, support and control rod. All of it is inside the covers, so none of it is built |
+
+Estimated: every size (the figures have no dimensions; covers are scaled off the stick and then fitted to the gap
+they sit in), the black paint and white lettering (line drawings carry no colour), the lettering's typeface, and the
+fluting of the pilot's friction grip (paragraph 11-7.4 names it; the figure shows only a ribbed sleeve). The cockpit
+is 84 in wide at the floor in this model, so the seats moved out to BL 24.2 to leave 2.8 in for the pilot's cover
+beside the console and 4.4 in for the copilot's beside the door; both gaps are estimates. Removed: the invented round
+bellows boot, friction collar and floor clevis.
