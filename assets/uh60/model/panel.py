@@ -48,30 +48,61 @@ def panel(ctx, Mp, art, out):
     if textured and o is not None:
         Mi = np.linalg.inv(Mp).T
         MA.set_uv(o, lambda a: np.stack([(W / 2 - (a @ Mi)[:, 1]) / W, (a @ Mi)[:, 2] / Hh], 1))
-    # ---- glare shield: a padded hood round the top and both sides of the panel
-    o_ = art['outline']; ys = [p[0] for p in o_]; zs = [p[1] for p in o_]
-    ymax, zmax = max(ys), max(zs); zc = 14.6; zlow = 1.9
-    path = [(ymax, zlow), (ymax, zc - 2.0), (ymax - 0.9, zc), (0.0, zmax), (-ymax + 0.9, zc), (-ymax, zc - 2.0), (-ymax, zlow)]
-    import interior
-    pts = interior.smooth_path([(0.0, y, z) for y, z in path], 3.0, 6)
-    dense = [np.array(pts[0], float)]
-    for q in pts[1:]:                                             # a ring every 1.5 in so the hood never twists across a long span
-        q = np.array(q, float); k = max(1, int(np.linalg.norm(q - dense[-1]) / 1.5)); p0 = dense[-1]
-        dense += [p0 + (q - p0) * (i + 1) / k for i in range(k)]
-    pts = dense
-    d = (np.linalg.inv(Mp) @ np.array((1.0, 0, 0.0, 0)))[:3]; d /= np.linalg.norm(d)      # toward the crew, drooping slightly
-    rings = []
-    for i, p in enumerate(pts):
-        t = pts[min(i + 1, len(pts) - 1)] - pts[max(i - 1, 0)]; t /= np.linalg.norm(t)
-        nrm = np.cross(t, (1.0, 0, 0)); nrm /= np.linalg.norm(nrm)
-        if nrm.dot(p - np.array((0, 0, 7.0))) < 0: nrm = -nrm                                  # outward from the panel centre
-        k = max(0.0, min(1.0, (p[2] - zlow) / (zc - 2.0 - zlow)))                              # 0 at the foot of each side, 1 over the top
-        dep = 1.8 + 2.9 * k ** 0.7                                                              # [EST F2-4]
-        a = p + nrm * 0.05; b = p + nrm * 1.35
-        rings.append([a - d * 0.4, b - d * 2.0, b + d * dep * 0.9, (a + b) / 2 + d * (dep + 0.25), a + d * dep * 0.9])
-    m = lib.loft(np.array(rings), cap0=True, cap1=True)
-    import cockpit_floor as CK
-    blk.merge(CK.outward(m), Mp)
+    glare_shield(ctx, Mp, art, blk)
+
+
+GS_D_END, GS_D_MID, GS_STEP, GS_LIP, GS_PAD_R = 10.0, 7.5, 14.0, 2.0, 0.85     # in; read off the figure's proportions [EST]
+
+
+def glare_shield(ctx, Mp, art, blk):
+    """Glare shield [TM 1-1520-237-23 (2006) WP 0215 00 figures 1 and 2]: a flat sheet-metal tray screwed to the top of
+    the instrument panel and reaching forward under the windshield, deeper at the two ends than in the middle, stiffening
+    beads across it; foam padding along the edge facing the crew, turning down at each end over a gusset lettered
+    NO HAND HOLD; a knee protector under each outboard stretch of the panel, stopping 1.00 in short of the panel's end
+    (the one dimension given). Depths, pad size and the gusset's drop are scaled off the drawings."""
+    import cockpit_floor as CK, interior
+    hi = ctx.lod == 0; n = ctx.n(12, 8)
+    o_ = art['outline']; ymax = max(p[0] for p in o_); ztop = max(p[1] for p in o_); zbot = min(p[1] for p in o_ if abs(p[0]) > 20)
+    W = lambda x, y, z: (Mp @ np.array((x, y, z, 1.0)))[:3]
+    e0 = W(0.0, 0.0, ztop); sta0, wl0 = e0[0], e0[2] + 0.06; yw = ymax + 0.7
+    sht, pad, scr, wht = Mesh(), Mesh(), Mesh(), Mesh()
+    # tray: deeper at the ends than in the middle [figure 1], but never through the windshield: this model's panel stands
+    # closer to the glass than the drawing implies, so the forward edge is cut 0.5 in short of the glass where they meet
+    import recipe as RC
+    def glass(y):
+        for s in np.arange(sta0 + 1.0, sta0 - 14.0, -0.25):
+            if float(RC.body_surface_bl(s, wl0 + 0.4)) < abs(y) + 0.6: return s + 0.75
+        return sta0 - 14.0
+    depth = lambda y: max(0.4, min(GS_D_END if abs(y) > GS_STEP else GS_D_MID, sta0 - glass(y)))
+    ys = sorted(set(list(np.linspace(-yw, yw, 41)) + [s * (GS_STEP + e) for s in (-1, 1) for e in (-0.01, 0.01)]))
+    rings = [[(sta0 + GS_LIP, y, wl0), (sta0 - depth(y), y, wl0), (sta0 - depth(y), y, wl0 + 0.1), (sta0 + GS_LIP, y, wl0 + 0.1)] for y in ys]
+    sht.merge(CK.outward(lib.loft(np.array(rings, float), cap0=True, cap1=True)))
+    for y in np.linspace(-yw + 3.0, yw - 3.0, 9):                                       # beads across the tray
+        d = depth(y)
+        if d > 2.4: sht.merge(lib.box((sta0 - d / 2 + 0.2, y, wl0 + 0.13), (d - 1.6, 0.35, 0.06)))
+        if hi: scr.merge(CK.screw((sta0 - 0.5, y + 1.4, wl0 + 0.1), (0, 0, 1), 0.15, 0.05))
+    # foam padding along the crew's edge, down each end; gussets under the ends
+    drop = 9.0; lip = np.array((sta0 + GS_LIP, 0.0, wl0 - 0.25)); dn = W(0.0, 0.0, ztop - drop) - W(0.0, 0.0, ztop)
+    path = [lip + (0, -yw, 0) + dn + (0.2, 0, 0), lip + (0, -yw, 0), lip + (0, yw, 0), lip + (0, yw, 0) + dn + (0.2, 0, 0)]
+    pts = interior.smooth_path(path, 2.2, 6)
+    pad.merge(lib.tube(pts, GS_PAD_R, n))
+    for sy in (-1, 1):
+        g = np.array([(sta0 + GS_LIP, wl0), (sta0 - max(depth(sy * yw), 2.0) * 0.55, wl0), (sta0 + GS_LIP + dn[0] + 0.2, wl0 + dn[2])])
+        sht.merge(CK.outward(lib.prism(g, sy * yw - 0.05, sy * yw + 0.05, lib.plane_basis('side_l'))))
+        if hi:                                                                          # NO HAND HOLD on the padding's end return
+            c = lip + (0, sy * yw, 0) + dn * 0.56; u = dn / np.linalg.norm(dn); M = np.eye(4)
+            M[:3, 0] = -u; M[:3, 1] = (0, sy, 0); M[:3, 2] = np.cross(-u, (0, sy, 0)); M[:3, 3] = c + M[:3, 2] * (GS_PAD_R + 0.01)
+            if M[0, 2] < 0: M[:3, 2] *= -1; M[:3, 3] = c + M[:3, 2] * (GS_PAD_R + 0.01); M[:3, 1] *= -1
+            wht.merge(lib.text_mesh('NO HAND HOLD', 0.42), M)
+    # knee protectors under the outboard stretches of the panel
+    inner = sorted(abs(p[0]) for p in o_ if abs(p[1] - zbot) < 0.2)[0]
+    for sy in (-1, 1):
+        a, b = W(0.35, sy * (ymax - 1.0), zbot - 0.1), W(0.35, sy * (inner + 0.6), zbot - 0.1)
+        pad.merge(lib.tube([a, b], 0.6, n))
+    ctx.part('airframe', 'glare_shield', sht, 'paint_black', 40)
+    ctx.part('airframe', 'glare_shield_padding', pad, 'rubber', 40)
+    if scr.n: ctx.part('airframe', 'glare_shield_screws', scr, 'steel_dark', 40)
+    if wht.n: ctx.part('airframe', 'glare_shield_lettering', wht, 'paint_white', 40)
 
 
 def console_top(ctx, Mc, art, out):

@@ -13,7 +13,7 @@ be measured. It is kept out of git (`model/refs-local/tm10.pdf`).
 | 6-9 Cabin dimensions | Cabin 151 in long, floor WL 206.75, ceiling WL 261, inside width 72 / 85 / 69 in, door 68 x 54 in |
 | 2-1 General arrangement | Which exterior equipment exists and roughly where |
 | 2-4, 2-5 Cockpit and cabin | Layout of seats, consoles, controls. 2-4 also gives what stands on the cockpit floor: ribbed pedal pads on arms, the lower console with its circuit breaker panel, parking brake lever, utility light and fire extinguisher, the crew seat frames and the collective boot (`model/cockpit_floor.py`; sizes inferred, the figure is an undimensioned perspective) |
-| 2-9 Instrument panel (sheets 1, 2) | The whole panel face. `model/manual_art.py` joins the two sheets (registered on the central display unit's lettering) and uses the drawing itself as the panel face: outline, each of the 40 instruments' outlines (raised plates), dials, legends, 22 knob positions. Fitted to a 67 in panel width; plate and knob heights nominal |
+| 2-9 Instrument panel (sheets 1, 2) | The whole panel face. `model/manual_art.py` joins the two sheets (registered on the central display unit's lettering) and uses the drawing itself as the panel face: outline, each of the 40 instruments' outlines (raised plates), dials, legends, 22 knob positions. Fitted to a 57.5 in panel width (see round 5); plate and knob heights nominal |
 | 2-8 Lower console (sheet 1) | The whole console top, sloped section and aft section, used directly as its face, with a knob or fastener head at each circle the drawing shows. Scaled by the 5.75 in control-head width |
 | 2-7 Upper console (sheet 1) | The whole upper console: outline with its forward cut-out, every panel legend as its face, a bat lever at each toggle switch and a button or knob at each breaker and rotary control the drawing shows. A plan seen from below, aft at the top. No dimensions: width 18.5 in is fitted (its toggle-switch nuts are drawn the same size as figure 2-8's). Where it hangs in the cockpit is still read from figure 2-4 |
 | 2-13 Engine control quadrant, with 2-7's plan of it | Quadrant cover, two power control levers with disc knobs, two fuel system selector levers, two engine emergency off T-handles. Where each sits across and along the console is figure 2-7's plan; shapes are figure 2-13's perspective. How far the cover and levers stand out of the console is estimated from that perspective. Colours and lettering are not in the manual: all left black |
@@ -104,3 +104,25 @@ fluting of the pilot's friction grip (paragraph 11-7.4 names it; the figure show
 is 84 in wide at the floor in this model, so the seats moved out to BL 24.2 to leave 2.8 in for the pilot's cover
 beside the console and 4.4 in for the copilot's beside the door; both gaps are estimates. Removed: the invented round
 bellows boot, friction collar and floor clevis.
+
+Round 5, glare shield and panel size: TM 1-1520-237-23 (2006), work packages 0215 00 and 0216 00 (volume 5).
+
+| Figure | Used for |
+|---|---|
+| 0215 00 figure 1, Replace Glare Shield | A flat sheet tray screwed to the top of the instrument panel, reaching forward under the windshield, deeper at the two ends than in the middle, beads across it; foam padding along the crew's edge turning down over a gusset at each end, lettered NO HAND HOLD |
+| 0215 00 figure 2, Repair Glare Shield | Knee protector under each outboard stretch of the panel, ending 1.00 in short of the panel's end (the figure's one dimension) |
+| 0216 00 figure 1, Replace Instrument Panel | One-piece panel bolted to end supports, top supports and the front of the lower console; notch at the bottom centre over the console |
+
+Panel width is now 57.5 in, down from 67 (which was only a guess at cockpit width). Reason: at 57.5 the drawn 2, 3 and
+5 in instrument cases come out at their standard sizes (2.41, 3.26, 5.03 in; the old scale made them 2.81, 3.78 and
+6.26), and the notch at the bottom of the panel comes out 19 in wide over the 18 in console. At 67 in the panel's top
+corners stood outside the hull, which showed as slivers of cabin liner across the outer instruments.
+
+Estimated or unresolved: the panel's fore-aft place. Panel and lower console moved 2.3 in aft (panel foot STA 209.3,
+console STA 209.6 to 246.3) so the panel's top corners clear the liner; no figure found yet gives the panel's station.
+The drawing's tray is roughly 8 to 10 in deep; here the windshield is closer to the panel top than that, so the tray is
+cut 0.5 in short of the glass and comes out 3 to 5 in deep. Either the panel belongs further aft or the windshield base
+further forward: needs a side view with stations. Pad radius 0.85 in, gusset drop 9 in and lettering size are scaled
+off the figure. Not built: master warning panels under the shield's lip (shown in figure 1, but their faces need the
+operator's manual drawing), instrument light assemblies, air bag modules (MWO 50-82). Removed: the invented hood.
+

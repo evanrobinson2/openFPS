@@ -20,7 +20,7 @@ SEAT_STA, SEAT_BL = 230.5, 24.2     # BL leaves room for the pilot's collective 
 CYC_STA = 222.0
 PED_STA = 204.0
 CON_HW = 9.25                              # the drawn console top is 18.0 in wide [F2-8 at 5.75 in per control head]
-CON_A, CON_B = (207.3, 234.5), (244.0, 223.5)   # (STA, WL): foot of the instrument panel, aft end of the console top
+CON_A, CON_B = (209.6, 234.5), (246.3, 223.5)   # (STA, WL): foot of the instrument panel, aft end of the console top
 PAN_Z = 12.5
 
 

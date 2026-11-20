@@ -18,7 +18,8 @@ import json, os
 import numpy as np
 
 ZOOM = 6.0                                   # render scale, px per PDF point
-PANEL_W = 67.0                               # in, across the panel face [fitted]
+PANEL_W = 57.5                               # in, across the panel face: the scale at which the drawn 2, 3 and 5 in instrument
+                                             # cases come out at their standard sizes (2.41, 3.26, 5.03 in); 67 made them 16 % too big
 P_CLIP = (60, 55, 990, 300)                  # panel area in sheet-1 page points
 P_SEAM, P_SHIFT = 521.0, (437.7, -27.6)      # sheet 2 = sheet 1 - shift (from the 'OFF' / 'DIGITS' lettering on both)
 P_POLY = [(100, 230), (170, 120), (2790, 95), (5380, 120), (5470, 230), (5470, 1180), (5400, 1265), (4150, 1265), (3700, 1400),

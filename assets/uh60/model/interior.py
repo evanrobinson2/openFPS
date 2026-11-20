@@ -164,7 +164,7 @@ def cockpit(ctx):
     hi = ctx.lod == 0
     arm, fab, belt, st, al, blk, face, grey, yel, red = (Mesh() for _ in range(10))
     # ---- instrument panel: one piece across the cockpit, tilted back 30 deg, glare shield on top
-    Mp = T(207.0, 0, 235.0) @ R('bl', -30.0)     # panel plane: local y = BL, local z = up along the panel face, local x = normal (aft)
+    Mp = T(209.3, 0, 235.0) @ R('bl', -30.0)     # panel plane: local y = BL, local z = up along the panel face, local x = normal (aft)
     art = getattr(ctx, 'art', None); knb = Mesh()
     PN.panel(ctx, Mp, art['panel'], (blk, knb))
     # ---- lower console: straight top from the foot of the panel aft; the manual's drawn console top takes its aft end
