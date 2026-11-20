@@ -292,7 +292,7 @@ function frame() {
 }
 function resize() { const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
 addEventListener('resize', resize); resize(); setMode('studio');
-window.uh60 = { flight, setMode, setDoors, setEngines, camera, orbit, get lod() { return lod; }, set collective(v) { collective = v; }, set view(v) { flyView = v; } };
+window.uh60 = { scene, flight, setMode, setDoors, setEngines, camera, orbit, get lod() { return lod; }, set collective(v) { collective = v; }, set view(v) { flyView = v; } };
 loadModel(matchMedia('(max-width: 700px)').matches ? 1 : 0).then(() => { $('load').hidden = true; $('b-lod').setAttribute('aria-pressed', lod === 0); frame(); })
   .catch(e => { $('load').textContent = 'The aircraft did not load. Reload the page to try again.'; console.error(e); });
 </script>

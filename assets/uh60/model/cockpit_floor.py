@@ -19,8 +19,8 @@ C0, C1, CHALF = 194.0, 247.0, 47.0
 SEAT_STA, SEAT_BL = 232.5, 21.0
 CYC_STA = 222.0
 PED_STA = 204.0
-CON_HW = 8.6
-CON_TOP = [(212.0, 226.5), (218.0, 228.0), (224.0, 229.5), (235.0, 226.25), (246.0, 223.0)]   # (STA, WL) of the console top
+CON_HW = 9.25                              # the drawn console top is 18.0 in wide [F2-8 at 5.75 in per control head]
+CON_A, CON_B = (207.3, 234.5), (244.0, 223.5)   # (STA, WL): foot of the instrument panel, aft end of the console top
 PAN_Z = 12.5
 
 
@@ -45,9 +45,6 @@ def spec():
     for sg in (1, -1):
         cy = sg * SEAT_BL
         b = sorted((cy - 7.5, cy + 7.5))
-        covers.append((213.6, 218.6, b[0], b[1]))                        # flight control access cover ahead of the cyclic
-        b2 = sorted((sg * 31.0, sg * 41.0)); covers.append((236.0, 245.0, b2[0], b2[1]))
-        plates.append((205.2, 213.0, cy - 8.8, cy + 8.8))                # heel plate under the pedals
         wear += [(209.0, cy, 6.0, 8.0, 255), (226.0, sg * 38.0, 12.0, 7.0, 210), (224.0, sg * 11.5, 16.0, 4.0, 140)]
         pans.append(circle(CYC_STA, cy, 3.3))
     return dict(lines=lines, covers=covers, plates=plates, wear=wear, pans=pans)
@@ -94,10 +91,6 @@ def pedals(ctx, cy, out):
         arm = [P(0, -3.0, -0.45), np.array((PED_STA - 1.0, y0, CF + 3.4)), foot]
         import interior
         frm.merge(lib.tube(interior.smooth_path(arm, 2.2), 0.52, n))
-        # brake master cylinder from the back of the pad down to the arm
-        a = P(0, 1.3, -1.1); b = np.array((PED_STA - 2.2, y0, CF + 2.6)); d = b - a
-        dull.merge(lib.cyl(a, a + d * 0.58, 0.46, n)); stl.merge(lib.cyl(a + d * 0.58, b, 0.16, 6))
-        dull.merge(lib.cyl(a + d * 0.52, a + d * 0.6, 0.56, n))
         # pivot bracket: two lugs on a base plate, bolted to the floor
         for sy in (-0.82, 0.82):
             lug = [(foot[0] - 1.5, CF), (foot[0] + 1.5, CF), (foot[0] + 0.7, CF + 2.2), (foot[0] - 0.7, CF + 2.2)]
@@ -105,45 +98,17 @@ def pedals(ctx, cy, out):
         frm.merge(lib.box((foot[0], y0, CF + 0.07), (3.8, 3.0, 0.14)))
         for sx in (-1.5, 1.5):
             for sy in (-1.15, 1.15): stl.merge(screw((foot[0] + sx, y0 + sy, CF + 0.14), (0, 0, 1), 0.2, 0.12))
-    # torque tube joining the pair, and the pedal adjuster between them
-    frm.merge(lib.cyl((PED_STA - 3.6, cy - 6.0, CF + 1.5), (PED_STA - 3.6, cy + 6.0, CF + 1.5), 0.42, n))
-    for sy in (-6.0, 6.0): stl.merge(lib.cyl((PED_STA - 3.6, cy + sy - 0.2, CF + 1.5), (PED_STA - 3.6, cy + sy + 0.2, CF + 1.5), 0.62, n))
-    frm.merge(lib.prism(lib.rrect(2.6, 2.2, 0.4, 3), CF, CF + 2.3, T(PED_STA - 1.4, cy, 0)))
-    stem0 = np.array((PED_STA - 0.9, cy, CF + 2.2)); stem1 = stem0 + (1.5, 0, 1.3)
-    stl.merge(lib.cyl(stem0, stem1, 0.2, 6))
-    M, _ = lib.frame_to(stem1, stem1 + (1.5, 0, 1.3))
-    blk.merge(lib.revolve([(0.5, 0), (0.95, 0.15), (0.95, 0.5), (0.6, 0.7), (0, 0.7)], n, M))
 
 
 # ------------------------------------------------------------------ lower console
 def console(ctx, out):
     body, frm, stl, grey, blk, yel, red, dull = out; hi = ctx.lod == 0; n = ctx.n(12, 8); hw = CON_HW
+    top = lambda s: CON_A[1] + (CON_B[1] - CON_A[1]) * (s - CON_A[0]) / (CON_B[0] - CON_A[0])
     rings = []
-    for s, h in CON_TOP:
-        rings.append([(s, hw - 0.5, h), (s, -hw + 0.5, h), (s, -hw, h - 0.5), (s, -hw, CF), (s, hw, CF), (s, hw, h - 0.5)])
+    for s in (CON_A[0], 212.0, 222.0, 234.0, CON_B[0]):
+        h = top(s); z0 = CF if s >= 212.0 else h - 3.2
+        rings.append([(s, hw - 0.4, h), (s, -hw + 0.4, h), (s, -hw, h - 0.4), (s, -hw, z0), (s, hw, z0), (s, hw, h - 0.4)])
     body.merge(outward(lib.loft(np.array(rings, float), cap0=True, cap1=True)))
-    # plinth, bolted down
-    for sg in (1, -1):
-        frm.merge(lib.box((229.0, sg * (hw + 0.35), CF + 0.75), (34.6, 0.7, 1.5)))
-        for s in np.arange(214.0, 246.0, 4.0): stl.merge(screw((s, sg * (hw + 0.7), CF + 0.75), (0, sg, 0), 0.2, 0.1))
-        # side access panels with quarter-turn fasteners
-        for (s0, s1, z0, z1) in ((214.0, 226.5, CF + 2.6, CF + 9.6), (228.5, 244.5, CF + 2.6, CF + 6.4)):
-            grey.merge(lib.prism(lib.rrect(s1 - s0, z1 - z0, 0.8, 3), sg * hw if sg > 0 else -hw - 0.07, hw + 0.07 if sg > 0 else -hw,
-                                 lib.plane_basis('side_l') @ T((s0 + s1) / 2, (z0 + z1) / 2, 0)))
-            pts = [(s0 + 0.7, z0 + 0.7), (s0 + 0.7, z1 - 0.7), (s1 - 0.7, z0 + 0.7), (s1 - 0.7, z1 - 0.7), ((s0 + s1) / 2, z0 + 0.7), ((s0 + s1) / 2, z1 - 0.7)]
-            for (s, z) in pts: stl.merge(screw((s, sg * (hw + 0.07), z), (0, sg, 0), 0.24, 0.06, 8))
-    frm.merge(lib.box((246.3, 0, CF + 0.75), (0.7, 2 * hw + 1.4, 1.5)))
-    # battery / battery utility bus circuit breaker panel on the aft face [F2-4 item 41]
-    grey.merge(lib.box((246.08, 0, CF + 4.4), (0.16, 13.0, 4.6)))
-    for row, z in enumerate((CF + 5.4, CF + 3.4)):
-        for k in range(7):
-            p = (246.16, -5.4 + k * 1.8, z)
-            blk.merge(lib.revolve([(0.36, 0), (0.36, 0.12), (0.24, 0.14), (0.24, 0.5), (0, 0.5)], 8, lib.frame_to(p, (247.0, p[1], z))[0], cap0=False))
-    for (y, z) in ((-6.1, CF + 2.5), (6.1, CF + 2.5), (-6.1, CF + 6.3), (6.1, CF + 6.3)): stl.merge(screw((246.16, y, z), (1, 0, 0), 0.2, 0.06))
-    # parking brake lever at the right aft corner [item 16]
-    a = np.array((241.5, -hw - 0.1, CF + 5.2)); b = a + (2.2, -0.9, 4.4)
-    stl.merge(lib.cyl(a, b, 0.2, 6)); frm.merge(lib.box(a, (1.6, 0.5, 1.8)))
-    yel.merge(lib.cyl(b + (0, -1.3, 0), b + (0, 1.3, 0), 0.38, n))
     # lower console utility light on a gooseneck, left side [item 18]
     import interior
     neck = interior.smooth_path([(236.0, hw, CF + 8.2), (236.0, hw + 1.8, CF + 8.6), (234.6, hw + 2.6, CF + 11.8), (232.6, hw + 2.0, CF + 13.0)], 1.6, 5)
@@ -159,16 +124,6 @@ def console(ctx, out):
         dull.merge(lib.revolve([(1.78, z - 0.4), (1.82, z - 0.3), (1.82, z + 0.3), (1.78, z + 0.4)], n, T(*fx), cap0=False, cap1=False))
         dull.merge(lib.box((fx[0], fx[1] - 1.5, fx[2] + z), (1.0, 1.6, 0.8)))
     dull.merge(lib.box((fx[0], fx[1], fx[2] + 0.15), (4.0, 4.0, 0.3))); dull.merge(lib.box((fx[0], hw + 0.5, fx[2] + 5.0), (1.2, 0.5, 10.0)))
-
-
-def console_rails(Mc, L, out):
-    """Mounting rails the control heads fasten to, along the sloped top (Mc: interior's console-top frame)."""
-    frm, stl = out
-    for y, w in ((-7.55, 0.9), (0.0, 1.9), (7.55, 0.9)):
-        frm.merge(lib.box((L / 2, y, 0.05), (L - 0.3, w, 0.1)), Mc)
-        for x in np.arange(0.9, L - 0.5, 1.5):
-            stl.merge(lib.revolve([(0.13, 0.1), (0.1, 0.14), (0, 0.14)], 6, cap0=False, cap1=False), Mc @ T(x, y + (0.6 if w > 1 else 0.0), 0))
-            if w > 1: stl.merge(lib.revolve([(0.13, 0.1), (0.1, 0.14), (0, 0.14)], 6, cap0=False, cap1=False), Mc @ T(x, y - 0.6, 0))
 
 
 # ------------------------------------------------------------------ crew seat frame and tracks
@@ -250,7 +205,7 @@ def door_sill(ctx, wall_bl, out):
             stl.merge(screw((s, sg * (wall_bl(s, CF) + 0.3 - 2.9), CF + 0.14), (0, 0, 1), 0.2, 0.06, 8))
 
 
-def build(ctx, wall_bl, Mc, Lc):
+def build(ctx, wall_bl):
     hi = ctx.lod == 0; textured = 'cockpit_floor' in ctx.mats
     half = lambda s: float(wall_bl(s, CF)) + 0.4
     sts = np.linspace(C0, C1, 10)
@@ -268,7 +223,6 @@ def build(ctx, wall_bl, Mc, Lc):
             a = k * math.pi / 4 + 0.39; stl.merge(screw((CYC_STA + 2.98 * math.cos(a), cy + 2.98 * math.sin(a), CF + 0.13), (0, 0, 1), 0.15, 0.06))
         rub.merge(bellows((CYC_STA, cy, CF + 0.12), (CYC_STA, cy, CF + 5.2), 2.65, 0.95, 5, ctx.n(18, 12)))
     console(ctx, (body, frm, stl, grey, blk, yel, red, dull))
-    console_rails(Mc, Lc, (frm, stl))
     door_sill(ctx, wall_bl, (od, dull, stl))
     for name, m, mat in (('pedal_pads', blk, 'paint_black'), ('cockpit_frames', frm, 'frame_grey'), ('cockpit_floor_steel', stl, 'steel'),
                          ('cockpit_fittings', dull, 'alu_dull'), ('seat_tracks', trk, 'steel_dark'), ('lower_console', body, 'panel_face'),

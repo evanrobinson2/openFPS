@@ -50,8 +50,11 @@ def build(lod):
     reset()
     ctx = RC.Context(lod=lod, fast=FAST, log=log, here=HERE)
     MT.setup(ctx)
+    import manual_art
+    ctx.art = manual_art.build(os.path.join(HERE, 'work', 'tex'), os.path.join(HERE, 'refs-local', 'tm10.pdf'), log)
     if not FAST:
         import skin, detail
+        for nm in ('panel_art', 'console_art'): manual_art.material(ctx, nm, os.path.join(HERE, 'work', 'tex', nm + '.png'), 1.0 if lod == 0 else 0.5)
         detail.materials(ctx, os.path.join(HERE, 'work', 'tex'), log)
         import floor, cockpit_floor
         floor.material(ctx, os.path.join(HERE, 'work', 'tex')); cockpit_floor.material(ctx, os.path.join(HERE, 'work', 'tex'))

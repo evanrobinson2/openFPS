@@ -5,7 +5,7 @@ arrangement follows figure 2-10; each fitting's own size is inferred from what i
 """
 import math
 import numpy as np
-import lib, recipe as RC, floor as FL, cockpit_floor as CK
+import lib, recipe as RC, floor as FL, cockpit_floor as CK, panel as PN
 from lib import Mesh, T, R, S
 
 INSET = RC.SHELL_T + 0.05
@@ -160,10 +160,6 @@ def crew_seat(ctx, out, M, hi):
     arm.merge(plate, Mb)
     for sy in (1, -1):                                   # side armour wings
         arm.merge(lib.box((-2.5, sy * 10.3, pan_z + 6.0), (15.0, 0.9, 13.0)), M)
-        for (bx, bz) in ((-9.0, 1.0), (-9.0, 11.5), (4.0, 1.0), (4.0, 11.5), (-2.5, 1.0), (-2.5, 11.5)):   # wing attachment bolts
-            st.merge(CK.screw((bx, sy * 10.75, pan_z + bz), (0, sy, 0), 0.3, 0.14, 8), M)
-        arm.merge(lib.box((-2.5, sy * 10.55, pan_z + 12.3), (15.4, 1.4, 0.5)), M)                          # rolled top edge
-    arm.merge(lib.box((9.6, 0, pan_z - 1.3), (0.5, 18.9, 3.0)), M)                                           # front lip of the bucket
     hr = Mesh(); hr.merge(lib.prism(lib.rrect(9.0, 6.5, 2.0, 4), -1.6, 0.6), np.array([[0, 0, 1, 0], [1, 0, 0, 0], [0, 1, 0, 30.5], [0, 0, 0, 1.0]]))
     fab.merge(hr, Mb)
     cush = Mesh(); cush.merge(lib.prism(lib.rrect(16.5, 22.0, 2.5, 4), 0.0, 1.8), np.array([[0, 0, 1, 0], [1, 0, 0, 0], [0, 1, 0, 13.0], [0, 0, 0, 1.0]]))
@@ -194,47 +190,18 @@ def cockpit(ctx):
         crew_seat(ctx, (arm, fab, belt, st, al), M, hi)
     # ---- instrument panel: one piece across the cockpit, tilted back 30 deg, glare shield on top
     Mp = T(207.0, 0, 235.0) @ R('bl', -30.0)     # panel plane: local y = BL, local z = up along the panel face, local x = normal (aft)
-    def P(y, z, x=0.0):     # panel-local to a placement matrix whose +Z is the panel normal facing the crew
-        return Mp @ T(x, y, z) @ np.array([[0, 0, 1, 0], [0, 1, 0, 0], [-1, 0, 0, 0], [0, 0, 0, 1.0]])
-    outline = [(-33.5, 0.0), (-9.0, 0.0), (-9.0, -9.5), (9.0, -9.5), (9.0, 0.0), (33.5, 0.0), (33.5, 12.5), (30.5, 16.0), (-30.5, 16.0), (-33.5, 12.5)]
-    pm = Mesh(); pm.merge(lib.prism(np.array(outline), -2.5, 0.0), np.array([[0, 0, 1, 0], [1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1.0]]))
-    blk.merge(pm, Mp)
-    blk.merge(lib.box((200.5, 0, 249.9), (8.5, 67.0, 0.6)))            # glare shield
-    for sg in (1, -1):
-        cy = sg * 21.0
-        # flight instruments: airspeed, attitude (VSI), altimeter over clock, HSI, vertical speed, radar altimeter
-        for (dy, z, r) in RC.FLIGHT_GAUGES:
-            gauge((blk, face, None), P(cy + dy, z), r, hi)
-        for dy in (-7.5, -4.5):                                      # mode select / CIS panels under the flight instruments
-            grey.merge(lib.box((0.12, cy + dy * sg, 1.3), (0.25, 2.4, 1.6)), Mp)
-    # centre: caution/advisory panel, central display unit (vertical-scale engine instruments), pilot display units
-    face.merge(lib.box((0.08, 0, 12.6), (0.16, 13.5, 4.2)), Mp)
-    grey.merge(lib.box((0.05, 0, 12.6), (0.14, 14.3, 5.0)), Mp)
-    for i in range(13):
-        face.merge(lib.box((0.1, -6.0 + i * 1.0, 6.0), (0.2, 0.62, 7.0)), Mp)
-    grey.merge(lib.box((0.04, 0, 6.0), (0.12, 14.3, 7.8)), Mp)
-    for dy in (-11.2, 11.2):
-        face.merge(lib.box((0.1, dy, 9.0), (0.2, 2.6, 5.6)), Mp); grey.merge(lib.box((0.04, dy, 9.0), (0.12, 3.2, 6.2)), Mp)
-    red.merge(lib.box((0.2, -11.2, 14.4), (0.3, 3.0, 1.0)), Mp); yel.merge(lib.box((0.2, 11.2, 14.4), (0.3, 3.0, 1.0)), Mp)   # master warning panels
-    # ---- lower console between the seats: radios on rails
-    con = [(212.0, 226.5), (224.0, 229.5), (246.0, 223.0), (246.0, CFLOOR), (212.0, CFLOOR)]
-    top0 = np.array((224.0, 0, 229.5)); top1 = np.array((246.0, 0, 223.0)); L = np.linalg.norm(top1 - top0)
-    ang = math.degrees(math.atan2(top0[2] - top1[2], top1[0] - top0[0]))
-    Mc = T(*top0) @ R('bl', -ang)
-    y_cols = (-4.1, 4.1); x = 0.6
-    heights = (2.6, 2.2, 3.4, 2.2, 2.6, 3.0, 2.2, 2.6)
-    for hgt in heights:
-        if x + hgt > L - 0.4: break
-        for yc in y_cols:
-            grey.merge(lib.box((x + hgt / 2, yc, 0.08), (hgt - 0.25, 5.75, 0.16)), Mc)
-            face.merge(lib.box((x + hgt / 2, yc + 1.2, 0.18), (min(1.0, hgt - 0.9), 2.4, 0.1)), Mc)
-            for k in range(3):
-                blk.merge(lib.revolve([(0.36, 0), (0.3, 0.55), (0, 0.55)], ctx.n(8, 6)), Mc @ T(x + hgt / 2, yc - 2.2 + k * 0.95, 0.16))
-            if hi:
-                for sx in (-1, 1):
-                    for sy in (-1, 1):
-                        st.merge(lib.revolve([(0.16, 0), (0.16, 0.08), (0, 0.08)], 6), Mc @ T(x + hgt / 2 + sx * (hgt / 2 - 0.35), yc + sy * 2.6, 0.16))
-        x += hgt
+    art = getattr(ctx, 'art', None); knb = Mesh()
+    PN.panel(ctx, Mp, art['panel'], (blk, knb))
+    # ---- lower console: straight top from the foot of the panel aft; the manual's drawn console top takes its aft end
+    A = np.array((CK.CON_A[0], 0, CK.CON_A[1])); B = np.array((CK.CON_B[0], 0, CK.CON_B[1])); L = np.linalg.norm(B - A)
+    ang = math.degrees(math.atan2(A[2] - B[2], B[0] - A[0])); u = (B - A) / L
+    Mc = T(*(A + u * 0.5)) @ R('bl', -ang)
+    assert abs(L - art['console']['l'] - 1.0) < 1.2, (L, art['console']['l'])
+    PN.console_top(ctx, Mc, art['console'], (blk, knb))
+    # parking brake lever in the slot the drawing letters PARKING BRAKE [F2-8; lever shape F2-4 item 16]
+    p0 = (Mc @ np.array((27.6, -2.35, 0.0, 1.0)))[:3]; p1 = (Mc @ np.array((26.4, -2.35, 3.4, 1.0)))[:3]
+    st.merge(lib.cyl(p0, p1, 0.2, 6)); yel.merge(lib.cyl(p1 + (0, -1.2, 0), p1 + (0, 1.2, 0), 0.36, ctx.n(12, 8)))
+    ctx.part('airframe', 'cockpit_knobs', knb, 'paint_black', 40)
     # ---- upper (overhead) console and the engine control quadrant
     grey.merge(lib.box((234.0, 0, 266.2), (25.0, 18.0, 2.4)))
     for i, sx in enumerate(np.linspace(226.0, 243.0, 6)):
@@ -255,8 +222,7 @@ def cockpit(ctx):
         nd = ctx.node(f'cyclic_{side}', 'airframe', pivot=(222.0, cy, CFLOOR + 1.0))
         m = Mesh(); g = Mesh()
         m.merge(lib.tube([(222.0, cy, CFLOOR + 1.0), (222.0, cy, CFLOOR + 9.0), (223.4, cy, CFLOOR + 13.0), (225.6, cy, CFLOOR + 15.5)], 0.55, 8))
-        g.merge(lib.tube([(225.6, cy, CFLOOR + 15.5), (226.4, cy, CFLOOR + 17.5), (226.6, cy, CFLOOR + 20.4)], [0.75, 0.85, 0.8], 10))
-        g.merge(lib.box((226.2, cy, CFLOOR + 21.0), (1.9, 1.7, 1.5)))
+        g.merge(PN.cyclic_grip(ctx, art['cyclic'], (225.6, cy, CFLOOR + 15.2)))
         ctx.part(nd, 'cyclic_tube', m, 'steel_dark', 40); ctx.part(nd, 'cyclic_grip', g, 'paint_black', 40)
         bl_c = cy + 10.6
         nd = ctx.node(f'collective_{side}', 'airframe', pivot=(240.0, bl_c, CFLOOR + 4.0))
@@ -270,14 +236,14 @@ def cockpit(ctx):
         fr = Mesh(); fr.merge(lib.cyl(p0 + d * 0.66, p0 + d * 0.76, 1.05, ctx.n(14, 10)))          # friction control collar [F2-4 item 37]
         ctx.part(nd, 'collective_friction', fr, 'steel_dark', 40)
         CK.collective_mount((240.0, bl_c, CFLOOR + 4.0), (al, st))
-    CK.build(ctx, wall_bl, Mc, L)
+    CK.build(ctx, wall_bl)
     for name, m, mat in (('crew_seat_armour', arm, 'armor'), ('crew_seat_cushions', fab, 'fabric_seat'), ('crew_harness', belt, 'fabric_belt'),
                          ('cockpit_steel', st, 'steel'), ('cockpit_brackets', al, 'frame_grey'), ('instrument_panel', blk, 'panel_face'),
                          ('instrument_faces', face, 'instrument'), ('console_panels', grey, 'paint_grey'),
                          ('cockpit_yellow', yel, 'paint_yellow'), ('cockpit_red', red, 'paint_red')):
         o = ctx.part('airframe', name, m, mat, 35)
         if name == 'instrument_faces' and o is not None and getattr(ctx, 'box_uv', None) is not None:
-            import detail; detail.instrument_uv(o, Mp, Mc)
+            import detail; detail.instrument_uv(o, Mp, np.eye(4))
 
 
 def cabin(ctx):

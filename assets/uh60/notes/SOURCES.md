@@ -13,6 +13,9 @@ be measured. It is kept out of git (`model/refs-local/tm10.pdf`).
 | 6-9 Cabin dimensions | Cabin 151 in long, floor WL 206.75, ceiling WL 261, inside width 72 / 85 / 69 in, door 68 x 54 in |
 | 2-1 General arrangement | Which exterior equipment exists and roughly where |
 | 2-4, 2-5 Cockpit and cabin | Layout of seats, consoles, controls. 2-4 also gives what stands on the cockpit floor: ribbed pedal pads on arms, the lower console with its circuit breaker panel, parking brake lever, utility light and fire extinguisher, the crew seat frames and the collective boot (`model/cockpit_floor.py`; sizes inferred, the figure is an undimensioned perspective) |
+| 2-9 Instrument panel (sheets 1, 2) | The whole panel face. `model/manual_art.py` joins the two sheets (registered on the central display unit's lettering) and uses the drawing itself as the panel face: outline, each of the 40 instruments' outlines (raised plates), dials, legends, 22 knob positions. Fitted to a 67 in panel width; plate and knob heights nominal |
+| 2-8 Lower console (sheet 1) | The whole console top, sloped section and aft section, used directly as its face, with a knob or fastener head at each circle the drawing shows. Scaled by the 5.75 in control-head width |
+| 2-14 Collective and cyclic grips (sheet 2) | Cyclic grip: lofted through the figure's side and front silhouettes. No dimensions in the figure: grip height 6.2 in is an estimate |
 | 6-11 Cargo tiedown arrangement | Dimensioned plan of the cabin floor: STA 247 to 398, BL 36.5 each side, compartment lines at STA 288 and 343, the position and type of all 34 tie-down and seat-stud pans, the cargo hook access door. Text 6.18: fittings rated 5,000 lb with studs for the troop seats, eight net restraint rings at STA 308 and 379, floor 300 lb per sq ft (`model/floor.py`; pan depth, ring and stud sizes, extra panel joints, screw pitch and wear inferred) |
 | 2-9 Instrument panel | Which instruments, and their arrangement |
 | 2-10 Troop seats | Seat arrangement and construction |
@@ -40,3 +43,8 @@ UH-60 simulation model reports (Howlett, NASA CR-166309). The paint is the Army'
 - The long fairing drawn along the lower fuselage side aft of the main gear is not modelled.
 - Engine inlet and exhaust are the plain UH-60A fit; no suppressor.
 - The gunner's window is one fixed pane with a centre post, not two sliding panes.
+
+
+## Rule for visible parts (Evan, 2026-11-19)
+
+Every part a camera can see must be shown in a manual figure, photograph or rendering before it is modelled. Still built only from figure 2-4's small perspective view, with estimated sizes, and to be replaced when a proper reference is in hand: pedals and their arms, crew seat buckets, frames and tracks, cyclic and collective sticks and boots, glare shield depth, console body, fire extinguisher, utility light, cockpit floor surface. Still a placeholder: the upper console (figure 2-7 has its layout; not yet applied).

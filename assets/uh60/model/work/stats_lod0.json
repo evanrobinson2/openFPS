@@ -1,7 +1,7 @@
 {
  "lod": 0,
- "tris": 620402,
- "parts": 150,
+ "tris": 634234,
+ "parts": 151,
  "nodes": [
   "airframe",
   "cabin_door_L",
@@ -28,5 +28,5 @@
   "seat_gunner_left",
   "seat_gunner_right"
  ],
- "glb_mb": 25.1
+ "glb_mb": 27.29
 }
