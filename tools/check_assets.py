@@ -13,7 +13,7 @@ ASSETS = os.path.join(ROOT, 'assets')
 BANNED = {'.glb', '.gltf', '.fbx', '.obj', '.blend', '.blend1', '.mp3', '.wav', '.flac', '.ogg', '.m4a', '.aac'}
 REQUIRED = ['USAGE.md', 'sample/index.html', 'provenance.json']
 # Models at or above the level of Claude Fable 5.2 or Astra 6.2. Extend this list as new frontier models ship.
-FRONTIER_MODELS = ['claude fable 5.2', 'astra 6.2']
+FRONTIER_MODELS = ['claude fable 5.2', 'astra 6.2', 'claude opus 5.5']
 
 errors, warnings = [], []
 for aid in sorted(os.listdir(ASSETS)):

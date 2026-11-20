@@ -1,0 +1,23 @@
+{
+  "asset": "helmets",
+  "credit": "carpetshark",
+  "modelled_by": [
+    {"part": "helmet generator (model/helmetkit.py, model/build.py, model/presets.json)", "model": "Claude Opus 5.5", "date": "2026-11-20"},
+    {"part": "procedural textures (model/textures.py)", "model": "Claude Opus 5.5", "date": "2026-11-20"},
+    {"part": "checks against published figures (model/check.py)", "model": "Claude Opus 5.5", "date": "2026-11-20"}
+  ],
+  "sources": "notes/SOURCES.md",
+  "references": [
+    "US Army TM 10-8470-204-10, Operator's Manual for the Advanced Combat Helmet (2008), WP 0002 Table 1, WP 0004 Table 1, WP 0005",
+    "Gentex ACH Operator's Manual TP0271 Rev. 2 (2007)",
+    "ARL LWH and ACH Helmet Hardware Study (DTIC AD1002883)",
+    "Gentex Ops-Core FAST XP data sheet REV.20251203; FAST SF and FAST Bump data sheets",
+    "6B47 helmet: Wikipedia; Army Recognition (2014)"
+  ],
+  "learned_from": [
+    {"what": "game-night tools/people/helmets.py, gear.py", "licence": "MIT", "use": "approach only, no code copied"}
+  ],
+  "presets": ["helmet_us_highcut", "helmet_pmc_highcut", "helmet_east_midcut"],
+  "random_family": "build.py --random N or --seeds a,b,c: new helmets mixing the presets' shells, cuts, paint and kit",
+  "status": "Parametric geometry recipe (Blender Python) with three presets and a random family; shells checked against published dimensions, coverage and weights (notes/checks.json). Grade not yet given."
+}
